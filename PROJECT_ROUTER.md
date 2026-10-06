@@ -1,0 +1,100 @@
+# LocalCash — Project Router
+
+**Propósito:** ser el punto de entrada para cualquier agente que trabaje en LocalCash. Este archivo no reemplaza la documentación técnica: indica qué leer, qué fuente manda y cómo cargar solo el contexto necesario.
+
+## 1. Fuentes de verdad
+
+LocalCash distingue entre fuente normativa y fuente operativa.
+
+### Fuente normativa
+- Encargo docente original: `LocalCash Proyecto Android.pdf`.
+- Especificación derivada y trazable: `docs/requirements/PROJECT_SPEC.md`.
+- Decisiones aceptadas: `docs/design/decisions/`.
+
+Si una decisión interna contradice el encargo docente, prevalece el encargo y la discrepancia debe escalarse al Orquestador.
+
+### Fuente operativa
+- Código y documentación versionada del repositorio GitHub.
+- Estado actual: `PROJECT_STATE.md`.
+- Sprint activo: `docs/sprints/<sprint-activo>.md`.
+- Trazabilidad: `docs/requirements/TRACEABILITY.md`.
+
+Para saber **qué debe existir**, consultar requisitos y decisiones. Para saber **qué existe realmente**, inspeccionar el repositorio y validar build/tests. Nunca asumir implementación desde un documento.
+
+## 2. Orden mínimo de lectura
+
+Todo agente:
+1. `PROJECT_ROUTER.md`
+2. `AGENTS.md`
+3. `PROJECT_STATE.md`
+
+Después, según el rol:
+
+### Orquestador
+- `docs/requirements/PROJECT_SPEC.md`
+- `docs/requirements/TRACEABILITY.md`
+- `docs/sprints/README.md`
+- sprint activo
+- auditorías/handoffs relevantes
+- documentos de diseño afectados
+
+### Codificador
+- sprint activo
+- tarea asignada
+- únicamente los documentos de diseño/requisitos relacionados con esa tarea
+- código real afectado por la tarea
+
+### Auditor
+- criterios de aceptación de la tarea/sprint
+- requisitos relacionados
+- arquitectura/reglas afectadas
+- diff/commits a auditar
+- resultados de build y pruebas
+
+## 3. Carga selectiva de contexto
+
+No cargar todos los documentos del repositorio por defecto.
+
+Ejemplos:
+- Persistencia: `DATABASE.md`, `DOMAIN_MODEL.md`, ADR SQLite y sprint correspondiente.
+- Cuentas/movimientos: `DOMAIN_MODEL.md`, `BUSINESS_RULES.md`, `DATABASE.md`, S03.
+- Mapas: `ARCHITECTURE.md`, `DATABASE.md` si persiste coordenadas, S04.
+- Seguridad: `ARCHITECTURE.md`, S02.
+- Gastos compartidos: `DOMAIN_MODEL.md`, `BUSINESS_RULES.md`, `DATABASE.md`, S06 y ExecPlan activo si existe.
+
+## 4. Resolución de discrepancias
+
+Si código, documentación y requisitos no coinciden:
+1. no inventar una reconciliación;
+2. identificar exactamente la discrepancia;
+3. determinar si afecta alcance, diseño o implementación;
+4. registrarla en el handoff o auditoría;
+5. escalar al Orquestador si requiere decisión;
+6. actualizar la documentación solo cuando exista una decisión o implementación verificada.
+
+## 5. Roles
+
+Las reglas específicas están en:
+- `docs/agent/roles/ORCHESTRATOR.md`
+- `docs/agent/roles/CODER.md`
+- `docs/agent/roles/AUDITOR.md`
+
+Los agentes deben actuar solo dentro del rol asignado.
+
+## 6. Handoffs
+
+Cada cambio de agente debe dejar un handoff breve y verificable siguiendo `docs/agent/HANDOFF_TEMPLATE.md`.
+
+Los handoffs registran estado y continuidad; no reemplazan `PROJECT_STATE.md`, `TRACEABILITY.md` ni los ExecPlans.
+
+## 7. Library y GitHub
+
+- **GitHub** es la fuente de verdad mutable para código y documentación de trabajo.
+- **Library** conserva un espejo persistente de documentos y artefactos importantes.
+- Si una copia de Library y GitHub difieren, usar GitHub para trabajo operativo y sincronizar Library en un checkpoint.
+- El PDF docente y referencias visuales pueden mantenerse en Library/Project Sources como fuentes originales.
+- Los chats son deliberación temporal y no constituyen fuente de verdad del proyecto.
+
+## 8. Regla de avance
+
+No avanzar de tarea o sprint solo por haber escrito código. El avance requiere los criterios definidos en `AGENTS.md`, resultados verificables y el control del Orquestador.
