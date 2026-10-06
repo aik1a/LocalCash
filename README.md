@@ -1,33 +1,42 @@
 # LocalCash
 
-Aplicación Android nativa en Java para gestión financiera personal local/offline.
+Aplicación Android académica en Java para gestión financiera personal local/offline.
 
-## Fuente de autoridad
+## Estado
 
-1. Documento original del docente: `LocalCash Proyecto Android.pdf` (conservar en `sources/originales/` al crear el repositorio).
-2. `docs/requirements/PROJECT_SPEC.md`: traducción técnica controlada del encargo.
-3. `ARCHITECTURE.md`: arquitectura aprobada.
-4. `docs/design/BUSINESS_RULES.md`, `DOMAIN_MODEL.md` y `DATABASE.md`.
-5. `docs/sprints/README.md` y el sprint activo.
-6. Código y pruebas.
+El proyecto se encuentra en **S00 — Foundation**. La documentación base y el protocolo multiagente están preparados; la aplicación Android todavía debe inicializarse/validarse.
 
-Si una decisión propuesta contradice el documento original, se debe detener la implementación y registrar la discrepancia.
+Consultar primero:
+1. `PROJECT_ROUTER.md`
+2. `PROJECT_STATE.md`
+3. `AGENTS.md`
 
-## Stack aprobado
+## Pilares del proyecto
 
-- Android Studio
-- Java
-- XML
-- Gradle con Groovy DSL
-- SQLite mediante `SQLiteOpenHelper`
-- `BiometricPrompt`
-- osmdroid `6.1.18`
-- RecyclerView para listados cuando corresponda
+- Android nativo en Java.
+- Persistencia local SQLite mediante `SQLiteOpenHelper`.
+- Autenticación biométrica.
+- Movimientos con geolocalización opcional y visualización en mapa.
+- Compras, contactos, gastos compartidos y deudas.
+- Funcionamiento principal offline.
+- Sin backend/Firebase/Room/Compose dentro del alcance actual.
 
-No forman parte del alcance actual: Firebase, backend remoto, Room, Jetpack Compose, Clean Architecture completa ni frameworks de inyección de dependencias.
+## Documentación
 
-## Cómo trabajar
+- Arquitectura: `ARCHITECTURE.md`
+- Requisitos: `docs/requirements/PROJECT_SPEC.md`
+- Trazabilidad: `docs/requirements/TRACEABILITY.md`
+- Dominio: `docs/design/DOMAIN_MODEL.md`
+- Base de datos: `docs/design/DATABASE.md`
+- Reglas de negocio: `docs/design/BUSINESS_RULES.md`
+- Sprints: `docs/sprints/`
+- Testing: `docs/testing/`
+- Operación multiagente: `docs/agent/`
+- Auditorías: `docs/audits/`
+- ExecPlans: `docs/exec-plans/`
 
-Leer `AGENTS.md`. Para cambios grandes o de varios pasos, seguir `.agent/PLANS.md` y crear un ExecPlan en `docs/exec-plans/active/`.
+## Flujo de agentes
 
-Cada tarea debe terminar en un incremento compilable y verificable. La documentación y `docs/requirements/TRACEABILITY.md` se actualizan en la misma iteración que el código.
+`ORQUESTADOR → TASK BRIEF → CODIFICADOR → BUILD/TEST → HANDOFF → AUDITOR → ORQUESTADOR`
+
+GitHub es la fuente de verdad mutable del proyecto. Library conserva un espejo persistente de documentos y artefactos importantes.
