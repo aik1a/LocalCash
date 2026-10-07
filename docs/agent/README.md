@@ -1,34 +1,29 @@
-# Operación multiagente de LocalCash
+# LocalCash — Sistema multiagente
 
-Este directorio define cómo colaboran los agentes del proyecto sin depender del historial de chats.
+Este directorio define cómo trabajan los agentes de LocalCash sin depender del historial de chats.
 
-## Roles
+## Documentos canónicos
 
-- **Orquestador:** controla alcance, estado, secuencia, contexto y cierre.
-- **Codificador:** implementa una tarea acotada y verifica su resultado.
-- **Auditor:** revisa de forma independiente cumplimiento, calidad y evidencia.
+- `WORKFLOW.md`: fases, gates, autoridad sobre commits/avance y separación de responsabilidades.
+- `CONTEXT_PACKS.md`: banco de verdad y documentos que debe consultar cada rol/sprint.
+- `TASK_TEMPLATE.md`: plantilla de Task Brief.
+- `HANDOFF_TEMPLATE.md`: transferencia verificable entre agentes.
+- `roles/ORCHESTRATOR.md`: contrato del Orquestador.
+- `roles/CODER.md`: contrato del Codificador.
+- `roles/AUDITOR.md`: contrato del Auditor.
+- `prompts/`: prompts bootstrap para iniciar chats nuevos por rol.
 
-Reglas completas:
-- `roles/ORCHESTRATOR.md`
-- `roles/CODER.md`
-- `roles/AUDITOR.md`
+## Regla principal
 
-## Flujo estándar
+Los prompts no contienen la verdad completa del proyecto. Solo arrancan el rol. La verdad vigente se recupera del repositorio mediante `PROJECT_ROUTER.md`, `PROJECT_STATE.md` y el Context Pack correspondiente.
 
-`ORQUESTADOR → TASK BRIEF → CODIFICADOR → BUILD/TEST → HANDOFF → AUDITOR → VEREDICTO → ORQUESTADOR`
+## Ciclo resumido
 
-Si el resultado es `FAIL`, el Orquestador genera una tarea correctiva para un Codificador. Si es `PASS`, puede autorizar la siguiente tarea.
+`ORQUESTADOR -> TASK BRIEF -> CODIFICADOR -> HANDOFF -> AUDITOR -> VEREDICTO -> ORQUESTADOR`
 
-## Documentos con funciones distintas
+Si el Auditor falla la tarea:
+`ORQUESTADOR -> TASK CORRECTIVA -> CODIFICADOR -> RE-AUDITORÍA`.
 
-| Documento | Función |
-|---|---|
-| `PROJECT_STATE.md` | estado actual y próxima acción |
-| Sprint activo | alcance y criterios del incremento |
-| ExecPlan | plan vivo para trabajo complejo |
-| Handoff | transferencia concreta entre agentes |
-| Auditoría | evaluación independiente |
-| `TRACEABILITY.md` | requisito → diseño → código → prueba |
-| ADR | decisión arquitectónica y fundamento |
+## Cambio de chat/agente
 
-No mezclar estas funciones en un único documento.
+Cada chat nuevo debe recibir un rol único y usar su prompt bootstrap. La continuidad se conserva en GitHub mediante Task Briefs, handoffs, auditorías, ExecPlans y `PROJECT_STATE.md`, no mediante memoria del chat anterior.
