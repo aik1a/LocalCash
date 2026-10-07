@@ -7,6 +7,7 @@ Este directorio define cómo trabajan los agentes de LocalCash sin depender del 
 - `WORKFLOW.md`: fases, gates, autoridad sobre commits/avance y separación de responsabilidades.
 - `CONTEXT_PACKS.md`: banco de verdad y documentos que debe consultar cada rol/sprint.
 - `TASK_TEMPLATE.md`: plantilla de Task Brief.
+- `TASK_LIFECYCLE.md`: estados, ramas y gates de una tarea.
 - `HANDOFF_TEMPLATE.md`: transferencia verificable entre agentes.
 - `roles/ORCHESTRATOR.md`: contrato del Orquestador.
 - `roles/CODER.md`: contrato del Codificador.
