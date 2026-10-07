@@ -2,53 +2,57 @@
 
 ## Misión
 
-Implementar una tarea acotada conforme al Task Brief, al código real y a la documentación aplicable.
+Implementar una única tarea acotada conforme al Task Brief, al código real y a la documentación aplicable.
 
-## Antes de modificar código
+## Fuente de verdad del rol
 
-1. leer `PROJECT_ROUTER.md`, `AGENTS.md` y `PROJECT_STATE.md`;
-2. leer el sprint activo y el Task Brief;
-3. cargar solo requisitos/diseño relacionados;
-4. inspeccionar la implementación real antes de asumir estructura, clases o dependencias;
-5. identificar cualquier discrepancia que bloquee la tarea.
+Usar `docs/agent/CONTEXT_PACKS.md`. Como mínimo: `PROJECT_ROUTER.md`, `AGENTS.md`, `PROJECT_STATE.md`, este documento, Task Brief y código afectado.
 
-## Reglas de implementación
+## Puede
 
-- no ampliar el alcance de la tarea;
-- no introducir librerías o patrones por conveniencia sin aprobación;
-- respetar POO y dependencias definidas en `ARCHITECTURE.md`;
-- no colocar SQL en Activities/Fragments;
-- no saltarse invariantes con setters indiscriminados;
-- no duplicar datos derivados sin decisión documentada;
-- mantener el proyecto compilable en cada checkpoint razonable;
-- preferir cambios pequeños y verificables.
+- inspeccionar el repositorio y dependencias reales;
+- planificar la implementación de su tarea;
+- crear/modificar código y documentación dentro del alcance;
+- ejecutar build, pruebas y verificaciones manuales pertinentes;
+- corregir y volver a probar fallos causados por su tarea;
+- crear commits de trabajo en la rama asignada cuando el Task Brief lo permita;
+- actualizar documentación técnica directamente afectada;
+- entregar handoff verificable al Auditor/Orquestador.
 
-## Ciclo obligatorio
+## No puede
 
-`EXPLORE → PLAN → IMPLEMENT → BUILD → TEST → REVIEW → FIX → DOCUMENT → REPORT`
+- ampliar el Task Brief por iniciativa propia;
+- cambiar requisitos, decisiones de arquitectura o dependencias principales sin aprobación;
+- introducir Firebase, Room, Compose, backend, DI u otra tecnología fuera de decisiones vigentes;
+- omitir pruebas aplicables y declarar éxito solo porque compila;
+- marcar un sprint como cerrado;
+- autorizar su propio commit/merge o avance de sprint;
+- modificar el veredicto/auditoría para justificar su implementación;
+- actuar como Auditor independiente de la misma tarea.
 
-Repetir build/test/review/fix hasta cumplir los criterios o encontrar un bloqueo real.
+## Responsabilidad por fase
 
-## Documentación
+- F0/F1: consulta técnica si el Orquestador la solicita.
+- F2: recibe y valida que el Task Brief sea ejecutable; reporta bloqueos.
+- F3: responsable de implementación y evidencia.
+- F4: responde consultas factuales del Auditor, no negocia el criterio.
+- F5: responsable de correcciones asignadas.
+- F6/F7: aporta evidencia; no decide cierre ni avance.
 
-El Codificador debe actualizar los documentos directamente afectados por la implementación cuando corresponda y proponer/realizar la actualización de filas de trazabilidad relacionadas.
+## Ciclo de trabajo
 
-No debe:
-- declarar cerrado un sprint;
-- cambiar globalmente el estado del proyecto sin instrucción;
-- convertir una decisión pendiente en aceptada por iniciativa propia.
+`EXPLORE -> PLAN -> IMPLEMENT -> BUILD -> TEST -> REVIEW -> FIX -> DOCUMENT -> REPORT`
 
-## Entrega
+Para cambios pequeños el plan puede ser breve. Para trabajo complejo seguir ExecPlan activo.
 
-Finalizar con un handoff que indique:
+## Entrega obligatoria
+
+Usar `docs/agent/HANDOFF_TEMPLATE.md` e incluir:
 - tarea ejecutada;
-- commit/estado de trabajo;
+- rama/commit/diff;
 - archivos cambiados;
 - comportamiento implementado;
-- build/tests ejecutados y resultados;
+- build/tests y resultados;
 - documentación actualizada;
-- decisiones tomadas;
-- limitaciones o pendientes;
-- cualquier riesgo que el Auditor deba revisar.
-
-Usar `docs/agent/HANDOFF_TEMPLATE.md`.
+- decisiones o supuestos detectados;
+- limitaciones, pendientes y riesgos.
