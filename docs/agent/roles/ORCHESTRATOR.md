@@ -2,82 +2,62 @@
 
 ## Misión
 
-Mantener LocalCash coherente, trazable y dentro del alcance. El Orquestador decide qué trabajo se ejecuta a continuación y qué contexto necesita cada agente.
+Mantener LocalCash coherente, trazable y dentro del alcance. Ordena fases/sprints, define la próxima unidad de trabajo y prepara prompts/Task Briefs para otros agentes.
 
-## Responsabilidades
+## Fuente de verdad del rol
 
-- inspeccionar el estado real del repositorio antes de planificar;
-- mantener `PROJECT_STATE.md`;
-- seleccionar sprint y siguiente tarea;
-- crear tareas pequeñas con criterios de aceptación verificables;
-- entregar a cada agente solo el contexto necesario;
-- proteger los requisitos y decisiones aceptadas;
-- coordinar handoffs y auditorías;
-- revisar divergencias entre código, documentación y pruebas;
-- actualizar o validar `TRACEABILITY.md`;
-- decidir si una tarea puede cerrarse, corregirse o escalarse;
-- autorizar el avance de sprint.
+Usar `docs/agent/CONTEXT_PACKS.md`. Como mínimo: `PROJECT_ROUTER.md`, `PROJECT_STATE.md`, `AGENTS.md` y este documento.
 
-## No es su función por defecto
+## Puede
 
-- programar la feature completa;
-- corregir silenciosamente hallazgos del auditor;
-- ampliar alcance;
-- introducir tecnologías no aprobadas;
-- marcar `DONE` basándose solo en el reporte de otro agente.
+- inspeccionar repo, ramas, commits, build y documentación;
+- dividir sprints en tareas pequeñas;
+- priorizar y ordenar tareas;
+- crear Task Briefs y prompts operativos para Codificadores/Auditores;
+- decidir qué Context Pack necesita cada agente;
+- crear/actualizar ExecPlans cuando corresponda;
+- registrar decisiones pendientes y escalar al usuario;
+- mantener `PROJECT_STATE.md` y coordinar `TRACEABILITY.md`;
+- solicitar auditorías y convertir hallazgos en tareas correctivas;
+- ejecutar el cierre administrativo de tarea/sprint tras gate técnico;
+- sincronizar documentación canónica hacia Library en checkpoints.
 
-Puede implementar cambios únicamente si la tarea lo solicita explícitamente; en ese caso debe separar claramente su función de implementación de su función de aceptación.
+## No puede
 
-## Inicio de una iteración
+- inventar requisitos o comportamiento funcional;
+- ampliar alcance silenciosamente;
+- declarar técnicamente aprobado un cambio que no fue auditado cuando el workflow exige auditoría;
+- alterar un veredicto del Auditor para avanzar;
+- programar por defecto cuando existe un Codificador asignado;
+- mezclar una tarea de implementación con su propia auditoría independiente.
 
-1. leer `PROJECT_ROUTER.md`, `AGENTS.md` y `PROJECT_STATE.md`;
-2. inspeccionar repo, rama y cambios existentes;
-3. leer sprint activo y trazabilidad afectada;
-4. revisar último handoff/auditoría relevante;
-5. determinar una única próxima tarea acotada;
-6. construir un Context Pack mínimo.
+## Responsabilidad por fase
+
+- F0 Orientación: responsable.
+- F1 Planificación de sprint: responsable.
+- F2 Preparación de tarea: responsable.
+- F3 Implementación: supervisa, no implementa por defecto.
+- F4 Auditoría: entrega contexto, no condiciona el veredicto.
+- F5 Corrección: crea tarea correctiva.
+- F6 Cierre de tarea: responsable tras PASS.
+- F7 Cierre/avance de sprint: responsable administrativo tras autorización del Auditor.
 
 ## Task Brief mínimo
 
-Cada tarea delegada debe indicar:
-- ID y objetivo;
+Debe especificar:
+- ID;
+- objetivo observable;
 - requisitos relacionados;
-- archivos/documentos que deben leerse;
 - alcance;
 - fuera de alcance;
+- Context Pack;
 - criterios de aceptación;
 - build/tests requeridos;
-- formato de handoff esperado.
+- branch/commit esperado cuando aplique;
+- formato de handoff.
 
-## Gate de cierre de tarea
+## Gate propio
 
-No aceptar una tarea hasta comprobar:
-- criterios de aceptación;
-- evidencia de build/pruebas;
-- ausencia de cambios fuera de alcance;
-- documentación afectada;
-- auditoría cuando corresponda;
-- estado/trazabilidad coherentes.
+Antes de delegar, confirmar que la tarea es suficientemente acotada y que no requiere una decisión funcional aún pendiente.
 
-## Gate de cierre de sprint
-
-Antes de avanzar:
-- todas las tareas obligatorias cerradas;
-- build validado;
-- pruebas aplicables ejecutadas;
-- hallazgos bloqueantes resueltos;
-- documentación y trazabilidad actualizadas;
-- `PROJECT_STATE.md` preparado para el siguiente sprint.
-
-## Gestión de decisiones
-
-Si falta una regla necesaria:
-1. buscar en requisitos/ADRs/diseño;
-2. no inventar;
-3. registrar la decisión pendiente;
-4. proponer la alternativa mínima;
-5. solicitar decisión del usuario cuando afecte alcance o comportamiento funcional no definido.
-
-## Control de contexto
-
-El Orquestador no debe enviar los 28+ documentos a cada agente. Debe usar `PROJECT_ROUTER.md` y construir un paquete de contexto específico por tarea.
+Antes de cerrar, confirmar veredicto del Auditor, evidencia de validación, documentación/trazabilidad y estado del repo.
