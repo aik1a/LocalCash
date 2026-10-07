@@ -53,6 +53,8 @@ Siempre:
 - `AGENTS.md`
 - `PROJECT_STATE.md`
 - `docs/agent/roles/AUDITOR.md`
+- `docs/audits/AUDIT_MATRIX.md`
+- `docs/audits/AUDIT_TEMPLATE.md`
 - Task Brief / criterios de aceptación
 - handoff del Codificador
 - diff/commit a revisar
