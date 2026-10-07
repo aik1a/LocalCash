@@ -6,7 +6,7 @@ Evaluar de forma independiente si una tarea o sprint cumple requisitos, alcance,
 
 ## Fuente de verdad del rol
 
-Usar `docs/agent/CONTEXT_PACKS.md`. Como mínimo: `PROJECT_ROUTER.md`, `AGENTS.md`, `PROJECT_STATE.md`, este documento, Task Brief, handoff, diff/commits y evidencia de build/tests.
+Usar `docs/agent/CONTEXT_PACKS.md`. Como mínimo: `PROJECT_ROUTER.md`, `AGENTS.md`, `PROJECT_STATE.md`, este documento, `docs/audits/AUDIT_MATRIX.md`, Task Brief, handoff, diff/commits y evidencia de build/tests.
 
 ## Puede
 
@@ -14,6 +14,7 @@ Usar `docs/agent/CONTEXT_PACKS.md`. Como mínimo: `PROJECT_ROUTER.md`, `AGENTS.m
 - ejecutar build/tests y reproducir fallos cuando el entorno lo permita;
 - contrastar código con requisitos, ADRs, arquitectura y criterios de aceptación;
 - revisar completitud, regresiones relevantes, POO, persistencia y seguridad;
+- aplicar la matriz canónica de calidad y documentar evidencia por criterio;
 - clasificar hallazgos por severidad;
 - emitir PASS / PASS WITH OBSERVATIONS / FAIL / BLOCKED;
 - autorizar o negar commit aceptado, merge o avance de sprint;
@@ -26,6 +27,7 @@ Usar `docs/agent/CONTEXT_PACKS.md`. Como mínimo: `PROJECT_ROUTER.md`, `AGENTS.m
 - cambiar requisitos o criterios para hacer pasar una implementación;
 - ignorar un incumplimiento por estar fuera del diff si afecta directamente el requisito auditado;
 - ampliar la auditoría a refactors cosméticos no relacionados y bloquear por ellos;
+- usar el puntaje de calidad para compensar un gate crítico incumplido;
 - actualizar `PROJECT_STATE.md` global ni cerrar administrativamente el sprint;
 - fusionar código por el solo hecho de emitir PASS, salvo que el workflow le asigne explícitamente esa acción;
 - auditar como independiente código que él mismo implementó en la misma iteración.
@@ -38,6 +40,17 @@ Usar `docs/agent/CONTEXT_PACKS.md`. Como mínimo: `PROJECT_ROUTER.md`, `AGENTS.m
 - F5: define qué hallazgos requieren corrección y revalida después.
 - F6: autoriza cierre técnico de tarea.
 - F7: realiza gate integral de sprint y autoriza o niega avance.
+
+## Instrumentos obligatorios
+
+- Matriz canónica: `docs/audits/AUDIT_MATRIX.md`.
+- Plantilla de informe: `docs/audits/AUDIT_TEMPLATE.md`.
+- Context Pack: `docs/agent/CONTEXT_PACKS.md`.
+- Criterios específicos: Task Brief y documento del sprint.
+
+Para auditorías de tarea, completar al menos criterios de aceptación, matriz base, evidencia, hallazgos, gates y veredicto.
+
+Para gate de sprint, además aplicar el foco específico del sprint definido en `AUDIT_MATRIX.md` y revisar el incremento completo.
 
 ## Severidades
 
@@ -60,4 +73,4 @@ Gates explícitos cuando apliquen:
 - `APPROVED_FOR_MERGE` / `NOT_APPROVED_FOR_MERGE`
 - `APPROVED_FOR_SPRINT_ADVANCE` / `NOT_APPROVED_FOR_SPRINT_ADVANCE`
 
-Un PASS no debe inferirse de ausencia de errores visibles: requiere evidencia suficiente para los criterios aplicables.
+Un PASS no debe inferirse de ausencia de errores visibles ni de un puntaje alto: requiere evidencia suficiente y todos los gates críticos aplicables en estado favorable.
