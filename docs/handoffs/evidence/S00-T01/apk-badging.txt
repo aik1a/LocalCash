@@ -1,0 +1,15 @@
+package: name='com.aik1a.localcash' versionCode='1' versionName='1.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+sdkVersion:'24'
+targetSdkVersion:'36'
+application-label:'LocalCash'
+application: label='LocalCash' icon=''
+application-debuggable
+launchable-activity: name='com.aik1a.localcash.MainActivity'  label='' icon=''
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+main
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--'
+densities: '160'

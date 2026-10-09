@@ -1,0 +1,15 @@
+NO EJECUTADO: instalaci�n/apertura de la aplicaci�n.
+
+1. adb devices: ning�n dispositivo antes de iniciar pruebas.
+2. emulator -avd Pixel_10a -read-only -no-snapshot -no-window -no-audio -gpu swiftshader -port 5580
+   Error: creaci�n de C:\Users\Admin\.android\avd\Pixel_10a.avd\snapshot.lock.lock denegada (error: 5).
+   Se detuvieron los procesos creados por el Codificador.
+3. Se prepar� un AVD aislado LocalCashTest en .android-user-home/avd, basado en la configuraci�n del AVD existente.
+   emulator -avd LocalCashTest -no-snapshot -no-window -no-audio -gpu swiftshader -port 5580
+   El log confirm� WHPX operativo, pero adb devices mantuvo emulator-5580 offline.
+4. adb -s emulator-5580 shell getprop sys.boot_completed
+   Resultado: adb.exe: device offline.
+5. adb -s emulator-5580 emu kill
+   Resultado: OK: killing emulator, bye bye; OK.
+
+No se instal� APK ni se verific� visualmente la Activity. No se declara PASS de arranque.
