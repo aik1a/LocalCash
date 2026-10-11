@@ -1,0 +1,27 @@
+S00-T01 scoped revalidation
+Date: 2026-10-10 America/Santiago / 2026-10-11 UTC
+Audited base: f1af509fe45b13df67f1898eae03ed57568e239a
+Branch: task/S00-T01-proyecto-android-base
+
+Attempted command:
+& 'C:\Users\Admin\AppData\Local\Android\Sdk\platform-tools\adb.exe' devices
+
+Tool result (before process creation):
+exec_command failed: CreateProcess { message: "Rejected(\"Failed to create unified exec process: exec-server rejected request (-32602): failed to prepare process sandbox: failed to prepare windows sandbox wrapper: managed networking requires the elevated Windows sandbox backend\")" }
+
+No adb process was created. No adb exit code is available.
+An earlier read-only workspace/Git inspection command failed at the same sandbox preparation stage.
+No elevation request or permission bypass was attempted.
+
+Current results:
+- APK installation: NO EJECUTADO.
+- MainActivity launch: NO EJECUTADO.
+- LocalCash text visible: NO EJECUTADO.
+- No startup-blocking errors: NO EJECUTADO, not confirmed.
+- Android Studio Gradle sync: NO EJECUTADO; no application-control channel available.
+- Build from clean checkout and unprepared caches: NO EJECUTADO; command execution unavailable.
+- New build or unit test run: NO EJECUTADO.
+- Historical 2026-10-09 build/test/metadata evidence: preserved, not rerun.
+
+No structural, dependency, version, or functional configuration changes were made.
+The current device state is unknown; the previous offline state belongs to 2026-10-09.
