@@ -1,0 +1,169 @@
+{
+  "task": "S00-T01",
+  "role": "Codificador",
+  "date_local": "2026-10-10 America/Santiago",
+  "date_utc": "2026-10-11",
+  "audited_base": "f1af509fe45b13df67f1898eae03ed57568e239a",
+  "verified_commit": "b7a1b01b8127b9d4d7894618e4e1590f7f7f8fc1",
+  "method": [
+    "Read GitHub content with encoding=base64 at the specified commit.",
+    "Decode raw bytes using a strict UTF-8 decoder; reject invalid sequences, overlong forms, surrogates and out-of-range code points.",
+    "Count Unicode replacement characters (U+FFFD); require zero after correction.",
+    "For uploaded files, compare Base64-encoded UTF-8 expected bytes against the stored Git bytes exactly.",
+    "For unchanged historical evidence, compare blob SHA against the audited base.",
+    "Before adding clearly separated revalidation notes, verify that replacing restored non-ASCII characters with U+FFFD recreates the original historical text exactly."
+  ],
+  "before": [
+    {
+      "path": "docs/delivery/BUILD.md",
+      "sha": "07a5f90716ffd2a5201a9b5b064bb2ca93f89e46",
+      "validUTF8": true,
+      "replacementCharacters": 48
+    },
+    {
+      "path": "docs/handoffs/S00-T01-coder.md",
+      "sha": "801edf4c5aff7acbee8e57dd8fdbe7f758e3acf0",
+      "validUTF8": true,
+      "replacementCharacters": 54
+    },
+    {
+      "path": "docs/handoffs/evidence/S00-T01/manual.txt",
+      "sha": "e2dee10462dc41f62e0e43cc7cb9e644ea10e285",
+      "validUTF8": true,
+      "replacementCharacters": 9
+    },
+    {
+      "path": "docs/handoffs/evidence/S00-T01/checks.txt",
+      "sha": "7a2e4e113532f8a9bca1cb80e5f64f9fca7e0bba",
+      "validUTF8": true,
+      "replacementCharacters": 0
+    },
+    {
+      "path": "docs/handoffs/evidence/S00-T01/assembleDebug.txt",
+      "sha": "bd0bc2201e407a8f8f20446ea26eaef1ccb6dc05",
+      "validUTF8": true,
+      "replacementCharacters": 0
+    },
+    {
+      "path": "docs/handoffs/evidence/S00-T01/clean-build-tests.txt",
+      "sha": "d2e07b99be98f6146f1545d85dc137f766e7e1f1",
+      "validUTF8": true,
+      "replacementCharacters": 0
+    },
+    {
+      "path": "docs/handoffs/evidence/S00-T01/apk-badging.txt",
+      "sha": "c2b81189547dfe7aaf6590764533922fc0b230a2",
+      "validUTF8": true,
+      "replacementCharacters": 0
+    }
+  ],
+  "restoration": [
+    {
+      "path": "docs/delivery/BUILD.md",
+      "originalBlob": "07a5f90716ffd2a5201a9b5b064bb2ca93f89e46",
+      "replacements": 48,
+      "onlyCharacterRestoration": true
+    },
+    {
+      "path": "docs/handoffs/S00-T01-coder.md",
+      "originalBlob": "801edf4c5aff7acbee8e57dd8fdbe7f758e3acf0",
+      "replacements": 54,
+      "onlyCharacterRestoration": true
+    },
+    {
+      "path": "docs/handoffs/evidence/S00-T01/manual.txt",
+      "originalBlob": "e2dee10462dc41f62e0e43cc7cb9e644ea10e285",
+      "replacements": 9,
+      "onlyCharacterRestoration": true
+    }
+  ],
+  "stored_blobs": [
+    {
+      "path": "docs/delivery/BUILD.md",
+      "blob_sha": "c19f07a024f9de561eadc8646e6813f0ca0b0ac8",
+      "strict_utf8": true,
+      "replacement_characters": 0,
+      "exact_uploaded_bytes": true,
+      "historical_blob_unchanged": null
+    },
+    {
+      "path": "docs/handoffs/S00-T01-coder.md",
+      "blob_sha": "6439cb6a051f229aef8d91d41577ea2819101648",
+      "strict_utf8": true,
+      "replacement_characters": 0,
+      "exact_uploaded_bytes": true,
+      "historical_blob_unchanged": null
+    },
+    {
+      "path": "docs/handoffs/evidence/S00-T01/manual.txt",
+      "blob_sha": "efabc1b717f3c70c548d1331345206574c2a7dde",
+      "strict_utf8": true,
+      "replacement_characters": 0,
+      "exact_uploaded_bytes": true,
+      "historical_blob_unchanged": null
+    },
+    {
+      "path": "docs/handoffs/evidence/S00-T01/revalidation-blocker.txt",
+      "blob_sha": "02525212f8defb14c4d85132d786422f787e276a",
+      "strict_utf8": true,
+      "replacement_characters": 0,
+      "exact_uploaded_bytes": true,
+      "historical_blob_unchanged": null
+    },
+    {
+      "path": "docs/handoffs/evidence/S00-T01/verify-utf8.ps1",
+      "blob_sha": "9297a8efde6abe7b264276584541f0afe637c70f",
+      "strict_utf8": true,
+      "replacement_characters": 0,
+      "exact_uploaded_bytes": true,
+      "historical_blob_unchanged": null
+    },
+    {
+      "path": "docs/handoffs/evidence/S00-T01/checks.txt",
+      "blob_sha": "7a2e4e113532f8a9bca1cb80e5f64f9fca7e0bba",
+      "strict_utf8": true,
+      "replacement_characters": 0,
+      "exact_uploaded_bytes": null,
+      "historical_blob_unchanged": true
+    },
+    {
+      "path": "docs/handoffs/evidence/S00-T01/assembleDebug.txt",
+      "blob_sha": "bd0bc2201e407a8f8f20446ea26eaef1ccb6dc05",
+      "strict_utf8": true,
+      "replacement_characters": 0,
+      "exact_uploaded_bytes": null,
+      "historical_blob_unchanged": true
+    },
+    {
+      "path": "docs/handoffs/evidence/S00-T01/clean-build-tests.txt",
+      "blob_sha": "d2e07b99be98f6146f1545d85dc137f766e7e1f1",
+      "strict_utf8": true,
+      "replacement_characters": 0,
+      "exact_uploaded_bytes": null,
+      "historical_blob_unchanged": true
+    },
+    {
+      "path": "docs/handoffs/evidence/S00-T01/apk-badging.txt",
+      "blob_sha": "c2b81189547dfe7aaf6590764533922fc0b230a2",
+      "strict_utf8": true,
+      "replacement_characters": 0,
+      "exact_uploaded_bytes": null,
+      "historical_blob_unchanged": true
+    }
+  ],
+  "result": "PASS for encoding correction and exact stored bytes; not an independent audit verdict.",
+  "reproduce": "From repository root in a functional Windows environment: powershell -NoProfile -File docs/handoffs/evidence/S00-T01/verify-utf8.ps1 -Ref HEAD",
+  "powershell_reproduction_executed": false,
+  "powershell_reproduction_limitation": "Local process creation blocked by managed Windows sandbox.",
+  "runtime_results": {
+    "apk_install": "NO EJECUTADO",
+    "main_activity_launch": "NO EJECUTADO",
+    "localcash_text_visible": "NO EJECUTADO",
+    "no_startup_errors": "NO EJECUTADO",
+    "android_studio_sync": "NO EJECUTADO",
+    "clean_checkout_without_prepared_caches": "NO EJECUTADO",
+    "new_build": "NO EJECUTADO"
+  },
+  "runtime_evidence": "docs/handoffs/evidence/S00-T01/revalidation-blocker.txt",
+  "scope": "Documentation and directly related evidence only. No source code, functional configuration, versions, requirements, ADR or PROJECT_STATE changes. No merge."
+}
