@@ -26,6 +26,8 @@ public final class MainActivity extends Activity {
         Pantalla.aplicarMargenes(findViewById(R.id.root));
         helper = new LocalCashDbHelper(this);
         service = new MovimientoService(helper);
+        findViewById(R.id.abrir_contactos).setOnClickListener(v -> startActivity(new Intent(this, ContactosActivity.class)));
+        findViewById(R.id.abrir_compras).setOnClickListener(v -> startActivity(new Intent(this, ComprasActivity.class)));
         lista = findViewById(R.id.cuentas);
         lista.setEmptyView(findViewById(R.id.vacio));
         findViewById(R.id.crear_cuenta).setOnClickListener(v -> mostrarFormulario());

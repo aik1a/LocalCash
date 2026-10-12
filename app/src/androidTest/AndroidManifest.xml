@@ -1,0 +1,3 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <instrumentation android:name="com.aik1a.localcash.PurchaseFlowChecks" android:targetPackage="com.aik1a.localcash" />
+</manifest>

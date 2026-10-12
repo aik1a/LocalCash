@@ -4,6 +4,7 @@
     android:orientation="vertical" android:padding="16dp">
     <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
         android:text="LocalCash · Cuentas" android:textSize="24sp" android:accessibilityHeading="true" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"><Button android:id="@+id/abrir_contactos" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Contactos" /><Button android:id="@+id/abrir_compras" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Compras" /></LinearLayout>
     <Button android:id="@+id/crear_cuenta" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Crear cuenta" />
     <TextView android:id="@+id/vacio" android:layout_width="match_parent" android:layout_height="wrap_content"
         android:padding="16dp" android:text="No hay cuentas. Crea una para comenzar." />
