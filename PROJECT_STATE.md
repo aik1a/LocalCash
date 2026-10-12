@@ -17,7 +17,7 @@
 
 ## Próxima acción autorizada
 
-**S00-T03:** implementar el primer flujo completo y demostrable: crear/listar cuentas, registrar ingresos/egresos, calcular saldo y persistirlo en SQLite. Task Brief: `docs/tasks/active/S00-T03-dependencias.md` (ruta histórica conservada; el contenido se actualizó a la nueva prioridad). Rama de código `task/S00-T03-cuentas-movimientos`, desde main.
+**S00-T03:** implementar el primer flujo completo y demostrable: crear/listar cuentas, registrar ingresos/egresos, calcular saldo y persistirlo en SQLite. Task Brief: `docs/tasks/active/S00-T03-cuentas-movimientos.md`. Rama de código `task/S00-T03-cuentas-movimientos`, desde main.
 
 **Motivo del cambio:** priorización expresa del usuario el 2026-10-12 por plazo académico. Se reemplaza la secuencia de tareas solo preparatorias por entregas funcionales, sin eliminar requisitos ni alterar los cuatro pilares docentes. Las dependencias, permisos y documentación técnica se integran cuando una funcionalidad realmente los necesita. Los sprints S01–S07 mantienen sus criterios técnicos de referencia, pero no implican implementar tareas duplicadas.
 
