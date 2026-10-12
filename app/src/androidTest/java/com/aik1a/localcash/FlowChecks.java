@@ -28,7 +28,7 @@ public final class FlowChecks extends Instrumentation {
             info.flags |= AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
             getUiAutomation().setServiceInfo(info);
             abrir();
-            clickText("Crear cuenta");
+            clickId("crear_cuenta");
             setText("nombre", " ");
             clickText("Guardar");
             assertTrue(nodeId("nombre") != null, "Nombre vacío mantiene formulario abierto");
@@ -36,7 +36,7 @@ public final class FlowChecks extends Instrumentation {
             setText("saldo_inicial", "100,00");
             clickText("Guardar");
             nodeText("Efectivo");
-            clickText("Crear cuenta");
+            clickId("crear_cuenta");
             setText("nombre", "Banco");
             setText("saldo_inicial", "300");
             clickText("Guardar");
@@ -112,6 +112,7 @@ public final class FlowChecks extends Instrumentation {
             result.putString("stream", "LOCALCASH_FLOW_PASS\n" + log);
             finish(Activity.RESULT_OK, result);
         } catch (Throwable failure) {
+            dump(getUiAutomation().getRootInActiveWindow(), 0);
             result.putString("stream", "LOCALCASH_FLOW_FAIL\n" + log + android.util.Log.getStackTraceString(failure));
             finish(Activity.RESULT_CANCELED, result);
         }
@@ -132,7 +133,7 @@ public final class FlowChecks extends Instrumentation {
                 List<AccessibilityNodeInfo> nodes = id ? root.findAccessibilityNodeInfosByViewId("com.aik1a.localcash:id/" + value)
                         : root.findAccessibilityNodeInfosByText(value);
                 for (AccessibilityNodeInfo node : nodes) {
-                    if (id || value.contentEquals(node.getText() == null ? "" : node.getText())) return node;
+                    if (id || value.equalsIgnoreCase(node.getText() == null ? "" : node.getText().toString())) return node;
                 }
             }
             SystemClock.sleep(100);
@@ -141,6 +142,15 @@ public final class FlowChecks extends Instrumentation {
     }
     private AccessibilityNodeInfo nodeId(String id) { return buscar(id, true); }
     private AccessibilityNodeInfo nodeText(String text) { return buscar(text, false); }
+    private void dump(AccessibilityNodeInfo node, int depth) {
+        if (node == null || depth > 12) return;
+        log.append("UI ").append(node.getViewIdResourceName()).append(" text=").append(node.getText()).append('\n');
+        for (int i = 0; i < node.getChildCount(); i++) dump(node.getChild(i), depth + 1);
+    }
+    private void clickId(String id) {
+        assertTrue(nodeId(id).performAction(AccessibilityNodeInfo.ACTION_CLICK), "Click " + id);
+        waitForIdleSync();
+    }
     private void clickText(String text) {
         AccessibilityNodeInfo node = nodeText(text);
         while (!node.isClickable() && node.getParent() != null) node = node.getParent();

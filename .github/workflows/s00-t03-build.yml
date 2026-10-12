@@ -54,6 +54,11 @@ jobs:
             adb install -r app/build/outputs/apk/debug/app-debug.apk
             adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
             adb shell am instrument -w com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks | tee evidence/android-flow.log
+            adb shell screencap -p /sdcard/flow.png
+            adb pull /sdcard/flow.png evidence/flow.png
+            adb shell uiautomator dump /sdcard/flow-window.xml
+            adb pull /sdcard/flow-window.xml evidence/flow-window.xml
+            adb logcat -d -t 500 > evidence/android-logcat.txt
             grep -q LOCALCASH_FLOW_PASS evidence/android-flow.log
             adb shell am force-stop com.aik1a.localcash
             adb shell am start -W -n com.aik1a.localcash/.presentation.MainActivity | tee evidence/relaunch.log
