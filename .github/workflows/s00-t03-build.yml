@@ -50,10 +50,11 @@ jobs:
           arch: x86_64
           target: google_apis
           disable-animations: true
+          emulator-boot-timeout: 180
           script: |
             adb install -r app/build/outputs/apk/debug/app-debug.apk
             adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
-            adb shell am instrument -w com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks | tee evidence/android-flow.log
+            timeout 180s adb shell am instrument -w com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks | tee evidence/android-flow.log
             adb shell screencap -p /sdcard/flow.png
             adb pull /sdcard/flow.png evidence/flow.png
             adb shell uiautomator dump /sdcard/flow-window.xml

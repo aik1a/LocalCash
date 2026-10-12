@@ -70,7 +70,7 @@ public final class FlowChecks extends Instrumentation {
             nodeText("Todavía no hay movimientos en esta cuenta.");
             clickText("Volver a cuentas");
             runOnMainSync(() -> main.finish());
-            waitForIdleSync();
+            esperarUI();
 
             LocalCashDbHelper helper = new LocalCashDbHelper(getTargetContext());
             MovimientoService service = new MovimientoService(helper);
@@ -118,11 +118,17 @@ public final class FlowChecks extends Instrumentation {
         }
     }
 
+    private void esperarUI() {
+        try { getUiAutomation().waitForIdle(100, 3000); }
+        catch (java.util.concurrent.TimeoutException ignored) {
+            // Cada búsqueda de nodo tiene su propio plazo; no bloquear esperando idle indefinidamente.
+        }
+    }
     private void abrir() {
         Intent intent = new Intent(getTargetContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         main = startActivitySync(intent);
-        waitForIdleSync();
+        esperarUI();
     }
     private void assertTrue(boolean condition, String message) { if (!condition) throw new AssertionError(message); }
     private AccessibilityNodeInfo buscar(String value, boolean id) {
@@ -149,18 +155,18 @@ public final class FlowChecks extends Instrumentation {
     }
     private void clickId(String id) {
         assertTrue(nodeId(id).performAction(AccessibilityNodeInfo.ACTION_CLICK), "Click " + id);
-        waitForIdleSync();
+        esperarUI();
     }
     private void clickText(String text) {
         AccessibilityNodeInfo node = nodeText(text);
         while (!node.isClickable() && node.getParent() != null) node = node.getParent();
         assertTrue(node.performAction(AccessibilityNodeInfo.ACTION_CLICK), "Click " + text);
-        waitForIdleSync();
+        esperarUI();
     }
     private void setText(String id, String text) {
         Bundle args = new Bundle();
         args.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, text);
         assertTrue(nodeId(id).performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args), "Texto " + id);
-        waitForIdleSync();
+        esperarUI();
     }
 }
