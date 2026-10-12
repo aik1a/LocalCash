@@ -51,6 +51,10 @@ public final class PurchaseFlowChecks extends Instrumentation {
             clickId("contacto_compra"); clickText("Ana (#1)");
             setText("item_descripcion", "Cuaderno"); setText("item_cantidad", "0"); setText("item_precio", "100,25");
             clickId("agregar_item"); nodeText("El ítem necesita descripción, cantidad entera positiva y precio no negativo.");
+            setText("item_cantidad", "-1"); clickId("agregar_item");
+            nodeText("El ítem necesita descripción, cantidad entera positiva y precio no negativo.");
+            setText("item_cantidad", "1,5"); clickId("agregar_item");
+            nodeText("La cantidad debe ser un entero positivo dentro del rango permitido.");
             setText("item_cantidad", "2"); clickId("agregar_item");
             setText("item_descripcion", "Servicio"); setText("item_cantidad", "3"); setText("item_precio", "10,50"); clickId("agregar_item");
             nodeText("Total: 232,00"); clickId("guardar_compra");
