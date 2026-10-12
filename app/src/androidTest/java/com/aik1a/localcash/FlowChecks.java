@@ -169,9 +169,10 @@ public final class FlowChecks extends Instrumentation {
             setText("nombre_compra", "Compra planificada");
             clickId("guardar_compra"); nodeText("La compra necesita nombre, estado, fecha y al menos un ítem válido.");
             setText("item_descripcion", "Producto futuro"); setText("item_cantidad", "1"); setText("item_precio", "50"); clickId("agregar_item");
-            clickId("fecha_compra"); clickText("Next month");
-            java.util.Calendar futuro = java.util.Calendar.getInstance(); futuro.add(java.util.Calendar.MONTH, 1); futuro.set(java.util.Calendar.DAY_OF_MONTH, 15);
-            clickText(new java.text.SimpleDateFormat("dd MMMM yyyy", java.util.Locale.US).format(futuro.getTime()));
+            clickId("fecha_compra");
+            int year = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
+            clickText(Integer.toString(year));
+            clickText(Integer.toString(year + 1));
             clickText("OK"); clickId("guardar_compra");
             assertTrue(nodeId("compra_info").getText().toString().startsWith("PLANIFICADA"), "Estado planificada visible"); nodeText("Contacto: Sin contacto"); nodeText("Total: 50,00");
             clickId("volver"); nodeText("Compra realizada"); nodeText("Compra planificada");
