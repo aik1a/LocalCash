@@ -10,19 +10,18 @@
 - **Rama principal:** `main`
 - **Fase:** foundation / implementación inicial
 - **Sprint activo:** `S00 — Foundation`
-- **Estado del sprint:** IN_PROGRESS; S00-T01 cerrada, resto pendiente
-- **Código Android:** proyecto base Java/XML y Gradle Groovy integrado en main mediante PR #1
-- **Build validado:** evidencia histórica del 2026-10-09, `BUILD SUCCESSFUL in 25s`; no reejecutado en este cierre
-- **Tests automatizados:** esqueleto sin tests; `:app:testDebugUnitTest NO-SOURCE` documentado
-- **Último hito validado:** S00-T01 integrada y cerrada administrativamente el 2026-10-12 tras PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE
-- **Merge S00-T01:** `3cb3d5a164bc99e5343f283efa44c4a9211426b3` ([PR #1](https://github.com/aik1a/LocalCash/pull/1))
-- **Tarea activa preparada:** S00-T02, READY; aún no implementada
+- **Estado del sprint:** IN_PROGRESS; S00-T01 y S00-T02 CLOSED
+- **Código Android:** proyecto base Java/XML + Gradle Groovy; MainActivity en `com.aik1a.localcash.presentation`
+- **Build validado:** GitHub Actions `38267899607`: `assembleDebug` para SHA `6cea41252f26a76af44f81f990a99f0b95cf74b1`, `BUILD SUCCESSFUL in 1m 8s`, 33 tareas, código 0
+- **Tests automatizados:** no hay tests implementados; S00-T02 no introdujo casos nuevos
+- **Último hito validado:** S00-T02 reauditoría PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE; fusionada mediante PR #2 (`d39a35b99fe96349f06052dff01163957ed54c4f`), cierre administrativo el 2026-10-12
+- **Tarea activa preparada:** S00-T03, READY; todavía no implementada
 
 ## Próxima acción autorizada
 
-`S00-T02`: organizar los paquetes Java mínimos según la arquitectura aprobada, conforme a `docs/tasks/active/S00-T02-estructura-paquetes.md`.
+`S00-T03`: preparar la dependencia aprobada de mapas, osmdroid 6.1.18, de forma acotada y compilar el cambio, conforme a `docs/tasks/active/S00-T03-dependencias.md`.
 
-Rol ejecutor: Codificador. Rama: `task/S00-T02-estructura-paquetes`, desde main después de este cierre. No implementar módulos, dependencias ni clases de tareas posteriores.
+**Rol ejecutor:** Codificador. Rama `task/S00-T03-dependencias`, creada desde el main vigente. No implementar mapas, biometría funcional, permisos, pantallas ni otras tareas.
 
 ## Decisiones vigentes
 
@@ -52,22 +51,21 @@ Resolver solo cuando el sprint correspondiente las necesite:
 
 ## Bloqueadores
 
-No hay bloqueo administrativo para preparar S00-T02. Las limitaciones de ejecución Android permanecen registradas para S00-T06; no se interpretan como pruebas realizadas.
+Ninguno para asignar S00-T03. H-01 (build S00-T02) quedó resuelto. No existe autorización de cierre del sprint S00.
 
 ## Última auditoría
 
-`docs/audits/S00/S00-T01-reaudit.md`: PASS WITH OBSERVATIONS y APPROVED_FOR_MERGE del estado funcional `b63e5e2c4de6accb9c952022f12b07a0b614d62d`. El único commit posterior anterior al merge (`7288b9f6b40bdcb3c77385e9e138acaff96973d7`) añadió ese informe; sin cambios funcionales.
+`docs/audits/S00/S00-T02-reaudit-H01.md`: PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE. Commit funcional `6cea41252f26a76af44f81f990a99f0b95cf74b1` compilado con Actions (run `38267899607`), y solo cambios CI/documentación después.
 
-No se repitió la auditoría. El sprint S00 no está cerrado ni tiene autorización de avance al sprint siguiente.
+PR #2 merge `d39a35b99fe96349f06052dff01163957ed54c4f`. Sin reauditoría integral de S00.
 
 ## Validaciones pendientes — S00-T06
 
-- OBS-02: instalar APK, abrir MainActivity, comprobar «LocalCash» y ausencia de errores de inicio.
-- OBS-03: sincronizar Gradle en Android Studio y compilar desde checkout limpio sin cachés previamente preparadas.
-- Conservar `NO EJECUTADO` hasta obtener evidencia real; usar los registros de `docs/handoffs/evidence/S00-T01/`.
-- Mantener documentada la deprecación `android.builtInKotlin=false` (OBS-04), sin actualizar versiones solo para eliminarla.
-
-El traslado a S00-T06 fue autorizado por el usuario el 2026-10-12 y se registra en `docs/sprints/S00-foundation.md`.
+- OBS-02 / H-02: instalar APK, abrir `com.aik1a.localcash.presentation.MainActivity`, comprobar «LocalCash» y ausencia de errores de inicio; sigue NO EJECUTADO.
+- OBS-03: sincronización Gradle en Android Studio; build desde checkout limpio y caché sin preparar. El runner CI de S00-T02 demuestra compilación de un checkout fijado, pero no una sincronización visual de Studio.
+- OBS-04: mantener documentada la deprecación `android.builtInKotlin=false`; sin actualización arbitraria de versión.
+- Workflow `s00-t02-build.yml` tiene checkout fijado al SHA antiguo. No usarlo como evidencia de commits nuevos sin actualizar la referencia y comprobar la salida.
+- Mantener evidencia histórica y separar pruebas realmente ejecutadas de las pendientes.
 
 ## Reglas de actualización
 

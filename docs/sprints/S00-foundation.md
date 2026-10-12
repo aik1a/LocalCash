@@ -7,8 +7,8 @@ Obtener un proyecto Android Java compilable con estructura mínima, dependencias
 ## Tareas
 
 - S00-T01 — CLOSED (2026-10-12): proyecto Android Java con Gradle Groovy integrado mediante PR #1.
-- S00-T02 — READY: definir paquetes coherentes con `ARCHITECTURE.md` sin sobrefragmentar; Task Brief `docs/tasks/active/S00-T02-estructura-paquetes.md`.
-- S00-T03: agregar dependencias necesarias, incluyendo osmdroid 6.1.18 y biometría cuando corresponda.
+- S00-T02 — CLOSED (2026-10-12): `MainActivity` en `presentation`, build CI validado y merge mediante PR #2. Auditoría `docs/audits/S00/S00-T02-reaudit-H01.md`.
+- S00-T03 — READY: incorporar la dependencia osmdroid 6.1.18 en Gradle y validar compilación; Task Brief `docs/tasks/active/S00-T03-dependencias.md`. La dependencia de biometría se añade cuando corresponda a su integración funcional en S02.
 - S00-T04: configurar permisos requeridos por el proyecto y documentar por qué existen.
 - S00-T05: crear navegación/pantalla base suficiente para integrar módulos posteriores.
 - S00-T06 — PENDIENTE: asegurar build limpio y registrar comandos; recoger las validaciones Android pendientes de S00-T01.
@@ -35,4 +35,4 @@ Por instrucción del usuario del 2026-10-12, S00-T06 debe resolver:
 - Conservar la advertencia `android.builtInKotlin=false` (OBS-04); no actualizar versiones para ocultarla.
 - Consultar `docs/handoffs/evidence/S00-T01/` y `docs/delivery/BUILD.md`; agregar evidencia nueva sin sustituir los registros históricos.
 
-S00-T06 no se asigna todavía: el siguiente trabajo autorizado es S00-T02.
+S00-T06 continúa pendiente: incluye H-02 de S00-T02 (apertura real de `presentation.MainActivity`). H-01 ya se resolvió mediante Actions run `38267899607` y no requiere más intentos. La siguiente tarea autorizada es S00-T03.

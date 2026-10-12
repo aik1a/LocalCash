@@ -2,7 +2,7 @@
 
 **Sprint:** S00 — Foundation
 **Rol asignado:** Codificador (Codex)
-**Estado:** READY
+**Estado:** CLOSED — 2026-10-12 (PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE)
 **Rama de trabajo:** `task/S00-T02-estructura-paquetes`, desde main después del cierre administrativo de S00-T01
 **Base funcional aceptada:** merge S00-T01 `3cb3d5a164bc99e5343f283efa44c4a9211426b3`; incluir también la documentación de cierre vigente en main
 **Repositorio:** `aik1a/LocalCash`
@@ -91,3 +91,13 @@ No modificar Gradle ni XML de la pantalla salvo una discrepancia documentada que
 - Solicitud de auditoría independiente; no autorizar el propio cambio ni hacer merge.
 
 La preparación de este Task Brief no implementa S00-T02. El Codificador está autorizado únicamente a esta tarea; aceptación del Auditor y cierre del Orquestador.
+
+## Cierre administrativo — 2026-10-12
+
+- Commit funcional auditado: `6cea41252f26a76af44f81f990a99f0b95cf74b1`.
+- Validación: [GitHub Actions run 38267899607](https://github.com/aik1a/LocalCash/actions/runs/38267899607); `assembleDebug` exit 0, 33 tareas, APK generado.
+- Informe: `docs/audits/S00/S00-T02-reaudit-H01.md`, PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE.
+- Merge: PR #2, `d39a35b99fe96349f06052dff01163957ed54c4f`.
+- H-01 resuelto; H-02 (abrir la aplicación en Android) permanece NO EJECUTADO para S00-T06.
+- Archivo histórico: criterios de aceptación originales conservados; su checklist previa no significa pruebas manuales ejecutadas.
+- Cierre administrativo por Orquestador; sprint S00 sigue IN_PROGRESS.

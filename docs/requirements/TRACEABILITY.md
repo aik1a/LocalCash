@@ -4,7 +4,7 @@ Esta matriz conecta requisitos con diseño, sprint, código y validación. Debe 
 
 | Requisito | Diseño principal | Sprint | Código | Prueba | Estado |
 |---|---|---:|---|---|---|
-| LC-P01 | ARCHITECTURE | S00 / T01 | `app/build.gradle`, `MainActivity.java`, XML y manifiesto | BUILD-01; logs S00-T01 y reauditoría favorable | Proyecto base integrado; S00-T01 CLOSED |
+| LC-P01 | ARCHITECTURE | S00 / T01-T02 | `app/build.gradle`, `app/src/main/java/com/aik1a/localcash/presentation/MainActivity.java`, XML y manifiesto | BUILD-01; Actions run `38267899607` (S00-T02, SHA exacto), auditoría favorable | Proyecto base y estructura presentacional integrados; T01-T02 CLOSED |
 | LC-P02 / LC-TECH-01 | DATABASE / ADR-001 | S01 | Pendiente | DB-01 | Pendiente |
 | LC-P03 / LC-AUTH-01 | ARCHITECTURE | S02 | Pendiente | AUTH-01 | Pendiente |
 | LC-CON-01 | DOMAIN_MODEL / DATABASE | S05 | Pendiente | CON-01 | Pendiente |
@@ -19,7 +19,7 @@ Esta matriz conecta requisitos con diseño, sprint, código y validación. Debe 
 | LC-SHARED-02 | DOMAIN_MODEL / DATABASE | S06 | Pendiente | SHARE-02 | Pendiente |
 | LC-DEBT-01 | BUSINESS_RULES | S06 | Pendiente | DEBT-01 | Pendiente |
 | LC-DEBT-02 | BUSINESS_RULES | S06 | Pendiente | DEBT-02 | Pendiente |
-| LC-TECH-05 | docs/ | S07 | Pendiente | DOC-01 | En progreso |
+| LC-TECH-05 | docs/ | S00/S07 | `docs/design/PACKAGE_STRUCTURE.md`; documentación BUILD | Evidencia/handoffs S00-T01 y S00-T02 | En progreso; estructura inicial documentada |
 | LC-TECH-06 | delivery/PRESENTATION | S07 | Pendiente | DEMO-01 | Pendiente |
 
 ## Cierre S00-T01 — 2026-10-12
@@ -37,4 +37,14 @@ Esta matriz conecta requisitos con diseño, sprint, código y validación. Debe 
 | Sync Android Studio / checkout y caché vacía (OBS-03) | NO EJECUTADO | S00-T06 | `BUILD.md`, `revalidation-blocker.txt` |
 | Deprecación Kotlin integrado (OBS-04) | Riesgo aceptado/documentado | Seguimiento en S00-T06 | `BUILD.md`, reauditoría S00-T01 |
 
-S00-T02 queda READY para definir los paquetes mínimos; no implementada. El sprint S00 continúa abierto.
+S00-T02 fue cerrada el 2026-10-12; S00-T03 quedó READY. El sprint S00 continúa abierto.
+
+## Cierre S00-T02 — 2026-10-12
+
+- Código auditado: `6cea41252f26a76af44f81f990a99f0b95cf74b1`.
+- Validación BUILD-01: [Actions run 38267899607](https://github.com/aik1a/LocalCash/actions/runs/38267899607), checkout del SHA exacto; `:app:assembleDebug` finaliza con `BUILD SUCCESSFUL in 1m 8s`, 33 tareas, código 0. APK publicado como artefacto.
+- Gate: `docs/audits/S00/S00-T02-reaudit-H01.md`, PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE.
+- Merge: [PR #2](https://github.com/aik1a/LocalCash/pull/2), `d39a35b99fe96349f06052dff01163957ed54c4f`.
+- Estructura: `com.aik1a.localcash.presentation.MainActivity`, `docs/design/PACKAGE_STRUCTURE.md`.
+- **Pendiente:** H-02, ejecución en dispositivo/emulador, incorporada a S00-T06 y no declarada PASS.
+- El workflow S00-T02 fija el SHA auditado: no confirma builds de otros commits.
