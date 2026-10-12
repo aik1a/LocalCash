@@ -62,7 +62,7 @@ jobs:
             adb pull /sdcard/flow-window.xml evidence/flow-window.xml
             adb logcat -d -t 500 > evidence/android-logcat.txt
             grep -q LOCALCASH_FLOW_PASS evidence/android-flow.log
-            timeout 180s adb shell am instrument -w com.aik1a.localcash.test/com.aik1a.localcash.PurchaseFlowChecks | tee evidence/purchase-flow.log
+            timeout 180s adb shell am instrument -w -e mode purchases com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks | tee evidence/purchase-flow.log
             adb shell screencap -p /sdcard/purchases.png
             adb pull /sdcard/purchases.png evidence/purchases.png
             adb shell uiautomator dump /sdcard/purchases.xml
