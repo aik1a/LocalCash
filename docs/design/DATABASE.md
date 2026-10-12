@@ -72,11 +72,11 @@ compras 1 ---- N deudas ---- N:1 contactos
 - Latitud/longitud: nullable y ambas presentes o ambas ausentes.
 - Índices solo donde exista una consulta real que los justifique.
 
-## Decisiones pendientes antes del freeze de esquema
+## Decisiones pendientes para módulos restantes y ampliaciones
 
-- campos definitivos de cada tabla;
+- campos definitivos de las tablas restantes;
 - valores de tipo de cuenta;
-- representación definitiva de dinero y fecha;
+- dinero y fecha de los módulos restantes (cuentas/movimientos ya definidos arriba);
 - políticas `ON DELETE`/`ON UPDATE`;
 - si una compra realizada genera movimiento automáticamente;
 - pagos parciales de deuda sí/no;
