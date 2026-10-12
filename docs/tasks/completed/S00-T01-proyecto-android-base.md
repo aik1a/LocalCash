@@ -2,7 +2,7 @@
 
 **Sprint:** S00 — Foundation  
 **Rol asignado:** Codificador (Codex)  
-**Estado:** READY  
+**Estado:** CLOSED (cierre administrativo 2026-10-12; gate técnico PASS WITH OBSERVATIONS)  
 **Rama de trabajo:** `task/S00-T01-proyecto-android-base` (desde `main`)  
 **Repositorio:** `aik1a/LocalCash`
 
@@ -83,3 +83,18 @@ Inspeccionar **los archivos reales de `main`** antes de generar o reemplazar nad
 Si aparece una incompatibilidad real entre herramientas/versiones, mantener Java + Groovy + minSdk 24 y proponer al Orquestador la combinación mínima compatible; documentar claramente la incompatibilidad antes de introducir dependencias nuevas. No cambiar alcance por cuenta propia.
 
 **El cierre de esta tarea depende del Auditor y del Orquestador, no del Codificador.**
+
+
+## Registro de cierre administrativo
+
+- Responsable: Orquestador, por instrucción explícita del usuario del 2026-10-12.
+- Auditoría favorable: `docs/audits/S00/S00-T01-reaudit.md`; PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE.
+- Commit auditado: `b63e5e2c4de6accb9c952022f12b07a0b614d62d`.
+- Head integrado: `7288b9f6b40bdcb3c77385e9e138acaff96973d7`. Solo añadió el informe de auditoría después del commit auditado.
+- PR: [#1](https://github.com/aik1a/LocalCash/pull/1).
+- Merge en main: `3cb3d5a164bc99e5343f283efa44c4a9211426b3`.
+- Evidencia existente: build histórico PASS, tests NO-SOURCE; no hubo nueva ejecución Android en este cierre.
+- OBS-02 y OBS-03 se conservan NO EJECUTADO y se trasladan a S00-T06 con referencia en el sprint, estado y trazabilidad. OBS-04 permanece documentada.
+- La lista de criterios anterior conserva el Task Brief original; este cierre no transforma sus pruebas no ejecutadas en PASS.
+- Siguiente tarea: `S00-T02`, READY, `docs/tasks/active/S00-T02-estructura-paquetes.md`.
+- Sprint S00 sigue en progreso; sin cierre de sprint ni avance a S01.

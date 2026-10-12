@@ -8,19 +8,21 @@
 
 - **Repositorio:** `aik1a/LocalCash`
 - **Rama principal:** `main`
-- **Fase:** preparación / foundation
+- **Fase:** foundation / implementación inicial
 - **Sprint activo:** `S00 — Foundation`
-- **Estado del sprint:** READY / no iniciado
-- **Código Android:** todavía no implementado
-- **Build validado:** no disponible todavía
-- **Tests automatizados:** no disponibles todavía
-- **Último hito validado:** estructura documental inicial y protocolo multiagente creados
+- **Estado del sprint:** IN_PROGRESS; S00-T01 cerrada, resto pendiente
+- **Código Android:** proyecto base Java/XML y Gradle Groovy integrado en main mediante PR #1
+- **Build validado:** evidencia histórica del 2026-10-09, `BUILD SUCCESSFUL in 25s`; no reejecutado en este cierre
+- **Tests automatizados:** esqueleto sin tests; `:app:testDebugUnitTest NO-SOURCE` documentado
+- **Último hito validado:** S00-T01 integrada y cerrada administrativamente el 2026-10-12 tras PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE
+- **Merge S00-T01:** `3cb3d5a164bc99e5343f283efa44c4a9211426b3` ([PR #1](https://github.com/aik1a/LocalCash/pull/1))
+- **Tarea activa preparada:** S00-T02, READY; aún no implementada
 
 ## Próxima acción autorizada
 
-`S00-T01`: verificar o crear el proyecto Android Java con Gradle Groovy conforme a `docs/sprints/S00-foundation.md`.
+`S00-T02`: organizar los paquetes Java mínimos según la arquitectura aprobada, conforme a `docs/tasks/active/S00-T02-estructura-paquetes.md`.
 
-Antes de implementarlo, el Codificador debe inspeccionar el repositorio real y confirmar qué archivos/proyecto Android existen.
+Rol ejecutor: Codificador. Rama: `task/S00-T02-estructura-paquetes`, desde main después de este cierre. No implementar módulos, dependencias ni clases de tareas posteriores.
 
 ## Decisiones vigentes
 
@@ -50,11 +52,22 @@ Resolver solo cuando el sprint correspondiente las necesite:
 
 ## Bloqueadores
 
-Ninguno documentado para iniciar S00.
+No hay bloqueo administrativo para preparar S00-T02. Las limitaciones de ejecución Android permanecen registradas para S00-T06; no se interpretan como pruebas realizadas.
 
 ## Última auditoría
 
-No existe auditoría de código todavía. La primera auditoría debe ejecutarse al completar una unidad implementable de S00.
+`docs/audits/S00/S00-T01-reaudit.md`: PASS WITH OBSERVATIONS y APPROVED_FOR_MERGE del estado funcional `b63e5e2c4de6accb9c952022f12b07a0b614d62d`. El único commit posterior anterior al merge (`7288b9f6b40bdcb3c77385e9e138acaff96973d7`) añadió ese informe; sin cambios funcionales.
+
+No se repitió la auditoría. El sprint S00 no está cerrado ni tiene autorización de avance al sprint siguiente.
+
+## Validaciones pendientes — S00-T06
+
+- OBS-02: instalar APK, abrir MainActivity, comprobar «LocalCash» y ausencia de errores de inicio.
+- OBS-03: sincronizar Gradle en Android Studio y compilar desde checkout limpio sin cachés previamente preparadas.
+- Conservar `NO EJECUTADO` hasta obtener evidencia real; usar los registros de `docs/handoffs/evidence/S00-T01/`.
+- Mantener documentada la deprecación `android.builtInKotlin=false` (OBS-04), sin actualizar versiones solo para eliminarla.
+
+El traslado a S00-T06 fue autorizado por el usuario el 2026-10-12 y se registra en `docs/sprints/S00-foundation.md`.
 
 ## Reglas de actualización
 
