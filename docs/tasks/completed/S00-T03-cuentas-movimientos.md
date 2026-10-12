@@ -1,7 +1,7 @@
 # Task Brief — S00-T03: primer flujo funcional — cuentas y movimientos
 
 **Sprint:** S00 — Entrega acelerada
-**Estado:** READY
+**Estado:** CLOSED — 2026-10-12 (PASS WITH OBSERVATIONS)
 **Responsable:** Agente Codificador
 **Repositorio:** `aik1a/LocalCash`
 **Rama nueva:** `task/S00-T03-cuentas-movimientos`, a partir del main vigente.
@@ -57,3 +57,10 @@ No cargar todo el repositorio. Inspeccionar primero main y su SHA.
 Avanzar en **dos checkpoints internos**, dentro de esta misma tarea: (A) BD/cuentas, (B) movimientos/saldos/UI/CI. No solicitar auditoría entre checkpoints. Plan breve previo a implementar; ExecPlan únicamente si surge una decisión o bloqueo que realmente lo necesite.
 
 Entrega: DONE / PARTIAL / BLOCKED, SHA final, evidencia, handoff y solicitud de auditoría. El Auditor decide el gate; el Orquestador integra.
+
+## Cierre administrativo
+
+- Implementación comprobada: `eea0fbfc895f5d5e2cde6f3512407f3cc9c16cec`.
+- [Run de validación](https://github.com/aik1a/LocalCash/actions/runs/38283139884): build PASS, 18 pruebas de dominio PASS, UI y persistencia SQLite en emulador PASS.
+- `docs/audits/S00/S00-T03-audit.md`: PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE.
+- Merge [PR #3](https://github.com/aik1a/LocalCash/pull/3): `f484642361c20246eb07dfc030a0e41e01b76647`. No cierra sprint S00.

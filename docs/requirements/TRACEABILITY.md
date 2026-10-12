@@ -5,11 +5,11 @@ Esta matriz conecta requisitos con diseño, sprint, código y validación. Debe 
 | Requisito | Diseño principal | Sprint | Código | Prueba | Estado |
 |---|---|---:|---|---|---|
 | LC-P01 | ARCHITECTURE | S00 / T01-T02 | `app/build.gradle`, `app/src/main/java/com/aik1a/localcash/presentation/MainActivity.java`, XML y manifiesto | BUILD-01; Actions run `38267899607` (S00-T02, SHA exacto), auditoría favorable | Proyecto base y estructura presentacional integrados; T01-T02 CLOSED |
-| LC-P02 / LC-TECH-01 | DATABASE / ADR-001 | S01 | Pendiente | DB-01 | Pendiente |
+| LC-P02 / LC-TECH-01 | DATABASE / ADR-001 | S00-T03 | `LocalCashDbHelper`, repositories de cuentas/movimientos | DB-01 / Actions run `38283139884` | Implementado en flujo T03; otros módulos pendientes |
 | LC-P03 / LC-AUTH-01 | ARCHITECTURE | S02 | Pendiente | AUTH-01 | Pendiente |
 | LC-CON-01 | DOMAIN_MODEL / DATABASE | S05 | Pendiente | CON-01 | Pendiente |
-| LC-ACC-01 | DOMAIN_MODEL / DATABASE | S03 | Pendiente | ACC-01 | Pendiente |
-| LC-MOV-01 | DOMAIN_MODEL / DATABASE | S03 | Pendiente | MOV-01 | Pendiente |
+| LC-ACC-01 | DOMAIN_MODEL / DATABASE | S00-T03 | `Cuenta`, `CuentaRepository`, `MainActivity` | ACC-01, dos cuentas en emulador | Implementado (crear/listar/consultar saldo) |
+| LC-MOV-01 | DOMAIN_MODEL / DATABASE | S00-T03 | `Movimiento`, `MovimientoService`, `CuentaActivity` | MOV-01, ingreso/egreso/persistencia en emulador | Implementado (registro/historial) |
 | LC-MOV-02 | DOMAIN_MODEL / DATABASE | S04 | Pendiente | GEO-01 | Pendiente |
 | LC-P04 / LC-MAP-01 | ARCHITECTURE | S04 | Pendiente | MAP-01 | Pendiente |
 | LC-BUY-01 | DOMAIN_MODEL / DATABASE | S05 | Pendiente | BUY-01 | Pendiente |
@@ -48,3 +48,10 @@ S00-T02 fue cerrada el 2026-10-12; S00-T03 quedó READY. El sprint S00 continúa
 - Estructura: `com.aik1a.localcash.presentation.MainActivity`, `docs/design/PACKAGE_STRUCTURE.md`.
 - **Pendiente:** H-02, ejecución en dispositivo/emulador, incorporada a S00-T06 y no declarada PASS.
 - El workflow S00-T02 fija el SHA auditado: no confirma builds de otros commits.
+
+## S00-T03 — Cierre 2026-10-12
+
+- `eea0fbfc895f5d5e2cde6f3512407f3cc9c16cec`: [CI y emulador PASS](https://github.com/aik1a/LocalCash/actions/runs/38283139884), 18 comprobaciones de dominio PASS, reinicio con SQLite persistente.
+- Gate `docs/audits/S00/S00-T03-audit.md` PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE.
+- [PR #3](https://github.com/aik1a/LocalCash/pull/3), merge `f484642361c20246eb07dfc030a0e41e01b76647`.
+- Pendiente: migración SQLite aditiva en T04; dispositivo físico y Android Studio en T07.

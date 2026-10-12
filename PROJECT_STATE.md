@@ -9,17 +9,17 @@
 - **Repositorio:** `aik1a/LocalCash`, rama `main`.
 - **Fase:** implementación acelerada de un MVP académico; entrega prevista **antes del 19 de octubre de 2026**.
 - **Sprint operativo:** S00 (ruta acelerada de trabajo); **IN_PROGRESS**.
-- **Cerradas:** S00-T01 (proyecto Android Java/XML) y S00-T02 (organización de paquete).
-- **Último merge:** PR #2, `d39a35b99fe96349f06052dff01163957ed54c4f`.
-- **Build real:** GitHub Actions run `38267899607`, `assembleDebug` del commit `6cea41252f26a76af44f81f990a99f0b95cf74b1`: SUCCESS, retorno 0.
-- **Aplicación actual:** solo pantalla inicial «LocalCash»; **no hay todavía SQLite ni módulos funcionales**.
-- **Próxima tarea:** S00-T03 — cuentas y movimientos SQLite con pantallas reales, READY.
+- **Cerradas:** S00-T01, S00-T02 y S00-T03 (cuentas, movimientos y SQLite funcional).
+- **Último merge:** PR #3, `f484642361c20246eb07dfc030a0e41e01b76647`.
+- **Build real:** GitHub Actions run `38283139884` del SHA `eea0fbfc895f5d5e2cde6f3512407f3cc9c16cec`: PASS, 18 comprobaciones de dominio y pruebas UI/SQLite en emulador PASS.
+- **Aplicación actual:** cuentas múltiples, ingresos/egresos, historial/saldo y SQLite persistente; probada en emulador y tras relanzar.
+- **Próxima tarea:** S00-T04 — contactos y compras locales, READY.
 
 ## Próxima acción autorizada
 
-**S00-T03:** implementar el primer flujo completo y demostrable: crear/listar cuentas, registrar ingresos/egresos, calcular saldo y persistirlo en SQLite. Task Brief: `docs/tasks/active/S00-T03-cuentas-movimientos.md`. Rama de código `task/S00-T03-cuentas-movimientos`, desde main.
+**S00-T04:** crear contactos y compras con detalles/estados, lista/historial y persistencia SQLite. Task Brief: `docs/tasks/active/S00-T04-contactos-compras.md`; rama `task/S00-T04-contactos-compras` desde main.
 
-**Motivo del cambio:** priorización expresa del usuario el 2026-10-12 por plazo académico. Se reemplaza la secuencia de tareas solo preparatorias por entregas funcionales, sin eliminar requisitos ni alterar los cuatro pilares docentes. Las dependencias, permisos y documentación técnica se integran cuando una funcionalidad realmente los necesita. Los sprints S01–S07 mantienen sus criterios técnicos de referencia, pero no implican implementar tareas duplicadas.
+**Continuidad importante:** implementar migración SQLite aditiva desde v1 sin borrar cuentas ni movimientos; demostrar que los saldos anteriores se conservan. La asociación automática compra→movimiento sigue pendiente de decisión, no debe inventarse. Una auditoría al final del incremento.
 
 ## Decisiones vigentes
 
@@ -49,21 +49,20 @@ Resolver solo cuando el sprint correspondiente las necesite:
 
 ## Bloqueadores y riesgos
 
-- Ningún bloqueo para asignar S00-T03. Los problemas de sandbox Windows se resolvieron para **build** usando GitHub Actions; no volver a repetir intentos fallidos.
-- **Apertura manual Android, instalación y sync de Studio:** siguen NO EJECUTADO y se verificarán durante la integración de entrega (S00-T07), sin declarar PASS anticipado.
-- Workflow de S00-T02 usa checkout fijado a SHA histórico: para cada nuevo cambio se debe compilar el **SHA nuevo**, no reutilizar esa salida.
-- **Fecha objetivo:** dejar un flujo demostrable de cuentas y movimientos antes de añadir complejidad de otros módulos.
+No hay bloqueo para asignar T04. **SQLite v1** requiere migración aditiva para añadir tablas; `onUpgrade` actual debe cambiar sin destruir información histórica. Pendiente decisión compra→movimiento y reparto (futuras tareas).
+
+La apertura y persistencia **sí se probaron en emulador en T03**. Sin prueba en dispositivo físico ni sync gráfico Android Studio (reservados para T07). No reutilizar builds antiguos para commits nuevos.
 
 ## Última auditoría
 
-`docs/audits/S00/S00-T02-reaudit-H01.md`: PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE. H-01 de build resuelto con run `38267899607`. PR #2 fusionada, S00-T02 CLOSED. Ninguna auditoría de funcionalidades financieras existe todavía.
+`docs/audits/S00/S00-T03-audit.md`: PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE; [PR #3](https://github.com/aik1a/LocalCash/pull/3) fusionada. Sprint S00 aún no cerrado.
 
 ## Seguimiento de validaciones pendientes
 
-- Apertura de `com.aik1a.localcash.presentation.MainActivity`, texto «LocalCash», errores de inicio: NO EJECUTADO.
-- Sincronización de Android Studio: NO EJECUTADO.
-- Mantener la advertencia `android.builtInKotlin=false` documentada; no actualizar herramientas por estética.
-- Ejecutar un build Android real por **incremento funcional**, preferentemente CI con checkout del SHA exacto y APK verificable. Auditoría breve al completar cada incremento, sin reauditar documentos sin cambio relevante.
+- Módulos funcionales T04, T05 y T06.
+- Comprobación final en dispositivo físico y Studio cuando exista entorno, T07.
+- Mantener avisos de deprecación documentados; no actualizaciones de versión arbitrarias.
+- Build y auditoría únicos por incremento funcional; sin burocracia intermedia.
 
 ## Reglas de actualización
 

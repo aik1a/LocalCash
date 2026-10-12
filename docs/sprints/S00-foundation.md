@@ -12,8 +12,8 @@ Disponer antes del **19 de octubre de 2026** de una aplicación Android académi
 |---|---|---|---|
 | S00-T01 | Proyecto Android Java/XML/Gradle | CLOSED | Completado |
 | S00-T02 | Paquete Java de presentación; build real en CI | CLOSED | Completado |
-| **S00-T03** | **Crear cuentas, registrar ingresos y egresos, mostrar saldo y guardar datos en SQLite** | **READY** | 13–14 oct |
-| S00-T04 | Directorio local de contactos; compras/historial y compras planificadas | PENDIENTE | 15 oct |
+| S00-T03 | Cuentas, movimientos, saldo y SQLite comprobados en emulador | **CLOSED** | 12 oct |
+| **S00-T04** | **Contactos, compras realizadas/planificadas, detalle e historial** | **READY** | 14–15 oct |
 | S00-T05 | Gastos compartidos con productos/servicios, reparto equitativo/personalizado y deudas | PENDIENTE | 16 oct |
 | S00-T06 | Acceso biométrico, ubicación opcional y mapas interactivos; validar uso offline | PENDIENTE | 17 oct |
 | S00-T07 | Build de integración, comprobaciones manuales, trazabilidad, documentación y pauta de exposición | PENDIENTE | 18 oct |
@@ -33,7 +33,7 @@ Las fechas son **objetivos de organización**, no resultados ni garantías de im
 
 ## Pendientes heredados
 
-La instalación/apertura de la aplicación en Android, la sincronización con Android Studio y el chequeo final desde checkout limpio siguen pendientes de prueba real; atender en S00-T07. Build S00-T02 sí validado: [Actions run 38267899607](https://github.com/aik1a/LocalCash/actions/runs/38267899607).
+El build S00-T03, las pruebas de dominio, el flujo UI/SQLite y el relanzamiento en emulador **están validados**: [Actions run 38283139884](https://github.com/aik1a/LocalCash/actions/runs/38283139884). Instalación física/sync Studio siguen pendientes para T07. S00-T04 debe conservar datos SQLite v1 mediante migración aditiva.
 
 ## Relación con documentos históricos
 
