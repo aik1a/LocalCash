@@ -1,38 +1,40 @@
-# S00 — Foundation
+# S00 — Entrega acelerada de LocalCash (2026-10-12)
 
-## Objetivo
+## Objetivo operativo
 
-Obtener un proyecto Android Java compilable con estructura mínima, dependencias aprobadas y navegación base, listo para construir persistencia.
+Disponer antes del **19 de octubre de 2026** de una aplicación Android académica **demostrable**, con módulos del PDF docente. La ruta de trabajo prioriza funciones utilizables; se sustituye la descomposición de tareas exclusivamente preparatorias de S00 por incrementos funcionales.
 
-## Tareas
+**No se cambian los requisitos del docente:** Java nativo, SQLite offline, autenticación biométrica, mapas interactivos y módulos de cuentas/movimientos, contactos, compras y gastos compartidos.
 
-- S00-T01 — CLOSED (2026-10-12): proyecto Android Java con Gradle Groovy integrado mediante PR #1.
-- S00-T02 — CLOSED (2026-10-12): `MainActivity` en `presentation`, build CI validado y merge mediante PR #2. Auditoría `docs/audits/S00/S00-T02-reaudit-H01.md`.
-- S00-T03 — READY: incorporar la dependencia osmdroid 6.1.18 en Gradle y validar compilación; Task Brief `docs/tasks/active/S00-T03-dependencias.md`. La dependencia de biometría se añade cuando corresponda a su integración funcional en S02.
-- S00-T04: configurar permisos requeridos por el proyecto y documentar por qué existen.
-- S00-T05: crear navegación/pantalla base suficiente para integrar módulos posteriores.
-- S00-T06 — PENDIENTE: asegurar build limpio y registrar comandos; recoger las validaciones Android pendientes de S00-T01.
-- S00-T07: actualizar documentación y trazabilidad.
+## Estado y prioridades
 
-## Criterios de aceptación
+| Tarea | Entregable visible y verificable | Estado | Objetivo temporal |
+|---|---|---|---|
+| S00-T01 | Proyecto Android Java/XML/Gradle | CLOSED | Completado |
+| S00-T02 | Paquete Java de presentación; build real en CI | CLOSED | Completado |
+| **S00-T03** | **Crear cuentas, registrar ingresos y egresos, mostrar saldo y guardar datos en SQLite** | **READY** | 13–14 oct |
+| S00-T04 | Directorio local de contactos; compras/historial y compras planificadas | PENDIENTE | 15 oct |
+| S00-T05 | Gastos compartidos con productos/servicios, reparto equitativo/personalizado y deudas | PENDIENTE | 16 oct |
+| S00-T06 | Acceso biométrico, ubicación opcional y mapas interactivos; validar uso offline | PENDIENTE | 17 oct |
+| S00-T07 | Build de integración, comprobaciones manuales, trazabilidad, documentación y pauta de exposición | PENDIENTE | 18 oct |
 
-- Proyecto compila desde checkout limpio con instrucciones documentadas.
-- No existe Firebase/Room/Compose/backend.
-- Stack coincide con documentación.
-- Estructura no contiene capas/clases vacías creadas solo por arquitectura.
+Las fechas son **objetivos de organización**, no resultados ni garantías de implementación. Reservar tiempo antes del 19 para correcciones. No empezar simultáneamente tareas que dependan del mismo modelo de datos.
 
-## Seguimiento tras S00-T01
+## Regla de ejecución simplificada
 
-El cierre de S00-T01 se apoya en PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE, `docs/audits/S00/S00-T01-reaudit.md`. Merge `3cb3d5a164bc99e5343f283efa44c4a9211426b3`. El cierre administrativo de la tarea no cierra S00 ni autoriza avanzar a S01.
+- Cada tarea entrega un **flujo que funcione**, no solo un archivo de configuración.
+- Incorporar osmdroid, biometría y permisos **en las tareas que los usan**, nunca como tareas aisladas.
+- Mantener Java, XML, Gradle Groovy, `SQLiteOpenHelper` y la separación mínima UI / dominio / repositories.
+- No crear clases/capas vacías, infraestructura remota, Firebase, Room, Compose, servicios inventados ni funciones comerciales.
+- El Codificador puede realizar varios commits dentro de **una sola tarea**, pero la auditoría se solicita al terminar el incremento. No auditar cada ajuste documental.
+- Compilar cada incremento real mediante CI o Android Studio y comprobar **su SHA exacto**. No repetir el sandbox Windows ya bloqueado.
+- Documentar solo decisiones de datos requeridas por la funcionalidad actual. Sin inventar requisitos; elevar al Orquestador las decisiones funcionales abiertas que afecten compra/reparto.
+- El Auditor sigue emitiendo gates de tarea. El cierre del sprint y avance administrativo requieren gate integral correspondiente.
 
-### Validaciones conservadas para S00-T06
+## Pendientes heredados
 
-Por instrucción del usuario del 2026-10-12, S00-T06 debe resolver:
+La instalación/apertura de la aplicación en Android, la sincronización con Android Studio y el chequeo final desde checkout limpio siguen pendientes de prueba real; atender en S00-T07. Build S00-T02 sí validado: [Actions run 38267899607](https://github.com/aik1a/LocalCash/actions/runs/38267899607).
 
-- OBS-02: instalar el APK en un dispositivo/emulador funcional, abrir MainActivity, comprobar «LocalCash» y ausencia de errores que impidan iniciar.
-- OBS-03: sincronización Gradle en Android Studio y build desde checkout limpio con caché sin preparar; registrar JDK/SDK, comando y salida, diferenciando esta prueba del build histórico con cachés.
-- Mantener `NO EJECUTADO` cuando exista un impedimento real; documentar el error exacto y no declarar PASS.
-- Conservar la advertencia `android.builtInKotlin=false` (OBS-04); no actualizar versiones para ocultarla.
-- Consultar `docs/handoffs/evidence/S00-T01/` y `docs/delivery/BUILD.md`; agregar evidencia nueva sin sustituir los registros históricos.
+## Relación con documentos históricos
 
-S00-T06 continúa pendiente: incluye H-02 de S00-T02 (apertura real de `presentation.MainActivity`). H-01 ya se resolvió mediante Actions run `38267899607` y no requiere más intentos. La siguiente tarea autorizada es S00-T03.
+`docs/sprints/S01-...` hasta `S07-...` siguen siendo referencias de requisitos/arquitectura y pruebas. Esta planificación **reordena y agrupa la ejecución** por plazo; no autoriza cerrar anticipadamente esos sprints ni afirmar funcionalidades terminadas. Evitar duplicar tareas ya demostradas en el MVP.

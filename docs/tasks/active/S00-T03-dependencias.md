@@ -1,75 +1,59 @@
-# Task Brief — S00-T03: dependencias aprobadas
+# Task Brief — S00-T03: primer flujo funcional — cuentas y movimientos
 
-**Sprint:** S00 — Foundation
-**Rol asignado:** Codificador (Codex)
+**Sprint:** S00 — Entrega acelerada
 **Estado:** READY
+**Responsable:** Agente Codificador
 **Repositorio:** `aik1a/LocalCash`
-**Rama:** `task/S00-T03-dependencias`, desde el **main vigente después del cierre S00-T02**.
+**Rama nueva:** `task/S00-T03-cuentas-movimientos`, a partir del main vigente.
+**Prioridad:** ALTA (primer resultado de uso real).
+
+> Replanificado por el Orquestador el 2026-10-12 tras solicitud del usuario de priorizar resultados antes del 19 de octubre. Este brief **sustituye** el anterior S00-T03 de dependencias aisladas; el historial Git conserva el texto antiguo.
 
 ## Objetivo observable
 
-Añadir exclusivamente la dependencia de mapas aprobada **osmdroid 6.1.18** al proyecto Android Java/Gradle Groovy y obtener un build verificable de la configuración resultante. No implementar aún el mapa.
+Que el usuario pueda **crear cuentas, registrar ingresos y egresos, consultar movimientos y ver un saldo correcto**, cerrar y abrir la aplicación y conservar los datos mediante **SQLite local**. Todo con una interfaz Android Java/XML sencilla.
 
-## Requisitos relacionados
+## Requisitos
 
-- `LC-P04` y `LC-TECH-03` (mapas/osmdroid), dependencias preparatorias de S00 sin afirmar funcionalidad de S04.
-- `LC-TECH-05`: documentación de dependencias.
-- `BUILD-01`: continuidad de compilación.
-
-La autenticación biométrica (`BiometricPrompt`) es obligatoria en S02. No se añade ahora una biblioteca de biometría sin código que la use; su integración se hará en el sprint correspondiente, con versión justificada.
+`LC-P01`, `LC-P02`, `LC-TECH-01`, `LC-ACC-01`, `LC-MOV-01`; evidencia `ACC-01`, `MOV-01` y `BUILD-01`.
 
 ## Context Pack mínimo
 
-1. `PROJECT_ROUTER.md`, `AGENTS.md`, `PROJECT_STATE.md`.
-2. `docs/agent/roles/CODER.md`.
-3. Este Task Brief, `docs/sprints/S00-foundation.md`.
-4. `ARCHITECTURE.md`, `docs/requirements/PROJECT_SPEC.md`, `docs/delivery/BUILD.md`.
-5. Archivos reales `app/build.gradle`, `settings.gradle`, `gradle.properties` y fuente Android vigente.
+`PROJECT_ROUTER.md`, `AGENTS.md`, `PROJECT_STATE.md`, `docs/agent/roles/CODER.md`, este brief, `ARCHITECTURE.md`, `docs/design/DOMAIN_MODEL.md`, `docs/design/BUSINESS_RULES.md`, `docs/design/DATABASE.md`, `docs/testing/TEST_PLAN.md` y código Android real.
 
-No cargar modelos de base de datos o tareas futuras.
+No cargar todo el repositorio. Inspeccionar primero main y su SHA.
 
-## Alcance
+## Alcance implementable
 
-1. Inspeccionar `main` y confirmar SHA antes de crear la rama.
-2. En `app/build.gradle`, declarar **solo** `implementation 'org.osmdroid:osmdroid-android:6.1.18'` (si todavía no figura). Reutilizar los repositorios actuales; no agregar repositorios redundantes.
-3. Mantener intactos Java, XML, `MainActivity`, manifiesto, package, namespace, permisos, minSdk y versiones AGP/Gradle/JDK.
-4. Actualizar `docs/delivery/BUILD.md` con dependencia declarada y resultados **realmente comprobados**; indicar que el uso de mapas y permisos sigue pendiente.
-5. Ejecutar `:app:assembleDebug` para el **SHA exacto que contenga el cambio de dependencia**, con salida, código de retorno y evidencia. Si no hay ejecución local, usar Work/GitHub Actions como vía de validación. No repetir intentos en un sandbox que ya demostró bloquear procesos.
-6. Si un fallo demuestra incompatibilidad de la dependencia aprobada, reportar el error y escalar antes de modificar versiones principales.
+1. Definir en `DATABASE.md` **solo** las decisiones físicas indispensables para `cuentas` y `movimientos` (campos/tipos, representación de montos/fecha y relación FK), indicando expresamente las decisiones tomadas y sin congelar el esquema de compras/deudas. Conservar: monto positivo, tipo `INGRESO`/`EGRESO`, saldo derivado = saldo inicial + ingresos − egresos. Ante ambigüedad funcional sustancial, escalar al Orquestador; no inventar más reglas.
+2. Entidades sencillas `Cuenta` y `Movimiento` con estado privado y validación mínima; `SQLiteOpenHelper` y repositories concretos para persistirlas. Ningún SQL en Activities ni saldo almacenado redundantemente.
+3. Interfaz XML clara y básica, alcanzable desde la pantalla principal: listar/crear **varias cuentas**, seleccionar una, listar/registrar ingreso y egreso y mostrar saldo. Formularios con validación de nombre, cuenta, tipo y monto positivo. No priorizar diseño visual avanzado.
+4. Los datos sobreviven al cierre/apertura: SQLite, **sin servidor ni conexión a internet** para operaciones financieras.
+5. Registrar evidencia de al menos estos escenarios: dos cuentas distintas; ingreso y egreso sobre una cuenta con saldo correcto; persistencia después de reabrir (si hay emulador); rechazo de monto inválido. Pruebas automatizadas de cálculo/validación donde resulten sencillas y ejecutables.
+6. Compilar el **SHA que incluye el código nuevo** con `:app:assembleDebug`. Usar Android Studio si está disponible o Work/GitHub Actions; un CI genérico que use el SHA del push es preferible al workflow S00-T02 que fija un commit antiguo. Conservar log, retorno y APK. No considerar un build histórico válido para el nuevo código.
+7. Añadir un handoff conciso con SHA, cambios, validaciones y bloqueos. Solicitar **una** auditoría independiente del incremento terminado.
 
 ## Fuera de alcance
 
-- Crear MapView, mostrar tiles, solicitar ubicación o agregar permisos (S00-T04 y S04).
-- Biometría funcional, vistas, navegación, persistencia, entidades o nuevas clases.
-- Cambiar osmdroid a otra versión, introducir bibliotecas adicionales, Room/Firebase/Compose/DI.
-- Actualizar AGP/Gradle, Kotlin, SDK, JDK o arquitectura sin autorización.
-- Retirar o reinterpretar la evidencia histórica de S00-T02.
-- Mergear a main, cerrar T03 o iniciar T04.
-
-## Archivos previstos
-
-- `app/build.gradle`.
-- `docs/delivery/BUILD.md`.
-- `docs/handoffs/S00-T03-coder.md` y evidencia bajo `docs/handoffs/evidence/S00-T03/`.
-- Ajustes mínimos de workflow de validación **solo si son necesarios** para compilar el SHA nuevo; no confiar en `s00-t02-build.yml` sin verificar, pues fija un SHA antiguo.
+- Compras, contactos, reparto de deudas (S00-T04/T05).
+- Mapas, osmdroid, ubicación, biometría y permisos (S00-T06).
+- Firebase, Room, backend, sincronización, multiusuario, reportes, analítica, cifrado propio, interfaces elaboradas o abstracciones empresariales.
+- Crear entidades/repositorios/services para módulos futuros, migraciones complejas sin necesidad, refactor del stack o nuevas versiones de Gradle/AGP.
+- Merge, cierre de tarea/sprint, documentación extensa que no respalde implementación.
 
 ## Criterios de aceptación
 
-- [ ] La única dependencia nueva de aplicación es osmdroid 6.1.18, descargada de repositorios ya definidos.
-- [ ] `assembleDebug` termina con código 0 en un entorno Android funcional, compilando el SHA que incorpora la dependencia.
-- [ ] Java/XML, permisos, código de UI y versiones del proyecto permanecen intactos.
-- [ ] No se introducen clases/paquetes vacíos ni funciones de mapas/biometría.
-- [ ] Documentación UTF-8, dependencias y limitaciones verificables.
-- [ ] Handoff con rama/SHA, diff, comando, log y resultado; solicitud de auditoría independiente.
+- [ ] Dos cuentas diferenciadas que se pueden crear y consultar.
+- [ ] Un ingreso aumenta el saldo y un egreso lo disminuye, según `BUSINESS_RULES.md`.
+- [ ] El historial está asociado a la cuenta correcta y se consulta desde la UI.
+- [ ] Persistencia SQLite local y ninguna dependencia de backend.
+- [ ] Código Java/XML; mínimo `SQLiteOpenHelper`, dominio, repositories y UI, sin sobreingeniería.
+- [ ] Formularios rechazan montos no positivos y nombres inválidos.
+- [ ] Build exitoso de SHA exacto con log/exit code y APK; pruebas reales claramente separadas de NO EJECUTADO.
+- [ ] Documentación técnica mínima y handoff UTF-8 con diff y SHA.
 
-## Validación requerida
+## Forma de trabajar
 
-Build `./gradlew :app:assembleDebug` (o `gradlew.bat` Windows). Anexar log y exit code; en Actions verificar `git rev-parse HEAD` del checkout exacto y artefacto cuando esté disponible.
+Avanzar en **dos checkpoints internos**, dentro de esta misma tarea: (A) BD/cuentas, (B) movimientos/saldos/UI/CI. No solicitar auditoría entre checkpoints. Plan breve previo a implementar; ExecPlan únicamente si surge una decisión o bloqueo que realmente lo necesite.
 
-Tests: ejecutar existentes si corresponde; no inventar casos o `NO-SOURCE`. Manual: no hay pantalla nueva que probar; H-02 del arranque inicial permanece en S00-T06.
-
-En caso de sandbox bloqueado, informar `PARTIAL/BLOCKED` y trasladar el build a un entorno ejecutable, sin declarar PASS por revisión estática.
-
-## Entrega
-
-Commits solo en rama T03, estado DONE/PARTIAL/BLOCKED, SHA, lista de cambios, resultados y evidencia, handoff, y solicitud de auditoría. El Auditor autoriza técnicamente; Orquestador realiza cierre.
+Entrega: DONE / PARTIAL / BLOCKED, SHA final, evidencia, handoff y solicitud de auditoría. El Auditor decide el gate; el Orquestador integra.

@@ -6,22 +6,20 @@
 
 ## Estado actual
 
-- **Repositorio:** `aik1a/LocalCash`
-- **Rama principal:** `main`
-- **Fase:** foundation / implementación inicial
-- **Sprint activo:** `S00 — Foundation`
-- **Estado del sprint:** IN_PROGRESS; S00-T01 y S00-T02 CLOSED
-- **Código Android:** proyecto base Java/XML + Gradle Groovy; MainActivity en `com.aik1a.localcash.presentation`
-- **Build validado:** GitHub Actions `38267899607`: `assembleDebug` para SHA `6cea41252f26a76af44f81f990a99f0b95cf74b1`, `BUILD SUCCESSFUL in 1m 8s`, 33 tareas, código 0
-- **Tests automatizados:** no hay tests implementados; S00-T02 no introdujo casos nuevos
-- **Último hito validado:** S00-T02 reauditoría PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE; fusionada mediante PR #2 (`d39a35b99fe96349f06052dff01163957ed54c4f`), cierre administrativo el 2026-10-12
-- **Tarea activa preparada:** S00-T03, READY; todavía no implementada
+- **Repositorio:** `aik1a/LocalCash`, rama `main`.
+- **Fase:** implementación acelerada de un MVP académico; entrega prevista **antes del 19 de octubre de 2026**.
+- **Sprint operativo:** S00 (ruta acelerada de trabajo); **IN_PROGRESS**.
+- **Cerradas:** S00-T01 (proyecto Android Java/XML) y S00-T02 (organización de paquete).
+- **Último merge:** PR #2, `d39a35b99fe96349f06052dff01163957ed54c4f`.
+- **Build real:** GitHub Actions run `38267899607`, `assembleDebug` del commit `6cea41252f26a76af44f81f990a99f0b95cf74b1`: SUCCESS, retorno 0.
+- **Aplicación actual:** solo pantalla inicial «LocalCash»; **no hay todavía SQLite ni módulos funcionales**.
+- **Próxima tarea:** S00-T03 — cuentas y movimientos SQLite con pantallas reales, READY.
 
 ## Próxima acción autorizada
 
-`S00-T03`: preparar la dependencia aprobada de mapas, osmdroid 6.1.18, de forma acotada y compilar el cambio, conforme a `docs/tasks/active/S00-T03-dependencias.md`.
+**S00-T03:** implementar el primer flujo completo y demostrable: crear/listar cuentas, registrar ingresos/egresos, calcular saldo y persistirlo en SQLite. Task Brief: `docs/tasks/active/S00-T03-dependencias.md` (ruta histórica conservada; el contenido se actualizó a la nueva prioridad). Rama de código `task/S00-T03-cuentas-movimientos`, desde main.
 
-**Rol ejecutor:** Codificador. Rama `task/S00-T03-dependencias`, creada desde el main vigente. No implementar mapas, biometría funcional, permisos, pantallas ni otras tareas.
+**Motivo del cambio:** priorización expresa del usuario el 2026-10-12 por plazo académico. Se reemplaza la secuencia de tareas solo preparatorias por entregas funcionales, sin eliminar requisitos ni alterar los cuatro pilares docentes. Las dependencias, permisos y documentación técnica se integran cuando una funcionalidad realmente los necesita. Los sprints S01–S07 mantienen sus criterios técnicos de referencia, pero no implican implementar tareas duplicadas.
 
 ## Decisiones vigentes
 
@@ -49,23 +47,23 @@ Resolver solo cuando el sprint correspondiente las necesite:
 - campos opcionales definitivos de contactos;
 - estrategia de tiles/cache que garantice el comportamiento offline del mapa.
 
-## Bloqueadores
+## Bloqueadores y riesgos
 
-Ninguno para asignar S00-T03. H-01 (build S00-T02) quedó resuelto. No existe autorización de cierre del sprint S00.
+- Ningún bloqueo para asignar S00-T03. Los problemas de sandbox Windows se resolvieron para **build** usando GitHub Actions; no volver a repetir intentos fallidos.
+- **Apertura manual Android, instalación y sync de Studio:** siguen NO EJECUTADO y se verificarán durante la integración de entrega (S00-T07), sin declarar PASS anticipado.
+- Workflow de S00-T02 usa checkout fijado a SHA histórico: para cada nuevo cambio se debe compilar el **SHA nuevo**, no reutilizar esa salida.
+- **Fecha objetivo:** dejar un flujo demostrable de cuentas y movimientos antes de añadir complejidad de otros módulos.
 
 ## Última auditoría
 
-`docs/audits/S00/S00-T02-reaudit-H01.md`: PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE. Commit funcional `6cea41252f26a76af44f81f990a99f0b95cf74b1` compilado con Actions (run `38267899607`), y solo cambios CI/documentación después.
+`docs/audits/S00/S00-T02-reaudit-H01.md`: PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE. H-01 de build resuelto con run `38267899607`. PR #2 fusionada, S00-T02 CLOSED. Ninguna auditoría de funcionalidades financieras existe todavía.
 
-PR #2 merge `d39a35b99fe96349f06052dff01163957ed54c4f`. Sin reauditoría integral de S00.
+## Seguimiento de validaciones pendientes
 
-## Validaciones pendientes — S00-T06
-
-- OBS-02 / H-02: instalar APK, abrir `com.aik1a.localcash.presentation.MainActivity`, comprobar «LocalCash» y ausencia de errores de inicio; sigue NO EJECUTADO.
-- OBS-03: sincronización Gradle en Android Studio; build desde checkout limpio y caché sin preparar. El runner CI de S00-T02 demuestra compilación de un checkout fijado, pero no una sincronización visual de Studio.
-- OBS-04: mantener documentada la deprecación `android.builtInKotlin=false`; sin actualización arbitraria de versión.
-- Workflow `s00-t02-build.yml` tiene checkout fijado al SHA antiguo. No usarlo como evidencia de commits nuevos sin actualizar la referencia y comprobar la salida.
-- Mantener evidencia histórica y separar pruebas realmente ejecutadas de las pendientes.
+- Apertura de `com.aik1a.localcash.presentation.MainActivity`, texto «LocalCash», errores de inicio: NO EJECUTADO.
+- Sincronización de Android Studio: NO EJECUTADO.
+- Mantener la advertencia `android.builtInKotlin=false` documentada; no actualizar herramientas por estética.
+- Ejecutar un build Android real por **incremento funcional**, preferentemente CI con checkout del SHA exacto y APK verificable. Auditoría breve al completar cada incremento, sin reauditar documentos sin cambio relevante.
 
 ## Reglas de actualización
 
