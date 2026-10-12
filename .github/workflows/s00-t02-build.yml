@@ -1,0 +1,49 @@
+name: S00-T02 build validation
+on:
+  push:
+    branches: [task/S00-T02-estructura-paquetes]
+    paths: [.github/workflows/s00-t02-build.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 6cea41252f26a76af44f81f990a99f0b95cf74b1
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - name: Install required SDK
+        run: sdkmanager "platforms;android-36.1" "build-tools;36.0.0"
+      - name: Build exact commit and record exit code
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/s00-t02-evidence"
+          git rev-parse HEAD | tee "$RUNNER_TEMP/s00-t02-evidence/validated-sha.txt"
+          test "$(git rev-parse HEAD)" = "6cea41252f26a76af44f81f990a99f0b95cf74b1"
+          java -version 2>&1 | tee "$RUNNER_TEMP/s00-t02-evidence/java-version.txt"
+          set +e
+          bash ./gradlew --no-daemon --console=plain :app:assembleDebug 2>&1 | tee "$RUNNER_TEMP/s00-t02-evidence/assembleDebug.log"
+          result=${PIPESTATUS[0]}
+          echo "$result" | tee "$RUNNER_TEMP/s00-t02-evidence/exit-code.txt"
+          if [ "$result" -eq 0 ]; then
+            sha256sum app/build/outputs/apk/debug/app-debug.apk | tee "$RUNNER_TEMP/s00-t02-evidence/apk-sha256.txt"
+          fi
+          exit "$result"
+      - name: Preserve build evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: S00-T02-build-evidence
+          path: |
+            ${{ runner.temp }}/s00-t02-evidence/
+            app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: warn
