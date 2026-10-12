@@ -1,7 +1,9 @@
-package com.aik1a.localcash;
+package com.aik1a.localcash.presentation;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.aik1a.localcash.R;
 
 public class MainActivity extends Activity {
 
