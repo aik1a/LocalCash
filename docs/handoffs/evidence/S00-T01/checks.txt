@@ -1,0 +1,32 @@
+git diff --cached --check: exit 0
+Java files: 1
+Kotlin/Kotlin DSL source files: 0
+Manifest uses-permission count: 0
+APK minimum API 24: True
+APK launcher MainActivity: True
+Docs unchanged outside BUILD/handoff/evidence: True
+PROJECT_STATE unchanged: True
+Main base tree verified: 67ac5648f292c25384674d6a8db85983c2e142f4
+APK SHA256: C9A2EF89AF4A840DEF451D5F1AD88571320A65C98EFBDA02E26071F4D0159BDF
+
+Changed files:
+.gitattributes
+.gitignore
+app/build.gradle
+app/src/main/AndroidManifest.xml
+app/src/main/java/com/aik1a/localcash/MainActivity.java
+app/src/main/res/layout/activity_main.xml
+app/src/main/res/values/strings.xml
+build.gradle
+docs/delivery/BUILD.md
+docs/handoffs/S00-T01-coder.md
+docs/handoffs/evidence/S00-T01/apk-badging.txt
+docs/handoffs/evidence/S00-T01/assembleDebug.txt
+docs/handoffs/evidence/S00-T01/clean-build-tests.txt
+docs/handoffs/evidence/S00-T01/manual.txt
+gradle.properties
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+gradlew
+gradlew.bat
+settings.gradle

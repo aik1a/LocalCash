@@ -1,0 +1,31 @@
+NO EJECUTADO: instalación/apertura de la aplicación.
+
+1. adb devices: ningún dispositivo antes de iniciar pruebas.
+2. emulator -avd Pixel_10a -read-only -no-snapshot -no-window -no-audio -gpu swiftshader -port 5580
+   Error: creación de C:\Users\Admin\.android\avd\Pixel_10a.avd\snapshot.lock.lock denegada (error: 5).
+   Se detuvieron los procesos creados por el Codificador.
+3. Se preparó un AVD aislado LocalCashTest en .android-user-home/avd, basado en la configuración del AVD existente.
+   emulator -avd LocalCashTest -no-snapshot -no-window -no-audio -gpu swiftshader -port 5580
+   El log confirmó WHPX operativo, pero adb devices mantuvo emulator-5580 offline.
+4. adb -s emulator-5580 shell getprop sys.boot_completed
+   Resultado: adb.exe: device offline.
+5. adb -s emulator-5580 emu kill
+   Resultado: OK: killing emulator, bye bye; OK.
+
+No se instaló APK ni se verificó visualmente la Activity. No se declara PASS de arranque.
+
+REVALIDACIÓN ACOTADA — 2026-10-10 (America/Santiago)
+
+Resultado: NO EJECUTADO.
+
+Comando intentado en Windows:
+& 'C:\Users\Admin\AppData\Local\Android\Sdk\platform-tools\adb.exe' devices
+
+La herramienta rechazó la creación del proceso antes de ejecutar adb:
+exec_command failed: CreateProcess { message: "Rejected(\"Failed to create unified exec process: exec-server rejected request (-32602): failed to prepare process sandbox: failed to prepare windows sandbox wrapper: managed networking requires the elevated Windows sandbox backend\")" }
+
+No hay código de salida de adb: el proceso no se inició.
+No se conoce el estado actual de los dispositivos. El estado offline de arriba corresponde al intento del 2026-10-09 y no se presenta como observación nueva.
+
+Instalación del APK, apertura de MainActivity, visualización de «LocalCash» y ausencia de errores de inicio: NO EJECUTADO.
+No se hicieron cambios estructurales ni se intentó eludir las restricciones del entorno.
