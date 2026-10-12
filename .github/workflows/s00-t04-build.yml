@@ -73,16 +73,7 @@ jobs:
             adb shell uiautomator dump /sdcard/window.xml
             adb pull /sdcard/window.xml evidence/relaunch-window.xml
             grep -q 'Saldo: 125,50' evidence/relaunch-window.xml
-            adb shell am start -W -n com.aik1a.localcash/.presentation.ComprasActivity
-            adb shell uiautomator dump /sdcard/restarted-purchases.xml
-            adb pull /sdcard/restarted-purchases.xml evidence/restarted-purchases.xml
-            grep -q 'Compra realizada' evidence/restarted-purchases.xml
-            grep -q 'Compra planificada' evidence/restarted-purchases.xml
-            adb shell am start -W -n com.aik1a.localcash/.presentation.ContactosActivity
-            adb shell uiautomator dump /sdcard/restarted-contacts.xml
-            adb pull /sdcard/restarted-contacts.xml evidence/restarted-contacts.xml
-            grep -q 'Ana' evidence/restarted-contacts.xml
-            grep -q 'Luis' evidence/restarted-contacts.xml
+            python tests/relaunch-checks.py
             adb shell screencap -p /sdcard/localcash.png
             adb pull /sdcard/localcash.png evidence/cuentas.png
       - name: Preserve evidence and APK

@@ -165,7 +165,7 @@ public final class PurchaseFlowChecks extends Instrumentation {
         for (int i = 0; i < node.getChildCount(); i++) dump(node.getChild(i), depth + 1);
     }
     private void clickId(String id) {
-        nodeId(id).performAction(AccessibilityNodeInfo.ACTION_SHOW_ON_SCREEN);
+        nodeId(id).performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SHOW_ON_SCREEN.getId());
         assertTrue(nodeId(id).performAction(AccessibilityNodeInfo.ACTION_CLICK), "Click " + id);
         esperarUI();
     }
@@ -178,7 +178,7 @@ public final class PurchaseFlowChecks extends Instrumentation {
     private void setText(String id, String text) {
         Bundle args = new Bundle();
         args.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, text);
-        nodeId(id).performAction(AccessibilityNodeInfo.ACTION_SHOW_ON_SCREEN);
+        nodeId(id).performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SHOW_ON_SCREEN.getId());
         assertTrue(nodeId(id).performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args), "Texto " + id);
         esperarUI();
     }
