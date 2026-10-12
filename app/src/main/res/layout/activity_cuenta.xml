@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="16dp">
+    <Button android:id="@+id/volver" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Volver a cuentas" />
+    <TextView android:id="@+id/nombre_cuenta" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="24sp" android:accessibilityHeading="true" />
+    <TextView android:id="@+id/saldo" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="22sp" android:paddingVertical="8dp" />
+    <Button android:id="@+id/registrar_movimiento" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Registrar ingreso o egreso" />
+    <TextView android:id="@+id/vacio" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:padding="16dp" android:text="Todavía no hay movimientos en esta cuenta." />
+    <ListView android:id="@+id/movimientos" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+</LinearLayout>
