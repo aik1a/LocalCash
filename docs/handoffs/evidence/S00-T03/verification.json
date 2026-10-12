@@ -1,0 +1,32 @@
+{
+  "task": "S00-T03",
+  "branch": "task/S00-T03-cuentas-movimientos",
+  "base_sha": "905ac2fdafcf82ac0d21183e1e9fa893dd2d7d2a",
+  "validated_sha": "eea0fbfc895f5d5e2cde6f3512407f3cc9c16cec",
+  "run_id": 38283139884,
+  "job_id": 114925004298,
+  "run_url": "https://github.com/aik1a/LocalCash/actions/runs/38283139884",
+  "result": "SUCCESS",
+  "build_command": "bash gradlew --no-daemon --console=plain :app:assembleDebug :app:assembleDebugAndroidTest",
+  "exit_code": 0,
+  "domain_checks": 18,
+  "android_tests": "PASS: cuentas desde formularios, ingreso/egreso, saldo, validación, aislamiento, FK, overflow y reapertura SQLite/Activities",
+  "process_restart": "PASS: am force-stop + am start + uiautomator XML con Saldo: 125,50",
+  "artifact_id": 11762057450,
+  "artifact_sha256": "087c38912f49223833119796d45911b6afc943e0bc7686c58380b259f8a35860",
+  "apk_sha256": "840113ae00deaa046b2d02a62d8f021c1f6c468f26ff105d5da0c09c56dae603",
+  "physical_device_manual": "NO EJECUTADO",
+  "android_studio_sync": "NO EJECUTADO",
+  "previous_attempts": [
+    {
+      "run_id": 38281698280,
+      "build": "PASS",
+      "android_flow": "FAIL: selector de texto inicial no encontró Crear cuenta"
+    },
+    {
+      "run_id": 38282300743,
+      "build": "PASS",
+      "android_flow": "sin resultado al registrar esta evidencia; sustituido por el run final con esperas acotadas"
+    }
+  ]
+}

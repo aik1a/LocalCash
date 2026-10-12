@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Nombre" android:labelFor="@+id/nombre" />
+        <EditText android:id="@id/nombre" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textCapSentences" android:maxLines="1" android:hint="Ej.: Efectivo" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Saldo inicial (hasta 2 decimales)" android:labelFor="@+id/saldo_inicial" />
+        <EditText android:id="@id/saldo_inicial" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal|numberSigned" android:digits="0123456789.,-" android:text="0" android:maxLines="1" android:selectAllOnFocus="true" />
+    </LinearLayout>
+</ScrollView>

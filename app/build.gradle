@@ -16,6 +16,7 @@ android {
         targetSdk 36
         versionCode 1
         versionName '1.0'
+        testInstrumentationRunner 'com.aik1a.localcash.FlowChecks'
     }
 
     compileOptions {
@@ -23,3 +24,4 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 }
+

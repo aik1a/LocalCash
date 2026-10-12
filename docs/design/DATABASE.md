@@ -1,6 +1,23 @@
 # Diseño SQLite
 
-**Estado:** PRELIMINAR — no congelar `CREATE TABLE` hasta resolver las decisiones pendientes indicadas aquí.
+**Estado:** cuentas/movimientos implementados en S00-T03, versión 1. El resto sigue PRELIMINAR.
+
+## Esquema mínimo S00-T03 (decisiones implementadas)
+
+Base `localcash.db`, administrada por `data.LocalCashDbHelper`.
+
+| Tabla | Columnas y restricciones |
+|---|---|
+| cuentas | id INTEGER PRIMARY KEY; nombre TEXT NOT NULL, trim no vacío; saldo_inicial INTEGER NOT NULL |
+| movimientos | id INTEGER PRIMARY KEY; cuenta_id INTEGER NOT NULL FK cuentas(id) ON DELETE RESTRICT; tipo TEXT NOT NULL INGRESO/EGRESO; monto INTEGER NOT NULL > 0; descripcion TEXT NOT NULL (vacío permitido); fecha INTEGER NOT NULL >= 0 |
+
+- Dinero en enteros de centésimas: 100,25 se guarda como 10025; sin REAL ni redondeo silencioso. UI acepta coma o punto y hasta dos decimales sin separador de miles. Sin conversión ni moneda implícita.
+- Saldo inicial puede ser cero o negativo; saldo actual siempre derivado por Cuenta.calcularSaldo. No se impide saldo negativo: no existe regla de fondos insuficientes en el encargo.
+- Fecha epoch en milisegundos al registrar, mostrada en hora local. Orden fecha ASC, id ASC; índice (cuenta_id, fecha, id) para el historial.
+- FK activas en onConfigure. No hay edición/borrado en este incremento. RESTRICT conserva relación; futuras migraciones explícitas, sin borrar datos.
+- Identidad por ID; nombres iguales permitidos (no se exige unicidad). Tipo de cuenta se mantiene pendiente y no se inventa catálogo.
+- La transacción de registrar valida el saldo contra overflow antes del insert; las operaciones de creación son insert de una fila.
+- Compras/deudas, ubicación y sus políticas siguen pendientes. Esta versión no crea tablas futuras.
 
 ## Principios
 
@@ -55,11 +72,11 @@ compras 1 ---- N deudas ---- N:1 contactos
 - Latitud/longitud: nullable y ambas presentes o ambas ausentes.
 - Índices solo donde exista una consulta real que los justifique.
 
-## Decisiones pendientes antes del freeze de esquema
+## Decisiones pendientes para módulos restantes y ampliaciones
 
-- campos definitivos de cada tabla;
+- campos definitivos de las tablas restantes;
 - valores de tipo de cuenta;
-- representación definitiva de dinero y fecha;
+- dinero y fecha de los módulos restantes (cuentas/movimientos ya definidos arriba);
 - políticas `ON DELETE`/`ON UPDATE`;
 - si una compra realizada genera movimiento automáticamente;
 - pagos parciales de deuda sí/no;
