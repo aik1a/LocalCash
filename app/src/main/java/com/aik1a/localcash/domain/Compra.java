@@ -14,14 +14,16 @@ public final class Compra {
     private final List<DetalleCompra> detalles;
     public Compra(long id, String nombre, Estado estado, long fecha, Long contactoId, List<DetalleCompra> detalles) {
         if (id < 0 || nombre == null || nombre.trim().isEmpty() || estado == null || fecha < 0
-                || (contactoId != null && contactoId <= 0) || detalles == null || detalles.isEmpty()
-                || detalles.contains(null)) throw new IllegalArgumentException("La compra necesita nombre, estado, fecha y al menos un ítem válido.");
+                || (contactoId != null && contactoId <= 0) || detalles == null || detalles.isEmpty()) throw new IllegalArgumentException("La compra necesita nombre, estado, fecha y al menos un ítem válido.");
         this.id = id;
         this.nombre = nombre.trim();
         this.estado = estado;
         this.fecha = fecha;
         this.contactoId = contactoId;
         this.detalles = Collections.unmodifiableList(new ArrayList<>(detalles));
+        for (DetalleCompra detalle : this.detalles) {
+            if (detalle == null) throw new IllegalArgumentException("La compra no admite ítems nulos.");
+        }
         calcularTotal();
     }
     public long getId() { return id; }
