@@ -17,7 +17,7 @@ Base `localcash.db`, administrada por `data.LocalCashDbHelper`.
 - FK activas en onConfigure. No hay edición/borrado en este incremento. RESTRICT conserva relación; futuras migraciones explícitas, sin borrar datos.
 - Identidad por ID; nombres iguales permitidos (no se exige unicidad). Tipo de cuenta se mantiene pendiente y no se inventa catálogo.
 - La transacción de registrar valida el saldo contra overflow antes del insert; las operaciones de creación son insert de una fila.
-- T03 solo creó cuentas/movimientos. T04 añade las tablas documentadas debajo; deudas, reparto y ubicación siguen pendientes.
+- T03 solo creó cuentas/movimientos. T04 añade las tablas documentadas debajo; T05 añade deudas/reparto. Ubicación sigue pendiente.
 
 ## Migración aditiva S00-T04, v1 → v2
 
@@ -66,9 +66,7 @@ Pruebas: fixture v2 con snapshot de todas las filas previas, FK/PK/CHECK, trigge
 3. `contactos`
 4. `compras`
 5. `detalle_compra`
-6. `participantes`
-7. `asignaciones`
-8. `deudas`
+6. `deudas` (T05; sustituye participantes/asignaciones separadas)
 
 ## Mapeo dominio -> persistencia
 

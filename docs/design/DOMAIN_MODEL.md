@@ -146,7 +146,7 @@ Puede ser una entidad/asociación persistente. Su forma final depende del DER de
 
 Esta entidad permite soportar reparto por producto/servicio y distribución personalizada sin introducir lógica en la UI.
 
-## Deuda
+## Diseño preliminar de Deuda (implementación mínima T05 arriba)
 
 **Responsabilidad:** representar el monto pendiente/asignado a un contacto dentro de una compra compartida.
 
