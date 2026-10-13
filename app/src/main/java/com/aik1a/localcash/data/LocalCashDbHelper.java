@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public final class LocalCashDbHelper extends SQLiteOpenHelper {
     public LocalCashDbHelper(Context context) {
-        super(context.getApplicationContext(), "localcash.db", null, 2);
+        super(context.getApplicationContext(), "localcash.db", null, 3);
     }
 
     @Override public void onConfigure(SQLiteDatabase db) {
@@ -25,6 +25,7 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
                 + "fecha INTEGER NOT NULL CHECK(fecha >= 0))");
         db.execSQL("CREATE INDEX movimientos_cuenta_fecha ON movimientos(cuenta_id, fecha, id)");
         crearCompras(db);
+        crearDeudas(db);
     }
 
     private void crearCompras(SQLiteDatabase db) {
@@ -38,8 +39,21 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE INDEX detalle_por_compra ON detalle_compra(compra_id, id)");
     }
 
+    private void crearDeudas(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE deudas (compra_id INTEGER NOT NULL REFERENCES compras(id) ON DELETE RESTRICT, "
+                + "contacto_id INTEGER NOT NULL REFERENCES contactos(id) ON DELETE RESTRICT, "
+                + "monto INTEGER NOT NULL CHECK(typeof(monto)='integer' AND monto >= 0), "
+                + "estado TEXT NOT NULL DEFAULT 'PENDIENTE' CHECK(estado = 'PENDIENTE'), "
+                + "PRIMARY KEY(compra_id, contacto_id))");
+    }
+
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion == 1 && newVersion == 2) { crearCompras(db); return; }
+        if (oldVersion >= 1 && oldVersion < newVersion && newVersion <= 3) {
+            if (oldVersion < 2 && newVersion >= 2) crearCompras(db);
+            if (oldVersion < 3 && newVersion >= 3) crearDeudas(db);
+            return;
+        }
         throw new IllegalStateException("Migración no soportada: " + oldVersion + " → " + newVersion);
     }
 }
+

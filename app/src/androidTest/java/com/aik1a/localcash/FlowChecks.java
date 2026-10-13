@@ -20,12 +20,14 @@ public final class FlowChecks extends Instrumentation {
     private Activity main;
 
     private boolean compras;
+    private boolean compartidas;
     @Override public void onCreate(Bundle arguments) {
         super.onCreate(arguments);
         compras = arguments != null && "purchases".equals(arguments.getString("mode"));
+        compartidas = arguments != null && "shared".equals(arguments.getString("mode"));
         start();
     }
-    @Override public void onStart() { if (compras) verificarCompras(); else verificarCuentas(); }
+    @Override public void onStart() { if (compartidas) verificarCompartidas(); else if (compras) verificarCompras(); else verificarCuentas(); }
 
     private void verificarCuentas() {
         Bundle result = new Bundle();
@@ -132,7 +134,7 @@ public final class FlowChecks extends Instrumentation {
         try {
             prepararV1();
             LocalCashDbHelper helper = new LocalCashDbHelper(getTargetContext());
-            assertTrue(helper.getWritableDatabase().getVersion() == 2, "Migración a versión 2");
+            assertTrue(helper.getWritableDatabase().getVersion() == 3, "Migración a versión 3");
             MovimientoService contabilidad = new MovimientoService(helper);
             assertTrue(contabilidad.listarCuentas().size() == 2, "Dos cuentas preservadas");
             assertTrue(contabilidad.calcularSaldo(1) == 12550, "Saldo v1 preservado");
@@ -142,7 +144,7 @@ public final class FlowChecks extends Instrumentation {
             assertTrue(compras.listarCompras().isEmpty() && compras.listarContactos().isEmpty(), "Tablas nuevas vacías");
             probarRollback(helper);
             helper.close();
-            log.append("PASS MIG-01: v1 real con dos cuentas y dos movimientos → v2, saldos 125,50 y 300,00 conservados.\n");
+            log.append("PASS MIG-01: v1 real con dos cuentas y dos movimientos → v3, saldos 125,50 y 300,00 conservados.\n");
             AccessibilityServiceInfo info = getUiAutomation().getServiceInfo();
             info.flags |= AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
             getUiAutomation().setServiceInfo(info);
@@ -200,6 +202,144 @@ public final class FlowChecks extends Instrumentation {
             result.putString("stream", "LOCALCASH_PURCHASE_FAIL\n" + log + android.util.Log.getStackTraceString(failure));
             finish(Activity.RESULT_CANCELED, result);
         }
+    }
+
+    private void verificarCompartidas() {
+        Bundle result = new Bundle();
+        try {
+            // El flujo T04 ha creado cuentas/movimientos/contactos/compras reales.
+            // Retroceder solo el esquema de deudas en el emulador desechable: fixture v2.
+            LocalCashDbHelper helper = new LocalCashDbHelper(getTargetContext());
+            CompraService compras = new CompraService(helper);
+            assertTrue(compras.listarCompras().size() == 2, "Fixture T04 existe");
+            compras.crearContacto("Marta");
+            long equitativa = compras.registrar(new Compra(0,"Compartida exacta",Compra.Estado.REALIZADA,3,1L,
+                    java.util.Arrays.asList(new DetalleCompra("Producto",1,10001))));
+            long custom = compras.registrar(new Compra(0,"Compartida personalizada",Compra.Estado.REALIZADA,4,null,
+                    java.util.Arrays.asList(new DetalleCompra("Servicio",1,10000))));
+            long prueba = compras.registrar(new Compra(0,"Prueba transacción",Compra.Estado.REALIZADA,5,null,
+                    java.util.Arrays.asList(new DetalleCompra("Producto",1,10000))));
+            android.database.sqlite.SQLiteDatabase db = helper.getWritableDatabase();
+            db.execSQL("DROP TABLE deudas"); db.setVersion(2);
+            String previo = snapshot(db);
+            assertTrue(db.getVersion() == 2, "Fixture v2 confirmado"); helper.close();
+            helper = new LocalCashDbHelper(getTargetContext()); db = helper.getWritableDatabase();
+            assertTrue(db.getVersion() == 3, "Migración v2→v3 real");
+            assertTrue(previo.equals(snapshot(db)), "Todas las filas v2 intactas");
+            assertTrue(new MovimientoService(helper).calcularSaldo(1) == 12550, "Saldo conservado");
+            log.append("PASS MIG-02: fixture SQLite v2→v3; snapshot exacto de cuentas, movimientos, contactos, compras y detalles intacto.\n");
+            com.aik1a.localcash.application.DeudaService service = new com.aik1a.localcash.application.DeudaService(helper);
+            final com.aik1a.localcash.application.DeudaService svc = service;
+            final long plan = comprasIdPlan(helper);
+            rechazar(() -> svc.repartirEquitativo(plan, java.util.Arrays.asList(1L,2L)));
+            rechazar(() -> svc.repartirEquitativo(prueba, java.util.Arrays.asList(1L,1L)));
+            rechazar(() -> svc.repartirPersonalizado(prueba, java.util.Arrays.asList(1L,2L),java.util.Arrays.asList(-1L,10001L)));
+            rechazar(() -> svc.repartirPersonalizado(prueba, java.util.Arrays.asList(1L,2L),java.util.Arrays.asList(20L,30L)));
+            rechazar(() -> svc.repartirPersonalizado(prueba, java.util.Arrays.asList(1L,2L),java.util.Arrays.asList(Long.MAX_VALUE,1L)));
+            rechazar(() -> svc.repartirEquitativo(prueba, java.util.Arrays.asList(1L,9999L)));
+            assertTrue(service.listarDeudas(prueba).isEmpty(), "Entradas inválidas sin escritura");
+            com.aik1a.localcash.data.DeudaRepository repo = new com.aik1a.localcash.data.DeudaRepository(helper);
+            Compra compraPrueba = new CompraService(helper).buscarCompra(prueba);
+            try {
+                repo.registrar(Reparto.equitativo(compraPrueba,java.util.Arrays.asList(1L,9999L)));
+                throw new AssertionError("FK desactivada");
+            } catch (android.database.sqlite.SQLiteConstraintException expected) {
+                assertTrue(repo.listarPorCompra(prueba).isEmpty(), "FK revierte primera deuda");
+            }
+            db.execSQL("CREATE TRIGGER test_falla_deuda BEFORE INSERT ON deudas WHEN NEW.contacto_id=2 BEGIN SELECT RAISE(ABORT,'fallo inducido'); END");
+            try {
+                service.repartirEquitativo(prueba,java.util.Arrays.asList(1L,2L));
+                throw new AssertionError("Trigger no falló");
+            } catch (android.database.sqlite.SQLiteException expected) {
+                assertTrue(repo.listarPorCompra(prueba).isEmpty(), "Segundo insert fallido revierte todo");
+            } finally { db.execSQL("DROP TRIGGER test_falla_deuda"); }
+            Compra falsa = new Compra(prueba,"Falsa",Compra.Estado.REALIZADA,0,null,
+                    java.util.Arrays.asList(new DetalleCompra("X",1,1)));
+            rechazar(() -> repo.registrar(Reparto.equitativo(falsa,java.util.Arrays.asList(1L,2L))));
+            assertTrue(repo.listarPorCompra(prueba).isEmpty(), "Total ficticio rechazado");
+            service.repartirPersonalizado(prueba,java.util.Arrays.asList(1L,2L),java.util.Arrays.asList(0L,10000L));
+            assertTrue(repo.listarPorCompra(prueba).get(0).getMonto() == 0, "Cuota cero persistida");
+            rechazar(() -> svc.repartirEquitativo(prueba,java.util.Arrays.asList(2L,3L)));
+            assertTrue(repo.listarPorCompra(prueba).size() == 2, "Reparto repetido con otros participantes rechazado");
+            try {
+                db.execSQL("INSERT INTO deudas(compra_id,contacto_id,monto,estado) VALUES("+prueba+",1,1,'PENDIENTE')");
+                throw new AssertionError("PK duplicada permitida");
+            } catch (android.database.sqlite.SQLiteConstraintException expected) { }
+            try {
+                db.execSQL("INSERT INTO deudas(compra_id,contacto_id,monto,estado) VALUES("+equitativa+",1,-1,'PENDIENTE')");
+                throw new AssertionError("Monto negativo SQL aceptado");
+            } catch (android.database.sqlite.SQLiteConstraintException expected) { }
+            try {
+                db.execSQL("INSERT INTO deudas(compra_id,contacto_id,monto,estado) VALUES(99999,1,1,'PENDIENTE')");
+                throw new AssertionError("Compra FK inválida permitida");
+            } catch (android.database.sqlite.SQLiteConstraintException expected) { }
+            log.append("PASS SHARED-DB: planificada/duplicados/negativo/desigual/overflow/contacto inválido rechazados; FK, PK, CHECK y rollback de segundo insert; total real revalidado, cuota cero persistida.\n");
+            helper.close();
+            AccessibilityServiceInfo info = getUiAutomation().getServiceInfo();
+            info.flags |= AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
+            getUiAutomation().setServiceInfo(info);
+            abrir(); clickId("abrir_compras"); clickText("Compartida exacta");
+            nodeText("Total: 100,01"); clickId("abrir_reparto");
+            assertTrue(!nodeText("Ana (#1)").isChecked(), "Contacto asociado no automático");
+            clickId("guardar_reparto"); nodeText("Selecciona al menos dos contactos distintos.");
+            clickText("Luis (#2)"); clickId("guardar_reparto"); nodeText("Selecciona al menos dos contactos distintos.");
+            clickText("Marta (#3)"); clickText("Ana (#1)"); clickId("guardar_reparto");
+            nodeText("Ana (#1): 33,34 · PENDIENTE"); nodeText("Luis (#2): 33,34 · PENDIENTE"); nodeText("Marta (#3): 33,33 · PENDIENTE");
+            clickId("volver"); clickId("volver"); clickText("Compartida personalizada"); clickId("abrir_reparto");
+            clickId("personalizado"); clickText("Ana (#1)"); clickText("Luis (#2)"); clickText("Marta (#3)");
+            setCuota("Ana (#1)","-1"); setCuota("Luis (#2)","30"); setCuota("Marta (#3)","50"); clickId("guardar_reparto");
+            nodeText("Cada contacto debe tener un monto no negativo.");
+            setCuota("Ana (#1)","19"); clickId("guardar_reparto"); nodeText("La suma debe coincidir exactamente con el total.");
+            setCuota("Ana (#1)","20,001"); clickId("guardar_reparto"); nodeText("Usa un número con hasta 2 decimales, sin separador de miles.");
+            setCuota("Ana (#1)","20"); clickId("guardar_reparto");
+            nodeText("Ana (#1): 20,00 · PENDIENTE"); nodeText("Luis (#2): 30,00 · PENDIENTE"); nodeText("Marta (#3): 50,00 · PENDIENTE");
+            clickId("volver"); clickId("abrir_reparto"); nodeText("Ana (#1): 20,00 · PENDIENTE");
+            helper = new LocalCashDbHelper(getTargetContext());
+            service = new com.aik1a.localcash.application.DeudaService(helper);
+            List<Deuda> partes = service.listarDeudas(equitativa);
+            assertTrue(partes.size()==3 && partes.get(0).getMonto()==3334 && partes.get(1).getMonto()==3334 && partes.get(2).getMonto()==3333,"SQLite reparto exacto");
+            assertTrue(service.listarDeudas(custom).size()==3 && service.listarDeudas(custom).get(0).getMonto()==2000,"SQLite personalizado");
+            assertTrue(previo.equals(snapshot(helper.getReadableDatabase())),"Regresión de todas las tablas anteriores");
+            try (android.database.Cursor c = helper.getReadableDatabase().rawQuery("PRAGMA foreign_key_check",null)) {
+                assertTrue(!c.moveToFirst(), "Sin FK huérfanas");
+            }
+            helper.close();
+            log.append("PASS SHARED-UI: selección explícita, validación de 2+, reparto 100,01/3 y personalizado 20+30+50; errores visibles; lectura al volver, persistencia/reapertura y regresión contable.\n");
+            result.putString("stream","LOCALCASH_SHARED_PASS\n"+log); finish(Activity.RESULT_OK,result);
+        } catch (Throwable failure) {
+            dump(getUiAutomation().getRootInActiveWindow(),0);
+            result.putString("stream","LOCALCASH_SHARED_FAIL\n"+log+android.util.Log.getStackTraceString(failure));
+            finish(Activity.RESULT_CANCELED,result);
+        }
+    }
+    private long comprasIdPlan(LocalCashDbHelper helper) {
+        for (Compra compra : new CompraService(helper).listarCompras())
+            if (compra.getEstado()==Compra.Estado.PLANIFICADA) return compra.getId();
+        throw new AssertionError("No hay compra planificada");
+    }
+    private void rechazar(Runnable action) {
+        try { action.run(); throw new AssertionError("Entrada inválida aceptada"); }
+        catch (IllegalArgumentException | ArithmeticException expected) { }
+    }
+    private String snapshot(android.database.sqlite.SQLiteDatabase db) {
+        StringBuilder rows = new StringBuilder();
+        for (String tabla : new String[]{"cuentas","movimientos","contactos","compras","detalle_compra"}) {
+            rows.append(tabla);
+            try (android.database.Cursor c = db.rawQuery("SELECT * FROM "+tabla+" ORDER BY id",null)) {
+                while (c.moveToNext()) for (int col=0;col<c.getColumnCount();col++) {
+                    String value=c.isNull(col)?"<NULL>":c.getString(col);
+                    rows.append(value.length()).append(':').append(value).append(';');
+                }
+            }
+        }
+        return rows.toString();
+    }
+    private void setCuota(String contacto, String texto) {
+        Bundle args = new Bundle(); args.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,texto);
+        AccessibilityNodeInfo node=nodeText("Monto para "+contacto);
+        node.performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SHOW_ON_SCREEN.getId());
+        assertTrue(nodeText("Monto para "+contacto).performAction(AccessibilityNodeInfo.ACTION_SET_TEXT,args),"Monto "+contacto);
+        esperarUI();
     }
 
     private void prepararV1() {
@@ -294,3 +434,4 @@ public final class FlowChecks extends Instrumentation {
         esperarUI();
     }
 }
+
