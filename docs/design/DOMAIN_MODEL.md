@@ -1,12 +1,18 @@
 # Modelo de dominio POO
 
-**Estado:** Cuenta y Movimiento implementados en S00-T03; módulos posteriores siguen siendo diseño v1.
+**Estado:** Cuenta/Movimiento (T03) y Contacto/Compra/DetalleCompra (T04) implementados; reparto/deudas siguen siendo diseño.
 
 ## Implementación actual S00-T03
 
 Cuenta y Movimiento son objetos inmutables con estado privado. IDs 0 representan objetos nuevos; IDs positivos identifican registros. Cuenta exige nombre no vacío y calcula saldo con movimientos de su propia cuenta; Movimiento exige cuenta persistida, tipo INGRESO/EGRESO y monto positivo. Dinero convierte texto decimal a centésimas long de forma exacta, sin redondear.
 
-Cuenta no incluye todavía tipo (catálogo pendiente). Movimiento incluye descripción opcional y fecha epoch milisegundos; ubicación queda fuera de esta tarea. No se implementan todavía clases de compras/deudas/contactos. Los saldos negativos son posibles: no se exige bloquear egresos por fondos insuficientes. Overflow se rechaza, no se convierte en saldo incorrecto.
+Cuenta no incluye todavía tipo (catálogo pendiente). Movimiento incluye descripción opcional y fecha epoch milisegundos; ubicación queda fuera de esta tarea. T04 incorpora contactos/compras; no hay clases de deudas/reparto. Los saldos negativos son posibles: no se exige bloquear egresos por fondos insuficientes. Overflow se rechaza, no se convierte en saldo incorrecto.
+
+## Implementación S00-T04
+
+Contacto contiene ID y nombre no vacío. DetalleCompra es inmutable: descripción, cantidad entera positiva y precio unitario no negativo en centésimas; calcula su subtotal exacto. Compra exige nombre, estado PLANIFICADA/REALIZADA, fecha y uno o más detalles; referencia opcional por ID a contacto existente. Copia y protege su lista, calcula total exacto y rechaza overflow. No expone setTotal ni setter de estado.
+
+CompraService coordina el contacto opcional y CompraRepository. Este último guarda cabecera/detalles en una transacción. No se implementa conversión de estado ni efecto contable automático; la decisión sigue pendiente.
 
 ## Principios
 

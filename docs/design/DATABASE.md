@@ -1,6 +1,6 @@
 # Diseño SQLite
 
-**Estado:** cuentas/movimientos implementados en S00-T03, versión 1. El resto sigue PRELIMINAR.
+**Estado:** esquema v2: cuentas/movimientos (T03) y contactos/compras/detalles (T04). Deudas/reparto siguen PRELIMINAR.
 
 ## Esquema mínimo S00-T03 (decisiones implementadas)
 
@@ -17,7 +17,24 @@ Base `localcash.db`, administrada por `data.LocalCashDbHelper`.
 - FK activas en onConfigure. No hay edición/borrado en este incremento. RESTRICT conserva relación; futuras migraciones explícitas, sin borrar datos.
 - Identidad por ID; nombres iguales permitidos (no se exige unicidad). Tipo de cuenta se mantiene pendiente y no se inventa catálogo.
 - La transacción de registrar valida el saldo contra overflow antes del insert; las operaciones de creación son insert de una fila.
-- Compras/deudas, ubicación y sus políticas siguen pendientes. Esta versión no crea tablas futuras.
+- T03 solo creó cuentas/movimientos. T04 añade las tablas documentadas debajo; deudas, reparto y ubicación siguen pendientes.
+
+## Migración aditiva S00-T04, v1 → v2
+
+SQLiteOpenHelper aumenta la versión a 2. onUpgrade(1,2) solo crea las tres tablas e índice siguientes; no borra ni reescribe cuentas/movimientos. SQLiteOpenHelper hace atómica la migración y el cambio de versión. onCreate crea las tablas contables originales y las nuevas para instalaciones limpias.
+
+| Tabla | Columnas/restricciones |
+|---|---|
+| contactos | id INTEGER PRIMARY KEY; nombre TEXT NOT NULL, trim no vacío |
+| compras | id INTEGER PRIMARY KEY; nombre TEXT NOT NULL no vacío; estado TEXT PLANIFICADA/REALIZADA; fecha INTEGER NOT NULL >= 0; contacto_id nullable FK contactos(id), ON DELETE RESTRICT |
+| detalle_compra | id INTEGER PRIMARY KEY; compra_id INTEGER NOT NULL FK compras(id), ON DELETE RESTRICT; descripcion TEXT no vacía; cantidad INTEGER > 0; precio_unitario INTEGER >= 0 |
+
+- Cantidades enteras positivas (unidades de producto/servicio); precios en centésimas long, como T03. Subtotal con multiplyExact y total con addExact, sin redondeos ni columnas derivadas.
+- Fecha epoch en milisegundos seleccionada con DatePicker; puede expresar la fecha realizada o planificada. Se muestra en la zona local. No se imponen restricciones de fecha no especificadas; no hay notificaciones ni ejecución automática.
+- Al menos un detalle válido en cada Compra; colección inmutable y total validado antes del insert. Cabecera y detalles se guardan en una transacción de CompraRepository; un fallo revierte toda la compra.
+- Índice detalle_por_compra(compra_id,id) para consulta y orden de ítems. Historial por fecha DESC,id DESC. Sin catálogo de productos ni campos obligatorios de teléfono/email.
+- Sin edición/borrado ni transición de estados en T04. Estado elegido al registrar. La política compra→movimiento sigue PENDIENTE; no se genera movimiento, no se solicita cuenta de cargo ni se altera saldo.
+- Prueba de migración parte del DDL v1 y registros previos; el emulador comprueba saldos/historial, compras/contactos y reinicio de proceso. Ver handoff S00-T04.
 
 ## Principios
 

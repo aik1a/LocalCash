@@ -1,0 +1,7 @@
+Starting: Intent { cmp=com.aik1a.localcash/.presentation.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.aik1a.localcash/.presentation.MainActivity
+TotalTime: 2731
+WaitTime: 2764
+Complete
