@@ -1,6 +1,6 @@
 # S00-T04 — Contactos y compras locales
 
-**Estado:** READY · **Rol:** Codificador · **Sprint:** S00 acelerado
+**Estado:** CLOSED — 2026-10-13 (PASS WITH OBSERVATIONS) · **Rol:** Codificador · **Sprint:** S00 acelerado
 **Rama:** `task/S00-T04-contactos-compras`, desde `main` vigente.
 **Objetivo:** app Java/XML funcional para crear/listar contactos, registrar compras (realizadas o planificadas) con varios detalles, calcular totales, mostrar historial y vincular opcionalmente un contacto.
 
@@ -37,3 +37,11 @@ Leer `PROJECT_ROUTER.md`, `AGENTS.md`, `PROJECT_STATE.md`, `docs/agent/roles/COD
 - [ ] Handoff con commits, archivos, resultados y una solicitud de auditoría independiente.
 
 **Entrega:** DONE/PARTIAL/BLOCKED, SHA, evidencia y handoff. Objetivo académico: resultado demostrable con mínima complejidad.
+
+## Cierre administrativo — 2026-10-13
+
+- SHA funcional validado `76480f7639a4ef2e2ec3121817307605ff9843d2`.
+- CI/emulador [38289787487](https://github.com/aik1a/LocalCash/actions/runs/38289787487): BUILD PASS, 33 comprobaciones de dominio, flujo compras/contactos y migración SQLite PASS.
+- Gate `docs/audits/S00/S00-T04-audit.md`: PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE.
+- [PR #4](https://github.com/aik1a/LocalCash/pull/4), merge `93d52298319a5cb57fd902d7d52b513fee7918c4`.
+- Riesgo firma APK distinto T03/T04, tratado como observación de entrega T07; no atribuir a SQLite. Sprint S00 permanece abierto.

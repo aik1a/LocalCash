@@ -13,8 +13,8 @@ Disponer antes del **19 de octubre de 2026** de una aplicación Android académi
 | S00-T01 | Proyecto Android Java/XML/Gradle | CLOSED | Completado |
 | S00-T02 | Paquete Java de presentación; build real en CI | CLOSED | Completado |
 | S00-T03 | Cuentas, movimientos, saldo y SQLite comprobados en emulador | **CLOSED** | 12 oct |
-| **S00-T04** | **Contactos, compras realizadas/planificadas, detalle e historial** | **READY** | 14–15 oct |
-| S00-T05 | Gastos compartidos con productos/servicios, reparto equitativo/personalizado y deudas | PENDIENTE | 16 oct |
+| S00-T04 | Contactos, compras, ítems, historial, migración SQLite v2 y emulador PASS | **CLOSED** | 13 oct |
+| **S00-T05** | **Reparto equitativo/personalizado de compras entre contactos y deudas** | **READY** | 14–15 oct |
 | S00-T06 | Acceso biométrico, ubicación opcional y mapas interactivos; validar uso offline | PENDIENTE | 17 oct |
 | S00-T07 | Build de integración, comprobaciones manuales, trazabilidad, documentación y pauta de exposición | PENDIENTE | 18 oct |
 
@@ -33,7 +33,7 @@ Las fechas son **objetivos de organización**, no resultados ni garantías de im
 
 ## Pendientes heredados
 
-El build S00-T03, las pruebas de dominio, el flujo UI/SQLite y el relanzamiento en emulador **están validados**: [Actions run 38283139884](https://github.com/aik1a/LocalCash/actions/runs/38283139884). Instalación física/sync Studio siguen pendientes para T07. S00-T04 debe conservar datos SQLite v1 mediante migración aditiva.
+El build S00-T03, las pruebas de dominio, el flujo UI/SQLite y el relanzamiento en emulador **están validados**: [Actions run 38283139884](https://github.com/aik1a/LocalCash/actions/runs/38283139884). Instalación física/sync Studio siguen pendientes para T07. S00-T04 conserva datos SQLite v1 mediante migración aditiva comprobada [Actions run 38289787487](https://github.com/aik1a/LocalCash/actions/runs/38289787487). T05 deberá migrar v2→v3. Los APK T03 y T04 tienen firmas distintas, por lo que la actualización de instalación de usuario requiere recuperar la misma firma antes de T07; no desinstalar sin respaldo.
 
 ## Relación con documentos históricos
 

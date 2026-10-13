@@ -7,14 +7,14 @@ Esta matriz conecta requisitos con diseño, sprint, código y validación. Debe 
 | LC-P01 | ARCHITECTURE | S00 / T01-T02 | `app/build.gradle`, `app/src/main/java/com/aik1a/localcash/presentation/MainActivity.java`, XML y manifiesto | BUILD-01; Actions run `38267899607` (S00-T02, SHA exacto), auditoría favorable | Proyecto base y estructura presentacional integrados; T01-T02 CLOSED |
 | LC-P02 / LC-TECH-01 | DATABASE / ADR-001 | S00-T03 | `LocalCashDbHelper`, repositories de cuentas/movimientos | DB-01 / Actions run `38283139884` | Implementado en flujo T03; otros módulos pendientes |
 | LC-P03 / LC-AUTH-01 | ARCHITECTURE | S02 | Pendiente | AUTH-01 | Pendiente |
-| LC-CON-01 | DOMAIN_MODEL / DATABASE | S05 | Pendiente | CON-01 | Pendiente |
+| LC-CON-01 | DOMAIN_MODEL / DATABASE | S00-T04 | `Contacto`, `ContactoRepository`, `ContactosActivity` | CON-01, CI `38289787487` | Implementado, T04 CLOSED |
 | LC-ACC-01 | DOMAIN_MODEL / DATABASE | S00-T03 | `Cuenta`, `CuentaRepository`, `MainActivity` | ACC-01, dos cuentas en emulador | Implementado (crear/listar/consultar saldo) |
 | LC-MOV-01 | DOMAIN_MODEL / DATABASE | S00-T03 | `Movimiento`, `MovimientoService`, `CuentaActivity` | MOV-01, ingreso/egreso/persistencia en emulador | Implementado (registro/historial) |
 | LC-MOV-02 | DOMAIN_MODEL / DATABASE | S04 | Pendiente | GEO-01 | Pendiente |
 | LC-P04 / LC-MAP-01 | ARCHITECTURE | S04 | Pendiente | MAP-01 | Pendiente |
-| LC-BUY-01 | DOMAIN_MODEL / DATABASE | S05 | Pendiente | BUY-01 | Pendiente |
-| LC-BUY-02 | BUSINESS_RULES / DATABASE | S05 | Pendiente | BUY-02 | Pendiente |
-| LC-BUY-03 | BUSINESS_RULES / DATABASE | S05 | Pendiente | BUY-03 | Pendiente |
+| LC-BUY-01 | DOMAIN_MODEL / DATABASE | S00-T04 | `Compra`, `DetalleCompra`, `CompraRepository`, UI | BUY-01, compras/historial/ítems UI | Implementado, T04 CLOSED |
+| LC-BUY-02 | BUSINESS_RULES / DATABASE | S00-T04 | `Compra.Estado`, `NuevaCompraActivity` | BUY-02, estado/fecha futura | Implementado, T04 CLOSED |
+| LC-BUY-03 | BUSINESS_RULES / DATABASE | S00-T04 | compra.contacto_id FK, `CompraService` | BUY-03, vínculo opcional | Implementado, T04 CLOSED |
 | LC-SHARED-01 | DOMAIN_MODEL / DATABASE | S06 | Pendiente | SHARE-01 | Pendiente |
 | LC-SHARED-02 | DOMAIN_MODEL / DATABASE | S06 | Pendiente | SHARE-02 | Pendiente |
 | LC-DEBT-01 | BUSINESS_RULES | S06 | Pendiente | DEBT-01 | Pendiente |
@@ -55,3 +55,11 @@ S00-T02 fue cerrada el 2026-10-12; S00-T03 quedó READY. El sprint S00 continúa
 - Gate `docs/audits/S00/S00-T03-audit.md` PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE.
 - [PR #3](https://github.com/aik1a/LocalCash/pull/3), merge `f484642361c20246eb07dfc030a0e41e01b76647`.
 - Pendiente: migración SQLite aditiva en T04; dispositivo físico y Android Studio en T07.
+
+## Cierre S00-T04 — 2026-10-13
+
+- SHA compilado `76480f7639a4ef2e2ec3121817307605ff9843d2`; [Actions run 38289787487](https://github.com/aik1a/LocalCash/actions/runs/38289787487): build PASS, 33 pruebas dominio, migración v1→v2/regresión/flujo UI/reinicio PASS.
+- Auditoría `docs/audits/S00/S00-T04-audit.md`: PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE.
+- [PR #4](https://github.com/aik1a/LocalCash/pull/4), merge `93d52298319a5cb57fd902d7d52b513fee7918c4`; Task Brief archivado.
+- Límite importante: actualización APK T03→T04 con certificados diferentes NO VALIDADA; T07 debe resolver firma. Migración SQLite interna sí probada.
+- Compras realizadas NO generan movimientos financieros automáticos (regla pendiente). Repartos T05 pendientes.

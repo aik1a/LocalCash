@@ -6,20 +6,18 @@
 
 ## Estado actual
 
-- **Repositorio:** `aik1a/LocalCash`, rama `main`.
-- **Fase:** implementación acelerada de un MVP académico; entrega prevista **antes del 19 de octubre de 2026**.
-- **Sprint operativo:** S00 (ruta acelerada de trabajo); **IN_PROGRESS**.
-- **Cerradas:** S00-T01, S00-T02 y S00-T03 (cuentas, movimientos y SQLite funcional).
-- **Último merge:** PR #3, `f484642361c20246eb07dfc030a0e41e01b76647`.
-- **Build real:** GitHub Actions run `38283139884` del SHA `eea0fbfc895f5d5e2cde6f3512407f3cc9c16cec`: PASS, 18 comprobaciones de dominio y pruebas UI/SQLite en emulador PASS.
-- **Aplicación actual:** cuentas múltiples, ingresos/egresos, historial/saldo y SQLite persistente; probada en emulador y tras relanzar.
-- **Próxima tarea:** S00-T04 — contactos y compras locales, READY.
+- **Repositorio:** `aik1a/LocalCash`, `main`. **Fecha objetivo de entrega académica:** 19 de octubre de 2026.
+- **Sprint:** S00 — entrega acelerada, **IN_PROGRESS**.
+- **Tareas cerradas:** S00-T01 (base), T02 (estructura), T03 (cuentas/movimientos) y **T04 (contactos/compras)**.
+- **Funcionalidad actual:** cuentas, ingresos/egresos/saldos, contactos, compras realizadas/planificadas con ítems e historial, persistencia SQLite v2.
+- **Último gate:** `docs/audits/S00/S00-T04-audit.md`, PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE.
+- **Último merge:** [PR #4](https://github.com/aik1a/LocalCash/pull/4), `93d52298319a5cb57fd902d7d52b513fee7918c4`.
+- **Validación T04:** [Actions run 38289787487](https://github.com/aik1a/LocalCash/actions/runs/38289787487), código `76480f7639a4ef2e2ec3121817307605ff9843d2`, build PASS 0, 33 pruebas dominio PASS, UI/migración/regresión/reinicio en emulador PASS.
+- **Próxima tarea:** S00-T05 — gastos compartidos y deudas, READY.
 
 ## Próxima acción autorizada
 
-**S00-T04:** crear contactos y compras con detalles/estados, lista/historial y persistencia SQLite. Task Brief: `docs/tasks/active/S00-T04-contactos-compras.md`; rama `task/S00-T04-contactos-compras` desde main.
-
-**Continuidad importante:** implementar migración SQLite aditiva desde v1 sin borrar cuentas ni movimientos; demostrar que los saldos anteriores se conservan. La asociación automática compra→movimiento sigue pendiente de decisión, no debe inventarse. Una auditoría al final del incremento.
+Codificador: `docs/tasks/active/S00-T05-gastos-compartidos.md`. Rama `task/S00-T05-gastos-compartidos` desde main actual. Reutilizar compras y contactos; reparto equitativo/personalizado exacto y persistente con SQLite v3. Una auditoría al finalizar. Biometría, ubicación/mapa y entrega final quedan para T06–T07.
 
 ## Decisiones vigentes
 
@@ -40,29 +38,33 @@ Resolver solo cuando el sprint correspondiente las necesite:
 - esquema físico SQLite definitivo;
 - tipos/constraints exactos de columnas;
 - política de borrado y cascadas;
-- estrategia exacta de reparto personalizado y redondeo;
-- soporte o exclusión de pagos parciales;
-- posible redundancia entre participantes y asignaciones;
+- reparto equitativo/personalizado: decisión mínima aceptada para S00-T05 en Task Brief y BUSINESS_RULES; validar su implementación;
+- pagos parciales: excluidos del MVP S00-T05 por decisión operativa documentada;
+- reparto/deudas: tabla única mínima de asignaciones por compra/contacto autorizada para T05; evitar redundancia;
 - si completar una compra genera automáticamente un movimiento financiero;
 - campos opcionales definitivos de contactos;
 - estrategia de tiles/cache que garantice el comportamiento offline del mapa.
 
 ## Bloqueadores y riesgos
 
-No hay bloqueo para asignar T04. **SQLite v1** requiere migración aditiva para añadir tablas; `onUpgrade` actual debe cambiar sin destruir información histórica. Pendiente decisión compra→movimiento y reparto (futuras tareas).
+No hay bloqueo para T05. Se debe migrar SQLite **v2→v3 aditivamente**, preservando toda la información de T03/T04.
 
-La apertura y persistencia **sí se probaron en emulador en T03**. Sin prueba en dispositivo físico ni sync gráfico Android Studio (reservados para T07). No reutilizar builds antiguos para commits nuevos.
+**Aviso de firma APK (T07):** T03 y T04 entregaron APKs con certificados distintos. El APK T04 **no actualiza directamente** una instalación T03 que conserve datos. No desinstalar APK anterior que contenga datos. Para prueba de actualización real, utilizar la misma clave/firma o una vía de respaldo compatible, y documentar evidencia. No considerar esto fallo de migración SQLite interna, que sí pasó en CI.
+
+Dispositivo físico y sync gráfico Android Studio: NO EJECUTADO. El emulador CI sí validó funcionalidad/reinicio.
+
+La vinculación automática compra→movimiento sigue pendiente; T05 no debe inventarla. Advertencias Gradle/Kotlin permanecen documentadas.
 
 ## Última auditoría
 
-`docs/audits/S00/S00-T03-audit.md`: PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE; [PR #3](https://github.com/aik1a/LocalCash/pull/3) fusionada. Sprint S00 aún no cerrado.
+`docs/audits/S00/S00-T04-audit.md`: PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE; [PR #4](https://github.com/aik1a/LocalCash/pull/4) integrado. Sprint no cerrado.
 
-## Seguimiento de validaciones pendientes
+## Seguimiento pendiente
 
-- Módulos funcionales T04, T05 y T06.
-- Comprobación final en dispositivo físico y Studio cuando exista entorno, T07.
-- Mantener avisos de deprecación documentados; no actualizaciones de versión arbitrarias.
-- Build y auditoría únicos por incremento funcional; sin burocracia intermedia.
+- S00-T05: reparto/deudas.
+- S00-T06: biometría, ubicación y mapas con requisito offline.
+- S00-T07: pruebas integrales, firma de APK, manual, documentación y exposición.
+- Un build real del SHA nuevo y auditoría única por incremento; sin burocracia intermedia.
 
 ## Reglas de actualización
 
