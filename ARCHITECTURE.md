@@ -105,7 +105,11 @@ SQLite es la única fuente persistente de verdad en esta versión. Véase `docs/
 
 ## Biometría
 
-`BiometricPrompt` autentica mediante las capacidades del dispositivo. LocalCash no almacena huellas ni plantillas biométricas en SQLite.
+`AccesoActivity` utiliza `androidx.biometric:biometric:1.1.0` (`BiometricPrompt`, `BIOMETRIC_STRONG`) para mantener compatibilidad con minSdk24. Es la única dependencia directa nueva; `FragmentActivity` y el tema AppCompat proceden de sus dependencias transitivas.
+
+Las siete Activities de datos heredan de `ActividadProtegida`: muestran bloqueo y difieren la creación de contenido/repositorios hasta autenticar. Las rutas internas también verifican sesión; solo la entrada principal es exportada. `LocalCashApplication` mantiene la sesión exclusivamente en memoria y la invalida al quedar toda la app en segundo plano. Reiniciar el proceso exige otro desafío. La rotación conserva el desafío del SDK sin conceder acceso.
+
+Cancelación, errores, bloqueo del sensor o ausencia de biometría mantienen el acceso cerrado y permiten reintentar. No hay PIN, credencial propia ni fallback abierto. LocalCash no almacena huellas ni plantillas; SQLite continúa en v4. Las ventanas usan `FLAG_SECURE`, el contenido privado se oculta al pausar y los diálogos se descartan al detener la pantalla. Las pruebas usan enrolamiento Android y el sensor del emulador, sin desactivar el gate.
 
 ## Mapas y ubicación
 

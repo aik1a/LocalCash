@@ -1,0 +1,76 @@
+{
+  "sha": "0f79e6c57be54144b1a756b3aff3a9644b025ca8",
+  "exit_code": 0,
+  "domain_checks": 5483,
+  "apk_sha256": "aa136956836bf9ca8839bff6cf81e1e911e927f5f9394a76bd8fa9e48c9b6c1d",
+  "run_id": 38625086287,
+  "run_url": "https://github.com/aik1a/LocalCash/actions/runs/38625086287",
+  "jobs": [
+    {
+      "id": 116062441534,
+      "name": "validate (24)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 116062442463,
+      "name": "validate (36)",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11924252922,
+      "name": "S00-T06C-API24-0f79e6c57be54144b1a756b3aff3a9644b025ca8",
+      "size_in_bytes": 1367717,
+      "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11924252922",
+      "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11924252922/zip",
+      "expired": false,
+      "created_at": "2026-10-14T19:44:21Z",
+      "expires_at": "2027-01-12T19:36:23Z",
+      "updated_at": "2026-10-14T19:44:21Z",
+      "digest": "sha256:53848fae41221b560b050cc8d9a1779d563a63274680c7b658bc4b26331bf655",
+      "workflow_run": {
+        "id": 38625086287,
+        "repository_id": 1407909272,
+        "head_repository_id": 1407909272,
+        "head_branch": "task/S00-T06C-biometria",
+        "head_sha": "0f79e6c57be54144b1a756b3aff3a9644b025ca8"
+      }
+    },
+    {
+      "id": 11924053647,
+      "name": "S00-T06C-API36-0f79e6c57be54144b1a756b3aff3a9644b025ca8",
+      "size_in_bytes": 1398989,
+      "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11924053647",
+      "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11924053647/zip",
+      "expired": false,
+      "created_at": "2026-10-14T19:48:07Z",
+      "expires_at": "2027-01-12T19:36:23Z",
+      "updated_at": "2026-10-14T19:48:07Z",
+      "digest": "sha256:e4472fe37740224176f15858e7d6b426d1b89bd2f78caf434ade13e67aab4f95",
+      "workflow_run": {
+        "id": 38625086287,
+        "repository_id": 1407909272,
+        "head_repository_id": 1407909272,
+        "head_branch": "task/S00-T06C-biometria",
+        "head_sha": "0f79e6c57be54144b1a756b3aff3a9644b025ca8"
+      }
+    }
+  ],
+  "biometrics": {
+    "api24": "PASS",
+    "api36": "PASS",
+    "process_death_pid_checked": true,
+    "real_emulator_fingerprint_enrollment": true,
+    "test_auth_bypass": false
+  },
+  "regression": {
+    "api36": "PASS T03-T06A"
+  },
+  "sqlite_version": 4,
+  "project_state_modified": false,
+  "merge": false,
+  "task_closed": false
+}
