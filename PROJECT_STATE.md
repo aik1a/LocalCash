@@ -6,20 +6,20 @@
 
 ## Estado actual
 
-- **Repositorio:** `aik1a/LocalCash`, `main`. Fecha objetivo de entrega académica: **19 de octubre de 2026**.
-- **Sprint:** S00 — entrega acelerada, **IN_PROGRESS**.
-- **Tareas cerradas:** S00-T01, T02, T03, T04 y **T05 (gastos compartidos/deudas)**.
-- **Funcionalidad aceptada:** cuentas, movimientos y saldos; contactos; compras planificadas/realizadas con ítems; reparto equitativo/personalizado exacto; deudas por contacto. Persistencia SQLite **v3**, Java/XML offline.
-- **Gate T05:** `docs/audits/S00/S00-T05-audit.md` — **PASS WITH OBSERVATIONS**, `APPROVED_FOR_MERGE`, sin BLOCKER/MAJOR; H-01 documental pendiente para T07.
-- **Último merge funcional:** [PR #5](https://github.com/aik1a/LocalCash/pull/5), `5c9e9c86c9913f6079b684a150c86d783d48c189`.
-- **Validación T05:** [Actions run 38440658476](https://github.com/aik1a/LocalCash/actions/runs/38440658476), SHA funcional `45c70f7efa2bb2ffcdc2b7cb7af78c16ca1c1c50`: Gradle exit 0, 5.460 comprobaciones de dominio PASS, migración v2→v3, pruebas de UI/regresión y relanzamiento en emulador PASS.
-- **Trabajo siguiente:** [plan T06](docs/tasks/active/S00-T06-plan.md); primer incremento [T06A ubicación](docs/tasks/active/S00-T06A-ubicacion.md), READY.
+- **Repositorio:** `aik1a/LocalCash`, `main`. **Entrega académica:** 19 de octubre de 2026.
+- **Sprint:** S00 acelerado, **IN_PROGRESS**.
+- **Tareas cerradas:** S00-T01, T02, T03, T04, T05 y **T06A (ubicación opcional)**.
+- **Funcionalidad integrada:** cuentas/movimientos/saldos, contactos/compras, reparto/deudas y ubicación opcional con consentimiento y permisos Android. Persistencia SQLite **v4**.
+- **Último merge:** [PR #6](https://github.com/aik1a/LocalCash/pull/6), `b0f0d06f1d8837e85e80b75aa62e806a090f420b`.
+- **Gate T06A:** `docs/audits/S00/S00-T06A-audit.md`, `PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE`, H-01 documental no bloqueante diferida a T07.
+- **CI T06A:** [run 38498296734](https://github.com/aik1a/LocalCash/actions/runs/38498296734), SHA funcional `ebc985dedfd61797bcf104b73b24ca9c6c926a1b`: build exit 0, 5.483 checks dominio, regresión y migraciones SQLite v1/v2/v3→v4, emulador con permisos/GPS/ausencia/reinicio PASS.
+- **Próximo incremento READY:** S00-T06C, acceso biométrico. T06B mapas conserva pendiente de tiles offline.
 
 ## Próxima acción autorizada
 
-**Codificador — S00-T06A: ubicación opcional de movimientos**, Task Brief `docs/tasks/active/S00-T06A-ubicacion.md`. Basarse en `main` aceptado tras T05 y usar rama `task/S00-T06A-ubicacion`; avanzar con SQLite v3→v4 aditiva, registro de movimiento opcionalmente geolocalizado y pruebas de regresión. No editar otros incrementos, no merge ni cierre. Build/CI/emulador del SHA nuevo, handoff y una auditoría independiente antes del merge.
+**Codificador — S00-T06C: acceso biométrico.** Brief `docs/tasks/active/S00-T06C-biometria.md`, estado **READY**; rama `task/S00-T06C-biometria` desde main posterior a T06A. Proteger contenido financiero antes de desbloqueo mediante `BiometricPrompt`, manejar cancelaciones, falta de biometría, reentrada y evitar bypass. Usar compatibilidad AndroidX Biometric 1.1.0 aprobada, minSdk24. Pruebas en emulador del SHA exacto y regresión T03–T06A; handoff único y auditoría independiente. Codificador no hace merge, cierre ni modifica este archivo.
 
-**T06B (mapas)** y **T06C (biometría)** están planificadas en briefs separados; T06B conserva una decisión de cartografía offline a documentar antes de autorizar implementación. T06C puede adelantarse si mapas está bloqueado. El sprint S00 **no está cerrado**; S00-T07 sigue pendiente.
+**T06B:** `docs/tasks/active/S00-T06B-mapas.md`, DRAFT hasta escoger fuente y cobertura de tiles legal/reproducible que funcionen desde instalación limpia con red desactivada. No convertirlo en READY por conveniencia. **S00 no está cerrado**; S00-T07 pendiente.
 
 ## Decisiones vigentes
 
@@ -36,31 +36,28 @@
 
 ## Decisiones pendientes relevantes
 
-- **T06A:** representar coordenadas como par opcional válido; migración SQLite v3→v4 aditiva. No cambiar movimientos previos ni crear geolocalización obligatoria.
-- **T06B:** elegir soporte, cobertura, licencia/atribución y empaquetado de tiles de mapa **disponibles sin conexión en primera apertura**. No asumir que caché en línea cumple el PDF. Documentar decisión antes de pasar T06B a READY.
-- **T06C:** integración `BiometricPrompt` compatible con minSdk24 actual, protección de todas las Activities y validación en emulador. No introducir bypass para facilitar pruebas.
-- **T07:** compatibilidad de certificados de firma de APK para actualización preservando datos, cierre documental H-01 de T05, build/validaciones integrales y entrega.
-- Otras decisiones no necesarias para T06 siguen sin resolverse (tipo de cuenta, política compra→movimiento, campos extra de contacto, pagos parciales excluidos).
+- **T06C autorizada:** `BiometricPrompt` vía AndroidX Biometric 1.1.0 y Groovy/Java como dependencia puntual necesaria para minSdk24; no modificar minSdk ni crear autenticación propia, PIN o bypass. Protección del contenido en todas las pantallas, reentrada y compatibilidad de pruebas.
+- **T06B aún bloqueada para implementación:** origen, formato, licencia, atribución, cobertura, empaquetado y prueba real de tiles offline reproducibles. No aceptar `MapView` que dependa de Internet ni descarga no autorizada de OSM.
+- **T07:** firma/apk actualizable preservando datos, pruebas integrales/instalación en dispositivo, consolidar discrepancias históricas de DOMAIN_MODEL y DATABASE (T05/T06A H-01), documentación y exposición.
+- **No expandir sin decisión:** pagos parciales, compra→movimiento automático, tipos de cuenta o campos extra de contacto.
 
 ## Bloqueadores y riesgos
 
-- **Sin bloqueo para comenzar T06A**. Para T06B está **pendiente decisión de tiles offline** y prueba reproducible desde instalación limpia sin red, no un fallo del Codificador.
-- El APK de T03 y el de T04 tenían firmas distintas; **no desinstalar instalaciones con datos** para probar actualización. La solución/backup pertenece a T07. La migración SQLite interna de T05 sí se validó en CI.
-- T06A debe demostrar que permisos de ubicación denegados o GPS ausente no impiden crear un movimiento sin coordenadas; ningún tracking en segundo plano.
-- Dispositivo físico y sync Android Studio local todavía sin evidencia; las pruebas CI/emulador anteriores no equivalen a prueba en dispositivo físico.
-- Gradle muestra advertencias heredadas. No bloquear cambios funcionales por warnings sin impacto probado.
+- **Sin bloqueo para comenzar T06C.** Mapas T06B sí requiere una decisión cartográfica válida antes de codificar.
+- Compatibilidad de firma entre APK T03/T04/T05/T06A sin prueba de instalación incremental; no desinstalar apps con datos de usuario. Pruebas SQLite aditivas T06A sí pasaron en emulador.
+- Ubicación aproximada solamente y GPS físico: no probados en dispositivo, no falsificar evidencia. El GPS simulado/permisos denegados y flujo sin fix sí pasaron.
+- Emulador CI no equivale a prueba Android Studio/dispositivo físico; firma de entrega y prueba física en T07. Advertencias Gradle heredadas no bloquean T06C sin evidencia de impacto.
 
 ## Última auditoría
 
-`docs/audits/S00/S00-T05-audit.md`: PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE, 97,5/100; [PR #5](https://github.com/aik1a/LocalCash/pull/5) fusionado. H-01 DOCUMENTATION para T07. Sprint S00 sigue en curso.
+`docs/audits/S00/S00-T06A-audit.md` — **PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE**, 97,5/100, [PR #6](https://github.com/aik1a/LocalCash/pull/6) fusionado. H-01 documental no bloqueante para T07. S00 sigue abierto.
 
 ## Seguimiento pendiente
 
-- S00-T06A (READY): ubicación opcional, persistencia SQLite v4, permisos y pruebas.
-- S00-T06B (DRAFT): osmdroid 6.1.18, marcadores y cartografía offline reproducible; decidir tiles/área de demo antes de codificar.
-- S00-T06C (DRAFT): gate biométrico seguro, compatibilidad SDK, regresión de UI; potencialmente adelantar si T06B bloqueado.
-- S00-T07: firma APK/datos, prueba final integral, documentación, presentación y cierre del sprint.
-- Una auditoría independiente por incremento verificable y cierre administrativo posterior por el Orquestador; no reabrir T01–T05 sin regresión concreta.
+- S00-T06C (**READY**): acceso `BiometricPrompt`, seguridad frente a bypass, AndroidX minSdk24, build y pruebas en emulador.
+- S00-T06B (**DRAFT**): definir y documentar tiles para osmdroid 6.1.18 offline reproducibles, luego implementar mapa.
+- S00-T07: regresión integral y firma, prueba física si disponible, documentación/entrega y cierre documental T05/T06A.
+- Auditoría independiente antes de cada merge funcional; no cerrar sprint hasta gate integral aprobado.
 
 ## Reglas de actualización
 
