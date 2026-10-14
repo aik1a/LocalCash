@@ -118,9 +118,11 @@ def enroll():
             if signature!=last_edit:
                 x1,y1,x2,y2=map(int,re.findall(r'\d+',edits[0].get('bounds')))
                 adb('shell','input','tap',str((x1+x2)//2),str((y1+y2)//2))
-                adb('shell','input','text','1234');adb('shell','input','keyevent','66')
+                adb('shell','input','text','1234')
+                fresh=dump('pin-entered')
+                if not tap(fresh,pattern=r'^(Next|Continue|OK|Confirm)$'):
+                    adb('shell','input','keyevent','66')
                 last_edit=signature
-            tap(tree,pattern=r'^(Next|Continue|OK|Confirm)$')
         else:
             # Elegir PIN solo cuando el sistema aún no tiene bloqueo configurado.
             if any(n.get('text','').upper()=='PIN' for n in tree.iter('node')):tap(tree,pattern=r'^PIN$')
