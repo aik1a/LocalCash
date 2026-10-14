@@ -22,14 +22,16 @@ public final class FlowChecks extends Instrumentation {
     private boolean compras;
     private boolean compartidas;
     private boolean ubicaciones;
+    private Bundle argumentosBiometricos;
     @Override public void onCreate(Bundle arguments) {
         super.onCreate(arguments);
         compras = arguments != null && "purchases".equals(arguments.getString("mode"));
         compartidas = arguments != null && "shared".equals(arguments.getString("mode"));
         ubicaciones = arguments != null && "location".equals(arguments.getString("mode"));
+        if (arguments != null && arguments.getString("mode", "").startsWith("bio-")) argumentosBiometricos = arguments;
         start();
     }
-    @Override public void onStart() { if (ubicaciones) verificarUbicaciones(); else if (compartidas) verificarCompartidas(); else if (compras) verificarCompras(); else verificarCuentas(); }
+    @Override public void onStart() { if (argumentosBiometricos != null) BiometricChecks.ejecutar(this, argumentosBiometricos); else if (ubicaciones) verificarUbicaciones(); else if (compartidas) verificarCompartidas(); else if (compras) verificarCompras(); else verificarCuentas(); }
 
     private void verificarCuentas() {
         Bundle result = new Bundle();

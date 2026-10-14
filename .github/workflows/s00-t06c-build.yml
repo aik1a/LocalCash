@@ -71,6 +71,7 @@ jobs:
           script: |
             adb install -r app/build/outputs/apk/debug/app-debug.apk
             adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            adb shell pm list instrumentation > evidence/instrumentation-list.txt
             python tests/biometric-emulator.py prepare
             python tests/biometric-emulator.py enroll
             python tests/biometric-emulator.py security

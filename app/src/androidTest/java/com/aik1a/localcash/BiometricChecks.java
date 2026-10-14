@@ -11,17 +11,22 @@ import com.aik1a.localcash.domain.*;
 import java.util.*;
 
 /** Fixtures y acceso directo interno; jamás modifica la sesión biométrica. */
-public final class BiometricChecks extends Instrumentation {
+public final class BiometricChecks {
+    private final Instrumentation instrumentation;
     private String mode, activity;
-    @Override public void onCreate(Bundle args) {
-        super.onCreate(args); mode=args.getString("mode"); activity=args.getString("activity"); start();
+    private BiometricChecks(Instrumentation instrumentation, Bundle args) {
+        this.instrumentation=instrumentation;
+        mode=args.getString("mode").replace("bio-",""); activity=args.getString("activity");
     }
-    @Override public void onStart() {
+    public static void ejecutar(Instrumentation instrumentation,Bundle args) {
+        new BiometricChecks(instrumentation,args).verificar();
+    }
+    private void verificar() {
         Bundle result=new Bundle();
         try {
             if ("seed".equals(mode)) {
-                getTargetContext().deleteDatabase("localcash.db");
-                try (LocalCashDbHelper helper=new LocalCashDbHelper(getTargetContext())) {
+                instrumentation.getTargetContext().deleteDatabase("localcash.db");
+                try (LocalCashDbHelper helper=new LocalCashDbHelper(instrumentation.getTargetContext())) {
                     MovimientoService cuentas=new MovimientoService(helper);
                     long cuenta=cuentas.crearCuenta("Efectivo",10000);
                     cuentas.registrar(cuenta,Movimiento.Tipo.INGRESO,2550,"Previo",new Ubicacion(-33.45,-70.66));
@@ -33,16 +38,16 @@ public final class BiometricChecks extends Instrumentation {
                 }
                 result.putString("stream","LOCALCASH_BIO_SEED_PASS");
             } else if ("direct".equals(mode)) {
-                AccessibilityServiceInfo info=getUiAutomation().getServiceInfo();
-                info.flags|=AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS; getUiAutomation().setServiceInfo(info);
-                Intent intent=new Intent().setClassName(getTargetContext(),"com.aik1a.localcash.presentation."+activity);
+                AccessibilityServiceInfo info=instrumentation.getUiAutomation().getServiceInfo();
+                info.flags|=AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS; instrumentation.getUiAutomation().setServiceInfo(info);
+                Intent intent=new Intent().setClassName(instrumentation.getTargetContext(),"com.aik1a.localcash.presentation."+activity);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("cuenta_id",1L); intent.putExtra("compra_id",1L); intent.putExtra("authenticated",true);
-                startActivitySync(intent);
+                instrumentation.startActivitySync(intent);
                 long deadline=SystemClock.uptimeMillis()+8000;
                 boolean gate=false;
                 do {
-                    AccessibilityNodeInfo root=getUiAutomation().getRootInActiveWindow();
+                    AccessibilityNodeInfo root=instrumentation.getUiAutomation().getRootInActiveWindow();
                     if (root!=null) {
                         for(String id:new String[]{"cuentas","movimientos","contactos","compras","deudas","nombre_compra","compra_total"}) {
                             if(!root.findAccessibilityNodeInfosByViewId("com.aik1a.localcash:id/"+id).isEmpty())
@@ -56,10 +61,10 @@ public final class BiometricChecks extends Instrumentation {
                 if(!gate) throw new AssertionError("Gate no visible: "+activity);
                 result.putString("stream","LOCALCASH_BIO_DIRECT_PASS "+activity);
             } else throw new IllegalArgumentException("Modo de prueba desconocido");
-            finish(Activity.RESULT_OK,result);
+            instrumentation.finish(Activity.RESULT_OK,result);
         } catch(Throwable failure) {
             result.putString("stream","LOCALCASH_BIO_FAIL\n"+android.util.Log.getStackTraceString(failure));
-            finish(Activity.RESULT_CANCELED,result);
+            instrumentation.finish(Activity.RESULT_CANCELED,result);
         }
     }
 }

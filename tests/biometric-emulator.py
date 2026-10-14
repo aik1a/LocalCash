@@ -70,6 +70,7 @@ def unlock():
     raise AssertionError('No desbloqueó mediante huella: '+texts(tree))
 
 def instrument(runner,mode=None,extra=None,file='instrument.log',marker=None):
+    if runner=='BiometricChecks': runner='FlowChecks';mode='bio-'+mode
     args=['shell','am','instrument','-w']
     if mode:args+=['-e','mode',mode]
     if extra:args+=['-e','activity',extra]
