@@ -200,8 +200,20 @@ def security():
     lines.append('PASS rotación: conserva desafío SDK y solo desbloquea con sensor.')
     launch();tree=wait(lambda t:has(t,'Desbloquear LocalCash'),'saved-process-prompt');blocked(tree)
     adb('shell','input','keyevent','3');time.sleep(2)
-    adb('shell','am','kill',package)
+    pid_before=adb('shell','pidof',package,check=False).strip()
+    assert pid_before.isdigit(),'PID del proceso no verificable: '+pid_before
+    # Android 7 no resuelve correctamente el paquete para USER_ALL implícito.
+    kill_output=adb('shell','am','kill','--user','0',package)
+    deadline=time.monotonic()+10
+    while time.monotonic()<deadline:
+        pid_after=adb('shell','pidof',package,check=False).strip()
+        if not pid_after:break
+        time.sleep(.2)
+    else:raise AssertionError('am kill no terminó el proceso: '+pid_after+' '+kill_output)
     adb('shell','am','start','-W','-a','android.intent.action.MAIN','-c','android.intent.category.LAUNCHER','-f','0x10200000','-n',package+'/.presentation.MainActivity')
+    pid_restored=adb('shell','pidof',package,check=False).strip()
+    assert pid_restored.isdigit() and pid_restored!=pid_before,'No se creó un proceso nuevo'
+    (folder/'bio-process-death.log').write_text('PASS: PID anterior '+pid_before+'; ausente después de am kill --user 0; PID restaurado '+pid_restored+'\\n')
     tree=wait(lambda t:has(t,'Desbloquear LocalCash'),'saved-process-restored');blocked(tree)
     unlock();lines.append('PASS restauración tras matar proceso en background: nuevo desafío, sin bloqueo permanente ni sesión heredada.')
     launch();tree=wait(lambda t:has(t,'Desbloquear LocalCash'),'intent-extra');blocked(tree)
