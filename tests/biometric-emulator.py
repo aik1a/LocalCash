@@ -125,7 +125,7 @@ def enroll():
                 last_edit=signature
         else:
             # Elegir PIN solo cuando el sistema aún no tiene bloqueo configurado.
-            if any(n.get('text','').upper()=='PIN' for n in tree.iter('node')):tap(tree,pattern=r'^PIN$')
+            if any(n.get('text','').upper() in {'PIN','FINGERPRINT + PIN'} for n in tree.iter('node')):tap(tree,pattern=r'^(Fingerprint \+ )?PIN$')
             elif has(tree,'Secure start-up'):tap(tree,pattern=r'^(No thanks|Do not require.*|Continue)$')
             else:tap(tree,pattern=r'^(Next|Continue|Start|I agree|Agree|More|Done|OK)$')
         time.sleep(.5)
