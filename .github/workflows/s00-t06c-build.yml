@@ -3,6 +3,9 @@ on:
   push:
     branches: [task/S00-T06C-biometria]
     paths: ['app/**', 'tests/**', '.github/workflows/s00-t06c-build.yml']
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths: ['app/**', 'tests/**', 'gradle.properties', '.github/workflows/s00-t06c-build.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -31,7 +34,7 @@ jobs:
         run: |
           mkdir -p evidence
           git rev-parse HEAD | tee evidence/validated-sha.txt
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
           java -version 2>&1 | tee evidence/java-version.txt
           bash tests/domain-checks.sh 2>&1 | tee evidence/domain-checks.log
           set +e
@@ -74,7 +77,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: S00-T06C-API${{ matrix.api }}-${{ github.sha }}
+          name: S00-T06C-API${{ matrix.api }}-${{ github.event.pull_request.head.sha || github.sha }}
           path: |
             evidence/
             app/build/outputs/apk/debug/app-debug.apk
