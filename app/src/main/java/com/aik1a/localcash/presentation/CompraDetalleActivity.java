@@ -1,6 +1,8 @@
 package com.aik1a.localcash.presentation;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.view.View;
 import android.os.Bundle;
 import android.database.sqlite.SQLiteException;
 import android.widget.*;
@@ -20,6 +22,9 @@ public final class CompraDetalleActivity extends Activity {
         try (LocalCashDbHelper helper = new LocalCashDbHelper(this)) {
             CompraService service = new CompraService(helper);
             Compra compra = service.buscarCompra(getIntent().getLongExtra(COMPRA_ID, -1));
+            findViewById(R.id.abrir_reparto).setVisibility(compra.getEstado() == Compra.Estado.REALIZADA ? View.VISIBLE : View.GONE);
+            findViewById(R.id.abrir_reparto).setOnClickListener(v -> startActivity(
+                    new Intent(this, RepartoActivity.class).putExtra(COMPRA_ID, compra.getId())));
             ((TextView)findViewById(R.id.compra_titulo)).setText(compra.getNombre());
             ((TextView)findViewById(R.id.compra_info)).setText(compra.getEstado().name() + " · "
                     + DateFormat.getDateInstance(DateFormat.SHORT).format(new Date(compra.getFecha())));
@@ -37,3 +42,4 @@ public final class CompraDetalleActivity extends Activity {
         }
     }
 }
+

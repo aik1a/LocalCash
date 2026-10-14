@@ -1,0 +1,32 @@
+{
+  "task": "S00-T05",
+  "role": "CODER",
+  "branch": "task/S00-T05-gastos-compartidos",
+  "base_sha": "df74f118a50aa044ef8ff3e17a83070de5a9f7e3",
+  "compiled_sha": "45c70f7efa2bb2ffcdc2b7cb7af78c16ca1c1c50",
+  "run_id": 38440658476,
+  "job_id": 115446054645,
+  "run_url": "https://github.com/aik1a/LocalCash/actions/runs/38440658476",
+  "conclusion": "success",
+  "build_exit_code": 0,
+  "domain_checks": {
+    "accounts_money": 18,
+    "contacts_purchases": 15,
+    "shared": 5427
+  },
+  "emulator": "API36 x86_64 google_apis",
+  "migration_v1_v3": "PASS",
+  "migration_v2_v3_exact_snapshot": "PASS",
+  "foreign_keys_rollback": "PASS",
+  "ui_shared": "PASS",
+  "force_stop_relaunch": "PASS",
+  "apk_sha256": "da65e2f98e18c28dcbf670a2262df223ba30f304a377876ca8c938c289c87238",
+  "apk_bytes": 87011,
+  "artifact_id": 11836165654,
+  "original_artifact_sha256": "2a6706391617e6763fc09ece1a465968781c9b40e5c12454ffc2d33a93bc8e18",
+  "physical_device": "NOT_EXECUTED",
+  "same_signing_key_apk_upgrade": "NOT_EXECUTED",
+  "audit": "PENDING",
+  "merged": false,
+  "task_closed": false
+}

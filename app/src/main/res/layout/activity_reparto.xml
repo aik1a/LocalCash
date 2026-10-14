@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:fillViewport="true" android:padding="16dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+        <Button android:id="@+id/volver" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Volver a la compra" />
+        <TextView android:id="@+id/reparto_titulo" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="24sp" />
+        <TextView android:id="@+id/reparto_total" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="22sp" />
+        <TextView android:id="@+id/reparto_info" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Selecciona dos o más contactos. El contacto de la compra no se selecciona automáticamente." />
+        <LinearLayout android:id="@+id/formulario_reparto" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+            <RadioGroup android:id="@+id/modo_reparto" android:layout_width="match_parent" android:layout_height="wrap_content" android:checkedButton="@id/equitativo">
+                <RadioButton android:id="@+id/equitativo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Equitativo" />
+                <RadioButton android:id="@+id/personalizado" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Personalizado" />
+            </RadioGroup>
+            <LinearLayout android:id="@+id/participantes" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" />
+            <Button android:id="@+id/guardar_reparto" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Guardar reparto" />
+        </LinearLayout>
+        <TextView android:id="@+id/error_reparto" android:layout_width="match_parent" android:layout_height="wrap_content" android:accessibilityLiveRegion="polite" android:textColor="#B00020" />
+        <LinearLayout android:id="@+id/deudas" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" />
+    </LinearLayout>
+</ScrollView>

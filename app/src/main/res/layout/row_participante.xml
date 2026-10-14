@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="8dp">
+    <CheckBox android:id="@+id/seleccionar_contacto" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp" android:saveEnabled="false" />
+    <EditText android:id="@+id/cuota" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:hint="Monto asignado · hasta 2 decimales" android:inputType="numberDecimal|numberSigned" android:minHeight="48dp" android:saveEnabled="false" />
+</LinearLayout>

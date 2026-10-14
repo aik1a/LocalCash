@@ -1,6 +1,6 @@
 # Diseño SQLite
 
-**Estado:** esquema v2: cuentas/movimientos (T03) y contactos/compras/detalles (T04). Deudas/reparto siguen PRELIMINAR.
+**Estado:** esquema v3: cuentas/movimientos (T03), contactos/compras/detalles (T04) y deudas (T05).
 
 ## Esquema mínimo S00-T03 (decisiones implementadas)
 
@@ -17,7 +17,7 @@ Base `localcash.db`, administrada por `data.LocalCashDbHelper`.
 - FK activas en onConfigure. No hay edición/borrado en este incremento. RESTRICT conserva relación; futuras migraciones explícitas, sin borrar datos.
 - Identidad por ID; nombres iguales permitidos (no se exige unicidad). Tipo de cuenta se mantiene pendiente y no se inventa catálogo.
 - La transacción de registrar valida el saldo contra overflow antes del insert; las operaciones de creación son insert de una fila.
-- T03 solo creó cuentas/movimientos. T04 añade las tablas documentadas debajo; deudas, reparto y ubicación siguen pendientes.
+- T03 solo creó cuentas/movimientos. T04 añade las tablas documentadas debajo; T05 añade deudas/reparto. Ubicación sigue pendiente.
 
 ## Migración aditiva S00-T04, v1 → v2
 
@@ -45,16 +45,28 @@ SQLiteOpenHelper aumenta la versión a 2. onUpgrade(1,2) solo crea las tres tabl
 - Evitar almacenar datos derivados que puedan quedar inconsistentes.
 - Operaciones multi-tabla que deban ser atómicas deben usar transacciones.
 
-## Tablas candidatas
+## Migración aditiva S00-T05, v2 → v3
+
+SQLiteOpenHelper crea únicamente deudas. Para instalaciones v1 se ejecutan en secuencia crearCompras y crearDeudas; onCreate incluye ambas. No se borra ni reescribe información anterior. La migración de SQLiteOpenHelper es atómica.
+
+| Tabla | Columnas/restricciones |
+|---|---|
+| deudas | compra_id INTEGER NOT NULL FK compras(id) RESTRICT; contacto_id INTEGER NOT NULL FK contactos(id) RESTRICT; monto INTEGER NOT NULL >= 0 y typeof integer; estado TEXT NOT NULL, PENDIENTE; PK(compra_id,contacto_id) |
+
+Una sola asociación representa participante, asignación y deuda del total de una compra. Sustituye las tres tablas candidatas del diseño preliminar; no hay total redundante ni reparto por ítem. El modo es una operación de cálculo transitoria, no un dato necesario para consultar cuánto debe cada persona. Marcar PAGADA no se implementa en T05.
+
+DeudaRepository registra todas las filas en una transacción, revalida el reparto contra la compra REALIZADA persistida y rechaza compras ya repartidas, incluso con otro conjunto de participantes. Las FK y PK protegen contactos/compras y duplicados; un error revierte todos los inserts. La suma exacta es una invariante de Reparto/repository; no se pretende hacer un CHECK SQL entre varias filas. No hay edición/borrado ni generación de movimientos.
+
+Pruebas: fixture v2 con snapshot de todas las filas previas, FK/PK/CHECK, trigger que falla en el segundo insert, cuota cero, rechazo de total ficticio y reparto repetido. Flujo UI y reinicio real en emulador; evidencia y estado final en handoff S00-T05.
+
+## Diseño preliminar histórico (sustituido para T05)
 
 1. `cuentas`
 2. `movimientos`
 3. `contactos`
 4. `compras`
 5. `detalle_compra`
-6. `participantes`
-7. `asignaciones`
-8. `deudas`
+6. `deudas` (T05; sustituye participantes/asignaciones separadas)
 
 ## Mapeo dominio -> persistencia
 
@@ -66,8 +78,8 @@ SQLiteOpenHelper aumenta la versión a 2. onUpgrade(1,2) solo crea las tres tabl
 | Contacto | `contactos` |
 | Compra | `compras` |
 | DetalleCompra | `detalle_compra` |
-| Participante | `participantes` |
-| Asignacion | `asignaciones` |
+| Participante | `deudas` (asociación mínima T05) |
+| Asignacion | `deudas.monto` (total por contacto T05) |
 | Deuda | `deudas` |
 
 ## Relaciones candidatas
@@ -96,9 +108,9 @@ compras 1 ---- N deudas ---- N:1 contactos
 - dinero y fecha de los módulos restantes (cuentas/movimientos ya definidos arriba);
 - políticas `ON DELETE`/`ON UPDATE`;
 - si una compra realizada genera movimiento automáticamente;
-- pagos parciales de deuda sí/no;
-- algoritmo/redondeo de distribución;
-- si `participantes` y `deudas` pueden simplificarse sin perder trazabilidad.
+- pagos parciales: excluidos de T05; ampliación futura;
+- algoritmo cerrado para T05 en BUSINESS_RULES;
+- simplificación aprobada/implementada para T05: tabla única deudas.
 
 ## Regla de freeze
 
@@ -108,3 +120,4 @@ Cuando S01 cierre estas decisiones:
 3. implementar `LocalCashDbHelper`;
 4. añadir pruebas CRUD;
 5. actualizar trazabilidad.
+
