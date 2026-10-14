@@ -6,11 +6,11 @@ Esta matriz conecta requisitos con diseño, sprint, código y validación. Debe 
 |---|---|---:|---|---|---|
 | LC-P01 | ARCHITECTURE | S00 / T01-T02 | `app/build.gradle`, `app/src/main/java/com/aik1a/localcash/presentation/MainActivity.java`, XML y manifiesto | BUILD-01; Actions run `38267899607` (S00-T02, SHA exacto), auditoría favorable | Proyecto base y estructura presentacional integrados; T01-T02 CLOSED |
 | LC-P02 / LC-TECH-01 | DATABASE / ADR-001 | S00-T03 | `LocalCashDbHelper`, repositories de cuentas/movimientos | DB-01 / Actions run `38283139884` | Implementado en flujo T03; otros módulos pendientes |
-| LC-P03 / LC-AUTH-01 | ARCHITECTURE | S02 | Pendiente | AUTH-01 | Pendiente |
+| LC-P03 / LC-AUTH-01 | ARCHITECTURE | S00-T06C | Pendiente implementación BiometricPrompt | AUTH-01: pruebas previstas autenticación real, error/cancelación, reentrada | READY, sin código aún |
 | LC-CON-01 | DOMAIN_MODEL / DATABASE | S00-T04 | `Contacto`, `ContactoRepository`, `ContactosActivity` | CON-01, CI `38289787487` | Implementado, T04 CLOSED |
 | LC-ACC-01 | DOMAIN_MODEL / DATABASE | S00-T03 | `Cuenta`, `CuentaRepository`, `MainActivity` | ACC-01, dos cuentas en emulador | Implementado (crear/listar/consultar saldo) |
 | LC-MOV-01 | DOMAIN_MODEL / DATABASE | S00-T03 | `Movimiento`, `MovimientoService`, `CuentaActivity` | MOV-01, ingreso/egreso/persistencia en emulador | Implementado (registro/historial) |
-| LC-MOV-02 | DOMAIN_MODEL / DATABASE | S04 | Pendiente | GEO-01 | Pendiente |
+| LC-MOV-02 | DOMAIN_MODEL / DATABASE | S00-T06A | `Ubicacion`, `Movimiento`, `MovimientoService`, `MovimientoRepository`, `LocalCashDbHelper`, `CapturaUbicacion`, `CuentaActivity` | GEO-01: CI `38498296734`, 23 checks ubicación, SQLite v1/v2/v3→v4, GPS/permisos/emulador/relanzamiento | Implementado; T06A CLOSED |
 | LC-P04 / LC-MAP-01 | ARCHITECTURE | S04 | Pendiente | MAP-01 | Pendiente |
 | LC-BUY-01 | DOMAIN_MODEL / DATABASE | S00-T04 | `Compra`, `DetalleCompra`, `CompraRepository`, UI | BUY-01, compras/historial/ítems UI | Implementado, T04 CLOSED |
 | LC-BUY-02 | BUSINESS_RULES / DATABASE | S00-T04 | `Compra.Estado`, `NuevaCompraActivity` | BUY-02, estado/fecha futura | Implementado, T04 CLOSED |
@@ -71,3 +71,10 @@ S00-T02 fue cerrada el 2026-10-12; S00-T03 quedó READY. El sprint S00 continúa
 - **Merge a main:** [PR #5](https://github.com/aik1a/LocalCash/pull/5), `5c9e9c86c9913f6079b684a150c86d783d48c189`.
 - **Implementado:** LC-SHARED-01/02, LC-DEBT-01/02; las deudas no generan movimientos y pagos parciales no pertenecen a T05. Task Brief en `docs/tasks/completed/S00-T05-gastos-compartidos.md`.
 - **Pendiente:** LC-AUTH-01 y LC-P03; LC-MOV-02; LC-MAP-01 y LC-P04; en S00-T06. Entrega final, firma de APK y H-01 en S00-T07.
+
+## Cierre S00-T06A — 2026-10-14
+
+- **Código compilado/probado:** `ebc985dedfd61797bcf104b73b24ca9c6c926a1b`; [CI original 38498296734](https://github.com/aik1a/LocalCash/actions/runs/38498296734): build exit 0, 5.483 comprobaciones dominio, migraciones v1/v2/v3→v4, permisos/GPS/fallback y relanzamiento API36 PASS.
+- **Auditoría independiente:** `docs/audits/S00/S00-T06A-audit.md` — `PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE`; observación documental H-01 para T07.
+- **Merge:** [PR #6](https://github.com/aik1a/LocalCash/pull/6), `b0f0d06f1d8837e85e80b75aa62e806a090f420b`. Brief archivado en `docs/tasks/completed/S00-T06A-ubicacion.md`.
+- **Siguiente autorizado:** `S00-T06C`, biometría Java/AndroidX, mientras `S00-T06B` conserva decisión cartográfica offline pendiente. El sprint S00 no se cierra.
