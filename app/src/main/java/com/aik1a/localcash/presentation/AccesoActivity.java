@@ -22,7 +22,10 @@ public final class AccesoActivity extends FragmentActivity {
         setContentView(R.layout.activity_bloqueo);
         Pantalla.aplicarMargenes(findViewById(R.id.root));
         generacionInicial = sesion().generacion();
-        if (state != null) { pendiente = state.getBoolean("pendiente"); primeraEntrada = false; }
+        if (state != null && sesion().proceso().equals(state.getString("proceso"))
+                && generacionInicial == state.getLong("generacion")) {
+            pendiente = state.getBoolean("pendiente"); primeraEntrada = false;
+        }
         prompt = new BiometricPrompt(this, ContextCompat.getMainExecutor(this), new BiometricPrompt.AuthenticationCallback() {
             @Override public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
                 if (!visible || !pendiente || generacionInicial != sesion().generacion() || isFinishing()) return;
@@ -71,6 +74,7 @@ public final class AccesoActivity extends FragmentActivity {
         if (!isChangingConfigurations()) { pendiente = false; prompt.cancelAuthentication(); }
         super.onStop();
     }
-    @Override protected void onSaveInstanceState(Bundle state) { super.onSaveInstanceState(state); state.putBoolean("pendiente", pendiente); }
+    @Override protected void onSaveInstanceState(Bundle state) { super.onSaveInstanceState(state); state.putBoolean("pendiente", pendiente);
+        state.putString("proceso", sesion().proceso()); state.putLong("generacion", generacionInicial); }
     @Override public void onBackPressed() { moveTaskToBack(true); }
 }

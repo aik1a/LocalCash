@@ -7,6 +7,9 @@ on:
     types: [opened, synchronize, reopened]
     paths: ['app/**', 'tests/**', 'gradle.properties', '.github/workflows/s00-t06c-build.yml']
   workflow_dispatch:
+concurrency:
+  group: biometric-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:

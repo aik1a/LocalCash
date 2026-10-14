@@ -8,9 +8,11 @@ public final class LocalCashApplication extends Application implements Applicati
     private boolean autenticada;
     private int visibles;
     private long generacion;
+    private final String proceso = java.util.UUID.randomUUID().toString();
     @Override public void onCreate() { super.onCreate(); registerActivityLifecycleCallbacks(this); }
     boolean autenticada() { return autenticada; }
     long generacion() { return generacion; }
+    String proceso() { return proceso; }
     void autenticarDesdePrompt() { autenticada = true; }
     @Override public void onActivityStarted(Activity activity) { visibles++; }
     @Override public void onActivityStopped(Activity activity) {

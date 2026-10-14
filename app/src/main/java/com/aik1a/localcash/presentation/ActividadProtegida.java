@@ -3,6 +3,8 @@ package com.aik1a.localcash.presentation;
 import android.app.*;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.SparseArray;
 import android.view.*;
 import com.aik1a.localcash.R;
 import java.util.*;
@@ -29,14 +31,26 @@ public abstract class ActividadProtegida extends Activity {
         super.onResume();
         if (!sesion().autenticada()) { if (privado != null) privado.setVisibility(View.GONE); abrirGate(); return; }
         if (!creada) {
-            crearContenido(estadoInicial); creada = true; estadoInicial = null;
+            crearContenido(estadoInicial); creada = true;
             ViewGroup content = findViewById(android.R.id.content);
             privado = content.getChildAt(0);
+            if (privado != null && estadoInicial != null) {
+                SparseArray<Parcelable> vistas = estadoInicial.getSparseParcelableArray("contenido_vistas");
+                if (vistas != null) privado.restoreHierarchyState(vistas);
+            }
+            estadoInicial = null;
         }
         if (privado != null) privado.setVisibility(View.VISIBLE);
         if (!isFinishing()) actualizarContenido();
     }
     private void abrirGate() { startActivity(new Intent(this, AccesoActivity.class)); }
+    @Override protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        if (privado != null) {
+            SparseArray<Parcelable> vistas = new SparseArray<>();
+            privado.saveHierarchyState(vistas); state.putSparseParcelableArray("contenido_vistas", vistas);
+        }
+    }
     @Override protected void onPause() {
         if (privado != null) privado.setVisibility(View.GONE);
         super.onPause();

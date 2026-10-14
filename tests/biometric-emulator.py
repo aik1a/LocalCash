@@ -102,7 +102,7 @@ def enroll():
         if has(tree,'Fingerprint added') or has(tree,'Your fingerprint is ready') or has(tree,'Fingerprint setup complete'):
             tap(tree,pattern=r'^(Done|Next)$');break
         # Enrolamiento real: repetir contactos del sensor, con levantamiento entre ellos.
-        adb('emu','finger','touch','1')
+        adb('emu','finger','touch','1');adb('emu','finger','remove',check=False)
         edits=[n for n in tree.iter('node') if n.get('class')=='android.widget.EditText' and n.get('enabled')=='true']
         if edits:
             signature=(content,edits[0].get('resource-id',''))
@@ -167,6 +167,19 @@ def security():
     unlock();lines.append('PASS background: nuevo desafío antes de mostrar datos.')
     launch();tree=wait(lambda t:has(t,'Desbloquear LocalCash'),'process-restart');blocked(tree)
     unlock();lines.append('PASS force-stop: sesión no sobrevive al proceso.')
+    launch();tree=wait(lambda t:has(t,'Desbloquear LocalCash'),'rotation-prompt');blocked(tree)
+    adb('shell','settings','put','system','accelerometer_rotation','0')
+    adb('shell','settings','put','system','user_rotation','1');time.sleep(1)
+    tree=wait(lambda t:has(t,'Desbloquear LocalCash'),'rotated-prompt');blocked(tree)
+    unlock()
+    adb('shell','settings','put','system','user_rotation','0');time.sleep(1)
+    lines.append('PASS rotación: conserva desafío SDK y solo desbloquea con sensor.')
+    launch();tree=wait(lambda t:has(t,'Desbloquear LocalCash'),'saved-process-prompt');blocked(tree)
+    adb('shell','input','keyevent','3');time.sleep(2)
+    adb('shell','am','kill',package)
+    adb('shell','am','start','-W','-a','android.intent.action.MAIN','-c','android.intent.category.LAUNCHER','-f','0x10200000','-n',package+'/.presentation.MainActivity')
+    tree=wait(lambda t:has(t,'Desbloquear LocalCash'),'saved-process-restored');blocked(tree)
+    unlock();lines.append('PASS restauración tras matar proceso en background: nuevo desafío, sin bloqueo permanente ni sesión heredada.')
     launch();tree=wait(lambda t:has(t,'Desbloquear LocalCash'),'intent-extra');blocked(tree)
     adb('shell','am','start','-n',package+'/.presentation.MainActivity','--ez','authenticated','true')
     tree=wait(lambda t:has(t,'Desbloquear LocalCash'),'malicious-extra');blocked(tree)
