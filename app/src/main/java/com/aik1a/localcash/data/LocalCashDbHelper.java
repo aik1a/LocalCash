@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public final class LocalCashDbHelper extends SQLiteOpenHelper {
     public LocalCashDbHelper(Context context) {
-        super(context.getApplicationContext(), "localcash.db", null, 3);
+        super(context.getApplicationContext(), "localcash.db", null, 4);
     }
 
     @Override public void onConfigure(SQLiteDatabase db) {
@@ -26,6 +26,7 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE INDEX movimientos_cuenta_fecha ON movimientos(cuenta_id, fecha, id)");
         crearCompras(db);
         crearDeudas(db);
+        crearUbicacion(db);
     }
 
     private void crearCompras(SQLiteDatabase db) {
@@ -48,12 +49,23 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion >= 1 && oldVersion < newVersion && newVersion <= 3) {
+        if (oldVersion >= 1 && oldVersion < newVersion && newVersion <= 4) {
             if (oldVersion < 2 && newVersion >= 2) crearCompras(db);
             if (oldVersion < 3 && newVersion >= 3) crearDeudas(db);
+            if (oldVersion < 4 && newVersion >= 4) crearUbicacion(db);
             return;
         }
         throw new IllegalStateException("Migración no soportada: " + oldVersion + " → " + newVersion);
     }
+
+    private void crearUbicacion(SQLiteDatabase db) {
+        db.execSQL("ALTER TABLE movimientos ADD COLUMN latitud REAL "
+                + "CHECK(latitud IS NULL OR (typeof(latitud) IN ('real','integer') AND latitud BETWEEN -90 AND 90))");
+        db.execSQL("ALTER TABLE movimientos ADD COLUMN longitud REAL CHECK("
+                + "(latitud IS NULL AND longitud IS NULL) OR "
+                + "(latitud IS NOT NULL AND longitud IS NOT NULL AND typeof(longitud) IN ('real','integer') "
+                + "AND longitud BETWEEN -180 AND 180))");
+    }
 }
+
 

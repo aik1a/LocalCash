@@ -6,7 +6,7 @@
 
 Cuenta y Movimiento son objetos inmutables con estado privado. IDs 0 representan objetos nuevos; IDs positivos identifican registros. Cuenta exige nombre no vacío y calcula saldo con movimientos de su propia cuenta; Movimiento exige cuenta persistida, tipo INGRESO/EGRESO y monto positivo. Dinero convierte texto decimal a centésimas long de forma exacta, sin redondear.
 
-Cuenta no incluye todavía tipo (catálogo pendiente). Movimiento incluye descripción opcional y fecha epoch milisegundos; ubicación queda fuera de esta tarea. T04 incorpora contactos/compras; T05 incorpora las clases Reparto/Deuda descritas debajo. Los saldos negativos son posibles: no se exige bloquear egresos por fondos insuficientes. Overflow se rechaza, no se convierte en saldo incorrecto.
+Cuenta no incluye todavía tipo (catálogo pendiente). Movimiento incluye descripción opcional y fecha epoch milisegundos; T06A incorpora ubicación opcional. T04 incorpora contactos/compras; T05 incorpora las clases Reparto/Deuda descritas debajo. Los saldos negativos son posibles: no se exige bloquear egresos por fondos insuficientes. Overflow se rechaza, no se convierte en saldo incorrecto.
 
 ## Implementación S00-T04
 
@@ -21,6 +21,14 @@ Reparto es inmutable y transitorio: exige compra persistida REALIZADA y 2+ conta
 Deuda representa compra/contacto/monto PENDIENTE. La tabla única deudas representa la participación, asignación del costo total y deuda; Participante/Asignacion no requieren clases ni tablas separadas en este incremento. Los ítems siguen detallados en Compra. No pagos parciales ni operación PAGADA en T05.
 
 DeudaService coordina compra, agenda y persistencia. DeudaRepository revalida el total persistido y registra atómicamente; no altera saldos. RepartoActivity captura selección/importes y muestra el resultado persistido desde el detalle de una compra.
+
+## Implementación S00-T06A
+
+Ubicacion es un Value Object inmutable con latitud/longitud double finitos y rangos geográficos. Movimiento continúa inmutable; el constructor anterior delega con ubicación null, y un overload admite Ubicacion opcional. getUbicacion/tieneUbicacion consultan el par. No setters ni cambios sobre movimientos previos.
+
+MovimientoService conserva la API antigua y añade registro con ubicación. MovimientoRepository guarda/reconstruye ambos valores juntos; SQLite v4 protege pares/rangos. El saldo continúa usando únicamente tipo/monto.
+
+CuentaActivity ofrece consentimiento por movimiento, permisos FINE/COARSE en tiempo de uso y estado visible. CapturaUbicacion coordina LocationManager durante el formulario, timeout de 15 segundos y cancelación al cerrar/salir. Sin permisos/proveedor/fix se permite registrar con null. No captura en segundo plano, geocoding ni mapas.
 
 ## Principios
 
@@ -178,4 +186,5 @@ Compra 1 ---- N Participante ---- 1 Contacto
 DetalleCompra 1 ---- N Asignacion ---- 1 Contacto
 Compra 1 ---- N Deuda ---- 1 Contacto
 ```
+
 

@@ -1,6 +1,8 @@
 package com.aik1a.localcash.presentation;
 
 import android.app.Activity;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.database.sqlite.SQLiteException;
@@ -19,6 +21,13 @@ public final class CuentaActivity extends Activity {
     private LocalCashDbHelper helper;
     private MovimientoService service;
     private ListView lista;
+    private static final int PERMISO_UBICACION = 60;
+    private AlertDialog formulario;
+    private View campos;
+    private CapturaUbicacion captura;
+    private Ubicacion ubicacion;
+    private boolean capturando;
+
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -47,7 +56,9 @@ public final class CuentaActivity extends Activity {
                 Map<String, String> fila = new HashMap<>();
                 fila.put("monto", movimiento.getTipo().name() + " · " + Dinero.formatear(movimiento.getMontoConSigno()));
                 fila.put("detalle", fecha.format(new Date(movimiento.getFecha()))
-                        + (movimiento.getDescripcion().isEmpty() ? "" : " · " + movimiento.getDescripcion()));
+                        + (movimiento.getDescripcion().isEmpty() ? "" : " · " + movimiento.getDescripcion())
+                        + (movimiento.tieneUbicacion() ? "\nUbicación: " + movimiento.getUbicacion().getLatitud()
+                        + ", " + movimiento.getUbicacion().getLongitud() : "\nSin ubicación"));
                 filas.add(fila);
             }
             lista.setAdapter(new SimpleAdapter(this, filas, android.R.layout.simple_list_item_2,
@@ -59,7 +70,28 @@ public final class CuentaActivity extends Activity {
     }
 
     private void mostrarFormulario() {
+        if (formulario != null && formulario.isShowing()) return;
         View form = getLayoutInflater().inflate(R.layout.dialog_movimiento, null);
+        campos = form; ubicacion = null;
+        CheckBox incluir = form.findViewById(R.id.incluir_ubicacion);
+        captura = new CapturaUbicacion(this, new CapturaUbicacion.Resultado() {
+            @Override public void recibido(Ubicacion valor) {
+                capturando = false;
+                if (formulario == null || !formulario.isShowing() || !incluir.isChecked()) return;
+                ubicacion = valor;
+                estadoUbicacion("Ubicación capturada: " + valor.getLatitud() + ", " + valor.getLongitud());
+            }
+            @Override public void noDisponible(String motivo) {
+                capturando = false; ubicacion = null; estadoUbicacion(motivo);
+            }
+        });
+        incluir.setOnCheckedChangeListener((button, checked) -> {
+            captura.cancelar(); capturando = false; ubicacion = null;
+            if (checked) solicitarUbicacion(); else estadoUbicacion("Se guardará sin ubicación.");
+        });
+        form.findViewById(R.id.reintentar_ubicacion).setOnClickListener(v -> {
+            if (incluir.isChecked()) solicitarUbicacion(); else incluir.setChecked(true);
+        });
         EditText monto = form.findViewById(R.id.monto);
         EditText descripcion = form.findViewById(R.id.descripcion);
         RadioGroup tipo = form.findViewById(R.id.tipo);
@@ -72,7 +104,8 @@ public final class CuentaActivity extends Activity {
             }
             try {
                 service.registrar(cuentaId, elegido == R.id.ingreso ? Movimiento.Tipo.INGRESO : Movimiento.Tipo.EGRESO,
-                        Dinero.parsear(monto.getText().toString()), descripcion.getText().toString());
+                        Dinero.parsear(monto.getText().toString()), descripcion.getText().toString(),
+                        incluir.isChecked() ? ubicacion : null);
                 dialog.dismiss(); actualizar();
             } catch (IllegalArgumentException ex) { monto.setError(ex.getMessage()); }
             catch (ArithmeticException ex) { monto.setError("El movimiento excede el rango del saldo."); }
@@ -80,7 +113,43 @@ public final class CuentaActivity extends Activity {
                 Toast.makeText(this, "No se guardó el movimiento. Intenta nuevamente.", Toast.LENGTH_LONG).show();
             }
         }));
+        formulario = dialog;
+        dialog.setOnDismissListener(ignored -> {
+            captura.cancelar(); capturando = false; ubicacion = null; campos = null; formulario = null;
+        });
         dialog.show();
     }
-    @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
+    private void estadoUbicacion(String mensaje) {
+        if (campos != null) ((TextView)campos.findViewById(R.id.estado_ubicacion)).setText(mensaje);
+    }
+    private void solicitarUbicacion() {
+        ubicacion = null;
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            estadoUbicacion("Solicitando permiso. Puedes guardar sin ubicación.");
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISO_UBICACION);
+        } else iniciarCaptura();
+    }
+    private void iniciarCaptura() {
+        if (campos == null || formulario == null || !formulario.isShowing()
+                || !((CheckBox)campos.findViewById(R.id.incluir_ubicacion)).isChecked()) return;
+        capturando = true; estadoUbicacion("Buscando ubicación (máximo 15 segundos). Puedes guardar sin ubicación.");
+        captura.iniciar();
+    }
+    @Override public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results) {
+        super.onRequestPermissionsResult(requestCode, permissions, results);
+        if (requestCode != PERMISO_UBICACION || campos == null || formulario == null || !formulario.isShowing()) return;
+        if (!((CheckBox)campos.findViewById(R.id.incluir_ubicacion)).isChecked()) return;
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) iniciarCaptura();
+        else { ubicacion = null; estadoUbicacion("Permiso denegado. Puedes guardar sin ubicación."); }
+    }
+    @Override protected void onPause() {
+        if (captura != null) captura.cancelar();
+        if (capturando) { capturando = false; estadoUbicacion("Captura interrumpida. Puedes reintentar o guardar sin ubicación."); }
+        super.onPause();
+    }
+    @Override protected void onDestroy() { if (formulario != null) formulario.dismiss(); if (captura != null) captura.cancelar();
+        if (helper != null) helper.close(); super.onDestroy(); }
 }
+
