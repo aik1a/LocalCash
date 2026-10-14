@@ -25,7 +25,10 @@ public abstract class ActividadProtegida extends Activity {
     protected abstract void crearContenido(Bundle state);
     protected void actualizarContenido() { }
     protected final boolean contenidoCreado() { return creada; }
-    protected final <T extends Dialog> T protegerDialogo(T dialogo) { dialogos.add(dialogo); return dialogo; }
+    protected final <T extends Dialog> T protegerDialogo(T dialogo) {
+        if (dialogo.getWindow() != null) dialogo.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        dialogos.add(dialogo); return dialogo;
+    }
     private LocalCashApplication sesion() { return (LocalCashApplication)getApplication(); }
     @Override protected void onResume() {
         super.onResume();
@@ -54,6 +57,10 @@ public abstract class ActividadProtegida extends Activity {
     @Override protected void onPause() {
         if (privado != null) privado.setVisibility(View.GONE);
         super.onPause();
+    }
+    @Override protected void onDestroy() {
+        for (Dialog dialogo : dialogos) if (dialogo.isShowing()) dialogo.dismiss();
+        dialogos.clear(); super.onDestroy();
     }
     @Override protected void onStop() {
         if (!isChangingConfigurations()) {

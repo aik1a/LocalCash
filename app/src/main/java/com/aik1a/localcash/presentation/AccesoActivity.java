@@ -20,7 +20,7 @@ public final class AccesoActivity extends FragmentActivity {
         super.onCreate(state);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_bloqueo);
-        Pantalla.aplicarMargenes(findViewById(R.id.root));
+        Pantalla.aplicarMargenes(findViewById(R.id.raiz_bloqueo));
         generacionInicial = sesion().generacion();
         if (state != null && sesion().proceso().equals(state.getString("proceso"))
                 && generacionInicial == state.getLong("generacion")) {

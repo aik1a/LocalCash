@@ -91,9 +91,17 @@ def enroll():
     # Este PIN pertenece a ajustes del emulador; LocalCash nunca lo solicita/acepta.
     output=adb('shell','locksettings','set-pin','1234',check=False)
     (folder/'enrollment-locksettings.log').write_text(output)
-    output=adb('shell','am','start','-a','android.settings.FINGERPRINT_ENROLL',check=False)
-    if 'Error' in output:
-        output=adb('shell','am','start','-n','com.android.settings/.fingerprint.FingerprintEnrollIntroduction',check=False)
+    sdk=int(adb('shell','getprop','ro.build.version.sdk').strip())
+    if sdk<28:
+        output=adb('shell','am','start','-a','android.settings.SECURITY_SETTINGS')
+        tree=wait(lambda t:has(t,'Fingerprint'),'security-settings')
+        assert tap(tree,pattern=r'^Fingerprints?$'),'Entrada Fingerprint no visible'
+    else:
+        output=adb('shell','am','start','-a','android.settings.FINGERPRINT_ENROLL',check=False)
+        if 'Error' in output or 'SecurityException' in output:
+            output=adb('shell','am','start','-a','android.settings.SECURITY_SETTINGS')
+            tree=wait(lambda t:has(t,'Fingerprint'),'security-settings')
+            assert tap(tree,pattern=r'^Fingerprints?$')
     (folder/'enrollment-launch.log').write_text(output)
     deadline=time.monotonic()+160
     last_edit=None
@@ -115,8 +123,8 @@ def enroll():
             tap(tree,pattern=r'^(Next|Continue|OK|Confirm)$')
         else:
             # Elegir PIN solo cuando el sistema aún no tiene bloqueo configurado.
-            if has(tree,'Choose screen lock'):tap(tree,pattern=r'^PIN$')
-            elif has(tree,'Secure start-up'):tap(tree,pattern=r'^(No thanks|Do not require|Continue)$')
+            if any(n.get('text','').upper()=='PIN' for n in tree.iter('node')):tap(tree,pattern=r'^PIN$')
+            elif has(tree,'Secure start-up'):tap(tree,pattern=r'^(No thanks|Do not require.*|Continue)$')
             else:tap(tree,pattern=r'^(Next|Continue|Start|I agree|Agree|More|Done|OK)$')
         time.sleep(.5)
     else:raise AssertionError('No pudo enrolar: '+content)
@@ -161,7 +169,11 @@ def security():
     tree=wait(lambda t:has(t,'Total: 100,00'),'purchase-detail');assert private(tree)
     assert tap(tree,resource='abrir_reparto')
     tree=wait(lambda t:has(t,'Ana (#1): 50,00') and has(t,'Luis (#2): 50,00'),'debts');assert private(tree)
-    lines.append('PASS navegación de cuentas/movimientos, contactos, compras/detalles/deudas con sesión válida.')
+    adb('shell','settings','put','system','accelerometer_rotation','0')
+    adb('shell','settings','put','system','user_rotation','1');time.sleep(1)
+    tree=wait(lambda t:has(t,'Ana (#1): 50,00') and has(t,'Luis (#2): 50,00'),'private-rotation');assert private(tree)
+    adb('shell','settings','put','system','user_rotation','0');time.sleep(1)
+    lines.append('PASS navegación y rotación de pantalla privada: cuentas/movimientos, contactos, compras/detalles/deudas con sesión válida.')
     adb('shell','input','keyevent','3');time.sleep(1)
     adb('shell','am','start','-W','-n',package+'/.presentation.MainActivity')
     tree=wait(lambda t:has(t,'Desbloquear LocalCash'),'background-return');blocked(tree)
