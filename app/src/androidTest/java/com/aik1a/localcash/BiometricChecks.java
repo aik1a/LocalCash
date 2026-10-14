@@ -1,0 +1,65 @@
+package com.aik1a.localcash;
+
+import android.app.*;
+import android.content.Intent;
+import android.os.*;
+import android.accessibilityservice.AccessibilityServiceInfo;
+import android.view.accessibility.AccessibilityNodeInfo;
+import com.aik1a.localcash.application.*;
+import com.aik1a.localcash.data.*;
+import com.aik1a.localcash.domain.*;
+import java.util.*;
+
+/** Fixtures y acceso directo interno; jamás modifica la sesión biométrica. */
+public final class BiometricChecks extends Instrumentation {
+    private String mode, activity;
+    @Override public void onCreate(Bundle args) {
+        super.onCreate(args); mode=args.getString("mode"); activity=args.getString("activity"); start();
+    }
+    @Override public void onStart() {
+        Bundle result=new Bundle();
+        try {
+            if ("seed".equals(mode)) {
+                getTargetContext().deleteDatabase("localcash.db");
+                try (LocalCashDbHelper helper=new LocalCashDbHelper(getTargetContext())) {
+                    MovimientoService cuentas=new MovimientoService(helper);
+                    long cuenta=cuentas.crearCuenta("Efectivo",10000);
+                    cuentas.registrar(cuenta,Movimiento.Tipo.INGRESO,2550,"Previo",new Ubicacion(-33.45,-70.66));
+                    CompraService compras=new CompraService(helper);
+                    long ana=compras.crearContacto("Ana"),luis=compras.crearContacto("Luis");
+                    long compra=compras.registrar(new Compra(0,"Compra previa",Compra.Estado.REALIZADA,0,ana,
+                            Arrays.asList(new DetalleCompra("Producto",1,10000))));
+                    new DeudaService(helper).repartirEquitativo(compra,Arrays.asList(ana,luis));
+                }
+                result.putString("stream","LOCALCASH_BIO_SEED_PASS");
+            } else if ("direct".equals(mode)) {
+                AccessibilityServiceInfo info=getUiAutomation().getServiceInfo();
+                info.flags|=AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS; getUiAutomation().setServiceInfo(info);
+                Intent intent=new Intent().setClassName(getTargetContext(),"com.aik1a.localcash.presentation."+activity);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("cuenta_id",1L); intent.putExtra("compra_id",1L); intent.putExtra("authenticated",true);
+                startActivitySync(intent);
+                long deadline=SystemClock.uptimeMillis()+8000;
+                boolean gate=false;
+                do {
+                    AccessibilityNodeInfo root=getUiAutomation().getRootInActiveWindow();
+                    if (root!=null) {
+                        for(String id:new String[]{"cuentas","movimientos","contactos","compras","deudas","nombre_compra","compra_total"}) {
+                            if(!root.findAccessibilityNodeInfosByViewId("com.aik1a.localcash:id/"+id).isEmpty())
+                                throw new AssertionError("Contenido expuesto: "+activity+" "+id);
+                        }
+                        gate=!root.findAccessibilityNodeInfosByText("Desbloquear LocalCash").isEmpty()
+                                || !root.findAccessibilityNodeInfosByText("LocalCash bloqueado").isEmpty();
+                    }
+                    if(!gate) SystemClock.sleep(100);
+                } while(!gate && SystemClock.uptimeMillis()<deadline);
+                if(!gate) throw new AssertionError("Gate no visible: "+activity);
+                result.putString("stream","LOCALCASH_BIO_DIRECT_PASS "+activity);
+            } else throw new IllegalArgumentException("Modo de prueba desconocido");
+            finish(Activity.RESULT_OK,result);
+        } catch(Throwable failure) {
+            result.putString("stream","LOCALCASH_BIO_FAIL\n"+android.util.Log.getStackTraceString(failure));
+            finish(Activity.RESULT_CANCELED,result);
+        }
+    }
+}

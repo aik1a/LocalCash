@@ -14,7 +14,7 @@ import com.aik1a.localcash.domain.*;
 import java.text.DateFormat;
 import java.util.*;
 
-public final class NuevaCompraActivity extends Activity {
+public final class NuevaCompraActivity extends ActividadProtegida {
     private LocalCashDbHelper helper;
     private CompraService service;
     private final List<DetalleCompra> detalles = new ArrayList<>();
@@ -25,8 +25,8 @@ public final class NuevaCompraActivity extends Activity {
     private LinearLayout lista;
     private TextView error;
 
-    @Override public void onCreate(Bundle saved) {
-        super.onCreate(saved); setContentView(R.layout.activity_nueva_compra);
+    @Override protected void crearContenido(Bundle saved) {
+         setContentView(R.layout.activity_nueva_compra);
         Pantalla.aplicarMargenes(findViewById(R.id.root));
         helper = new LocalCashDbHelper(this); service = new CompraService(helper);
         nombre = findViewById(R.id.nombre_compra); descripcion = findViewById(R.id.item_descripcion);
@@ -53,10 +53,10 @@ public final class NuevaCompraActivity extends Activity {
     }
     private void elegirFecha() {
         Calendar c = Calendar.getInstance(); c.setTimeInMillis(fecha);
-        new DatePickerDialog(this, (view, year, month, day) -> {
+        protegerDialogo(new DatePickerDialog(this, (view, year, month, day) -> {
             Calendar elegida = Calendar.getInstance(); elegida.clear(); elegida.set(year, month, day);
             fecha = elegida.getTimeInMillis(); mostrarFecha();
-        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH))).show();
     }
     private void mostrarFecha() { ((Button)findViewById(R.id.fecha_compra)).setText("Fecha: " + DateFormat.getDateInstance(DateFormat.SHORT).format(new Date(fecha))); }
     private void agregarItem() {
@@ -96,10 +96,11 @@ public final class NuevaCompraActivity extends Activity {
         catch (SQLiteException ex) { error.setText("No se guardó la compra. Los datos del formulario se conservan."); }
     }
     @Override protected void onSaveInstanceState(Bundle out) {
-        super.onSaveInstanceState(out); out.putLong("fecha", fecha);
+        super.onSaveInstanceState(out); if (!contenidoCreado()) return; out.putLong("fecha", fecha);
         ArrayList<String> nombres = new ArrayList<>(); long[] cantidades = new long[detalles.size()], precios = new long[detalles.size()];
         for (int i = 0; i < detalles.size(); i++) { DetalleCompra d = detalles.get(i); nombres.add(d.getDescripcion()); cantidades[i] = d.getCantidad(); precios[i] = d.getPrecioUnitario(); }
         out.putStringArrayList("items", nombres); out.putLongArray("cantidades", cantidades); out.putLongArray("precios", precios);
     }
     @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
 }
+

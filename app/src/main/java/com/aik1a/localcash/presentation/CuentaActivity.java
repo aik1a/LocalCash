@@ -15,7 +15,7 @@ import com.aik1a.localcash.domain.*;
 import java.text.DateFormat;
 import java.util.*;
 
-public final class CuentaActivity extends Activity {
+public final class CuentaActivity extends ActividadProtegida {
     public static final String CUENTA_ID = "cuenta_id";
     private long cuentaId;
     private LocalCashDbHelper helper;
@@ -29,8 +29,8 @@ public final class CuentaActivity extends Activity {
     private boolean capturando;
 
 
-    @Override public void onCreate(Bundle state) {
-        super.onCreate(state);
+    @Override protected void crearContenido(Bundle state) {
+        
         setContentView(R.layout.activity_cuenta);
         Pantalla.aplicarMargenes(findViewById(R.id.root));
         cuentaId = getIntent().getLongExtra(CUENTA_ID, -1);
@@ -41,7 +41,7 @@ public final class CuentaActivity extends Activity {
         findViewById(R.id.volver).setOnClickListener(v -> finish());
         findViewById(R.id.registrar_movimiento).setOnClickListener(v -> mostrarFormulario());
     }
-    @Override protected void onResume() { super.onResume(); actualizar(); }
+    @Override protected void actualizarContenido() { actualizar(); }
 
     private void actualizar() {
         try {
@@ -117,7 +117,7 @@ public final class CuentaActivity extends Activity {
         dialog.setOnDismissListener(ignored -> {
             captura.cancelar(); capturando = false; ubicacion = null; campos = null; formulario = null;
         });
-        dialog.show();
+        protegerDialogo(dialog).show();
     }
     private void estadoUbicacion(String mensaje) {
         if (campos != null) ((TextView)campos.findViewById(R.id.estado_ubicacion)).setText(mensaje);
@@ -152,4 +152,5 @@ public final class CuentaActivity extends Activity {
     @Override protected void onDestroy() { if (formulario != null) formulario.dismiss(); if (captura != null) captura.cancelar();
         if (helper != null) helper.close(); super.onDestroy(); }
 }
+
 

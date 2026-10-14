@@ -580,6 +580,7 @@ public final class FlowChecks extends Instrumentation {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         main = startActivitySync(intent);
         esperarUI();
+        nodeId("crear_cuenta"); // Solo avanza tras desafío real, alimentado por sensor del emulador.
     }
     private void assertTrue(boolean condition, String message) { if (!condition) throw new AssertionError(message); }
     private AccessibilityNodeInfo buscar(String value, boolean id) {
@@ -628,5 +629,6 @@ public final class FlowChecks extends Instrumentation {
         esperarUI();
     }
 }
+
 
 

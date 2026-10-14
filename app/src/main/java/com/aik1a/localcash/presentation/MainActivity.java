@@ -14,14 +14,14 @@ import com.aik1a.localcash.domain.Cuenta;
 import com.aik1a.localcash.domain.Dinero;
 import java.util.*;
 
-public final class MainActivity extends Activity {
+public final class MainActivity extends ActividadProtegida {
     private LocalCashDbHelper helper;
     private MovimientoService service;
     private List<Cuenta> cuentas = new ArrayList<>();
     private ListView lista;
 
-    @Override public void onCreate(Bundle state) {
-        super.onCreate(state);
+    @Override protected void crearContenido(Bundle state) {
+        
         setContentView(R.layout.activity_main);
         Pantalla.aplicarMargenes(findViewById(R.id.root));
         helper = new LocalCashDbHelper(this);
@@ -37,7 +37,7 @@ public final class MainActivity extends Activity {
             startActivity(intent);
         });
     }
-    @Override protected void onResume() { super.onResume(); actualizar(); }
+    @Override protected void actualizarContenido() { actualizar(); }
 
     private void actualizar() {
         try {
@@ -73,7 +73,8 @@ public final class MainActivity extends Activity {
                 Toast.makeText(this, "No se guardó la cuenta. Intenta nuevamente.", Toast.LENGTH_LONG).show();
             }
         }));
-        dialog.show();
+        protegerDialogo(dialog).show();
     }
     @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
 }
+

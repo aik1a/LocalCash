@@ -13,10 +13,10 @@ import com.aik1a.localcash.domain.*;
 import java.text.DateFormat;
 import java.util.Date;
 
-public final class CompraDetalleActivity extends Activity {
+public final class CompraDetalleActivity extends ActividadProtegida {
     public static final String COMPRA_ID = "compra_id";
-    @Override public void onCreate(Bundle state) {
-        super.onCreate(state); setContentView(R.layout.activity_compra_detalle);
+    @Override protected void crearContenido(Bundle state) {
+         setContentView(R.layout.activity_compra_detalle);
         Pantalla.aplicarMargenes(findViewById(R.id.root));
         findViewById(R.id.volver).setOnClickListener(v -> finish());
         try (LocalCashDbHelper helper = new LocalCashDbHelper(this)) {
@@ -42,4 +42,5 @@ public final class CompraDetalleActivity extends Activity {
         }
     }
 }
+
 

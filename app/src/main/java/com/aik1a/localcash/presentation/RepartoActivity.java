@@ -11,14 +11,14 @@ import com.aik1a.localcash.data.LocalCashDbHelper;
 import com.aik1a.localcash.domain.*;
 import java.util.*;
 
-public final class RepartoActivity extends Activity {
+public final class RepartoActivity extends ActividadProtegida {
     private long compraId;
     private final List<Contacto> contactos = new ArrayList<>();
     private final List<CheckBox> seleccion = new ArrayList<>();
     private final List<EditText> cuotas = new ArrayList<>();
 
-    @Override public void onCreate(Bundle state) {
-        super.onCreate(state); setContentView(R.layout.activity_reparto);
+    @Override protected void crearContenido(Bundle state) {
+         setContentView(R.layout.activity_reparto);
         Pantalla.aplicarMargenes(findViewById(R.id.root));
         findViewById(R.id.volver).setOnClickListener(v -> finish());
         compraId = getIntent().getLongExtra(CompraDetalleActivity.COMPRA_ID, -1);
@@ -101,6 +101,7 @@ public final class RepartoActivity extends Activity {
     private void mostrarError(String mensaje) { ((TextView)findViewById(R.id.error_reparto)).setText(mensaje); }
     @Override public void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
+        if (!contenidoCreado()) return;
         long[] ids = new long[contactos.size()], elegidos = new long[contactos.size()];
         String[] valores = new String[contactos.size()];
         for (int i = 0; i < contactos.size(); i++) {
@@ -111,3 +112,4 @@ public final class RepartoActivity extends Activity {
         state.putStringArray("cuotas", valores); state.putBoolean("personalizado", personalizado());
     }
 }
+
