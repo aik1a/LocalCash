@@ -195,9 +195,9 @@ public final class FlowChecks extends Instrumentation {
             } catch (IllegalArgumentException expected) { assertTrue(compras.listarCompras().size() == 2, "Compra inválida no persistida"); }
             helper.close();
             helper = new LocalCashDbHelper(getTargetContext());
-            assertTrue(new CompraService(helper).listarCompras().size() == 2 && new MovimientoService(helper).calcularSaldo(1) == 12550, "Reapertura v2");
+            assertTrue(new CompraService(helper).listarCompras().size() == 2 && new MovimientoService(helper).calcularSaldo(1) == 12550, "Reapertura v4");
             helper.close();
-            log.append("PASS regresión contable, persistencia v2, validaciones y ausencia de movimientos automáticos.\n");
+            log.append("PASS regresión contable, persistencia v4, validaciones y ausencia de movimientos automáticos.\n");
             result.putString("stream", "LOCALCASH_PURCHASE_PASS\n" + log); finish(Activity.RESULT_OK, result);
         } catch (Throwable failure) {
             dump(getUiAutomation().getRootInActiveWindow(), 0);
@@ -390,10 +390,12 @@ public final class FlowChecks extends Instrumentation {
             shell("pm grant com.aik1a.localcash android.permission.ACCESS_FINE_LOCATION");
             shell("cmd location set-location-enabled true");
             nuevoMovimiento("GPS simulado"); clickId("incluir_ubicacion");
-            nodeText("Ubicación capturada: -33.45, -70.66"); clickText("Guardar"); nodeText("Saldo: 128,50");
+            double[] capturada=esperarCaptura();
+            log.append("GPS_EXPECTED: ").append(capturada[0]).append(", ").append(capturada[1]).append('\n');
+            clickText("Guardar"); nodeText("Saldo: 128,50");
             log.append("PASS GEO-GPS: permiso concedido, callback LocationManager productivo, GPS inyectado por adb emu geo fix.\n");
             nuevoMovimiento("Consentimiento retirado"); clickId("incluir_ubicacion");
-            nodeText("Ubicación capturada: -33.45, -70.66"); clickId("incluir_ubicacion");
+            esperarCaptura(); clickId("incluir_ubicacion");
             nodeText("Se guardará sin ubicación."); clickText("Guardar"); nodeText("Saldo: 129,50");
             shell("cmd location set-location-enabled false");
             nuevoMovimiento("GPS desactivado"); clickId("incluir_ubicacion");
@@ -420,7 +422,7 @@ public final class FlowChecks extends Instrumentation {
                 for (Movimiento m:movimientos) {
                     if (m.tieneUbicacion()) {
                         geolocalizados++; assertTrue(m.getDescripcion().equals("GPS simulado"),"Consentimiento explícito único");
-                        assertTrue(m.getUbicacion().getLatitud()==-33.45 && m.getUbicacion().getLongitud()==-70.66,"Coordenadas exactas persistidas");
+                        assertTrue(m.getUbicacion().getLatitud()==capturada[0] && m.getUbicacion().getLongitud()==capturada[1],"Coordenadas exactas persistidas");
                     }
                 }
                 assertTrue(geolocalizados==1,"Todos los otros registros tienen ambos NULL");
@@ -439,6 +441,20 @@ public final class FlowChecks extends Instrumentation {
         } finally {
             if (testProvider && lm!=null) lm.removeTestProvider(android.location.LocationManager.GPS_PROVIDER);
         }
+    }
+    private double[] esperarCaptura() {
+        long deadline=SystemClock.uptimeMillis()+17000;
+        do {
+            String estado=nodeId("estado_ubicacion").getText().toString();
+            if (estado.startsWith("Ubicación capturada: ")) {
+                String[] par=estado.substring("Ubicación capturada: ".length()).split(", ");
+                double lat=Double.parseDouble(par[0]),lon=Double.parseDouble(par[1]);
+                assertTrue(Math.abs(lat+33.45)<0.00001 && Math.abs(lon+70.66)<0.00001,"Fix simulado dentro de 0,00001 grados");
+                return new double[]{lat,lon};
+            }
+            SystemClock.sleep(100);
+        } while(SystemClock.uptimeMillis()<deadline);
+        throw new AssertionError("GPS no capturado: "+nodeId("estado_ubicacion").getText());
     }
     private void nuevoMovimiento(String descripcion) {
         clickText("Registrar ingreso o egreso"); clickText("Ingreso"); setText("monto","1"); setText("descripcion",descripcion);

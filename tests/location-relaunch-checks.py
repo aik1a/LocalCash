@@ -18,6 +18,7 @@ def tap(tree,text=None,resource=None):
     x1,y1,x2,y2=map(int,re.findall(r'\d+',node.get('bounds')))
     assert x2>x1 and y2>y1
     adb('shell','input','tap',str((x1+x2)//2),str((y1+y2)//2))
+coordinates=next(line.split(': ',1)[1] for line in (folder/'location-flow.log').read_text().splitlines() if line.startswith('GPS_EXPECTED: '))
 main=screen('location-restarted-main')
 assert contains(main,'Saldo: 131,50')
 tap(main,text='Efectivo')
@@ -28,7 +29,7 @@ for index in range(5):
         value=n.get('text','')
         for label in ['GPS simulado','Sin consentimiento','Permiso denegado','Consentimiento retirado','GPS desactivado','Sin fix']:
             if label in value:
-                assert ('Ubicación: -33.45, -70.66' in value) if label=='GPS simulado' else ('Sin ubicación' in value)
+                assert (('Ubicación: '+coordinates) in value) if label=='GPS simulado' else ('Sin ubicación' in value)
                 seen.add(label)
     adb('shell','screencap','-p','/sdcard/location-restart.png')
     adb('pull','/sdcard/location-restart.png',str(folder/('location-restarted-'+str(index)+'.png')))
