@@ -1,0 +1,38 @@
+LOCALCASH_LOCATION_FAIL
+PASS MIG-1: v1→v4, snapshot exacto, NULL antiguos, saldo y FK.
+PASS MIG-2: v2→v4, snapshot exacto, NULL antiguos, saldo y FK.
+PASS GEO-SQL: INSERT/UPDATE de par incompleto, rango, texto e infinito rechazados sin alterar registros.
+PASS MIG-3: v3→v4, snapshot exacto, NULL antiguos, saldo y FK.
+PASS GEO-PERM: sin solicitud automática; diálogo Android real denegado, movimiento guardado con NULL.
+UI null text=null
+UI null text=null
+UI android:id/content text=null
+UI android:id/parentPanel text=null
+UI android:id/topPanel text=null
+UI android:id/title_template text=null
+UI android:id/alertTitle text=Registrar movimiento
+UI android:id/customPanel text=null
+UI android:id/custom text=null
+UI null text=null
+UI null text=null
+UI com.aik1a.localcash:id/tipo text=null
+UI com.aik1a.localcash:id/ingreso text=Ingreso
+UI com.aik1a.localcash:id/egreso text=Egreso
+UI null text=Monto positivo (hasta 2 decimales)
+UI com.aik1a.localcash:id/monto text=1
+UI null text=Descripción (opcional)
+UI com.aik1a.localcash:id/descripcion text=GPS simulado
+UI com.aik1a.localcash:id/incluir_ubicacion text=Incluir ubicación actual (opcional)
+UI com.aik1a.localcash:id/estado_ubicacion text=Ubicación capturada: -33.45, -70.65999833333333
+UI com.aik1a.localcash:id/reintentar_ubicacion text=CAPTURAR / REINTENTAR UBICACIÓN
+UI android:id/buttonPanel text=null
+UI null text=null
+UI android:id/button2 text=CANCELAR
+UI android:id/button1 text=GUARDAR
+java.lang.AssertionError: No se encontró Ubicación capturada: -33.45, -70.66
+	at com.aik1a.localcash.FlowChecks.buscar(FlowChecks.java:587)
+	at com.aik1a.localcash.FlowChecks.nodeText(FlowChecks.java:590)
+	at com.aik1a.localcash.FlowChecks.verificarUbicaciones(FlowChecks.java:393)
+	at com.aik1a.localcash.FlowChecks.onStart(FlowChecks.java:32)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2597)
+
