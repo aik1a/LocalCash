@@ -1,6 +1,6 @@
 # Diseño SQLite
 
-**Estado:** esquema v3: cuentas/movimientos (T03), contactos/compras/detalles (T04) y deudas (T05).
+**Estado:** esquema v4: cuentas/movimientos (T03), contactos/compras/detalles (T04) y deudas (T05), con ubicación opcional de movimientos (T06A).
 
 ## Esquema mínimo S00-T03 (decisiones implementadas)
 
@@ -17,7 +17,7 @@ Base `localcash.db`, administrada por `data.LocalCashDbHelper`.
 - FK activas en onConfigure. No hay edición/borrado en este incremento. RESTRICT conserva relación; futuras migraciones explícitas, sin borrar datos.
 - Identidad por ID; nombres iguales permitidos (no se exige unicidad). Tipo de cuenta se mantiene pendiente y no se inventa catálogo.
 - La transacción de registrar valida el saldo contra overflow antes del insert; las operaciones de creación son insert de una fila.
-- T03 solo creó cuentas/movimientos. T04 añade las tablas documentadas debajo; T05 añade deudas/reparto. Ubicación sigue pendiente.
+- T03 solo creó cuentas/movimientos. T04 añade las tablas documentadas debajo; T05 añade deudas/reparto. T06A añade ubicación opcional.
 
 ## Migración aditiva S00-T04, v1 → v2
 
@@ -58,6 +58,16 @@ Una sola asociación representa participante, asignación y deuda del total de u
 DeudaRepository registra todas las filas en una transacción, revalida el reparto contra la compra REALIZADA persistida y rechaza compras ya repartidas, incluso con otro conjunto de participantes. Las FK y PK protegen contactos/compras y duplicados; un error revierte todos los inserts. La suma exacta es una invariante de Reparto/repository; no se pretende hacer un CHECK SQL entre varias filas. No hay edición/borrado ni generación de movimientos.
 
 Pruebas: fixture v2 con snapshot de todas las filas previas, FK/PK/CHECK, trigger que falla en el segundo insert, cuota cero, rechazo de total ficticio y reparto repetido. Flujo UI y reinicio real en emulador; evidencia y estado final en handoff S00-T05.
+
+## Migración aditiva S00-T06A, v3 → v4
+
+Se añaden únicamente movimientos.latitud REAL nullable y movimientos.longitud REAL nullable mediante ALTER TABLE. La creación nueva sigue el mismo DDL aditivo; v1→v4 y v2→v4 crean primero tablas de compras/deudas y luego las columnas. Los registros anteriores conservan todos sus valores e IDs, con ambas coordenadas NULL.
+
+CHECK latitud: NULL o numérico en [-90,90]. CHECK longitud: ambos NULL o ambos presentes, numéricos y longitud en [-180,180]. No acepta pares incompletos en INSERT/UPDATE. Ubicacion rechaza NaN/infinito y fuera de rango antes de persistir; MovimientoRepository inserta/reconstruye el par opcional y valida su completitud.
+
+No hay tabla de ubicaciones, direcciones ni historial GPS. Las coordenadas pertenecen al movimiento capturado explícitamente; no afectan su monto ni saldo. Sin modificación de cuentas/compras/deudas ni nueva dependencia.
+
+Validación: fixtures originales v1/v2/v3, snapshots de columnas previas en las seis tablas correspondientes, NULL antiguos y FK intactas; dominio, SQL inválido, UI/permisos/GPS y reinicio de proceso en CI. Ver docs/testing/S00-T06A.md y handoff de la tarea.
 
 ## Diseño preliminar histórico (sustituido para T05)
 
@@ -120,4 +130,5 @@ Cuando S01 cierre estas decisiones:
 3. implementar `LocalCashDbHelper`;
 4. añadir pruebas CRUD;
 5. actualizar trazabilidad.
+
 

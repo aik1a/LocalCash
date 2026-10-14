@@ -1,0 +1,110 @@
+name: LocalCash ubicación opcional y regresión
+on:
+  push:
+    branches: [task/S00-T06A-ubicacion]
+    paths: ['app/**', 'tests/**', '.github/workflows/s00-t06a-build.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - run: sdkmanager "platforms;android-36.1" "build-tools;36.0.0"
+      - name: Build exact pushed SHA and tests
+        shell: bash
+        run: |
+          mkdir -p evidence
+          git rev-parse HEAD | tee evidence/validated-sha.txt
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          java -version 2>&1 | tee evidence/java-version.txt
+          bash tests/domain-checks.sh 2>&1 | tee evidence/domain-checks.log
+          set +e
+          bash gradlew --no-daemon --console=plain :app:assembleDebug :app:assembleDebugAndroidTest 2>&1 | tee evidence/assembleDebug.log
+          result=${PIPESTATUS[0]}
+          echo "$result" | tee evidence/exit-code.txt
+          if [ "$result" -eq 0 ]; then
+            sha256sum app/build/outputs/apk/debug/app-debug.apk | tee evidence/apk-sha256.txt
+          fi
+          exit "$result"
+      - name: Free runner disk for Android image
+        run: |
+          df -h /
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk/ndk
+          df -h /
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Android SQLite and UI flow
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          emulator-boot-timeout: 180
+          script: |
+            adb install -r app/build/outputs/apk/debug/app-debug.apk
+            adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            timeout 180s adb shell am instrument -w com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks | tee evidence/android-flow.log
+            adb shell screencap -p /sdcard/flow.png
+            adb pull /sdcard/flow.png evidence/flow.png
+            adb shell uiautomator dump /sdcard/flow-window.xml
+            adb pull /sdcard/flow-window.xml evidence/flow-window.xml
+            adb logcat -d -t 500 > evidence/android-logcat.txt
+            grep -q LOCALCASH_FLOW_PASS evidence/android-flow.log
+            timeout 180s adb shell am instrument -w -e mode purchases com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks | tee evidence/purchase-flow.log
+            adb shell screencap -p /sdcard/purchases.png
+            adb pull /sdcard/purchases.png evidence/purchases.png
+            adb shell uiautomator dump /sdcard/purchases.xml
+            adb pull /sdcard/purchases.xml evidence/purchases.xml
+            adb logcat -d -t 500 > evidence/purchase-logcat.txt
+            grep -q LOCALCASH_PURCHASE_PASS evidence/purchase-flow.log
+            adb shell am force-stop com.aik1a.localcash
+            adb shell am start -W -n com.aik1a.localcash/.presentation.MainActivity | tee evidence/relaunch.log
+            adb shell uiautomator dump /sdcard/window.xml
+            adb pull /sdcard/window.xml evidence/relaunch-window.xml
+            grep -q 'Saldo: 125,50' evidence/relaunch-window.xml
+            python tests/relaunch-checks.py
+            adb shell screencap -p /sdcard/localcash.png
+            adb pull /sdcard/localcash.png evidence/cuentas.png
+            timeout 240s adb shell am instrument -w -e mode shared com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks | tee evidence/shared-flow.log
+            adb logcat -d -t 700 > evidence/shared-logcat.txt
+            grep -q LOCALCASH_SHARED_PASS evidence/shared-flow.log
+            adb shell screencap -p /sdcard/shared.png
+            adb pull /sdcard/shared.png evidence/shared.png
+            adb shell am force-stop com.aik1a.localcash
+            adb shell am start -W -n com.aik1a.localcash/.presentation.MainActivity | tee evidence/shared-relaunch.log
+            python tests/shared-relaunch-checks.py
+            python tests/gps-feed.py start
+            timeout 240s adb shell am instrument -w -e mode location com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks | tee evidence/location-flow.log
+            adb logcat -d -t 1000 > evidence/location-logcat.txt
+            python tests/gps-feed.py stop
+            grep -q LOCALCASH_LOCATION_PASS evidence/location-flow.log
+            adb shell am force-stop com.aik1a.localcash
+            adb shell am start -W -n com.aik1a.localcash/.presentation.MainActivity | tee evidence/location-relaunch.log
+            python tests/location-relaunch-checks.py
+      - name: Preserve evidence and APK
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: S00-T06A-${{ github.sha }}
+          path: |
+            evidence/
+            app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: warn
+
+

@@ -1,0 +1,10 @@
+{
+  "sha": "4c331d8326fa0ff55a994be81ec1f159e1c6a800",
+  "run_id": 38497503997,
+  "result": "FAIL_TEST_EXPECTATION",
+  "build": "PASS",
+  "domain": "PASS",
+  "migration_regression_permission_denial": "PASS",
+  "failure": "GPS emulator quantized longitude to -70.65999833333333; test demanded literal -70.66.",
+  "correction": "Validate expected injection tolerance 0.00001 degrees, then require exact persistence of received doubles."
+}

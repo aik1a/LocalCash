@@ -5,6 +5,7 @@ import com.aik1a.localcash.data.LocalCashDbHelper;
 import com.aik1a.localcash.data.MovimientoRepository;
 import com.aik1a.localcash.domain.Cuenta;
 import com.aik1a.localcash.domain.Movimiento;
+import com.aik1a.localcash.domain.Ubicacion;
 import java.util.List;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -31,7 +32,10 @@ public final class MovimientoService {
     }
 
     public long registrar(long cuentaId, Movimiento.Tipo tipo, long monto, String descripcion) {
-        Movimiento nuevo = new Movimiento(0, cuentaId, tipo, monto, descripcion, System.currentTimeMillis());
+        return registrar(cuentaId, tipo, monto, descripcion, null);
+    }
+    public long registrar(long cuentaId, Movimiento.Tipo tipo, long monto, String descripcion, Ubicacion ubicacion) {
+        Movimiento nuevo = new Movimiento(0, cuentaId, tipo, monto, descripcion, System.currentTimeMillis(), ubicacion);
         SQLiteDatabase db = helper.getWritableDatabase();
         db.beginTransaction();
         try {
@@ -47,3 +51,4 @@ public final class MovimientoService {
         }
     }
 }
+
