@@ -20,7 +20,7 @@ Cada tarea se implementa en su rama desde `main` actualizado después del merge 
 
 ## Decisión de cartografía offline aceptada
 
-[ADR-002 — osmdroid y cartografía OSM offline](../../docs/design/decisions/ADR-002-osmdroid-cartografia-offline.md) **ACCEPTED**: render local de datos OSM con licencia ODbL a atlas ZIP `LocalCashOSM/z/x/y.png` incluido en APK, bbox acotada de Santiago Centro (-33.465,-70.675,-33.435,-70.645), z14–16 y `OfflineTileProvider` sin red/fallback; no se descargan tiles OSMF. El Codificador debe **producir** los datos/mosaicos con procedencia, probar el ZIP real y validar instalación limpia sin red. La decisión resuelve la planificación; no demuestra todavía implementación o funcionamiento.
+[ADR-002 — osmdroid y cartografía OSM offline](../../design/decisions/ADR-002-osmdroid-cartografia-offline.md) **ACCEPTED**: render local de datos OSM con licencia ODbL a atlas ZIP `LocalCashOSM/z/x/y.png` incluido en APK, bbox acotada de Santiago Centro (-33.465,-70.675,-33.435,-70.645), z14–16 y `OfflineTileProvider` sin red/fallback; no se descargan tiles OSMF. El Codificador debe **producir** los datos/mosaicos con procedencia, probar el ZIP real y validar instalación limpia sin red. La decisión resuelve la planificación; no demuestra todavía implementación o funcionamiento.
 
 ## Gate integral S00-T06
 
