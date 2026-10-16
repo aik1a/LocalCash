@@ -12,13 +12,13 @@ import com.aik1a.localcash.domain.*;
 import java.text.DateFormat;
 import java.util.*;
 
-public final class ComprasActivity extends Activity {
+public final class ComprasActivity extends ActividadProtegida {
     private LocalCashDbHelper helper;
     private CompraService service;
     private List<Compra> compras = new ArrayList<>();
     private ListView lista;
-    @Override public void onCreate(Bundle state) {
-        super.onCreate(state); setContentView(R.layout.activity_compras);
+    @Override protected void crearContenido(Bundle state) {
+         setContentView(R.layout.activity_compras);
         Pantalla.aplicarMargenes(findViewById(R.id.root));
         helper = new LocalCashDbHelper(this); service = new CompraService(helper);
         lista = findViewById(R.id.compras); lista.setEmptyView(findViewById(R.id.vacio));
@@ -27,7 +27,7 @@ public final class ComprasActivity extends Activity {
         lista.setOnItemClickListener((parent, view, position, id) -> startActivity(new Intent(this, CompraDetalleActivity.class)
                 .putExtra(CompraDetalleActivity.COMPRA_ID, compras.get(position).getId())));
     }
-    @Override protected void onResume() { super.onResume(); actualizar(); }
+    @Override protected void actualizarContenido() { actualizar(); }
     private void actualizar() {
         try {
             compras = service.listarCompras();
@@ -46,3 +46,4 @@ public final class ComprasActivity extends Activity {
     }
     @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
 }
+

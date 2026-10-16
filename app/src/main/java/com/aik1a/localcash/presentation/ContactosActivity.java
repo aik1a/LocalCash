@@ -10,19 +10,19 @@ import com.aik1a.localcash.R;
 import com.aik1a.localcash.application.CompraService;
 import com.aik1a.localcash.data.LocalCashDbHelper;
 
-public final class ContactosActivity extends Activity {
+public final class ContactosActivity extends ActividadProtegida {
     private LocalCashDbHelper helper;
     private CompraService service;
     private ListView lista;
-    @Override public void onCreate(Bundle state) {
-        super.onCreate(state); setContentView(R.layout.activity_contactos);
+    @Override protected void crearContenido(Bundle state) {
+         setContentView(R.layout.activity_contactos);
         Pantalla.aplicarMargenes(findViewById(R.id.root));
         helper = new LocalCashDbHelper(this); service = new CompraService(helper);
         lista = findViewById(R.id.contactos); lista.setEmptyView(findViewById(R.id.vacio));
         findViewById(R.id.volver).setOnClickListener(v -> finish());
         findViewById(R.id.crear_contacto).setOnClickListener(v -> formulario());
     }
-    @Override protected void onResume() { super.onResume(); actualizar(); }
+    @Override protected void actualizarContenido() { actualizar(); }
     private void actualizar() {
         try { lista.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, service.listarContactos())); }
         catch (SQLiteException ex) { Toast.makeText(this, "No se pudieron leer los contactos.", Toast.LENGTH_LONG).show(); }
@@ -37,7 +37,8 @@ public final class ContactosActivity extends Activity {
             catch (IllegalArgumentException ex) { nombre.setError(ex.getMessage()); }
             catch (SQLiteException ex) { Toast.makeText(this, "No se guardó el contacto.", Toast.LENGTH_LONG).show(); }
         }));
-        dialog.show();
+        protegerDialogo(dialog).show();
     }
     @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
 }
+
