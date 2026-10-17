@@ -20,7 +20,7 @@ try:
      time.sleep(.5)
     (e/'network-before-first-map.txt').write_text(connectivity)
     (e/'network-settings.txt').write_text('wifi_on='+bio.adb('shell','settings','get','global','wifi_on')+'mobile_data='+bio.adb('shell','settings','get','global','mobile_data'))
-    assert bio.adb('shell','run-as',bio.package,'test','-f','files/maps/santiago_centro.zip',check=False).strip()==''
+    # MapChecks exige File.exists()==false antes de abrir el mapa; sin depender de test(1) en Android 7.
     with (e/'maps-fingerprint-feed.log').open('w') as output:feed=subprocess.Popen([sys.executable,'tests/biometric-emulator.py','feed'],stdout=output,stderr=subprocess.STDOUT,start_new_session=True)
     try:
      bio.instrument('FlowChecks','maps',file='maps-flow.log',marker='LOCALCASH_MAPS_PASS')
