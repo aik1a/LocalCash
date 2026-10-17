@@ -8,7 +8,7 @@
 
 - **Repositorio:** `aik1a/LocalCash`, `main`. **Fecha objetivo de entrega:** 19 de octubre de 2026.
 - **Sprint:** S00, `IN_PROGRESS` (**no cerrado**).
-- **Tareas cerradas:** S00-T01, T02, T03, T04, T05, T06A (GPS opcional) **T06C (biometría)** y **T06B (mapas offline)**.
+- **Tareas cerradas:** S00-T01, T02, T03, T04, T05, T06A (GPS opcional), **T06C (biometría)** y **T06B (mapas offline)**.
 - **Funcionalidades integradas:** cuentas/movimientos/saldos, contactos/compras, gastos compartidos/deudas, ubicación opcional, acceso biométrico mediante AndroidX `BiometricPrompt` y mapas offline Santiago Centro mediante osmdroid 6.1.18. SQLite **v4**, Java/XML, almacenamiento financiero local.
 - **Último merge funcional:** [PR #8](https://github.com/aik1a/LocalCash/pull/8) — `f1664ec4d87bf16cd9f7668cbda62e0ef0f406e9` (T06B).
 - **Gate T06C:** [auditoría independiente](docs/audits/S00/S00-T06C-audit.md) `PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE`, 97,5/100, sin defectos BLOCKER/MAJOR; observación documental para T07.
@@ -18,7 +18,7 @@
 
 ## Próxima acción autorizada
 
-**Orquestador — preparar Task Brief S00-T07** y asignar tareas acotadas de cierre técnico/documental al Codificador. Mantener S00 `IN_PROGRESS` hasta validación integral y gate independiente. T07 incluye firma/upgrade sin pérdida de datos, regresión integrada, documentación técnica H-01, evidencia de entrega y pruebas físicas solo si hay dispositivo disponible. No inventar PASS para dispositivo físico ni actualización histórica no ejecutada.
+**Codificador — ejecutar S00-T07A** conforme a [Task Brief](docs/tasks/active/S00-T07A-integracion.md) en `task/S00-T07A-integracion`, partiendo de main tras planificación. T07B (firma/upgrade), T07C (documentación/entrega) y T07D (auditoría integral) tienen briefs en `docs/tasks/active/` y permanecen PLANNED. Mantener S00 `IN_PROGRESS` hasta validación integral y gate independiente. T07 incluye firma/upgrade sin pérdida de datos, regresión integrada, documentación técnica H-01, evidencia de entrega y pruebas físicas solo si hay dispositivo disponible. No inventar PASS para dispositivo físico ni actualización histórica no ejecutada.
 
 ## Decisiones vigentes
 
@@ -54,7 +54,7 @@
 ## Seguimiento pendiente
 
 - **S00-T06B CLOSED:** atlas y mapa offline integrados y auditados, PR #8.
-- **S00-T07 pendiente:** regresión final, validación APK/firma y datos, revisión documental H-01, presentación y entrega.
+- **S00-T07A READY:** build y regresión integral; T07B/T07C/T07D PLANNED. Briefs en `docs/tasks/active/`. Riesgos: firma APK histórica distinta, pruebas físicas no realizadas, H-01 documental y plazo 19/10.
 - Una auditoría independiente por incremento; Orquestador formaliza cierres/merges. No reabrir T01–T06C salvo defecto concreto.
 
 ## Reglas de actualización
