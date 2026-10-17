@@ -13,7 +13,7 @@ package='com.aik1a.localcash'
 sequence=0
 
 def adb(*args,check=True):
-    r=subprocess.run(['adb',*args],capture_output=True,text=True,check=check)
+    r=subprocess.run(['adb',*args],capture_output=True,text=True,check=check,timeout=30)
     return r.stdout+r.stderr
 
 def dump(label='window'):

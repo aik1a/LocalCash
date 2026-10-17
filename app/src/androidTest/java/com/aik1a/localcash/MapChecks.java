@@ -35,6 +35,8 @@ public final class MapChecks {
         AccessibilityServiceInfo info=ins.getUiAutomation().getServiceInfo();info.flags|=AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;ins.getUiAutomation().setServiceInfo(info);
         ConnectivityManager manager=(ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         android.net.NetworkInfo active=manager.getActiveNetworkInfo();
+        long networkDeadline=SystemClock.uptimeMillis()+20000;
+        while(active!=null && active.isConnected() && SystemClock.uptimeMillis()<networkDeadline){SystemClock.sleep(250);active=manager.getActiveNetworkInfo();}
         ok(active==null||!active.isConnected(),"Primera apertura exige red desactivada");
         ok(context.checkSelfPermission("android.permission.INTERNET")==PackageManager.PERMISSION_DENIED,"APK no debe tener permiso INTERNET");
         ok(!AtlasOffline.archivo(context).exists(),"Atlas ya copiado: primera apertura no limpia");
