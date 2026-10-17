@@ -1,0 +1,1 @@
+[out:json][timeout:45];(way["highway"](-33.470,-70.680,-33.430,-70.640);way["leisure"~"park|garden"](-33.470,-70.680,-33.430,-70.640);way["waterway"](-33.470,-70.680,-33.430,-70.640);way["natural"="water"](-33.470,-70.680,-33.430,-70.640););out body geom;

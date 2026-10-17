@@ -1,0 +1,2 @@
+f37bc75ae6e1c996d6527b411f805eb7bc304d898920a258d208d7acc605ab1d  app/src/main/assets/maps/santiago_centro.zip
+1aaa9a71b9453178345ac7ea47e273a66187a555368ecabe8ac1924408a3e27d  tools/maps/santiago-centro.osm.xml.gz

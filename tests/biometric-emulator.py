@@ -13,7 +13,7 @@ package='com.aik1a.localcash'
 sequence=0
 
 def adb(*args,check=True):
-    r=subprocess.run(['adb',*args],capture_output=True,text=True,check=check)
+    r=subprocess.run(['adb',*args],capture_output=True,text=True,check=check,timeout=30)
     return r.stdout+r.stderr
 
 def dump(label='window'):
@@ -49,7 +49,7 @@ def wait(predicate,label,seconds=25):
     raise AssertionError(label+': '+texts(tree))
 
 def private(tree):
-    return any(n.get('resource-id','').split(':id/')[-1] in {'crear_cuenta','registrar_movimiento','crear_contacto','crear_compra','compra_total','guardar_compra','reparto_total'} for n in tree.iter('node'))
+    return any(n.get('resource-id','').split(':id/')[-1] in {'crear_cuenta','registrar_movimiento','crear_contacto','crear_compra','compra_total','guardar_compra','reparto_total','map'} for n in tree.iter('node'))
 
 def blocked(tree):
     assert not private(tree),'Contenido privado antes de autenticar: '+texts(tree)
@@ -220,7 +220,7 @@ def security():
     adb('shell','am','start','-n',package+'/.presentation.MainActivity','--ez','authenticated','true')
     tree=wait(lambda t:has(t,'Desbloquear LocalCash'),'malicious-extra');blocked(tree)
     lines.append('PASS extra authenticated=true ignorado; sin autenticación no muestra datos.')
-    for activity in ['MainActivity','CuentaActivity','ContactosActivity','ComprasActivity','NuevaCompraActivity','CompraDetalleActivity','RepartoActivity']:
+    for activity in ['MainActivity','CuentaActivity','ContactosActivity','ComprasActivity','NuevaCompraActivity','CompraDetalleActivity','RepartoActivity','MapaActivity']:
         instrument('BiometricChecks','direct',activity,file='bio-direct-'+activity+'.log',marker='LOCALCASH_BIO_DIRECT_PASS')
         tree=dump('direct-'+activity);blocked(tree)
         lines.append('PASS intent interno directo protegido: '+activity)
@@ -251,10 +251,11 @@ def regressions():
         print('LOCALCASH_BIOMETRIC_REGRESSION_PASS',flush=True)
     finally:os.killpg(process.pid,signal.SIGTERM)
 
-try:
-    {'prepare':prepare,'enroll':enroll,'security':security,'unlock':unlock,'feed':feed,'regressions':regressions}[sys.argv[1]]()
-except BaseException:
-    if sys.argv[1]!='feed':
-        try:(folder/'biometric-final-logcat.txt').write_text(adb('logcat','-d','-t','1000'))
-        except Exception:pass
-    raise
+if __name__ == '__main__':
+    try:
+        {'prepare':prepare,'enroll':enroll,'security':security,'unlock':unlock,'feed':feed,'regressions':regressions}[sys.argv[1]]()
+    except BaseException:
+        if sys.argv[1]!='feed':
+            try:(folder/'biometric-final-logcat.txt').write_text(adb('logcat','-d','-t','1000'))
+            except Exception:pass
+        raise

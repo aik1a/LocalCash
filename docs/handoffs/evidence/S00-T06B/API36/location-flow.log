@@ -1,0 +1,11 @@
+LOCALCASH_LOCATION_PASS
+PASS MIG-1: v1→v4, snapshot exacto, NULL antiguos, saldo y FK.
+PASS MIG-2: v2→v4, snapshot exacto, NULL antiguos, saldo y FK.
+PASS GEO-SQL: INSERT/UPDATE de par incompleto, rango, texto e infinito rechazados sin alterar registros.
+PASS MIG-3: v3→v4, snapshot exacto, NULL antiguos, saldo y FK.
+PASS GEO-PERM: sin solicitud automática; diálogo Android real denegado, movimiento guardado con NULL.
+GPS_EXPECTED: -33.45, -70.65999833333333
+PASS GEO-GPS: permiso concedido, callback LocationManager productivo, GPS inyectado por adb emu geo fix.
+PASS GEO-FALLBACK: consentimiento retirado, GPS desactivado y timeout real sin fix permiten guardar sin ubicación.
+PASS GEO-DB: reapertura, un par exacto y siete pares NULL; saldo y deudas preservados.
+

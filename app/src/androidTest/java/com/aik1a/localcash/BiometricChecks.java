@@ -49,7 +49,7 @@ public final class BiometricChecks {
                 do {
                     AccessibilityNodeInfo root=instrumentation.getUiAutomation().getRootInActiveWindow();
                     if (root!=null) {
-                        for(String id:new String[]{"cuentas","movimientos","contactos","compras","deudas","nombre_compra","compra_total"}) {
+                        for(String id:new String[]{"cuentas","movimientos","contactos","compras","deudas","nombre_compra","compra_total","map"}) {
                             if(!root.findAccessibilityNodeInfosByViewId("com.aik1a.localcash:id/"+id).isEmpty())
                                 throw new AssertionError("Contenido expuesto: "+activity+" "+id);
                         }

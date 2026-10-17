@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="12dp">
+ <Button android:id="@+id/volver" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Volver a movimientos" />
+ <TextView android:id="@+id/titulo_mapa" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="20sp" android:accessibilityHeading="true" />
+ <TextView android:id="@+id/estado_mapa" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="4dp" android:accessibilityLiveRegion="polite" />
+ <TextView android:id="@+id/cobertura_mapa" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Área offline demostrativa: Santiago Centro (z14–16)" android:textSize="12sp" />
+ <com.aik1a.localcash.presentation.MapaLocalView android:id="@+id/map" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:contentDescription="Mapa offline de movimientos. Arrastra para desplazarte y usa los botones de zoom." />
+ <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+  <Button android:id="@+id/zoom_menos" android:layout_width="0dp" android:layout_weight="1" android:layout_height="48dp" android:text="−" android:contentDescription="Alejar mapa" />
+  <Button android:id="@+id/centrar_mapa" android:layout_width="0dp" android:layout_weight="2" android:layout_height="48dp" android:text="Santiago Centro" />
+  <Button android:id="@+id/zoom_mas" android:layout_width="0dp" android:layout_weight="1" android:layout_height="48dp" android:text="+" android:contentDescription="Acercar mapa" />
+ </LinearLayout>
+ <TextView android:id="@+id/detalle_marcador" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Toca un marcador para ver el movimiento." android:accessibilityLiveRegion="polite" android:paddingVertical="4dp" />
+ <TextView android:id="@+id/atribucion_mapa" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Datos del mapa © OpenStreetMap contributors · ODbL" android:textSize="12sp" android:paddingVertical="6dp" />
+</LinearLayout>

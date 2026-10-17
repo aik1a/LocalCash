@@ -1,0 +1,4 @@
+PASS centro z14: 34457 pixels cartográficos, 587 colores, OSM real.
+PASS centro z15: 32646 pixels cartográficos, 505 colores, OSM real.
+PASS centro z16: 24980 pixels cartográficos, 516 colores, OSM real.
+LOCALCASH_ATLAS_PASS: 64 PNG XYZ, bbox z14–16, <=6MiB, SHA256/origen ODbL y vías reales.

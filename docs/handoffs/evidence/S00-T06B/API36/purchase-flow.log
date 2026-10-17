@@ -1,0 +1,6 @@
+LOCALCASH_PURCHASE_PASS
+PASS compra atómica: fallo del segundo detalle revierte cabecera y primer detalle.
+PASS MIG-01: v1 real con dos cuentas y dos movimientos → v4, saldos 125,50 y 300,00 conservados.
+PASS CON/BUY-01/02/03: dos contactos por UI, compra realizada con dos ítems y total 232,00 vinculada a Ana; planificada con fecha futura sin contacto; historial y detalles.
+PASS regresión contable, persistencia v4, validaciones y ausencia de movimientos automáticos.
+

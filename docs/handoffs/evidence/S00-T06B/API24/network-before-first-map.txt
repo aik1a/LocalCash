@@ -1,0 +1,56 @@
+NetworkFactories for: TelephonyNetworkFactory[0] WIFI PhoneSwitcherNetworkRequstListener WIFI_UT
+
+Active default network: none
+
+Current Networks:
+
+Metered Interfaces:
+
+Restrict background: false
+
+Status for known UIDs:
+  UID=10014 rules=1 (ALLOW_METERED)
+  
+Network Requests:
+  Request from uid/pid:1000/1648 for NetworkRequest [ id=1, legacyType=-1, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+  Listen from uid/pid:1000/1648 for NetworkRequest [ id=3, legacyType=-1, [] ]
+  Listen from uid/pid:10070/3961 for NetworkRequest [ id=10, legacyType=-1, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+  Listen from uid/pid:10027/1811 for NetworkRequest [ id=5, legacyType=-1, [] ]
+  Listen from uid/pid:1000/1648 for NetworkRequest [ id=4, legacyType=-1, [ Transports: CELLULAR|WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+  Listen from uid/pid:10014/1763 for NetworkRequest [ id=7, legacyType=-1, [ Capabilities: NOT_RESTRICTED] ]
+  Listen from uid/pid:10028/2252 for NetworkRequest [ id=6, legacyType=-1, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+  
+mLegacyTypeTracker:
+  Supported types: 0 1 2 3 5 10 11 12 13 14 15 17
+  Current state:
+
+mNetTransitionWakeLock: currently held, last requested for NetworkAgentInfo [MOBILE (LTE) - 100]
+
+Tethering:
+  mUpstreamIfaceTypes: MOBILE WIFI MOBILE_HIPRI BLUETOOTH ETHERNET
+  Tether state:
+
+Packet keepalives:
+
+
+mValidationLogs (most recent first):
+100 - epc.tmobile.com
+  10-17 15:01:25.049 - PROBE_DNS OK 96ms, connectivitycheck.gstatic.com=142.251.150.120,2001:4860:4826:7800::
+  10-17 15:01:25.125 - PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 time=31ms ret=204 headers={null=[HTTP/1.1 204 No Content], Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], Date=[Sat, 17 Oct 2026 15:01:25 GMT], X-Android-Received-Millis=[1792249285124], X-Android-Response-Source=[NETWORK 204], X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1792249285117]}
+  10-17 15:01:25.171 - PROBE_HTTPS https://connectivitycheck.gstatic.com/generate_204 time=79ms ret=204 headers={null=[HTTP/1.1 204 No Content], Alt-Svc=[h3=":443"; ma=2592000,h3-29=":443"; ma=2592000], Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], Date=[Sat, 17 Oct 2026 15:01:25 GMT], X-Android-Received-Millis=[1792249285170], X-Android-Response-Source=[NETWORK 204], X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1792249285153]}
+  10-17 15:01:29.852 - PROBE_DNS OK 6ms, connectivitycheck.gstatic.com=142.251.150.120,2001:4860:4826:7800::
+  10-17 15:01:29.858 - PROBE_HTTPS https://connectivitycheck.gstatic.com/generate_204 time=3ms ret=204 headers={null=[HTTP/1.1 204 No Content], Alt-Svc=[h3=":443"; ma=2592000,h3-29=":443"; ma=2592000], Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], Date=[Sat, 17 Oct 2026 15:01:29 GMT], X-Android-Received-Millis=[1792249289858], X-Android-Response-Source=[NETWORK 204], X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1792249289856]}
+  10-17 15:01:29.864 - PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 time=2ms ret=204 headers={null=[HTTP/1.1 204 No Content], Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], Date=[Sat, 17 Oct 2026 15:01:29 GMT], X-Android-Received-Millis=[1792249289864], X-Android-Response-Source=[NETWORK 204], X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1792249289862]}
+
+mNetworkRequestInfoLogs (most recent first):
+  10-17 15:01:46.391 - REGISTER Listen from uid/pid:10070/3961 for NetworkRequest [ id=10, legacyType=-1, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+  10-17 15:01:46.138 - RELEASE Listen from uid/pid:10070/3878 for NetworkRequest [ id=9, legacyType=-1, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+  10-17 15:01:45.538 - REGISTER Listen from uid/pid:10070/3878 for NetworkRequest [ id=9, legacyType=-1, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+  10-17 15:01:43.558 - RELEASE Listen from uid/pid:10070/3165 for NetworkRequest [ id=8, legacyType=-1, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+  10-17 15:01:34.316 - REGISTER Listen from uid/pid:10070/3165 for NetworkRequest [ id=8, legacyType=-1, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+  10-17 15:01:29.334 - REGISTER Listen from uid/pid:10014/1763 for NetworkRequest [ id=7, legacyType=-1, [ Capabilities: NOT_RESTRICTED] ]
+  10-17 15:01:27.536 - REGISTER Listen from uid/pid:10028/2252 for NetworkRequest [ id=6, legacyType=-1, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+  10-17 15:01:20.747 - REGISTER Listen from uid/pid:10027/1811 for NetworkRequest [ id=5, legacyType=-1, [] ]
+  10-17 15:01:19.791 - REGISTER Listen from uid/pid:1000/1648 for NetworkRequest [ id=4, legacyType=-1, [ Transports: CELLULAR|WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+  10-17 15:01:19.314 - REGISTER Listen from uid/pid:1000/1648 for NetworkRequest [ id=3, legacyType=-1, [] ]
+  10-17 15:01:19.155 - REGISTER Request from uid/pid:1000/1648 for NetworkRequest [ id=1, legacyType=-1, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]

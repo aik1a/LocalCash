@@ -1,0 +1,104 @@
+name: LocalCash mapas offline y regresión
+on:
+  push:
+    branches: [task/S00-T06B-mapas]
+    paths: ['app/**', 'tests/**', 'tools/maps/**', '.github/workflows/s00-t06b-build.yml']
+  workflow_dispatch:
+concurrency:
+  group: maps-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  validate:
+    strategy:
+      fail-fast: false
+      matrix:
+        api: [36, 24]
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - run: sdkmanager "platforms;android-36.1" "build-tools;36.0.0"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reproduce and verify licensed offline atlas
+        run: |
+          mkdir -p evidence
+          python -m pip install -r tools/maps/requirements.txt
+          python tools/maps/verify_atlas.py | tee evidence/atlas-verification.log
+          python tools/maps/generate_offline_tiles.py --output "$RUNNER_TEMP/atlas/santiago_centro.zip" --preview evidence/atlas-preview-z16.png | tee evidence/atlas-reproduction.log
+          cmp app/src/main/assets/maps/santiago_centro.zip "$RUNNER_TEMP/atlas/santiago_centro.zip"
+          sha256sum app/src/main/assets/maps/santiago_centro.zip tools/maps/santiago-centro.osm.xml.gz | tee evidence/atlas-sha256.txt
+      - name: Build exact pushed SHA and tests
+        shell: bash
+        run: |
+          mkdir -p evidence
+          git rev-parse HEAD | tee evidence/validated-sha.txt
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          java -version 2>&1 | tee evidence/java-version.txt
+          bash tests/domain-checks.sh 2>&1 | tee evidence/domain-checks.log
+          set +e
+          bash gradlew --no-daemon --console=plain :app:assembleDebug :app:assembleDebugAndroidTest 2>&1 | tee evidence/assembleDebug.log
+          result=${PIPESTATUS[0]}
+          echo "$result" | tee evidence/exit-code.txt
+          if [ "$result" -eq 0 ]; then
+            sha256sum app/build/outputs/apk/debug/app-debug.apk | tee evidence/apk-sha256.txt
+          fi
+          exit "$result"
+      - name: Dependency evidence
+        run: bash gradlew --no-daemon --console=plain :app:dependencies --configuration debugRuntimeClasspath > evidence/dependencies.txt
+      - name: Free runner disk for Android image
+        run: |
+          df -h /
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk/ndk
+          df -h /
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Android SQLite and UI flow
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          ram-size: 2048M
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          emulator-boot-timeout: 300
+          script: |
+            adb install -r app/build/outputs/apk/debug/app-debug.apk
+            adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            adb shell pm list instrumentation > evidence/instrumentation-list.txt
+            python tests/biometric-emulator.py prepare
+            python tests/biometric-emulator.py enroll
+            python tests/biometric-emulator.py security
+            python tests/maps-emulator.py
+            python tests/biometric-regression-dispatch.py ${{ matrix.api }}
+            adb logcat -d -t 1000 > evidence/biometric-final-logcat.txt
+      - name: Preserve evidence and APK
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: S00-T06B-API${{ matrix.api }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            evidence/
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            app/src/main/assets/maps/
+            tools/maps/download-provenance.json
+          if-no-files-found: warn
+
+
+
