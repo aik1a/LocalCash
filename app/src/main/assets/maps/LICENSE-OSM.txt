@@ -1,0 +1,8 @@
+Datos del mapa © OpenStreetMap contributors.
+Datos OSM y selección vectorial: Open Database License (ODbL) 1.0.
+https://opendatacommons.org/licenses/odbl/1-0/
+https://www.openstreetmap.org/copyright
+
+Este APK incluye una copia legible por máquina del extracto utilizado: assets/maps/santiago-centro.osm.xml.gz. Se puede extraer abriendo el APK como ZIP y descomprimir con gzip. El extracto se ofrece bajo ODbL 1.0; conserva IDs, geometrías y avisos de OSM. Las URLs, fechas, filtros y SHA256 están en assets/maps/provenance.json.
+
+Los mosaicos se dibujaron localmente a partir de esos datos; no provienen de servidores de tiles de OSMF. El código/estilo de render propio se ofrece bajo CC0 1.0; esto no elimina la atribución ni ODbL sobre los datos subyacentes.

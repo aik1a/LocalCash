@@ -1,0 +1,40 @@
+{
+  "provider": "OpenStreetMap API 0.6",
+  "license": "ODbL-1.0",
+  "attribution": "© OpenStreetMap contributors",
+  "copyright_url": "https://www.openstreetmap.org/copyright",
+  "records": [
+    {
+      "url": "https://api.openstreetmap.org/api/0.6/map?bbox=-70.675,-33.465,-70.66,-33.45",
+      "utc": "2026-10-17T14:26:12.931100+00:00",
+      "response_sha256": "bffbc0e5e6d7d59467d2647e6c3695d8c8f18777ba6ec3393efee36497bdaf7d",
+      "bytes": 4893039
+    },
+    {
+      "url": "https://api.openstreetmap.org/api/0.6/map?bbox=-70.66,-33.465,-70.645,-33.45",
+      "utc": "2026-10-17T14:26:19.713320+00:00",
+      "response_sha256": "43e919e27f8f6cacaa8453bcbadeff2ca9d8fecd8352a4ed2fdbf6ed25dfa640",
+      "bytes": 6498443
+    },
+    {
+      "url": "https://api.openstreetmap.org/api/0.6/map?bbox=-70.675,-33.45,-70.66,-33.435",
+      "utc": "2026-10-17T14:26:26.346767+00:00",
+      "response_sha256": "75a85cbace3e002b90313966cf1ca7d7cd43d6d7e5bd78692b4dfccd2f0578e9",
+      "bytes": 5971641
+    },
+    {
+      "url": "https://api.openstreetmap.org/api/0.6/map?bbox=-70.66,-33.45,-70.645,-33.435",
+      "utc": "2026-10-17T14:26:34.362245+00:00",
+      "response_sha256": "a2dc93d1330b9b86df0eb0be85a60dda2e20852474c1800dad82ad7150325c75",
+      "bytes": 11635164
+    }
+  ],
+  "selection": "ways: highway, waterway, leisure park/garden, natural water; all referenced nodes; sorted by numeric OSM id",
+  "raw_sha256": "8503f464f1fe48655a52b69eb75ca13a1a1069b5e79ee0798cfa65503e46f3b7",
+  "gzip_sha256": "1aaa9a71b9453178345ac7ea47e273a66187a555368ecabe8ac1924408a3e27d",
+  "nodes": 15023,
+  "ways": 3279,
+  "raw_bytes": 4387702,
+  "gzip_bytes": 434548,
+  "fallback": "Overpass-api.de POST HTTP502; kumi GET HTTP500; official API full bbox >50000 nodes; four bounded quadrants of ADR bbox, no tile download."
+}

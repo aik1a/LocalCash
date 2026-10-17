@@ -36,6 +36,7 @@ public final class CuentaActivity extends ActividadProtegida {
         cuentaId = getIntent().getLongExtra(CUENTA_ID, -1);
         helper = new LocalCashDbHelper(this);
         service = new MovimientoService(helper);
+        findViewById(R.id.abrir_mapa).setOnClickListener(v -> startActivity(new android.content.Intent(this, MapaActivity.class).putExtra(CUENTA_ID, cuentaId)));
         lista = findViewById(R.id.movimientos);
         lista.setEmptyView(findViewById(R.id.vacio));
         findViewById(R.id.volver).setOnClickListener(v -> finish());

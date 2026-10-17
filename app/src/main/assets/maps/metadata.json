@@ -1,0 +1,31 @@
+{
+  "source_name": "LocalCashOSM",
+  "tile_size": 256,
+  "scheme": "XYZ",
+  "zooms": [
+    14,
+    15,
+    16
+  ],
+  "bbox": [
+    -33.465,
+    -70.675,
+    -33.435,
+    -70.645
+  ],
+  "center": [
+    -33.45,
+    -70.66
+  ],
+  "tiles": 64,
+  "zip_bytes": 875101,
+  "zip_sha256": "f37bc75ae6e1c996d6527b411f805eb7bc304d898920a258d208d7acc605ab1d",
+  "extract_gzip_sha256": "1aaa9a71b9453178345ac7ea47e273a66187a555368ecabe8ac1924408a3e27d",
+  "pillow_version": "12.3.0",
+  "license": "ODbL-1.0",
+  "attribution": "Datos del mapa © OpenStreetMap contributors · ODbL",
+  "copyright_url": "https://www.openstreetmap.org/copyright",
+  "style_license": "CC0-1.0",
+  "extract_asset": "maps/santiago-centro.osm.xml.gz",
+  "style": "LocalCash simple raster, generated locally from OSM ways"
+}

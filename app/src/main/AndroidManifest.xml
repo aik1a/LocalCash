@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-feature android:name="android.hardware.location" android:required="false" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" android:maxSdkVersion="27" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:node="remove" />
     <application
         android:name=".presentation.LocalCashApplication"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        <activity android:name=".presentation.MapaActivity" android:exported="false" />
         <activity android:name=".presentation.RepartoActivity" android:exported="false" />
         <activity android:name=".presentation.AccesoActivity" android:theme="@style/Theme.LocalCash.Acceso" android:exported="false" />
         <activity android:name=".presentation.ContactosActivity" android:exported="false" />

@@ -1,0 +1,1 @@
+Overpass principal HTTP 502 e instancia kumi HTTP 500. Conforme al fallback permitido por ADR-002 se intentará un único extracto vectorial de la API oficial de OSM, misma bbox con padding, sin servidores de mosaicos.
