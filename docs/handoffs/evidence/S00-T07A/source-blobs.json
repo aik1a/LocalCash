@@ -1,0 +1,450 @@
+{
+  "source_sha": "cc77afc2c676770329eb89e367ea44f8c11c9e1a",
+  "verified_blobs": [
+    {
+      "path": ".gitignore",
+      "sha": "1a391b14a927dbb0650b3ecae34a8aa1d77b8236",
+      "size": 143
+    },
+    {
+      "path": "AGENTS.md",
+      "sha": "1e8e7974db868a19c250d135a161b5fa883d25e8",
+      "size": 4465
+    },
+    {
+      "path": "app/build.gradle",
+      "sha": "c25e2ba741a840186b1deb430439a2c95d51ed74",
+      "size": 678
+    },
+    {
+      "path": "app/src/androidTest/java/com/aik1a/localcash/BiometricChecks.java",
+      "sha": "6be5752c09cd9f17d2b12b0cd264f8c636facb76",
+      "size": 4288
+    },
+    {
+      "path": "app/src/androidTest/java/com/aik1a/localcash/FlowChecks.java",
+      "sha": "79b6f2fed9e16e866b84464ea972fa8dfa132c20",
+      "size": 46943
+    },
+    {
+      "path": "app/src/androidTest/java/com/aik1a/localcash/MapChecks.java",
+      "sha": "3ba389b6253154ddb1681280a73309eacb5078f0",
+      "size": 12993
+    },
+    {
+      "path": "app/src/main/AndroidManifest.xml",
+      "sha": "b2fe556aa7e6b41651e51b0c8c0bf9ea895f75d3",
+      "size": 2280
+    },
+    {
+      "path": "app/src/main/assets/maps/LICENSE-OSM.txt",
+      "sha": "0bb4e5ba791e830ce645b08d6dd4205305543688",
+      "size": 769
+    },
+    {
+      "path": "app/src/main/assets/maps/metadata.json",
+      "sha": "7141649d42a77423e071a151dcc837c65d34b27c",
+      "size": 786
+    },
+    {
+      "path": "app/src/main/assets/maps/provenance.json",
+      "sha": "96662388f0031e31971b21203929016c31b68206",
+      "size": 1816
+    },
+    {
+      "path": "app/src/main/assets/maps/santiago-centro.osm.xml.gz",
+      "sha": "b4bb4b39f640cf768e15d49cd161dc112f54eabb",
+      "size": 434548
+    },
+    {
+      "path": "app/src/main/assets/maps/santiago_centro.zip",
+      "sha": "2bc37386e275e19896ad35d6a8539e4dc5ea6783",
+      "size": 875101
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+      "sha": "30784bc3a4ccf1db2e8878c7614ccd93cad6c325",
+      "size": 1064
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/application/DeudaService.java",
+      "sha": "0717d0b8486737130e5691a5029ada1deb84d1cc",
+      "size": 1307
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+      "sha": "b6daae391c5d38035a84bb9e482a43be35477102",
+      "size": 2315
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+      "sha": "8d7cffd166f81115b851f49949c051fb10d9d169",
+      "size": 2977
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/data/ContactoRepository.java",
+      "sha": "d52349195fd8c60eb34c7284a5977c1b93d37b3d",
+      "size": 1379
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/data/CuentaRepository.java",
+      "sha": "a5047df68c049fa4dad1e5e061e0c6e05adef132",
+      "size": 1611
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/data/DeudaRepository.java",
+      "sha": "de192822abcc0de77b822daec174555f5ce5e54c",
+      "size": 2103
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/data/LocalCashDbHelper.java",
+      "sha": "003215b6b5831ddc5cd9f175d9c5d4435768b942",
+      "size": 3888
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/data/MovimientoRepository.java",
+      "sha": "145587d7bf8fd47421d537f952da3f7c8961aab8",
+      "size": 2570
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/domain/Compra.java",
+      "sha": "f9792dd590bfd7dfa213b5233c982c237ce54ee7",
+      "size": 1760
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/domain/Contacto.java",
+      "sha": "012bbd71e079de9293108445c17ea52dbead2823",
+      "size": 534
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/domain/Cuenta.java",
+      "sha": "50ff3f00ec930bbeaa13d4adbfc5321b24d674ab",
+      "size": 1092
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/domain/DetalleCompra.java",
+      "sha": "f8682bed9dd225604842125583708820703f749b",
+      "size": 953
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/domain/Deuda.java",
+      "sha": "b3bfe4f53eee29b83980ab08fe5225c13dd1cf23",
+      "size": 756
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/domain/Dinero.java",
+      "sha": "65680d99fce0ee1edcf544ea46276792e52d69a3",
+      "size": 858
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/domain/Movimiento.java",
+      "sha": "fb1cc4f381100d20dff1cc43abbc5e5826008bb6",
+      "size": 1627
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/domain/Reparto.java",
+      "sha": "138f3476497a0e7fea649bd718c11858fa970dc2",
+      "size": 2964
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/domain/Ubicacion.java",
+      "sha": "e815e354b677ffad66a1255a94f6712635c31ff0",
+      "size": 690
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/AccesoActivity.java",
+      "sha": "b783c762d9399e3fa082550462924670257a9989",
+      "size": 4879
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/ActividadProtegida.java",
+      "sha": "2bd0f81663a8ee5b024b0d209545797512d69dcd",
+      "size": 3221
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/AtlasOffline.java",
+      "sha": "ecf63dc6ba0669247c036bfb1f4fa988e1179676",
+      "size": 3400
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/CapturaUbicacion.java",
+      "sha": "c2ef3604c7bb53b66b588e120e2678a97c8d26c1",
+      "size": 3531
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java",
+      "sha": "21daa6e94daeb2267e755f7aefa0774177770a5c",
+      "size": 2701
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/ComprasActivity.java",
+      "sha": "202cfce482d9cdec21cf3f3348506b81d298d48a",
+      "size": 2602
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/ContactosActivity.java",
+      "sha": "63b4567dab2faaf412725a040fa566438bac42fe",
+      "size": 2359
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/CuentaActivity.java",
+      "sha": "99d757e48fa88147a3094d6280d578185b081368",
+      "size": 8895
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/LocalCashApplication.java",
+      "sha": "0c9d8eb117fb00791bddea0caf91b3385bc0cd04",
+      "size": 1356
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/MainActivity.java",
+      "sha": "d9beb1be56eeaf7dd28b331cc55d9b7fa0e53f01",
+      "size": 3897
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/MapaActivity.java",
+      "sha": "0a63d24ceff1273b888f95d223939bf418580275",
+      "size": 6224
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/MapaLocalView.java",
+      "sha": "db47422acf36445b6ae3149908624381341c8dfc",
+      "size": 881
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/NuevaCompraActivity.java",
+      "sha": "65436c8ed5f471243ccaa9acacb7b006d6b0a106",
+      "size": 7155
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/Pantalla.java",
+      "sha": "04f680448023cd09396a53141dba0791261523ec",
+      "size": 683
+    },
+    {
+      "path": "app/src/main/java/com/aik1a/localcash/presentation/RepartoActivity.java",
+      "sha": "538c94a62e6721915eb117de511002335239e685",
+      "size": 6739
+    },
+    {
+      "path": "app/src/main/res/layout/activity_bloqueo.xml",
+      "sha": "be39ea41919ecc10953699b74b94c43c605d1ae2",
+      "size": 1011
+    },
+    {
+      "path": "app/src/main/res/layout/activity_compra_detalle.xml",
+      "sha": "50beb03c8e037f8e5f83a0bce4be42d6f489a46a",
+      "size": 1435
+    },
+    {
+      "path": "app/src/main/res/layout/activity_compras.xml",
+      "sha": "c0e3d6a2de4b55769e8d4bb26b9a1a46a3fedd13",
+      "size": 990
+    },
+    {
+      "path": "app/src/main/res/layout/activity_contactos.xml",
+      "sha": "859d695a58404eae13a43252a8ac4e342d6ce624",
+      "size": 972
+    },
+    {
+      "path": "app/src/main/res/layout/activity_cuenta.xml",
+      "sha": "c9d35a0693d5d50a9356bee625c279cd79872b01",
+      "size": 1441
+    },
+    {
+      "path": "app/src/main/res/layout/activity_main.xml",
+      "sha": "131f2b7b85c717c79457612bacadd2c986607f5d",
+      "size": 1415
+    },
+    {
+      "path": "app/src/main/res/layout/activity_mapa.xml",
+      "sha": "1c03e77d66663f748c5504eae0f7732da86c23d9",
+      "size": 2433
+    },
+    {
+      "path": "app/src/main/res/layout/activity_nueva_compra.xml",
+      "sha": "53a4e4eabb6d13341d6362523e6e46cc99d9a646",
+      "size": 3620
+    },
+    {
+      "path": "app/src/main/res/layout/activity_reparto.xml",
+      "sha": "db52f50d1cf84747ce54a7e51fdb6514da66b775",
+      "size": 2503
+    },
+    {
+      "path": "app/src/main/res/layout/dialog_contacto.xml",
+      "sha": "bf72674054ad51424e6f13eb91b20648ac95d7f2",
+      "size": 618
+    },
+    {
+      "path": "app/src/main/res/layout/dialog_cuenta.xml",
+      "sha": "4c032a2f4c4728b20c07d04e67936dd652ef6327",
+      "size": 1170
+    },
+    {
+      "path": "app/src/main/res/layout/dialog_movimiento.xml",
+      "sha": "552732c3037e1bf1acd1660de88997e254eb05ae",
+      "size": 2164
+    },
+    {
+      "path": "app/src/main/res/layout/row_detalle.xml",
+      "sha": "c687e89527c6b1acae59e0232749c5db3120e52a",
+      "size": 230
+    },
+    {
+      "path": "app/src/main/res/layout/row_item_borrador.xml",
+      "sha": "c63e9ae47f63922a787036ff5e980b155da0b29e",
+      "size": 515
+    },
+    {
+      "path": "app/src/main/res/layout/row_participante.xml",
+      "sha": "82c7874063698a7abeac6a249cf2f9e4c557d8e8",
+      "size": 720
+    },
+    {
+      "path": "app/src/main/res/values/strings.xml",
+      "sha": "a32f1c29e6cfeb44216fca87eaa8bb06159785fa",
+      "size": 112
+    },
+    {
+      "path": "app/src/main/res/values/styles.xml",
+      "sha": "27900b0a562f159f62a10c8297229cb3a750a5dc",
+      "size": 253
+    },
+    {
+      "path": "build.gradle",
+      "sha": "3c54a514a2aa19c1781e14e3ba59cb6b2f6ae46f",
+      "size": 73
+    },
+    {
+      "path": "gradle.properties",
+      "sha": "1f4ad0a15ad2a27b0a30d246d4ed6b5124ccb6fd",
+      "size": 125
+    },
+    {
+      "path": "gradle/wrapper/gradle-wrapper.jar",
+      "sha": "b1b8ef56b44f16b14dc800fa8103a6d89abb526f",
+      "size": 48462
+    },
+    {
+      "path": "gradle/wrapper/gradle-wrapper.properties",
+      "sha": "b52fb7e713a5f298c2d47a83b550f546ffe9ab43",
+      "size": 281
+    },
+    {
+      "path": "gradlew",
+      "sha": "32abfec07b608014a095f72d8807aebc99c5d06f",
+      "size": 8675
+    },
+    {
+      "path": "gradlew.bat",
+      "sha": "24c62d56f2d4a91975bd1aa72103d2ec628e449f",
+      "size": 2764
+    },
+    {
+      "path": "settings.gradle",
+      "sha": "082ee732d83004a03dfa9596bf16427492fcdd64",
+      "size": 326
+    },
+    {
+      "path": "tests/DomainChecks.java",
+      "sha": "356f7cedb274c86e22ea3d367f32051b15818fac",
+      "size": 2235
+    },
+    {
+      "path": "tests/LocationDomainChecks.java",
+      "sha": "62764b3419503c7b6e5a62ddc95e2b57b44b96d5",
+      "size": 1623
+    },
+    {
+      "path": "tests/PurchaseDomainChecks.java",
+      "sha": "e0a178d1f4322db28447481f962d73c3ddafb595",
+      "size": 2098
+    },
+    {
+      "path": "tests/SharedDomainChecks.java",
+      "sha": "0714974d3cf355f573d0136a72548644e4581d28",
+      "size": 4042
+    },
+    {
+      "path": "tests/biometric-emulator.py",
+      "sha": "f8cd98daac503ef74a714f1290d0d19c1f01002c",
+      "size": 14927
+    },
+    {
+      "path": "tests/biometric-regression-dispatch.py",
+      "sha": "8a8aa2a39eafdd3ae032293120e39a5fca284aeb",
+      "size": 226
+    },
+    {
+      "path": "tests/domain-checks.sh",
+      "sha": "973ba6b625d96448cf5773ee862bc6c0cad9cea8",
+      "size": 488
+    },
+    {
+      "path": "tests/gps-feed.py",
+      "sha": "2f74ed69125ebb5aa0a8ccad14a503f5b3e51440",
+      "size": 522
+    },
+    {
+      "path": "tests/location-gps-feed.sh",
+      "sha": "c4aeb04f34aced692ef36b2a59da60d6bee3c180",
+      "size": 117
+    },
+    {
+      "path": "tests/location-relaunch-checks.py",
+      "sha": "2862618fccca13780031204e65b399ea462a3252",
+      "size": 2080
+    },
+    {
+      "path": "tests/maps-emulator.py",
+      "sha": "29c48affa8492acbaa81513704521b954e2734fa",
+      "size": 5180
+    },
+    {
+      "path": "tests/relaunch-checks.py",
+      "sha": "ba34df075726a5909b8453fd3984bc299ce0672c",
+      "size": 1914
+    },
+    {
+      "path": "tests/shared-relaunch-checks.py",
+      "sha": "f5177d15519082eec31d905a4f01d01c348452d7",
+      "size": 2313
+    },
+    {
+      "path": "tools/maps/acquire_osm.py",
+      "sha": "93731db47a3bfdcd704b6194beac3e92959f14ab",
+      "size": 2615
+    },
+    {
+      "path": "tools/maps/download-provenance.json",
+      "sha": "96662388f0031e31971b21203929016c31b68206",
+      "size": 1816
+    },
+    {
+      "path": "tools/maps/generate_offline_tiles.py",
+      "sha": "2a7a5110a28fdaed3db73f2e12f434ae36f09dbd",
+      "size": 4804
+    },
+    {
+      "path": "tools/maps/requirements.txt",
+      "sha": "e7cc6c178b542946a555ad07fa55b5dde3fca566",
+      "size": 15
+    },
+    {
+      "path": "tools/maps/santiago-centro.osm.xml.gz",
+      "sha": "b4bb4b39f640cf768e15d49cd161dc112f54eabb",
+      "size": 434548
+    },
+    {
+      "path": "tools/maps/santiago-centro.overpassql",
+      "sha": "14b600efb31fd30772683434ce66b6206d6427f4",
+      "size": 256
+    },
+    {
+      "path": "tools/maps/verify_atlas.py",
+      "sha": "e76c761d665f02907c3b6e06e64baed605e56ce0",
+      "size": 2006
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+LOCALCASH_FLOW_PASS
+PASS ACC-01: dos cuentas creadas desde formularios XML.
+PASS MOV-01: ingreso/egreso por UI; 100 + 50 - 24,50 = 125,50; monto 0/negativo rechazado.
+PASS cuenta inexistente rechazada.
+PASS overflow rechazado sin insertar.
+PASS integridad referencial SQLite.
+PASS DB-01: reapertura BD y Activities; datos recuperados.
+
+
+LOCALCASH_PURCHASE_PASS
+PASS compra atómica: fallo del segundo detalle revierte cabecera y primer detalle.
+PASS MIG-01: v1 real con dos cuentas y dos movimientos → v4, saldos 125,50 y 300,00 conservados.
+PASS CON/BUY-01/02/03: dos contactos por UI, compra realizada con dos ítems y total 232,00 vinculada a Ana; planificada con fecha futura sin contacto; historial y detalles.
+PASS regresión contable, persistencia v4, validaciones y ausencia de movimientos automáticos.
+
+
+UI hierchary dumped to: /sdcard/relaunch-check.xml
+UI hierchary dumped to: /sdcard/relaunch-check.xml
+UI hierchary dumped to: /sdcard/relaunch-check.xml
+UI hierchary dumped to: /sdcard/relaunch-check.xml
+UI hierchary dumped to: /sdcard/relaunch-check.xml
+UI hierchary dumped to: /sdcard/relaunch-check.xml
+LOCALCASH_RESTART_PASS
+LOCALCASH_SHARED_PASS
+PASS MIG-02: fixture SQLite v2→v4; snapshot exacto de cuentas, movimientos, contactos, compras y detalles intacto.
+PASS SHARED-DB: planificada/duplicados/negativo/desigual/overflow/contacto inválido rechazados; FK, PK, CHECK y rollback de segundo insert; total real revalidado, cuota cero persistida.
+PASS SHARED-UI: selección explícita, validación de 2+, reparto 100,01/3 y personalizado 20+30+50; errores visibles; lectura al volver, persistencia/reapertura y regresión contable.
+
+
+UI hierchary dumped to: /sdcard/shared-restart.xml
+UI hierchary dumped to: /sdcard/shared-restart.xml
+UI hierchary dumped to: /sdcard/shared-restart.xml
+UI hierchary dumped to: /sdcard/shared-restart.xml
+UI hierchary dumped to: /sdcard/shared-restart.xml
+UI hierchary dumped to: /sdcard/shared-restart.xml
+UI hierchary dumped to: /sdcard/shared-restart.xml
+UI hierchary dumped to: /sdcard/shared-restart.xml
+UI hierchary dumped to: /sdcard/shared-restart.xml
+LOCALCASH_SHARED_RESTART_PASS
+LOCALCASH_LOCATION_PASS
+PASS MIG-1: v1→v4, snapshot exacto, NULL antiguos, saldo y FK.
+PASS MIG-2: v2→v4, snapshot exacto, NULL antiguos, saldo y FK.
+PASS GEO-SQL: INSERT/UPDATE de par incompleto, rango, texto e infinito rechazados sin alterar registros.
+PASS MIG-3: v3→v4, snapshot exacto, NULL antiguos, saldo y FK.
+PASS GEO-PERM: sin solicitud automática; diálogo Android real denegado, movimiento guardado con NULL.
+GPS_EXPECTED: -33.45, -70.65999833333333
+PASS GEO-GPS: permiso concedido, callback LocationManager productivo, GPS inyectado por adb emu geo fix.
+PASS GEO-FALLBACK: consentimiento retirado, GPS desactivado y timeout real sin fix permiten guardar sin ubicación.
+PASS GEO-DB: reapertura, un par exacto y siete pares NULL; saldo y deudas preservados.
+
+
+UI hierchary dumped to: /sdcard/location.xml
+UI hierchary dumped to: /sdcard/location.xml
+UI hierchary dumped to: /sdcard/location.xml
+UI hierchary dumped to: /sdcard/location.xml
+UI hierchary dumped to: /sdcard/location.xml
+UI hierchary dumped to: /sdcard/location.xml
+LOCALCASH_LOCATION_RESTART_PASS
+LOCALCASH_BIOMETRIC_REGRESSION_PASS

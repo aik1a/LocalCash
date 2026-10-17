@@ -1,0 +1,1 @@
+PASS syntax: 10 Python files; 18 XML files. Static parsing only; not Android execution.
