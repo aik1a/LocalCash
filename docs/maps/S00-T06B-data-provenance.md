@@ -7,7 +7,7 @@ La consulta Overpass original está en tools/maps/santiago-centro.overpassql (so
 
 ## Licencia y acceso al extracto
 Datos © OpenStreetMap contributors; selección bajo ODbL 1.0: https://opendatacommons.org/licenses/odbl/1-0/. Atribución/copyright: https://www.openstreetmap.org/copyright. No es cartografía del estilo estándar OSM, sino render propio. El código/estilo propio es CC0; no modifica los derechos/avisos ODbL del dato subyacente. Ver LICENSE-OSM.txt.
-El mismo extracto comprimido y los avisos están incluidos dentro del APK en assets/maps/, de modo que un receptor puede obtener datos/algoritmo sin depender de acceso al repositorio privado: abrir el APK como ZIP y descomprimir el .gz. Entregar estos avisos con el atlas.
+El mismo extracto comprimido y los avisos están incluidos dentro del APK en assets/maps/ (AAPT expande el .gz a XML; ver APK-layout.md), de modo que un receptor puede obtener datos/algoritmo sin depender de acceso al repositorio privado: abrir el APK como ZIP y extraer assets/maps/santiago-centro.osm.xml (ya descomprimido). Entregar estos avisos con el atlas.
 
 ## Cobertura y límites
 Bbox WGS84 sur -33.465, oeste -70.675, norte -33.435, este -70.645. Centro (-33.450,-70.660), z14/15/16. Se dibujan todos los XYZ que intersectan la bbox; un tile de borde puede extenderse fuera de ella. La API devuelve completos los ways/nodos de borde; fuera del área declarada no se promete cartografía. Los puntos exteriores conservan coordenadas y se advierten en la pantalla.

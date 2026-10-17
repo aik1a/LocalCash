@@ -1,0 +1,2 @@
+wifi_on=0
+mobile_data=0

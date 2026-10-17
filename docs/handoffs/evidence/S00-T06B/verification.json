@@ -1,0 +1,80 @@
+{
+  "functional_sha": "c289b0614d9d891c6ea4cfcdeec48dabc342c459",
+  "build_exit_code": 0,
+  "domain_checks": 5483,
+  "apk_sha256": "c4161293f2b0f1bb7f145c5bb13ec7455b150ffff0d7867277a00a7a154384db",
+  "atlas_sha256": "f37bc75ae6e1c996d6527b411f805eb7bc304d898920a258d208d7acc605ab1d",
+  "extract_apk_entry": "assets/maps/santiago-centro.osm.xml",
+  "extract_apk_sha256": "8503f464f1fe48655a52b69eb75ca13a1a1069b5e79ee0798cfa65503e46f3b7",
+  "extract_source_gzip_sha256": "1aaa9a71b9453178345ac7ea47e273a66187a555368ecabe8ac1924408a3e27d",
+  "maps": "PASS API24/API36",
+  "regression": "PASS T03-T06C",
+  "branch": "task/S00-T06B-mapas",
+  "base": "9f13e3036aad9815020df3b59bea66a357f1fc9b",
+  "run_id": 39042930625,
+  "run_url": "https://github.com/aik1a/LocalCash/actions/runs/39042930625",
+  "jobs": [
+    {
+      "id": 117425906376,
+      "name": "validate (24)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 117425906567,
+      "name": "validate (36)",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 12104783307,
+      "name": "S00-T06B-API24-c289b0614d9d891c6ea4cfcdeec48dabc342c459",
+      "size_in_bytes": 5395173,
+      "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12104783307",
+      "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12104783307/zip",
+      "expired": false,
+      "created_at": "2026-10-17T15:05:28Z",
+      "expires_at": "2027-01-15T14:57:15Z",
+      "updated_at": "2026-10-17T15:05:28Z",
+      "digest": "sha256:21678a295baf3a94442b5dbcd94918aa2915e906cf5a962afb64621eb9f42557",
+      "workflow_run": {
+        "id": 39042930625,
+        "repository_id": 1407909272,
+        "head_repository_id": 1407909272,
+        "head_branch": "task/S00-T06B-mapas",
+        "head_sha": "c289b0614d9d891c6ea4cfcdeec48dabc342c459"
+      }
+    },
+    {
+      "id": 12104643986,
+      "name": "S00-T06B-API36-c289b0614d9d891c6ea4cfcdeec48dabc342c459",
+      "size_in_bytes": 5437515,
+      "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12104643986",
+      "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12104643986/zip",
+      "expired": false,
+      "created_at": "2026-10-17T15:07:51Z",
+      "expires_at": "2027-01-15T14:57:15Z",
+      "updated_at": "2026-10-17T15:07:51Z",
+      "digest": "sha256:f82c1c7bc42f8f0e7c1795637ac62a8a3e8161143c7171a984f3d33ad1c5b058",
+      "workflow_run": {
+        "id": 39042930625,
+        "repository_id": 1407909272,
+        "head_repository_id": 1407909272,
+        "head_branch": "task/S00-T06B-mapas",
+        "head_sha": "c289b0614d9d891c6ea4cfcdeec48dabc342c459"
+      }
+    }
+  ],
+  "sqlite_version": 4,
+  "min_sdk": 24,
+  "biometrics": "PASS API24/API36; eight protected routes",
+  "offline_first_open": "PASS global default network none and ConnectivityManager disconnected; no prior private atlas; no INTERNET permission",
+  "tile_pixels": "Exact decoded equality with archive at z14/15/16; >500 colors",
+  "map_render_marker_changed_pixels": 781,
+  "project_state_modified": false,
+  "adr002_modified": false,
+  "merge": false,
+  "task_closed": false
+}

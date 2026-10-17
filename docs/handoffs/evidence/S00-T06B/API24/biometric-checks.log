@@ -1,0 +1,20 @@
+PASS cancelación: sin contenido privado ni fallback.
+PASS dedo no enrolado: sin acceso.
+PASS error/bloqueo temporal Android: gate permanece cerrado.
+PASS éxito: cuentas/saldo visibles tras desafío.
+PASS navegación y rotación de pantalla privada: cuentas/movimientos, contactos, compras/detalles/deudas con sesión válida.
+PASS background: nuevo desafío antes de mostrar datos.
+PASS force-stop: sesión no sobrevive al proceso.
+PASS rotación: conserva desafío SDK y solo desbloquea con sensor.
+PASS restauración tras matar proceso en background: nuevo desafío, sin bloqueo permanente ni sesión heredada.
+PASS extra authenticated=true ignorado; sin autenticación no muestra datos.
+PASS intent interno directo protegido: MainActivity
+PASS intent interno directo protegido: CuentaActivity
+PASS intent interno directo protegido: ContactosActivity
+PASS intent interno directo protegido: ComprasActivity
+PASS intent interno directo protegido: NuevaCompraActivity
+PASS intent interno directo protegido: CompraDetalleActivity
+PASS intent interno directo protegido: RepartoActivity
+PASS intent interno directo protegido: MapaActivity
+PASS Activities internas no exportadas.
+LOCALCASH_BIOMETRIC_PASS
