@@ -14,9 +14,9 @@ Disponer antes del **19 de octubre de 2026** de una aplicación Android académi
 | S00-T02 | Paquete Java de presentación; build real en CI | CLOSED | Completado |
 | S00-T03 | Cuentas, movimientos, saldo y SQLite comprobados en emulador | **CLOSED** | 12 oct |
 | S00-T04 | Contactos, compras, ítems, historial, migración SQLite v2 y emulador PASS | **CLOSED** | 13 oct |
-| **S00-T05** | **Reparto equitativo/personalizado de compras entre contactos y deudas** | **READY** | 14–15 oct |
-| S00-T06 | Acceso biométrico, ubicación opcional y mapas interactivos; validar uso offline | PENDIENTE | 17 oct |
-| S00-T07 | Build de integración, comprobaciones manuales, trazabilidad, documentación y pauta de exposición | PENDIENTE | 18 oct |
+| S00-T05 | Reparto equitativo/personalizado de compras entre contactos y deudas | CLOSED | 13 oct |
+| S00-T06A / T06C / T06B | GPS opcional, biometría y mapas offline Santiago Centro; PR #6, #7 y #8 | CLOSED | 17 oct |
+| S00-T07 | Gate integral, firma APK/upgrade preservando datos, regresión, documentación y entrega | PENDING | 18 oct |
 
 Las fechas son **objetivos de organización**, no resultados ni garantías de implementación. Reservar tiempo antes del 19 para correcciones. No empezar simultáneamente tareas que dependan del mismo modelo de datos.
 
@@ -38,3 +38,7 @@ El build S00-T03, las pruebas de dominio, el flujo UI/SQLite y el relanzamiento 
 ## Relación con documentos históricos
 
 `docs/sprints/S01-...` hasta `S07-...` siguen siendo referencias de requisitos/arquitectura y pruebas. Esta planificación **reordena y agrupa la ejecución** por plazo; no autoriza cerrar anticipadamente esos sprints ni afirmar funcionalidades terminadas. Evitar duplicar tareas ya demostradas en el MVP.
+
+## Actualización operativa — 2026-10-17
+
+T06B fue integrada mediante [PR #8](https://github.com/aik1a/LocalCash/pull/8), merge `f1664ec4d87bf16cd9f7668cbda62e0ef0f406e9`; auditoría `docs/audits/S00/S00-T06B-audit.md` PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE, 97,5/100. T06A y T06C ya estaban cerradas. **S00 permanece IN_PROGRESS** hasta completar T07 y gate integral independiente. Cobertura de mapas Santiago Centro z14–16; dispositivo físico y actualización APK conservando datos no validados aún. H-01 documental pendiente T07.
