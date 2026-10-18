@@ -1,0 +1,192 @@
+[
+  {
+    "id": 11762057450,
+    "name": "S00-T03-eea0fbfc895f5d5e2cde6f3512407f3cc9c16cec",
+    "size_in_bytes": 289437,
+    "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11762057450",
+    "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11762057450/zip",
+    "expired": false,
+    "created_at": "2026-10-12T17:21:42Z",
+    "expires_at": "2027-01-10T17:16:46Z",
+    "updated_at": "2026-10-12T17:21:42Z",
+    "digest": "sha256:087c38912f49223833119796d45911b6afc943e0bc7686c58380b259f8a35860",
+    "workflow_run": {
+      "id": 38283139884,
+      "repository_id": 1407909272,
+      "head_repository_id": 1407909272,
+      "head_branch": "task/S00-T03-cuentas-movimientos",
+      "head_sha": "eea0fbfc895f5d5e2cde6f3512407f3cc9c16cec"
+    }
+  },
+  {
+    "id": 11766425002,
+    "name": "S00-T04-76480f7639a4ef2e2ec3121817307605ff9843d2",
+    "size_in_bytes": 523692,
+    "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11766425002",
+    "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11766425002/zip",
+    "expired": false,
+    "created_at": "2026-10-12T18:22:25Z",
+    "expires_at": "2027-01-10T18:16:24Z",
+    "updated_at": "2026-10-12T18:22:25Z",
+    "digest": "sha256:09df6e3bb3fd25d8c003a84df1602b4c99dba2eb569cf3ccf9cf9ba6e863038f",
+    "workflow_run": {
+      "id": 38289787487,
+      "repository_id": 1407909272,
+      "head_repository_id": 1407909272,
+      "head_branch": "task/S00-T04-contactos-compras",
+      "head_sha": "76480f7639a4ef2e2ec3121817307605ff9843d2"
+    }
+  },
+  {
+    "id": 11836165654,
+    "name": "S00-T05-45c70f7efa2bb2ffcdc2b7cb7af78c16ca1c1c50",
+    "size_in_bytes": 817790,
+    "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11836165654",
+    "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11836165654/zip",
+    "expired": false,
+    "created_at": "2026-10-13T17:47:09Z",
+    "expires_at": "2027-01-11T17:41:15Z",
+    "updated_at": "2026-10-13T17:47:09Z",
+    "digest": "sha256:2a6706391617e6763fc09ece1a465968781c9b40e5c12454ffc2d33a93bc8e18",
+    "workflow_run": {
+      "id": 38440658476,
+      "repository_id": 1407909272,
+      "head_repository_id": 1407909272,
+      "head_branch": "task/S00-T05-gastos-compartidos",
+      "head_sha": "45c70f7efa2bb2ffcdc2b7cb7af78c16ca1c1c50"
+    }
+  },
+  {
+    "id": 11863884007,
+    "name": "S00-T06A-ebc985dedfd61797bcf104b73b24ca9c6c926a1b",
+    "size_in_bytes": 1078165,
+    "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11863884007",
+    "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11863884007/zip",
+    "expired": false,
+    "created_at": "2026-10-14T02:02:05Z",
+    "expires_at": "2027-01-12T01:55:20Z",
+    "updated_at": "2026-10-14T02:02:05Z",
+    "digest": "sha256:e69534724d8a45411ab943d202054e5f694e73430816ec5906cfb8e9ac4d9968",
+    "workflow_run": {
+      "id": 38498296734,
+      "repository_id": 1407909272,
+      "head_repository_id": 1407909272,
+      "head_branch": "task/S00-T06A-ubicacion",
+      "head_sha": "ebc985dedfd61797bcf104b73b24ca9c6c926a1b"
+    }
+  },
+  {
+    "id": 11924252922,
+    "name": "S00-T06C-API24-0f79e6c57be54144b1a756b3aff3a9644b025ca8",
+    "size_in_bytes": 1367717,
+    "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11924252922",
+    "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11924252922/zip",
+    "expired": false,
+    "created_at": "2026-10-14T19:44:21Z",
+    "expires_at": "2027-01-12T19:36:23Z",
+    "updated_at": "2026-10-14T19:44:21Z",
+    "digest": "sha256:53848fae41221b560b050cc8d9a1779d563a63274680c7b658bc4b26331bf655",
+    "workflow_run": {
+      "id": 38625086287,
+      "repository_id": 1407909272,
+      "head_repository_id": 1407909272,
+      "head_branch": "task/S00-T06C-biometria",
+      "head_sha": "0f79e6c57be54144b1a756b3aff3a9644b025ca8"
+    }
+  },
+  {
+    "id": 11924053647,
+    "name": "S00-T06C-API36-0f79e6c57be54144b1a756b3aff3a9644b025ca8",
+    "size_in_bytes": 1398989,
+    "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11924053647",
+    "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/11924053647/zip",
+    "expired": false,
+    "created_at": "2026-10-14T19:48:07Z",
+    "expires_at": "2027-01-12T19:36:23Z",
+    "updated_at": "2026-10-14T19:48:07Z",
+    "digest": "sha256:e4472fe37740224176f15858e7d6b426d1b89bd2f78caf434ade13e67aab4f95",
+    "workflow_run": {
+      "id": 38625086287,
+      "repository_id": 1407909272,
+      "head_repository_id": 1407909272,
+      "head_branch": "task/S00-T06C-biometria",
+      "head_sha": "0f79e6c57be54144b1a756b3aff3a9644b025ca8"
+    }
+  },
+  {
+    "id": 12104783307,
+    "name": "S00-T06B-API24-c289b0614d9d891c6ea4cfcdeec48dabc342c459",
+    "size_in_bytes": 5395173,
+    "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12104783307",
+    "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12104783307/zip",
+    "expired": false,
+    "created_at": "2026-10-17T15:05:28Z",
+    "expires_at": "2027-01-15T14:57:15Z",
+    "updated_at": "2026-10-17T15:05:28Z",
+    "digest": "sha256:21678a295baf3a94442b5dbcd94918aa2915e906cf5a962afb64621eb9f42557",
+    "workflow_run": {
+      "id": 39042930625,
+      "repository_id": 1407909272,
+      "head_repository_id": 1407909272,
+      "head_branch": "task/S00-T06B-mapas",
+      "head_sha": "c289b0614d9d891c6ea4cfcdeec48dabc342c459"
+    }
+  },
+  {
+    "id": 12104643986,
+    "name": "S00-T06B-API36-c289b0614d9d891c6ea4cfcdeec48dabc342c459",
+    "size_in_bytes": 5437515,
+    "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12104643986",
+    "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12104643986/zip",
+    "expired": false,
+    "created_at": "2026-10-17T15:07:51Z",
+    "expires_at": "2027-01-15T14:57:15Z",
+    "updated_at": "2026-10-17T15:07:51Z",
+    "digest": "sha256:f82c1c7bc42f8f0e7c1795637ac62a8a3e8161143c7171a984f3d33ad1c5b058",
+    "workflow_run": {
+      "id": 39042930625,
+      "repository_id": 1407909272,
+      "head_repository_id": 1407909272,
+      "head_branch": "task/S00-T06B-mapas",
+      "head_sha": "c289b0614d9d891c6ea4cfcdeec48dabc342c459"
+    }
+  },
+  {
+    "id": 12106073736,
+    "name": "S00-T07A-API24-32dd6e0ff09143bfc55276d5084c18472769b4af",
+    "size_in_bytes": 5391064,
+    "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12106073736",
+    "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12106073736/zip",
+    "expired": false,
+    "created_at": "2026-10-17T15:59:23Z",
+    "expires_at": "2027-01-15T15:52:12Z",
+    "updated_at": "2026-10-17T15:59:23Z",
+    "digest": "sha256:101943ef20858a287cca8dc019902714d50fc7b1d7f38d60607cd35a34f1653b",
+    "workflow_run": {
+      "id": 39046939759,
+      "repository_id": 1407909272,
+      "head_repository_id": 1407909272,
+      "head_branch": "task/S00-T07A-integracion",
+      "head_sha": "32dd6e0ff09143bfc55276d5084c18472769b4af"
+    }
+  },
+  {
+    "id": 12105649198,
+    "name": "S00-T07A-API36-32dd6e0ff09143bfc55276d5084c18472769b4af",
+    "size_in_bytes": 5448818,
+    "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12105649198",
+    "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12105649198/zip",
+    "expired": false,
+    "created_at": "2026-10-17T16:04:47Z",
+    "expires_at": "2027-01-15T15:52:12Z",
+    "updated_at": "2026-10-17T16:04:47Z",
+    "digest": "sha256:9ab61141e5c36e2770b9a870136c1b4941dd99c65cd6164ed29c7daa14d918ab",
+    "workflow_run": {
+      "id": 39046939759,
+      "repository_id": 1407909272,
+      "head_repository_id": 1407909272,
+      "head_branch": "task/S00-T07A-integracion",
+      "head_sha": "32dd6e0ff09143bfc55276d5084c18472769b4af"
+    }
+  }
+]
