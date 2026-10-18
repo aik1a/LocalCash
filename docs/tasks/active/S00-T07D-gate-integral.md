@@ -1,6 +1,6 @@
 # Task Brief — S00-T07D: auditoría integral y gate de sprint
 
-**Sprint:** S00 · **Rol:** Auditor independiente; cierre posterior exclusivo del Orquestador · **Estado:** PLANNED (no iniciar hasta T07A/B/C aceptadas) · **Rama prevista:** `audit/S00-T07D-integral` o rama documental designada por Orquestador, desde main integrado.
+**Sprint:** S00 · **Rol:** Auditor independiente; cierre posterior exclusivo del Orquestador · **Estado:** READY (T07A/B/C integradas) · **Rama autorizada:** `audit/S00-T07D-integral`, desde main posterior a PR #11 y cierre administrativo T07C.
 
 ## Objetivo
 Evaluar de forma independiente si LocalCash cumple el encargo docente y si S00 puede cerrarse y entregarse.
