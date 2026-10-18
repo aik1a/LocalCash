@@ -1,6 +1,6 @@
 # Task Brief — S00-T07B: firma APK y actualización preservando datos
 
-**Sprint:** S00 · **Rol:** Codificador · **Estado:** PLANNED (habilitar tras evidencia base T07A) · **Rama prevista:** `task/S00-T07B-firma-upgrade`, desde main aceptado tras T07A.
+**Sprint:** S00 · **Rol:** Codificador · **Estado:** READY (T07A integrada mediante PR #9) · **Rama autorizada:** `task/S00-T07B-firma-upgrade`, desde main aceptado tras T07A.
 
 ## Objetivo
 Determinar con evidencia si un APK de LocalCash puede actualizar una instalación anterior preservando datos SQLite y documentar un procedimiento seguro de instalación.
