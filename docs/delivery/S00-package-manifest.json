@@ -1,0 +1,125 @@
+{
+  "task": "S00-T07C",
+  "prepared_date": "2026-10-18",
+  "baseline_sha": "9084b573ebe055485e3cdda11ca8db2d8df6a3bc",
+  "code_repository": "https://github.com/aik1a/LocalCash",
+  "code_source_archive": "https://github.com/aik1a/LocalCash/archive/9084b573ebe055485e3cdda11ca8db2d8df6a3bc.zip",
+  "apk": {
+    "run": 39046939759,
+    "artifact_id": 12105649198,
+    "compiled_sha": "32dd6e0ff09143bfc55276d5084c18472769b4af",
+    "artifact_zip_sha256": "9ab61141e5c36e2770b9a870136c1b4941dd99c65cd6164ed29c7daa14d918ab",
+    "entry": "app/build/outputs/apk/debug/app-debug.apk",
+    "package": "com.aik1a.localcash",
+    "version_code": 1,
+    "version_name": "1.0",
+    "min_sdk": 24,
+    "target_sdk": 36,
+    "sha256": "f6c188ae06db78a6068b64b69157b4fcfe776b6009561a1a0e9269086e9a83d0",
+    "certificate_sha256": "49d73d9652d1cbf9c9891fb90a3d01fc94a3f2a6dcb02aea8a20471b927f191a"
+  },
+  "teacher_pdf": {
+    "name": "LocalCash Proyecto Android.pdf",
+    "pages": 7,
+    "sha256": "eea19ac075c5105b9a6c24f2c6d925ecb273c6092a2f97c8c01e58f800f7c199"
+  },
+  "map": {
+    "tiles": 64,
+    "zooms": [
+      14,
+      15,
+      16
+    ],
+    "coverage": "Santiago Centro",
+    "sha256": "f37bc75ae6e1c996d6527b411f805eb7bc304d898920a258d208d7acc605ab1d",
+    "license": "ODbL 1.0, © OpenStreetMap contributors"
+  },
+  "ci": [
+    {
+      "id": 39042930625,
+      "head_sha": "c289b0614d9d891c6ea4cfcdeec48dabc342c459",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/aik1a/LocalCash/actions/runs/39042930625"
+    },
+    {
+      "id": 39046939759,
+      "head_sha": "32dd6e0ff09143bfc55276d5084c18472769b4af",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/aik1a/LocalCash/actions/runs/39046939759"
+    },
+    {
+      "id": 39082526083,
+      "head_sha": "ece84d4cc7f3eee816f24626094597e43883e169",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/aik1a/LocalCash/actions/runs/39082526083"
+    }
+  ],
+  "historical_main_certificates": 10,
+  "historical_compatible_distinct_pairs": 0,
+  "in_place_upgrade": "BLOCKED_SIGNER_MISMATCH",
+  "sqlite_preservation_after_upgrade": "NOT TESTED",
+  "not_tested": [
+    "Complete financial/GPS regression API24",
+    "Physical device and physical biometric sensor",
+    "Exclusively approximate location",
+    "Clean Android Studio Sync",
+    "Historical APK upgrade preserving data",
+    "Human manual walkthrough/exposition"
+  ],
+  "source_identity_with_compiled_commit": [
+    {
+      "path": "app",
+      "sha": "e1014d8f3a47856363fd72b413902c6ef8dea279",
+      "identical": true
+    },
+    {
+      "path": "build.gradle",
+      "sha": "3c54a514a2aa19c1781e14e3ba59cb6b2f6ae46f",
+      "identical": true
+    },
+    {
+      "path": "settings.gradle",
+      "sha": "082ee732d83004a03dfa9596bf16427492fcdd64",
+      "identical": true
+    },
+    {
+      "path": "gradle.properties",
+      "sha": "1f4ad0a15ad2a27b0a30d246d4ed6b5124ccb6fd",
+      "identical": true
+    },
+    {
+      "path": "gradle",
+      "sha": "afd6a019245454b82c42f438d0e2670f5d32a678",
+      "identical": true
+    },
+    {
+      "path": "gradlew",
+      "sha": "32abfec07b608014a095f72d8807aebc99c5d06f",
+      "identical": true
+    },
+    {
+      "path": "gradlew.bat",
+      "sha": "24c62d56f2d4a91975bd1aa72103d2ec628e449f",
+      "identical": true
+    },
+    {
+      "path": "tests",
+      "sha": "1fc4ddbbfa7e03a348527acca2628e10eb32f276",
+      "identical": true
+    }
+  ],
+  "documentation_files": [
+    "ARCHITECTURE.md",
+    "docs/design/ARCHITECTURE.md",
+    "docs/delivery/BUILD.md",
+    "docs/delivery/PRESENTATION.md",
+    "docs/requirements/TRACEABILITY.md",
+    "docs/delivery/S00-final-delivery.md",
+    "docs/delivery/S00-package-manifest.json",
+    "docs/handoffs/S00-T07C-coder.md"
+  ],
+  "source_delivery_limit": "Code remains in authenticated GitHub repository; companion ZIP contains docs/APK/evidence, not a complete code checkout."
+}
