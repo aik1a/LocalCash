@@ -25,9 +25,11 @@ jobs:
       - run: sdkmanager "build-tools;36.0.0"
       - name: Verify exact SHA and inventory retained APKs
         id: inventory
+        shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
           mkdir -p evidence
           git rev-parse HEAD | tee evidence/validated-sha.txt
           test "$(git rev-parse HEAD)" = "${{ github.sha }}"

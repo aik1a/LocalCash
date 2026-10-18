@@ -56,14 +56,16 @@ for artifact in SOURCES:
             apk.write_bytes(source.read(entry))
             signature = command([SDK / 'apksigner', 'verify', '--verbose', '--print-certs', apk], ROOT / f'{tag}-apksigner.log')
             badging = command([SDK / 'aapt', 'dump', 'badging', apk], ROOT / f'{tag}-badging.log')
-            package = re.search(r"^package: name='([^']+)' versionCode='([0-9]+)' versionName='([^']*)'", badging, re.M)
+            package = re.search(r"^package: name='([^']+)' versionCode='([0-9]*)' versionName='([^']*)'", badging, re.M)
             fingerprints = re.findall(r'^Signer #\d+ certificate SHA-256 digest: ([0-9a-fA-F]+)$', signature, re.M)
             if not package or not fingerprints:
                 raise AssertionError(f'Unrecognized metadata {tag}')
+            if package[1] == 'com.aik1a.localcash' and not package[2]:
+                raise AssertionError(f'Missing application versionCode {tag}')
             inventory.append({
                 'id': tag, 'artifact_id': artifact_id, 'entry': entry,
                 'apk_sha256': hashlib.sha256(apk.read_bytes()).hexdigest(),
-                'package': package[1], 'version_code': int(package[2]), 'version_name': package[3],
+                'package': package[1], 'version_code': int(package[2]) if package[2] else None, 'version_name': package[3],
                 'signer_sha256': sorted(f.lower() for f in fingerprints),
                 'certificate_dn': re.findall(r'^Signer #\d+ certificate DN: (.*)$', signature, re.M),
                 'schemes': re.findall(r'^(Verified using .*?: (?:true|false))$', signature, re.M),
