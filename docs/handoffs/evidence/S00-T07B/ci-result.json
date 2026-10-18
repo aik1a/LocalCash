@@ -1,0 +1,29 @@
+{
+  "run": 39082526083,
+  "job": 117542262210,
+  "sha": "ece84d4cc7f3eee816f24626094597e43883e169",
+  "conclusion": "success",
+  "artifact": {
+    "id": 12119172237,
+    "name": "S00-T07B-signatures-ece84d4cc7f3eee816f24626094597e43883e169",
+    "size_in_bytes": 43171666,
+    "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12119172237",
+    "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12119172237/zip",
+    "expired": false,
+    "created_at": "2026-10-18T00:23:14Z",
+    "expires_at": "2027-01-16T00:22:35Z",
+    "updated_at": "2026-10-18T00:23:14Z",
+    "digest": "sha256:73d1f7d482de6f64d6a48a6e7dbdcb47494d4ff39643c91e02b287b2dc498483",
+    "workflow_run": {
+      "id": 39082526083,
+      "repository_id": 1407909272,
+      "head_repository_id": 1407909272,
+      "head_branch": "task/S00-T07B-firma-upgrade",
+      "head_sha": "ece84d4cc7f3eee816f24626094597e43883e169"
+    }
+  },
+  "app_apk_build_sha": "32dd6e0ff09143bfc55276d5084c18472769b4af",
+  "upgrade_adb_executed": false,
+  "sqlite_upgrade_preservation": "NOT TESTED",
+  "diagnosis": "BLOCKED_SIGNER_MISMATCH"
+}

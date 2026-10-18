@@ -1,0 +1,1111 @@
+{
+  "tool": "Android SDK Build Tools 36.0.0 apksigner verify --verbose --print-certs / aapt dump badging",
+  "inventory": [
+    {
+      "id": "11762057450-0",
+      "artifact_id": 11762057450,
+      "entry": "app/build/outputs/apk/debug/app-debug.apk",
+      "apk_sha256": "840113ae00deaa046b2d02a62d8f021c1f6c468f26ff105d5da0c09c56dae603",
+      "package": "com.aik1a.localcash",
+      "version_code": 1,
+      "version_name": "1.0",
+      "signer_sha256": [
+        "663ca35e997038317416faa5be219126ea1350b8a7c199aff4be75cd8062a224"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "eea0fbfc895f5d5e2cde6f3512407f3cc9c16cec",
+      "run": 38283139884,
+      "artifact_zip_sha256": "sha256:087c38912f49223833119796d45911b6afc943e0bc7686c58380b259f8a35860",
+      "apksigner_exit": 0,
+      "role": "application"
+    },
+    {
+      "id": "11766425002-0",
+      "artifact_id": 11766425002,
+      "entry": "app/build/outputs/apk/debug/app-debug.apk",
+      "apk_sha256": "d15f90d9780fb9c073f3b5dcf0c1179c72db5e6ca832118080417c7a81cdf5fe",
+      "package": "com.aik1a.localcash",
+      "version_code": 1,
+      "version_name": "1.0",
+      "signer_sha256": [
+        "9c8254a44b7df2bc456bb93eb0cdd3726b80ecc0ea434dbfbdbc2e38ff6a7caf"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "76480f7639a4ef2e2ec3121817307605ff9843d2",
+      "run": 38289787487,
+      "artifact_zip_sha256": "sha256:09df6e3bb3fd25d8c003a84df1602b4c99dba2eb569cf3ccf9cf9ba6e863038f",
+      "apksigner_exit": 0,
+      "role": "application"
+    },
+    {
+      "id": "11836165654-0",
+      "artifact_id": 11836165654,
+      "entry": "app/build/outputs/apk/debug/app-debug.apk",
+      "apk_sha256": "da65e2f98e18c28dcbf670a2262df223ba30f304a377876ca8c938c289c87238",
+      "package": "com.aik1a.localcash",
+      "version_code": 1,
+      "version_name": "1.0",
+      "signer_sha256": [
+        "9b5ddf94b5ecfc900bc357e4eb4fd22e10ca33140db96017ecb0edb2e363f4c2"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "45c70f7efa2bb2ffcdc2b7cb7af78c16ca1c1c50",
+      "run": 38440658476,
+      "artifact_zip_sha256": "sha256:2a6706391617e6763fc09ece1a465968781c9b40e5c12454ffc2d33a93bc8e18",
+      "apksigner_exit": 0,
+      "role": "application"
+    },
+    {
+      "id": "11863884007-0",
+      "artifact_id": 11863884007,
+      "entry": "app/build/outputs/apk/debug/app-debug.apk",
+      "apk_sha256": "e2c9c934ddd285e4dabc5587f3751c35d93070eba92a2077437489aeae8c8117",
+      "package": "com.aik1a.localcash",
+      "version_code": 1,
+      "version_name": "1.0",
+      "signer_sha256": [
+        "e11799f7c93d1d0cf38b831e3ec29e359347a33a36e17196f674d09c080cd4aa"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "ebc985dedfd61797bcf104b73b24ca9c6c926a1b",
+      "run": 38498296734,
+      "artifact_zip_sha256": "sha256:e69534724d8a45411ab943d202054e5f694e73430816ec5906cfb8e9ac4d9968",
+      "apksigner_exit": 0,
+      "role": "application"
+    },
+    {
+      "id": "11924252922-0",
+      "artifact_id": 11924252922,
+      "entry": "app/build/outputs/apk/debug/app-debug.apk",
+      "apk_sha256": "9a0ae95f02ff2fd0f1da72b6c93009fdff85dfc22d465e0b7c6d4ac313278e71",
+      "package": "com.aik1a.localcash",
+      "version_code": 1,
+      "version_name": "1.0",
+      "signer_sha256": [
+        "683d4526c087d2b5f9d3669b8124ebf46a035cc1ce579c41758239fb39cab50b"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "0f79e6c57be54144b1a756b3aff3a9644b025ca8",
+      "run": 38625086287,
+      "artifact_zip_sha256": "sha256:53848fae41221b560b050cc8d9a1779d563a63274680c7b658bc4b26331bf655",
+      "apksigner_exit": 0,
+      "role": "application"
+    },
+    {
+      "id": "11924053647-0",
+      "artifact_id": 11924053647,
+      "entry": "app/build/outputs/apk/debug/app-debug.apk",
+      "apk_sha256": "aa136956836bf9ca8839bff6cf81e1e911e927f5f9394a76bd8fa9e48c9b6c1d",
+      "package": "com.aik1a.localcash",
+      "version_code": 1,
+      "version_name": "1.0",
+      "signer_sha256": [
+        "dabb07e4c5f2eafa52dafd87f45719ced87000d68d2d7c609121c31e00ac25ce"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "0f79e6c57be54144b1a756b3aff3a9644b025ca8",
+      "run": 38625086287,
+      "artifact_zip_sha256": "sha256:e4472fe37740224176f15858e7d6b426d1b89bd2f78caf434ade13e67aab4f95",
+      "apksigner_exit": 0,
+      "role": "application"
+    },
+    {
+      "id": "12104783307-0",
+      "artifact_id": 12104783307,
+      "entry": "app/build/outputs/apk/debug/app-debug.apk",
+      "apk_sha256": "0e21dd4436ad24412923b590ff621e3601bf533435fe9c72baaa3cd0491a5a79",
+      "package": "com.aik1a.localcash",
+      "version_code": 1,
+      "version_name": "1.0",
+      "signer_sha256": [
+        "2537053221563de33121b9085c8102facaa10de98d021951a6dd7ac5b957ffa0"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "c289b0614d9d891c6ea4cfcdeec48dabc342c459",
+      "run": 39042930625,
+      "artifact_zip_sha256": "sha256:21678a295baf3a94442b5dbcd94918aa2915e906cf5a962afb64621eb9f42557",
+      "apksigner_exit": 0,
+      "role": "application"
+    },
+    {
+      "id": "12104783307-1",
+      "artifact_id": 12104783307,
+      "entry": "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk",
+      "apk_sha256": "d8f072abfa0372125129a0b2dfd27bb7991cc06a884c2a46e1885be6eb889191",
+      "package": "com.aik1a.localcash.test",
+      "version_code": null,
+      "version_name": "",
+      "signer_sha256": [
+        "2537053221563de33121b9085c8102facaa10de98d021951a6dd7ac5b957ffa0"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "c289b0614d9d891c6ea4cfcdeec48dabc342c459",
+      "run": 39042930625,
+      "artifact_zip_sha256": "sha256:21678a295baf3a94442b5dbcd94918aa2915e906cf5a962afb64621eb9f42557",
+      "apksigner_exit": 0,
+      "role": "instrumentation"
+    },
+    {
+      "id": "12104643986-0",
+      "artifact_id": 12104643986,
+      "entry": "app/build/outputs/apk/debug/app-debug.apk",
+      "apk_sha256": "c4161293f2b0f1bb7f145c5bb13ec7455b150ffff0d7867277a00a7a154384db",
+      "package": "com.aik1a.localcash",
+      "version_code": 1,
+      "version_name": "1.0",
+      "signer_sha256": [
+        "acabb162a6cb0ad28064b5ed9d8a275c58ac008f00f6753c53ba6ed4b9890ae9"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "c289b0614d9d891c6ea4cfcdeec48dabc342c459",
+      "run": 39042930625,
+      "artifact_zip_sha256": "sha256:f82c1c7bc42f8f0e7c1795637ac62a8a3e8161143c7171a984f3d33ad1c5b058",
+      "apksigner_exit": 0,
+      "role": "application"
+    },
+    {
+      "id": "12104643986-1",
+      "artifact_id": 12104643986,
+      "entry": "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk",
+      "apk_sha256": "708e4fc040bf99aa182743a19c00561c5ad920038ddb2e4ecb07907f3c72a1de",
+      "package": "com.aik1a.localcash.test",
+      "version_code": null,
+      "version_name": "",
+      "signer_sha256": [
+        "acabb162a6cb0ad28064b5ed9d8a275c58ac008f00f6753c53ba6ed4b9890ae9"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "c289b0614d9d891c6ea4cfcdeec48dabc342c459",
+      "run": 39042930625,
+      "artifact_zip_sha256": "sha256:f82c1c7bc42f8f0e7c1795637ac62a8a3e8161143c7171a984f3d33ad1c5b058",
+      "apksigner_exit": 0,
+      "role": "instrumentation"
+    },
+    {
+      "id": "12106073736-0",
+      "artifact_id": 12106073736,
+      "entry": "app/build/outputs/apk/debug/app-debug.apk",
+      "apk_sha256": "90c177bd383da6d7d85f0fa048f29d8997d32298b5095dd86f550d873cd606ac",
+      "package": "com.aik1a.localcash",
+      "version_code": 1,
+      "version_name": "1.0",
+      "signer_sha256": [
+        "3c57bd7d9da58cc64c693700640903f95fc83fcaebe50ea2ad56a97ff605194b"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "32dd6e0ff09143bfc55276d5084c18472769b4af",
+      "run": 39046939759,
+      "artifact_zip_sha256": "sha256:101943ef20858a287cca8dc019902714d50fc7b1d7f38d60607cd35a34f1653b",
+      "apksigner_exit": 0,
+      "role": "application"
+    },
+    {
+      "id": "12106073736-1",
+      "artifact_id": 12106073736,
+      "entry": "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk",
+      "apk_sha256": "567520c34f872b0798069810529e17bc8a3b605ba485cd9932972cf8620ee304",
+      "package": "com.aik1a.localcash.test",
+      "version_code": null,
+      "version_name": "",
+      "signer_sha256": [
+        "3c57bd7d9da58cc64c693700640903f95fc83fcaebe50ea2ad56a97ff605194b"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "32dd6e0ff09143bfc55276d5084c18472769b4af",
+      "run": 39046939759,
+      "artifact_zip_sha256": "sha256:101943ef20858a287cca8dc019902714d50fc7b1d7f38d60607cd35a34f1653b",
+      "apksigner_exit": 0,
+      "role": "instrumentation"
+    },
+    {
+      "id": "12105649198-0",
+      "artifact_id": 12105649198,
+      "entry": "app/build/outputs/apk/debug/app-debug.apk",
+      "apk_sha256": "f6c188ae06db78a6068b64b69157b4fcfe776b6009561a1a0e9269086e9a83d0",
+      "package": "com.aik1a.localcash",
+      "version_code": 1,
+      "version_name": "1.0",
+      "signer_sha256": [
+        "49d73d9652d1cbf9c9891fb90a3d01fc94a3f2a6dcb02aea8a20471b927f191a"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "32dd6e0ff09143bfc55276d5084c18472769b4af",
+      "run": 39046939759,
+      "artifact_zip_sha256": "sha256:9ab61141e5c36e2770b9a870136c1b4941dd99c65cd6164ed29c7daa14d918ab",
+      "apksigner_exit": 0,
+      "role": "application"
+    },
+    {
+      "id": "12105649198-1",
+      "artifact_id": 12105649198,
+      "entry": "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk",
+      "apk_sha256": "025c89976efe19a17266bf8a21d0ea577b7ce2db8bfe8692cf994f704873c14d",
+      "package": "com.aik1a.localcash.test",
+      "version_code": null,
+      "version_name": "",
+      "signer_sha256": [
+        "49d73d9652d1cbf9c9891fb90a3d01fc94a3f2a6dcb02aea8a20471b927f191a"
+      ],
+      "certificate_dn": [
+        "C=US, O=Android, CN=Android Debug"
+      ],
+      "schemes": [
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): false",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false"
+      ],
+      "commit": "32dd6e0ff09143bfc55276d5084c18472769b4af",
+      "run": 39046939759,
+      "artifact_zip_sha256": "sha256:9ab61141e5c36e2770b9a870136c1b4941dd99c65cd6164ed29c7daa14d918ab",
+      "apksigner_exit": 0,
+      "role": "instrumentation"
+    }
+  ],
+  "compatibility": [
+    {
+      "from": "11762057450-0",
+      "to": "11766425002-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11762057450-0",
+      "to": "11836165654-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11762057450-0",
+      "to": "11863884007-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11762057450-0",
+      "to": "11924252922-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11762057450-0",
+      "to": "11924053647-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11762057450-0",
+      "to": "12104783307-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11762057450-0",
+      "to": "12104643986-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11762057450-0",
+      "to": "12106073736-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11762057450-0",
+      "to": "12105649198-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11766425002-0",
+      "to": "11762057450-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11766425002-0",
+      "to": "11836165654-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11766425002-0",
+      "to": "11863884007-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11766425002-0",
+      "to": "11924252922-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11766425002-0",
+      "to": "11924053647-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11766425002-0",
+      "to": "12104783307-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11766425002-0",
+      "to": "12104643986-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11766425002-0",
+      "to": "12106073736-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11766425002-0",
+      "to": "12105649198-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11836165654-0",
+      "to": "11762057450-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11836165654-0",
+      "to": "11766425002-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11836165654-0",
+      "to": "11863884007-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11836165654-0",
+      "to": "11924252922-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11836165654-0",
+      "to": "11924053647-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11836165654-0",
+      "to": "12104783307-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11836165654-0",
+      "to": "12104643986-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11836165654-0",
+      "to": "12106073736-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11836165654-0",
+      "to": "12105649198-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11863884007-0",
+      "to": "11762057450-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11863884007-0",
+      "to": "11766425002-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11863884007-0",
+      "to": "11836165654-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11863884007-0",
+      "to": "11924252922-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11863884007-0",
+      "to": "11924053647-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11863884007-0",
+      "to": "12104783307-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11863884007-0",
+      "to": "12104643986-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11863884007-0",
+      "to": "12106073736-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11863884007-0",
+      "to": "12105649198-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924252922-0",
+      "to": "11762057450-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924252922-0",
+      "to": "11766425002-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924252922-0",
+      "to": "11836165654-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924252922-0",
+      "to": "11863884007-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924252922-0",
+      "to": "11924053647-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924252922-0",
+      "to": "12104783307-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924252922-0",
+      "to": "12104643986-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924252922-0",
+      "to": "12106073736-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924252922-0",
+      "to": "12105649198-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924053647-0",
+      "to": "11762057450-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924053647-0",
+      "to": "11766425002-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924053647-0",
+      "to": "11836165654-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924053647-0",
+      "to": "11863884007-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924053647-0",
+      "to": "11924252922-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924053647-0",
+      "to": "12104783307-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924053647-0",
+      "to": "12104643986-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924053647-0",
+      "to": "12106073736-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "11924053647-0",
+      "to": "12105649198-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104783307-0",
+      "to": "11762057450-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104783307-0",
+      "to": "11766425002-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104783307-0",
+      "to": "11836165654-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104783307-0",
+      "to": "11863884007-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104783307-0",
+      "to": "11924252922-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104783307-0",
+      "to": "11924053647-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104783307-0",
+      "to": "12104643986-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104783307-0",
+      "to": "12106073736-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104783307-0",
+      "to": "12105649198-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104643986-0",
+      "to": "11762057450-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104643986-0",
+      "to": "11766425002-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104643986-0",
+      "to": "11836165654-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104643986-0",
+      "to": "11863884007-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104643986-0",
+      "to": "11924252922-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104643986-0",
+      "to": "11924053647-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104643986-0",
+      "to": "12104783307-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104643986-0",
+      "to": "12106073736-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12104643986-0",
+      "to": "12105649198-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12106073736-0",
+      "to": "11762057450-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12106073736-0",
+      "to": "11766425002-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12106073736-0",
+      "to": "11836165654-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12106073736-0",
+      "to": "11863884007-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12106073736-0",
+      "to": "11924252922-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12106073736-0",
+      "to": "11924053647-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12106073736-0",
+      "to": "12104783307-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12106073736-0",
+      "to": "12104643986-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12106073736-0",
+      "to": "12105649198-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12105649198-0",
+      "to": "11762057450-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12105649198-0",
+      "to": "11766425002-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12105649198-0",
+      "to": "11836165654-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12105649198-0",
+      "to": "11863884007-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12105649198-0",
+      "to": "11924252922-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12105649198-0",
+      "to": "11924053647-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12105649198-0",
+      "to": "12104783307-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12105649198-0",
+      "to": "12104643986-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    },
+    {
+      "from": "12105649198-0",
+      "to": "12106073736-0",
+      "same_package": true,
+      "same_signer": false,
+      "compatible": false,
+      "reason": "SIGNER_MISMATCH"
+    }
+  ],
+  "compatible_distinct_pairs": 0,
+  "limitations": [
+    "Inventory limited to retained accepted T03\u2013T07A delivery runs; no user device APK supplied.",
+    "Self-reinstallation of an identical APK is not a historical version upgrade.",
+    "Signature lineage rotation is not introduced or inferred."
+  ]
+}

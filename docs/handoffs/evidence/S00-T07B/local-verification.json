@@ -1,0 +1,10 @@
+{
+  "result": "PASS",
+  "exit_code": 0,
+  "source_zips_verified": 10,
+  "apk_hashes_and_der_fingerprints_cross_checked": 14,
+  "unique_application_signers": 10,
+  "incompatible_ordered_pairs": 90,
+  "compatible_distinct_pairs": 0,
+  "method": "zip CRC/SHA256; APK v2 certificate DER extraction/hash cross-check against official apksigner output; no local crypto signature verification or emulator execution"
+}
