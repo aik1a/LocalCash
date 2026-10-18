@@ -9,7 +9,7 @@
 - SHA final auditado: `2285deaf1e5f03754b9d705ebd7713087c1d4bc6`.
 - SHA técnico ejecutado: `ece84d4cc7f3eee816f24626094597e43883e169`.
 - Base main y merge-base contrastados: `68e853fc4cc726500bb03dcbf9877a3a1e1936e2`.
-- SHA del commit documental inicial de esta auditoría: PENDIENTE_REGISTRO.
+- SHA del commit documental inicial de esta auditoría: `95033dae0012f7a9d0c79ba3086cbc83184e13e5`.
 - Task Brief: docs/tasks/active/S00-T07B-firma-upgrade.md.
 - Handoff: docs/handoffs/S00-T07B-coder.md.
 - Tipo: gate de integración T07B; no auditoría integral T07D ni cierre S00.
