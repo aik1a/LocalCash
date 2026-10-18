@@ -1,26 +1,55 @@
 # Matriz de trazabilidad
 
-Esta matriz conecta requisitos con diseño, sprint, código y validación. Debe actualizarse en la misma iteración que la implementación.
+**Revisión T07C: 2026-10-18.** Fuente normativa: PDF docente, páginas 3–6; traducción canónica en [PROJECT_SPEC](PROJECT_SPEC.md). Se revisa documentación, no requisitos ni estados administrativos. Base inspeccionada: 9084b573ebe055485e3cdda11ca8db2d8df6a3bc.
 
-| Requisito | Diseño principal | Sprint | Código | Prueba | Estado |
-|---|---|---:|---|---|---|
-| LC-P01 | ARCHITECTURE | S00 / T01-T02 | `app/build.gradle`, `app/src/main/java/com/aik1a/localcash/presentation/MainActivity.java`, XML y manifiesto | BUILD-01; Actions run `38267899607` (S00-T02, SHA exacto), auditoría favorable | Proyecto base y estructura presentacional integrados; T01-T02 CLOSED |
-| LC-P02 / LC-TECH-01 | DATABASE / ADR-001 | S00-T03 | `LocalCashDbHelper`, repositories de cuentas/movimientos | DB-01 / Actions run `38283139884` | Implementado en flujo T03; otros módulos pendientes |
-| LC-P03 / LC-AUTH-01 / LC-TECH-02 | ARCHITECTURE | S00-T06C | `AccesoActivity`, `ActividadProtegida`, `LocalCashApplication`, ocho rutas protegidas (incluido mapa); AndroidX Biometric 1.1.0 | AUTH-01: CI `38625086287`, API24/API36, huella emulada, cancelación, bloqueo, rutas directas, reentrada y regresión | Implementado; T06C CLOSED, PR #7 |
-| LC-CON-01 | DOMAIN_MODEL / DATABASE | S00-T04 | `Contacto`, `ContactoRepository`, `ContactosActivity` | CON-01, CI `38289787487` | Implementado, T04 CLOSED |
-| LC-ACC-01 | DOMAIN_MODEL / DATABASE | S00-T03 | `Cuenta`, `CuentaRepository`, `MainActivity` | ACC-01, dos cuentas en emulador | Implementado (crear/listar/consultar saldo) |
-| LC-MOV-01 | DOMAIN_MODEL / DATABASE | S00-T03 | `Movimiento`, `MovimientoService`, `CuentaActivity` | MOV-01, ingreso/egreso/persistencia en emulador | Implementado (registro/historial) |
-| LC-MOV-02 | DOMAIN_MODEL / DATABASE | S00-T06A | `Ubicacion`, `Movimiento`, `MovimientoService`, `MovimientoRepository`, `LocalCashDbHelper`, `CapturaUbicacion`, `CuentaActivity` | GEO-01: CI `38498296734`, 23 checks ubicación, SQLite v1/v2/v3→v4, GPS/permisos/emulador/relanzamiento | Implementado; T06A CLOSED |
-| LC-P04 / LC-MAP-01 / LC-TECH-03 | ARCHITECTURE / ADR-002 | S00-T06B | `MapaActivity`, `MapaLocalView`, `AtlasOffline`, osmdroid 6.1.18, `OfflineTileProvider`, atlas OSM ZIP Santiago Centro z14–16 y marcadores SQLite v4 | MAP-01: [CI 39042930625](https://github.com/aik1a/LocalCash/actions/runs/39042930625) API24/API36, instalación limpia offline, biometría, marcadores, lifecycle; [auditoría](../audits/S00/S00-T06B-audit.md) | Implementado; T06B CLOSED, PR #8 |
-| LC-BUY-01 | DOMAIN_MODEL / DATABASE | S00-T04 | `Compra`, `DetalleCompra`, `CompraRepository`, UI | BUY-01, compras/historial/ítems UI | Implementado, T04 CLOSED |
-| LC-BUY-02 | BUSINESS_RULES / DATABASE | S00-T04 | `Compra.Estado`, `NuevaCompraActivity` | BUY-02, estado/fecha futura | Implementado, T04 CLOSED |
-| LC-BUY-03 | BUSINESS_RULES / DATABASE | S00-T04 | compra.contacto_id FK, `CompraService` | BUY-03, vínculo opcional | Implementado, T04 CLOSED |
-| LC-SHARED-01 | DOMAIN_MODEL / DATABASE | S00-T05 | `Compra`, `DetalleCompra`, `Reparto`, `Deuda`, `DeudaService`, `DeudaRepository`, `RepartoActivity` | SHARE-01: UI e ítems compra; CI `38440658476` | Implementado; T05 CLOSED |
-| LC-SHARED-02 | BUSINESS_RULES / DOMAIN_MODEL | S00-T05 | `Reparto`, `DeudaService`, `RepartoActivity`, agenda existente | SHARE-02: 2+ contactos distintos y selección explícita en FlowChecks | Implementado; T05 CLOSED |
-| LC-DEBT-01 | BUSINESS_RULES / DATABASE | S00-T05 | `Deuda`, `DeudaRepository`, `RepartoActivity`, tabla `deudas` SQLite v3 | DEBT-01: consulta, migración v2→v3, integridad, rollback y relanzamiento, CI `38440658476` | Implementado; T05 CLOSED |
-| LC-DEBT-02 | BUSINESS_RULES / DOMAIN_MODEL | S00-T05 | `Reparto.equitativo`, `Reparto.personalizado`, `DeudaService` | DEBT-02: 100,01/3, 20+30+50, cero, negativo, overflow, 5.427 checks de reparto | Implementado; T05 CLOSED |
-| LC-TECH-05 | docs/ | S00/S07 | `docs/design/PACKAGE_STRUCTURE.md`; documentación BUILD | Evidencia/handoffs S00-T01 y S00-T02 | En progreso; estructura inicial documentada |
-| LC-TECH-06 | delivery/PRESENTATION | S07 | Pendiente | DEMO-01 | Pendiente |
+La tabla siguiente refleja el incremento integrado. Las entradas históricas al final conservan el estado de cada fecha; no son pendientes vigentes por sí mismas.
+
+## Estado contrastado actual
+
+Rutas de código abreviadas por clase: clases presentation/application/data/domain bajo app/src/main/java/com/aik1a/localcash/. [Arquitectura canónica](../../ARCHITECTURE.md) · [Esquema SQLite](../design/DATABASE.md).
+
+| Requisito | Correspondencia docente | Código/documento real | Evidencia | Alcance y límite |
+|---|---|---|---|---|
+| LC-P01 | Java nativo | app/build.gradle; presentation y layouts XML | Build T07A, ambos assemble exit 0 | Implementado; Sync Studio limpio NOT TESTED |
+| LC-P02 / LC-TECH-01 | SQLite local | LocalCashDbHelper v4; seis tablas; repositories | T07A, snapshots/migraciones/rollback/reinicio API36 | Implementado; upgrade APK con datos NOT TESTED |
+| LC-P03 / LC-AUTH-01 / LC-TECH-02 | Biometría Android | AccesoActivity, ActividadProtegida, LocalCashApplication; ocho rutas | T07A API24/API36, sensor emulado y rutas directas | Implementado y probado en AVD; físico NOT TESTED |
+| LC-P04 / LC-MAP-01 / LC-TECH-03 | Mapa interactivo offline | MapaActivity, MapaLocalView, AtlasOffline; osmdroid 6.1.18 | T06B y T07A API24/API36: base real, marcadores, offline/lifecycle | Implementado; Santiago Centro z14–16 |
+| LC-CON-01 | Directorio local | Contacto, ContactoRepository, ContactosActivity | T07A purchase-flow.log y relanzamiento API36 | Crear/listar y vínculo local implementados |
+| LC-ACC-01 | Cuentas múltiples | Cuenta, CuentaRepository, MovimientoService, MainActivity | T07A android-flow.log: dos cuentas/saldos API36 | Crear/listar/consultar saldo; sin catálogo de tipos ni edición/borrado general |
+| LC-MOV-01 | Ingresos/egresos | Movimiento, MovimientoService, MovimientoRepository, CuentaActivity | T07A android-flow.log, invalidaciones y persistencia API36 | Implementado; saldo derivado |
+| LC-MOV-02 | Ubicación opcional | Ubicacion, CapturaUbicacion; columnas latitud/longitud | T07A location-flow.log, permisos/fix/timeout/reinicio API36 | Implementado; exclusivamente aproximada NOT TESTED |
+| LC-BUY-01 | Compras/historial/ítems | Compra, DetalleCompra, CompraRepository y Activities | T07A purchase-flow.log y restart-checks.log API36 | Implementado; sin cargo automático a cuentas |
+| LC-BUY-02 | Adquisiciones futuras | Compra.Estado.PLANIFICADA, fecha, NuevaCompraActivity | T07A fecha futura/total estimado API36 | Implementado como registro planificado; sin recordatorios |
+| LC-BUY-03 | Vínculo con contacto | compra.contacto_id opcional; CompraService | T07A compra realizada con Ana y planificada sin contacto API36 | Vínculo local implementado; no envío/notificación remota |
+| LC-SHARED-01 | Compra compartida detallada | DetalleCompra, CompraService, RepartoActivity | T07A shared-flow.log API36; ítems y total real | Implementado; se reparte total, no ítems individualmente |
+| LC-SHARED-02 | Participantes desde agenda | ContactoRepository, DeudaService, selección explícita | T07A 2+ contactos distintos seleccionados API36 | Implementado; contacto de compra no se añade automáticamente |
+| LC-DEBT-01 | Deuda por participante | Deuda, DeudaRepository, tabla deudas en v4 | T07A FK/PK/CHECK/rollback/reinicio API36 | Monto PENDIENTE persistido; sin pago parcial ni marcar pagada |
+| LC-DEBT-02 | Reparto equitativo/personalizado | Reparto y DeudaService | T07A 100,01/3 y 20+30+50; 5427 checks reparto por job | Implementado; suma exacta y orden de resto por ID |
+| LC-TECH-04 | Código fuente completo Git | Repositorio Android: app, wrapper, scripts y recursos | Árbol Git y código inspeccionados T07C; base posterior PR #10 | Disponible en repositorio privado con acceso autorizado |
+| LC-TECH-05 | Documentación técnica | ARCHITECTURE.md; docs/design/DATABASE.md; docs/delivery/BUILD.md | Contraste T07C con código, PDF y CI; historial conservado | Documentación actualizada; auditoría independiente T07C pendiente |
+| LC-TECH-06 | Pauta de exposición | docs/delivery/PRESENTATION.md y S00-final-delivery.md | Guion/datos esperados/checklist T07C | Material preparado; exposición/recorrido manual humano NOT TESTED |
+
+## Referencias de validación y límites transversales
+
+- [CI T07A 39046939759](https://github.com/aik1a/LocalCash/actions/runs/39046939759), SHA 32dd6e0ff09143bfc55276d5084c18472769b4af: ambos assemble PASS/0 y 5483 comprobaciones por API24/API36; [informe](../testing/S00-T07A.md) y [auditoría](../audits/S00/S00-T07A-audit.md).
+- [CI T06B 39042930625](https://github.com/aik1a/LocalCash/actions/runs/39042930625): cartografía real OSM y gate biométrico; [auditoría](../audits/S00/S00-T06B-audit.md).
+- [CI T07B 39082526083](https://github.com/aik1a/LocalCash/actions/runs/39082526083), SHA ece84d4cc7f3eee816f24626094597e43883e169: diez certificados principales distintos, cero pares compatibles entre inventariados. Actualización in-place **BLOCKED_SIGNER_MISMATCH**; conservación SQLite después de actualizar **NOT TESTED**. [Informe](../testing/S00-T07B.md) y [auditoría](../audits/S00/S00-T07B-audit.md).
+- Regresión financiera/GPS completa API24: NOT TESTED. Dispositivo físico: NOT TESTED. GPS exclusivamente aproximado: NOT TESTED. Sync Android Studio desde entorno limpio: NOT TESTED. Exposición/recorrido manual humano: NOT TESTED.
+- “Implementado” identifica código contrastado y los escenarios probados; no significa cumplimiento exhaustivo en toda plataforma ni cierre de S00.
+
+El PDF permite enlace de compra con contacto para notificar **o** mantener registro conjunto: se implementa vínculo local, no notificación remota. “Programar” se materializa como estado/fecha futura, sin temporizador/recordatorio. El reparto del total mantiene los productos detallados conforme a la decisión mínima aprobada T05. La “privacidad absoluta” del resumen docente no se transforma en garantía técnica: hay gate Android/almacenamiento local, no cifrado de SQLite declarado.
+
+## Comprobación de los entregables académicos
+
+| PDF p.6 | Entrega versionada | Estado documental |
+|---|---|---|
+| Repositorio GitHub con código completo Java/SQLite/biometría/mapas/módulos | Repositorio y rutas de código; acceso autorizado al repo privado | Disponible |
+| Arquitectura, estructura SQLite, dependencias y compilación/ejecución | ARCHITECTURE, DATABASE y BUILD enlazados arriba | Actualizado T07C, pendiente auditoría |
+| Pauta de exposición y demostración offline | [PRESENTATION](../delivery/PRESENTATION.md) y [paquete académico](../delivery/S00-final-delivery.md) | Preparado; exposición no ejecutada |
+
+## Registro histórico — conservar contexto de cada fecha
+
+Las referencias/pendientes de esta sección describen la fecha de su registro. La tabla actual y los informes T07A/T07B anteriores prevalecen para conocer lo implementado. Se corrige únicamente el enlace de T06B al brief ya archivado; no se cambian resultados ni fechas históricos.
 
 ## Cierre S00-T01 — 2026-10-12
 
@@ -82,7 +111,7 @@ S00-T02 fue cerrada el 2026-10-12; S00-T03 quedó READY. El sprint S00 continúa
 ## Cierre S00-T06C y habilitación T06B — 2026-10-16
 
 - **Biometría (LC-P03/AUTH-01/TECH-02):** código funcional SHA `0f79e6c57be54144b1a756b3aff3a9644b025ca8`; [CI 38625086287](https://github.com/aik1a/LocalCash/actions/runs/38625086287) API24 y API36: build exit 0, 5483 comprobaciones dominio cada job, sesión, prompt, siete Activities, cancelación/error/reentrada y regreso de segundo plano PASS, regresión T03–T06A PASS en API36. [Auditoría T06C](../audits/S00/S00-T06C-audit.md): PASS WITH OBSERVATIONS/APPROVED_FOR_MERGE. [PR #7](https://github.com/aik1a/LocalCash/pull/7) fusionado, `1c944cde59ed6aba8e8af2f9529b29435e40af59`. Brief en `docs/tasks/completed/S00-T06C-biometria.md`.
-- **Mapas (LC-P04/MAP-01/TECH-03):** diseño aprobado por [ADR-002](../design/decisions/ADR-002-osmdroid-cartografia-offline.md) y [Task Brief T06B](../tasks/active/S00-T06B-mapas.md) READY. La cartografía **no está generada ni implementada**; no marcar cumplimiento MAP-01 hasta aportar ZIP offline y CI de instalación limpia sin red.
+- **Mapas (LC-P04/MAP-01/TECH-03):** diseño aprobado por [ADR-002](../design/decisions/ADR-002-osmdroid-cartografia-offline.md) y [Task Brief T06B](../tasks/completed/S00-T06B-mapas.md) READY. La cartografía **no está generada ni implementada**; no marcar cumplimiento MAP-01 hasta aportar ZIP offline y CI de instalación limpia sin red.
 - **T07:** pendientes firma/upgrade, validación integral, soporte físico cuando disponible, corrección de discrepancias documentales heredadas y entrega.
 
 ## Cierre S00-T06B y habilitación T07 — 2026-10-17
@@ -93,3 +122,4 @@ S00-T02 fue cerrada el 2026-10-12; S00-T03 quedó READY. El sprint S00 continúa
 - **Implementado:** LC-P04, LC-MAP-01, LC-TECH-03; cartografía OSM real offline Santiago Centro z14–16, marcadores de movimientos georreferenciados de la cuenta y gate biométrico.
 - **Límites:** cobertura geográfica de demostración; dispositivo físico no probado; firma/actualización de APK con conservación de datos pendiente de T07. H-01 documental no bloqueante (ARCHITECTURE.md, BUILD.md) para T07.
 - **S00 permanece IN_PROGRESS.** T07 es la próxima tarea de integración/cierre, sujeta a Task Brief y gate integral independiente.
+

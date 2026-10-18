@@ -1,0 +1,112 @@
+{
+  "result": "PASS",
+  "exit_code": 0,
+  "scope": "Document validation; not Android execution or independent audit",
+  "documents_checked": 7,
+  "internal_links_checked": 55,
+  "broken_internal_links": [],
+  "external_urls_found": [
+    "https://developer.android.com/build",
+    "https://github.com/aik1a/LocalCash",
+    "https://github.com/aik1a/LocalCash/actions/runs/38267899607",
+    "https://github.com/aik1a/LocalCash/actions/runs/38283139884",
+    "https://github.com/aik1a/LocalCash/actions/runs/38289787487",
+    "https://github.com/aik1a/LocalCash/actions/runs/38440658476",
+    "https://github.com/aik1a/LocalCash/actions/runs/38498296734",
+    "https://github.com/aik1a/LocalCash/actions/runs/38625086287",
+    "https://github.com/aik1a/LocalCash/actions/runs/39042930625",
+    "https://github.com/aik1a/LocalCash/actions/runs/39046939759",
+    "https://github.com/aik1a/LocalCash/actions/runs/39046939759/artifacts/12105649198",
+    "https://github.com/aik1a/LocalCash/actions/runs/39082526083",
+    "https://github.com/aik1a/LocalCash/pull/2",
+    "https://github.com/aik1a/LocalCash/pull/3",
+    "https://github.com/aik1a/LocalCash/pull/4",
+    "https://github.com/aik1a/LocalCash/pull/5",
+    "https://github.com/aik1a/LocalCash/pull/6",
+    "https://github.com/aik1a/LocalCash/pull/7",
+    "https://github.com/aik1a/LocalCash/pull/8"
+  ],
+  "external_link_limit": "CI run/artifact references checked using original GitHub API metadata; other HTTP URLs were not all fetched",
+  "protected_routes": [
+    "CompraDetalleActivity",
+    "ComprasActivity",
+    "ContactosActivity",
+    "CuentaActivity",
+    "MainActivity",
+    "MapaActivity",
+    "NuevaCompraActivity",
+    "RepartoActivity"
+  ],
+  "canonical_route": "ARCHITECTURE.md; docs/design/ARCHITECTURE.md links to it",
+  "original_historical_documents_preserved": 3,
+  "requirement_ids_checked": 23,
+  "apk_sha256": "f6c188ae06db78a6068b64b69157b4fcfe776b6009561a1a0e9269086e9a83d0",
+  "pdf_sha256": "eea19ac075c5105b9a6c24f2c6d925ecb273c6092a2f97c8c01e58f800f7c199",
+  "source_identity": [
+    {
+      "path": "app",
+      "sha": "e1014d8f3a47856363fd72b413902c6ef8dea279",
+      "identical": true
+    },
+    {
+      "path": "build.gradle",
+      "sha": "3c54a514a2aa19c1781e14e3ba59cb6b2f6ae46f",
+      "identical": true
+    },
+    {
+      "path": "settings.gradle",
+      "sha": "082ee732d83004a03dfa9596bf16427492fcdd64",
+      "identical": true
+    },
+    {
+      "path": "gradle.properties",
+      "sha": "1f4ad0a15ad2a27b0a30d246d4ed6b5124ccb6fd",
+      "identical": true
+    },
+    {
+      "path": "gradle",
+      "sha": "afd6a019245454b82c42f438d0e2670f5d32a678",
+      "identical": true
+    },
+    {
+      "path": "gradlew",
+      "sha": "32abfec07b608014a095f72d8807aebc99c5d06f",
+      "identical": true
+    },
+    {
+      "path": "gradlew.bat",
+      "sha": "24c62d56f2d4a91975bd1aa72103d2ec628e449f",
+      "identical": true
+    },
+    {
+      "path": "tests",
+      "sha": "1fc4ddbbfa7e03a348527acca2628e10eb32f276",
+      "identical": true
+    }
+  ],
+  "ci_checked": [
+    {
+      "id": 39042930625,
+      "head_sha": "c289b0614d9d891c6ea4cfcdeec48dabc342c459",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/aik1a/LocalCash/actions/runs/39042930625"
+    },
+    {
+      "id": 39046939759,
+      "head_sha": "32dd6e0ff09143bfc55276d5084c18472769b4af",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/aik1a/LocalCash/actions/runs/39046939759"
+    },
+    {
+      "id": 39082526083,
+      "head_sha": "ece84d4cc7f3eee816f24626094597e43883e169",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/aik1a/LocalCash/actions/runs/39082526083"
+    }
+  ],
+  "new_build": "N/A documentation-only",
+  "new_android_tests": "NOT EXECUTED"
+}
