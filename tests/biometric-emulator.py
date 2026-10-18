@@ -20,7 +20,8 @@ def dump(label='window'):
     global sequence
     sequence+=1
     adb('shell','uiautomator','dump','/sdcard/bio.xml')
-    path=folder/f'bio-{label}-{sequence}.xml'
+    safe_label=re.sub(r'[^a-zA-Z0-9_-]+','-',label)
+    path=folder/f'bio-{safe_label}-{sequence}.xml'
     adb('pull','/sdcard/bio.xml',str(path))
     return ET.parse(path).getroot()
 
