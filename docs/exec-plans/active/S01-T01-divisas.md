@@ -63,3 +63,12 @@ Smoke UI falló por un gesto del test fuera de una pantalla 320×640, no por pé
 ítems: XML confirma Pan CLP100 y total CLP100. Se corrige scroll con bounds reales y
 se repite el recorrido. Workflow de divisas evita repetir la regresión biométrica que
 ya ejecuta el workflow heredado de cada PR; mantiene pruebas nuevas, mapas y UI.
+
+## Corrección de infraestructura y simplificación del gate
+El runner API36 del workflow adicional no inició: FATAL Not enough space to create
+userdata partition (7210 MB disponibles, 7373 MB requeridos). El workflow heredado
+sí libera espacio y registra PASS de biometría, cuentas, compras, reparto, GPS y
+reapertura API36 sobre 922e2d34 antes de la cancelación administrativa del job.
+Se elimina el workflow duplicado y se agregan checks nativos de divisas, SQL host,
+mapas y smoke de monedas al workflow existente s00-t06c-build.yml. No cambia app,
+dependencias, AVD ni seguridad. Una matriz API24/API36 ejecuta el gate completo.

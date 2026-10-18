@@ -172,5 +172,5 @@ al usuario y rechaza un segundo reparto. Los repartos antiguos no reciben una cu
 propia retroactiva. Persistir cuotas evita tener que inferirlas al cambiar reglas.
 
 Validación: tests/CurrencyDomainChecks.java, tests/sqlite-currency-checks.py,
-CurrencyChecks Android, tests/currency-ui.py y workflow s01-t01-divisas.yml. La
+CurrencyChecks Android, tests/currency-ui.py y workflow s00-t06c-build.yml. La
 migración lógica SQLite no acredita actualización APK entre certificados distintos.

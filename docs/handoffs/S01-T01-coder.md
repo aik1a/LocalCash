@@ -34,7 +34,7 @@ Dominio Divisa/Dinero/Cuenta/Compra/Reparto; repositories y servicios correspond
 ActividadProtegida, DivisasUI y Activities monetarias; layouts de selección/formularios.
 CurrencyDomainChecks, CurrencyChecks Android, sqlite-currency-checks.py y currency-ui.py;
 regresión existente adaptada a moneda explícita, nombres limpios y participación propia.
-Workflow .github/workflows/s01-t01-divisas.yml.
+Workflow .github/workflows/s00-t06c-build.yml.
 
 ## Validación ejecutada
 | Verificación | Comando/escenario | Resultado |
