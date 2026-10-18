@@ -1,0 +1,52 @@
+name: LocalCash T07B APK inventory
+on:
+  push:
+    branches: [task/S00-T07B-firma-upgrade]
+    paths: ['tools/apk/**', '.github/workflows/s00-t07b-signatures.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - run: sdkmanager "build-tools;36.0.0"
+      - name: Verify exact SHA and inventory retained APKs
+        id: inventory
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p evidence
+          git rev-parse HEAD | tee evidence/validated-sha.txt
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          python tools/apk/inventory.py | tee evidence/inventory.log
+      - name: Record compatibility outcome
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('evidence/inventory.json').read_text())
+          count=report['compatible_distinct_pairs']
+          status='PENDING_COMPATIBLE_UPGRADE_TEST' if count else 'BLOCKED_SIGNER_MISMATCH'
+          Path('evidence/upgrade-status.txt').write_text(status+'\n')
+          print(status)
+          PY
+      - name: Preserve public certificates and validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: S00-T07B-signatures-${{ github.sha }}
+          path: evidence/
+          if-no-files-found: error
