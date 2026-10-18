@@ -16,7 +16,7 @@ Disponer antes del **19 de octubre de 2026** de una aplicación Android académi
 | S00-T04 | Contactos, compras, ítems, historial, migración SQLite v2 y emulador PASS | **CLOSED** | 13 oct |
 | S00-T05 | Reparto equitativo/personalizado de compras entre contactos y deudas | CLOSED | 13 oct |
 | S00-T06A / T06C / T06B | GPS opcional, biometría y mapas offline Santiago Centro; PR #6, #7 y #8 | CLOSED | 17 oct |
-| S00-T07 | Gate integral, firma APK/upgrade preservando datos, regresión, documentación y entrega | PENDING | 18 oct |
+| S00-T07 | Regresión, diagnóstico de firma/upgrade, documentación, paquete y gate integral; upgrade histórico BLOCKED_SIGNER_MISMATCH, conservación tras upgrade NOT TESTED | **CLOSED (alcance académico)** | 18 oct |
 
 Las fechas son **objetivos de organización**, no resultados ni garantías de implementación. Reservar tiempo antes del 19 para correcciones. No empezar simultáneamente tareas que dependan del mismo modelo de datos.
 
@@ -42,3 +42,10 @@ El build S00-T03, las pruebas de dominio, el flujo UI/SQLite y el relanzamiento 
 ## Actualización operativa — 2026-10-17
 
 T06B fue integrada mediante [PR #8](https://github.com/aik1a/LocalCash/pull/8), merge `f1664ec4d87bf16cd9f7668cbda62e0ef0f406e9`; auditoría `docs/audits/S00/S00-T06B-audit.md` PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE, 97,5/100. T06A y T06C ya estaban cerradas. **S00 permanece IN_PROGRESS** hasta completar T07 y gate integral independiente. Cobertura de mapas Santiago Centro z14–16; dispositivo físico y actualización APK conservando datos no validados aún. H-01 documental pendiente T07.
+
+
+## Cierre administrativo S00 — 2026-10-18 (Orquestador)
+
+**S00 CLOSED — PASS WITH OBSERVATIONS, APPROVED_FOR_SPRINT_ADVANCE por suficiencia académica.** Auditoría integral independiente [T07D](../audits/S00/S00-T07D-integral-audit.md) sobre SHA `c149132fda19bb07bfd7ff9170781e1bde99f781`, informe publicado `e1c83d9d94f7b613194d2e41006f0fffeeffbb4a` e integrado mediante [PR #12](https://github.com/aik1a/LocalCash/pull/12), merge `53c1517ec6a7eb64a7ab646df5565145aa455fd3`. T07A/B/C/D cerradas; 0 BLOCKER, 0 MAJOR, 3 MINOR heredados (API24 completo, disparadores CI y estados documentales, este último reconciliado administrativamente aquí y en PROJECT_STATE).
+
+Se acredita **material académico preparado**, no recepción docente ni exposición. APK seleccionado es debug para instalación nueva; su SHA256 es `f6c188ae06db78a6068b64b69157b4fcfe776b6009561a1a0e9269086e9a83d0`. Las pruebas en dispositivo físico, Sync Studio limpio, GPS exclusivamente aproximado, recorrido humano, regresión completa API24 y conservación SQLite tras upgrade siguen NOT TESTED. Upgrade histórico BLOCKED_SIGNER_MISMATCH. No desinstalar instalaciones con datos. El material y los binarios conservan identidad de su SHA de compilación; el cierre documental no equivale a nuevo build.
