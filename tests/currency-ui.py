@@ -6,13 +6,21 @@ import time
 spec=importlib.util.spec_from_file_location('bio',pathlib.Path(__file__).with_name('biometric-emulator.py'))
 b=importlib.util.module_from_spec(spec);spec.loader.exec_module(b)
 
+def scroll(tree):
+    import re
+    node=next((n for n in tree.iter('node') if n.get('scrollable')=='true'),None)
+    if node is None:return False
+    x1,y1,x2,y2=map(int,re.findall(r'\d+',node.get('bounds')))
+    x=(x1+x2)//2;start=y1+(y2-y1)*4//5;end=y1+(y2-y1)//4
+    b.adb('shell','input','swipe',str(x),str(start),str(x),str(end),'300')
+    return True
+
 def tap(resource=None,text=None):
-    tree=b.dump('currency-before-tap')
-    if not b.tap(tree,resource=resource,text=text):
-        # Los formularios son ScrollView: permitir llegar a botones inferiores.
-        b.adb('shell','input','swipe','500','1700','500','600','300')
-        tree=b.dump('currency-scrolled')
-        assert b.tap(tree,resource=resource,text=text), resource or text
+    for attempt in range(6):
+        tree=b.dump('currency-before-tap')
+        if b.tap(tree,resource=resource,text=text):return
+        if not scroll(tree):break
+    raise AssertionError(resource or text)
 
 def text(resource,value):
     import re
@@ -38,7 +46,7 @@ def fresh_unlock():
 b.adb('shell','pm','clear',b.package)
 fresh_unlock()
 tap(text='Guardar')
-visible('No hay cuentas') if False else b.wait(lambda t:b.private(t),'currency-main')
+b.wait(lambda t:b.private(t),'currency-main')
 # Main preference CLP, integer field and integer display.
 tap(resource='crear_cuenta');text('nombre','Efectivo');text('saldo_inicial','100');tap(text='Guardar')
 visible('CLP 100')
@@ -52,11 +60,11 @@ tap(resource='estado_compra');tap(text='REALIZADA')
 tap(resource='contacto_compra')
 tree=visible('Valentina');assert '(#' not in b.texts(tree);tap(text='Valentina')
 # Scroll to product inputs.
-b.adb('shell','input','swipe','500','1500','500','700','300')
+scroll(b.dump('currency-product-scroll'))
 text('item_descripcion','Pan');text('item_precio','100');tap(resource='agregar_item')
 # Both labels remain concise. No leaked validation requirements or database IDs.
 tree=b.dump('currency-clean-labels');assert 'hasta 2 decimales' not in b.texts(tree) and 'entera positiva' not in b.texts(tree)
-tap(resource='guardar_compra');visible('Total: CLP 100');tap(resource='abrir_reparto')
+tap(resource='guardar_compra');visible('Contacto: Valentina');visible('Total: CLP 100');tap(resource='abrir_reparto')
 visible('Tú');visible('Valentina');tap(resource='guardar_reparto')
 visible('Tú: CLP 50');visible('Valentina: CLP 50')
 # Real process restart: preference and per-purchase allocations survive.

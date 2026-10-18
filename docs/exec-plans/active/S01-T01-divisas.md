@@ -39,7 +39,7 @@ compra CLP 100/3 → 34/33/33; fracciones CLP rechazadas; rotación y migración
 
 ## Progreso
 - [x] Inspección y autorización
-- [ ] Implementación
+- [x] Implementación
 - [ ] Pruebas y revisión
 - [ ] Handoff y PR
 
@@ -55,3 +55,11 @@ En curso.
 Usuario pide «Tú + un contacto», retirar IDs visibles y aclaraciones técnicas.
 La cuota propia se persiste en reparto_usuario(compra_id,monto), sin contacto sintético
 ni deuda del usuario consigo mismo. Repartos históricos no se recalculan.
+
+## Verificación durante implementación
+34.400 checks de dominio y 55 de SQLite host PASS. Build app/AndroidTest PASS API24 y
+API36 sobre 922e2d34. API24: 76 checks nativos SQLite/repositories, biometría y mapas PASS.
+Smoke UI falló por un gesto del test fuera de una pantalla 320×640, no por pérdida de
+ítems: XML confirma Pan CLP100 y total CLP100. Se corrige scroll con bounds reales y
+se repite el recorrido. Workflow de divisas evita repetir la regresión biométrica que
+ya ejecuta el workflow heredado de cada PR; mantiene pruebas nuevas, mapas y UI.

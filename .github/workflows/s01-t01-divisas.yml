@@ -2,6 +2,7 @@ name: LocalCash divisas y UX
 on:
   push:
     branches: [task/S01-T01-divisas]
+    paths: ['app/**', 'tests/**', '*.gradle', 'gradle.properties', 'gradle/**', '.github/workflows/s01-t01-divisas.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -12,6 +13,9 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
     strategy:
       fail-fast: false
       matrix:
@@ -55,10 +59,8 @@ jobs:
             grep -q LOCALCASH_CURRENCY_PASS evidence/currency-native.log
             python tests/biometric-emulator.py prepare
             python tests/biometric-emulator.py enroll
-            python tests/biometric-emulator.py security
             python tests/maps-emulator.py
             python tests/currency-ui.py
-            python tests/biometric-regression-dispatch.py ${{ matrix.api }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
