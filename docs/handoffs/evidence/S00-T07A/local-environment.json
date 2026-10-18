@@ -1,0 +1,13 @@
+{
+  "source_sha": "cc77afc2c676770329eb89e367ea44f8c11c9e1a",
+  "ci_sha": "32dd6e0ff09143bfc55276d5084c18472769b4af",
+  "system": "Linux-6.18.55-x86_64-with-glibc2.39",
+  "tools": {
+    "java": "/usr/bin/java",
+    "javac": null,
+    "adb": null,
+    "emulator": null,
+    "sdkmanager": null
+  },
+  "kvm": false
+}

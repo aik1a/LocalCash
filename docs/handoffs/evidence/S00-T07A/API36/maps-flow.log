@@ -1,0 +1,12 @@
+PASS primera instalación: sin conectividad, sin permiso INTERNET y sin atlas/caché previo.
+PASS tile fuente LocalCashOSM z14 4976/9809 colores=587
+PASS tile fuente LocalCashOSM z15 9952/19618 colores=505
+PASS tile fuente LocalCashOSM z16 19904/39236 colores=516
+PASS render MapView real: marcador cambia 781 pixels; FLAG_SECURE intacto.
+PASS proveedor local, tiles reales z14/15/16 decodificados idénticos al ZIP, base dibujada y marcador visible, pan/zoom/detalles/cobertura.
+PASS tile fuente LocalCashOSM z15 9952/19618 colores=505
+PASS tile fuente LocalCashOSM z15 9952/19618 colores=505
+PASS sin coordenadas: cero marcadores/estado vacío; ZIP corrupto: error local controlado; copia ausente: recuperada exclusivamente desde APK.
+PASS reapertura/lifecycle y SQLite v4: datos/saldos/coordenadas intactos.
+LOCALCASH_MAPS_PASS
+

@@ -1,0 +1,42 @@
+{
+  "artifacts": [
+    {
+      "id": 12106073736,
+      "name": "S00-T07A-API24-32dd6e0ff09143bfc55276d5084c18472769b4af",
+      "size_in_bytes": 5391064,
+      "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12106073736",
+      "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12106073736/zip",
+      "expired": false,
+      "created_at": "2026-10-17T15:59:23Z",
+      "expires_at": "2027-01-15T15:52:12Z",
+      "updated_at": "2026-10-17T15:59:23Z",
+      "digest": "sha256:101943ef20858a287cca8dc019902714d50fc7b1d7f38d60607cd35a34f1653b",
+      "workflow_run": {
+        "id": 39046939759,
+        "repository_id": 1407909272,
+        "head_repository_id": 1407909272,
+        "head_branch": "task/S00-T07A-integracion",
+        "head_sha": "32dd6e0ff09143bfc55276d5084c18472769b4af"
+      }
+    },
+    {
+      "id": 12105649198,
+      "name": "S00-T07A-API36-32dd6e0ff09143bfc55276d5084c18472769b4af",
+      "size_in_bytes": 5448818,
+      "url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12105649198",
+      "archive_download_url": "https://api.github.com/repos/aik1a/LocalCash/actions/artifacts/12105649198/zip",
+      "expired": false,
+      "created_at": "2026-10-17T16:04:47Z",
+      "expires_at": "2027-01-15T15:52:12Z",
+      "updated_at": "2026-10-17T16:04:47Z",
+      "digest": "sha256:9ab61141e5c36e2770b9a870136c1b4941dd99c65cd6164ed29c7daa14d918ab",
+      "workflow_run": {
+        "id": 39046939759,
+        "repository_id": 1407909272,
+        "head_repository_id": 1407909272,
+        "head_branch": "task/S00-T07A-integracion",
+        "head_sha": "32dd6e0ff09143bfc55276d5084c18472769b4af"
+      }
+    }
+  ]
+}

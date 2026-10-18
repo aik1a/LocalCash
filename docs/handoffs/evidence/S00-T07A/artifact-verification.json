@@ -1,0 +1,53 @@
+{
+  "validated_sha": "32dd6e0ff09143bfc55276d5084c18472769b4af",
+  "verification": "local byte/hash/marker verification of new CI artifacts; not local Android execution",
+  "artifacts": [
+    {
+      "api": 24,
+      "artifact_id": 12106073736,
+      "zip_sha256": "101943ef20858a287cca8dc019902714d50fc7b1d7f38d60607cd35a34f1653b",
+      "zip_bytes": 5391064,
+      "sha": "32dd6e0ff09143bfc55276d5084c18472769b4af",
+      "gradle_exit_code": 0,
+      "hash_entries_verified": 118,
+      "apk_sha256": {
+        "app/build/outputs/apk/debug/app-debug.apk": "90c177bd383da6d7d85f0fa048f29d8997d32298b5095dd86f550d873cd606ac",
+        "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk": "567520c34f872b0798069810529e17bc8a3b605ba485cd9932972cf8620ee304"
+      },
+      "atlas_in_apk_matches_source": true,
+      "osm_xml_in_apk_matches_source": true,
+      "required_markers_verified": {
+        "biometric-checks.log": "LOCALCASH_BIOMETRIC_PASS",
+        "maps-flow.log": "LOCALCASH_MAPS_PASS",
+        "maps-relaunch-checks.log": "LOCALCASH_MAPS_RELAUNCH_PASS"
+      },
+      "result": "PASS"
+    },
+    {
+      "api": 36,
+      "artifact_id": 12105649198,
+      "zip_sha256": "9ab61141e5c36e2770b9a870136c1b4941dd99c65cd6164ed29c7daa14d918ab",
+      "zip_bytes": 5448818,
+      "sha": "32dd6e0ff09143bfc55276d5084c18472769b4af",
+      "gradle_exit_code": 0,
+      "hash_entries_verified": 152,
+      "apk_sha256": {
+        "app/build/outputs/apk/debug/app-debug.apk": "f6c188ae06db78a6068b64b69157b4fcfe776b6009561a1a0e9269086e9a83d0",
+        "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk": "025c89976efe19a17266bf8a21d0ea577b7ce2db8bfe8692cf994f704873c14d"
+      },
+      "atlas_in_apk_matches_source": true,
+      "osm_xml_in_apk_matches_source": true,
+      "required_markers_verified": {
+        "biometric-checks.log": "LOCALCASH_BIOMETRIC_PASS",
+        "maps-flow.log": "LOCALCASH_MAPS_PASS",
+        "maps-relaunch-checks.log": "LOCALCASH_MAPS_RELAUNCH_PASS",
+        "android-flow.log": "LOCALCASH_FLOW_PASS",
+        "purchase-flow.log": "LOCALCASH_PURCHASE_PASS",
+        "shared-flow.log": "LOCALCASH_SHARED_PASS",
+        "location-flow.log": "LOCALCASH_LOCATION_PASS",
+        "regression-dispatch.log": "LOCALCASH_BIOMETRIC_REGRESSION_PASS"
+      },
+      "result": "PASS"
+    }
+  ]
+}

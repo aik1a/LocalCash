@@ -1,0 +1,8 @@
+LOCALCASH_FLOW_PASS
+PASS ACC-01: dos cuentas creadas desde formularios XML.
+PASS MOV-01: ingreso/egreso por UI; 100 + 50 - 24,50 = 125,50; monto 0/negativo rechazado.
+PASS cuenta inexistente rechazada.
+PASS overflow rechazado sin insertar.
+PASS integridad referencial SQLite.
+PASS DB-01: reapertura BD y Activities; datos recuperados.
+

@@ -1,0 +1,5 @@
+LOCALCASH_SHARED_PASS
+PASS MIG-02: fixture SQLite v2→v4; snapshot exacto de cuentas, movimientos, contactos, compras y detalles intacto.
+PASS SHARED-DB: planificada/duplicados/negativo/desigual/overflow/contacto inválido rechazados; FK, PK, CHECK y rollback de segundo insert; total real revalidado, cuota cero persistida.
+PASS SHARED-UI: selección explícita, validación de 2+, reparto 100,01/3 y personalizado 20+30+50; errores visibles; lectura al volver, persistencia/reapertura y regresión contable.
+
