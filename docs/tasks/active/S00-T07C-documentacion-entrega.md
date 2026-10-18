@@ -1,6 +1,6 @@
 # Task Brief — S00-T07C: documentación y paquete de entrega
 
-**Sprint:** S00 · **Rol:** Codificador · **Estado:** PLANNED (habilitar tras T07A y usar resultados T07B) · **Rama prevista:** `task/S00-T07C-documentacion-entrega`, desde main aceptado tras T07A/T07B.
+**Sprint:** S00 · **Rol:** Codificador · **Estado:** READY (T07A y T07B integradas) · **Rama autorizada:** `task/S00-T07C-documentacion-entrega`, desde main aceptado tras T07A/T07B.
 
 ## Objetivo
 Entregar documentación técnica y académica coherente con el código y evidencia, sin reescribir hechos históricos.
