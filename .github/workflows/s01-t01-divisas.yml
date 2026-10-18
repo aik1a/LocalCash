@@ -56,7 +56,9 @@ jobs:
             python tests/biometric-emulator.py prepare
             python tests/biometric-emulator.py enroll
             python tests/biometric-emulator.py security
+            python tests/maps-emulator.py
             python tests/currency-ui.py
+            python tests/biometric-regression-dispatch.py ${{ matrix.api }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

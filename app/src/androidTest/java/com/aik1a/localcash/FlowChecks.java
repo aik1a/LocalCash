@@ -60,7 +60,7 @@ public final class FlowChecks extends Instrumentation {
             nodeText("Banco");
             log.append("PASS ACC-01: dos cuentas creadas desde formularios XML.\n");
             clickText("Efectivo");
-            nodeText("Saldo: 100,00");
+            nodeText("Saldo: USD 100,00");
             clickText("Registrar ingreso o egreso");
             clickText("Ingreso");
             setText("monto", "0");
@@ -72,18 +72,18 @@ public final class FlowChecks extends Instrumentation {
             setText("monto", "50");
             setText("descripcion", "Sueldo");
             clickText("Guardar");
-            nodeText("Saldo: 150,00");
+            nodeText("Saldo: USD 150,00");
             clickText("Registrar ingreso o egreso");
             clickText("Egreso");
             setText("monto", "24,50");
             setText("descripcion", "Transporte");
             clickText("Guardar");
-            nodeText("Saldo: 125,50");
+            nodeText("Saldo: USD 125,50");
             log.append("PASS MOV-01: ingreso/egreso por UI; 100 + 50 - 24,50 = 125,50; monto 0/negativo rechazado.\n");
             clickText("Volver a cuentas");
             nodeText("Banco");
             clickText("Banco");
-            nodeText("Saldo: 300,00");
+            nodeText("Saldo: USD 300,00");
             nodeText("Todavía no hay movimientos en esta cuenta.");
             clickText("Volver a cuentas");
             runOnMainSync(() -> main.finish());
@@ -122,9 +122,9 @@ public final class FlowChecks extends Instrumentation {
             assertTrue(new MovimientoService(helper).calcularSaldo(efectivo) == 12550, "Reapertura helper");
             helper.close();
             abrir();
-            nodeText("Saldo: 125,50");
+            nodeText("Saldo: USD 125,50");
             clickText("Efectivo");
-            nodeText("Saldo: 125,50");
+            nodeText("Saldo: USD 125,50");
             log.append("PASS DB-01: reapertura BD y Activities; datos recuperados.\n");
             result.putString("stream", "LOCALCASH_FLOW_PASS\n" + log);
             finish(Activity.RESULT_OK, result);
@@ -142,7 +142,7 @@ public final class FlowChecks extends Instrumentation {
         try {
             prepararV1();
             LocalCashDbHelper helper = new LocalCashDbHelper(getTargetContext());
-            assertTrue(helper.getWritableDatabase().getVersion() == 4, "Migración a versión 4");
+            assertTrue(helper.getWritableDatabase().getVersion() == 5, "Migración a versión 5");
             MovimientoService contabilidad = new MovimientoService(helper);
             assertTrue(contabilidad.listarCuentas().size() == 2, "Dos cuentas preservadas");
             assertTrue(contabilidad.calcularSaldo(1) == 12550, "Saldo v1 preservado");
@@ -152,11 +152,11 @@ public final class FlowChecks extends Instrumentation {
             assertTrue(compras.listarCompras().isEmpty() && compras.listarContactos().isEmpty(), "Tablas nuevas vacías");
             probarRollback(helper);
             helper.close();
-            log.append("PASS MIG-01: v1 real con dos cuentas y dos movimientos → v4, saldos 125,50 y 300,00 conservados.\n");
+            log.append("PASS MIG-01: v1 real con dos cuentas y dos movimientos → v5, saldos 125,50 y 300,00 conservados.\n");
             AccessibilityServiceInfo info = getUiAutomation().getServiceInfo();
             info.flags |= AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
             getUiAutomation().setServiceInfo(info);
-            abrir(); nodeText("Saldo: 125,50");
+            abrir(); nodeText("Saldo: USD 125,50");
             clickId("abrir_contactos"); clickId("crear_contacto");
             setText("nombre_contacto", " "); clickText("Guardar"); nodeId("nombre_contacto");
             setText("nombre_contacto", "Ana"); clickText("Guardar"); nodeText("Ana");
@@ -164,7 +164,7 @@ public final class FlowChecks extends Instrumentation {
             clickId("volver"); clickId("abrir_compras"); clickId("crear_compra");
             setText("nombre_compra", "Compra realizada");
             clickId("estado_compra"); clickText("REALIZADA");
-            clickId("contacto_compra"); clickText("Ana (#1)");
+            clickId("contacto_compra"); clickText("Ana");
             setText("item_descripcion", "Cuaderno"); setText("item_cantidad", "0"); setText("item_precio", "100,25");
             clickId("agregar_item"); nodeText("El ítem necesita descripción, cantidad entera positiva y precio no negativo.");
             setText("item_cantidad", "-1"); clickId("agregar_item");
@@ -173,8 +173,8 @@ public final class FlowChecks extends Instrumentation {
             nodeText("La cantidad debe ser un entero positivo dentro del rango permitido.");
             setText("item_cantidad", "2"); clickId("agregar_item");
             setText("item_descripcion", "Servicio"); setText("item_cantidad", "3"); setText("item_precio", "10,50"); clickId("agregar_item");
-            nodeText("Total: 232,00"); clickId("guardar_compra");
-            nodeText("Total: 232,00"); nodeText("Contacto: Ana"); assertTrue(nodeId("compra_info").getText().toString().startsWith("REALIZADA"), "Estado realizada visible");
+            nodeText("Total: USD 232,00"); clickId("guardar_compra");
+            nodeText("Total: USD 232,00"); nodeText("Contacto: Ana"); assertTrue(nodeId("compra_info").getText().toString().startsWith("REALIZADA"), "Estado realizada visible");
             clickId("volver"); nodeText("Compra realizada"); clickId("crear_compra");
             setText("nombre_compra", "Compra planificada");
             clickId("guardar_compra"); nodeText("La compra necesita nombre, estado, fecha y al menos un ítem válido.");
@@ -184,9 +184,9 @@ public final class FlowChecks extends Instrumentation {
             clickText(Integer.toString(year));
             clickText(Integer.toString(year + 1));
             clickText("OK"); clickId("guardar_compra");
-            assertTrue(nodeId("compra_info").getText().toString().startsWith("PLANIFICADA"), "Estado planificada visible"); nodeText("Contacto: Sin contacto"); nodeText("Total: 50,00");
+            assertTrue(nodeId("compra_info").getText().toString().startsWith("PLANIFICADA"), "Estado planificada visible"); nodeText("Contacto: Sin contacto"); nodeText("Total: USD 50,00");
             clickId("volver"); nodeText("Compra realizada"); nodeText("Compra planificada");
-            clickText("Compra realizada"); nodeText("Total: 232,00"); nodeText("Contacto: Ana");
+            clickText("Compra realizada"); nodeText("Total: USD 232,00"); nodeText("Contacto: Ana");
             log.append("PASS CON/BUY-01/02/03: dos contactos por UI, compra realizada con dos ítems y total 232,00 vinculada a Ana; planificada con fecha futura sin contacto; historial y detalles.\n");
             helper = new LocalCashDbHelper(getTargetContext()); compras = new CompraService(helper);
             assertTrue(compras.listarContactos().size() == 2 && compras.listarCompras().size() == 2, "Persistencia nueva");
@@ -196,14 +196,14 @@ public final class FlowChecks extends Instrumentation {
             assertTrue(realizada != null && realizada.getDetalles().size() == 2 && realizada.calcularTotal() == 23200 && realizada.getContactoId() == 1, "Compra reconstruida");
             assertTrue(new MovimientoService(helper).calcularSaldo(1) == 12550 && new MovimientoService(helper).listarMovimientos(1).size() == 2, "Compras no crean movimientos ni alteran saldo");
             try {
-                compras.registrar(new Compra(0, "Inválida", Compra.Estado.REALIZADA, 0, 9999L, realizada.getDetalles()));
+                compras.registrar(new Compra(0, "Inválida", Compra.Estado.REALIZADA, 0, 9999L, realizada.getDetalles(), Divisa.USD));
                 throw new AssertionError("Contacto inexistente aceptado");
             } catch (IllegalArgumentException expected) { assertTrue(compras.listarCompras().size() == 2, "Compra inválida no persistida"); }
             helper.close();
             helper = new LocalCashDbHelper(getTargetContext());
-            assertTrue(new CompraService(helper).listarCompras().size() == 2 && new MovimientoService(helper).calcularSaldo(1) == 12550, "Reapertura v4");
+            assertTrue(new CompraService(helper).listarCompras().size() == 2 && new MovimientoService(helper).calcularSaldo(1) == 12550, "Reapertura v5");
             helper.close();
-            log.append("PASS regresión contable, persistencia v4, validaciones y ausencia de movimientos automáticos.\n");
+            log.append("PASS regresión contable, persistencia v5, validaciones y ausencia de movimientos automáticos.\n");
             result.putString("stream", "LOCALCASH_PURCHASE_PASS\n" + log); finish(Activity.RESULT_OK, result);
         } catch (Throwable failure) {
             dump(getUiAutomation().getRootInActiveWindow(), 0);
@@ -215,33 +215,24 @@ public final class FlowChecks extends Instrumentation {
     private void verificarCompartidas() {
         Bundle result = new Bundle();
         try {
-            // El flujo T04 ha creado cuentas/movimientos/contactos/compras reales.
-            // Retroceder solo el esquema de deudas en el emulador desechable: fixture v2.
+            prepararFixtureUbicacion(2);
+            android.database.sqlite.SQLiteDatabase old = getTargetContext().openOrCreateDatabase("localcash.db",0,null);
+            String original = snapshotUbicacion(old,2); old.close();
             LocalCashDbHelper helper = new LocalCashDbHelper(getTargetContext());
-            CompraService compras = new CompraService(helper);
-            assertTrue(compras.listarCompras().size() == 2, "Fixture T04 existe");
-            compras.crearContacto("Marta");
-            long equitativa = compras.registrar(new Compra(0,"Compartida exacta",Compra.Estado.REALIZADA,3,1L,
-                    java.util.Arrays.asList(new DetalleCompra("Producto",1,10001))));
-            long custom = compras.registrar(new Compra(0,"Compartida personalizada",Compra.Estado.REALIZADA,4,null,
-                    java.util.Arrays.asList(new DetalleCompra("Servicio",1,10000))));
-            long prueba = compras.registrar(new Compra(0,"Prueba transacción",Compra.Estado.REALIZADA,5,null,
-                    java.util.Arrays.asList(new DetalleCompra("Producto",1,10000))));
             android.database.sqlite.SQLiteDatabase db = helper.getWritableDatabase();
-            // Fixture v2 genuino: retirar únicamente columnas de v4 en BD desechable.
-            db.execSQL("ALTER TABLE movimientos RENAME TO movimientos_fixture_v4");
-            db.execSQL("CREATE TABLE movimientos (id INTEGER PRIMARY KEY, cuenta_id INTEGER NOT NULL REFERENCES cuentas(id) ON DELETE RESTRICT, tipo TEXT NOT NULL CHECK(tipo IN ('INGRESO','EGRESO')), monto INTEGER NOT NULL CHECK(monto>0), descripcion TEXT NOT NULL DEFAULT '', fecha INTEGER NOT NULL CHECK(fecha>=0))");
-            db.execSQL("INSERT INTO movimientos SELECT id,cuenta_id,tipo,monto,descripcion,fecha FROM movimientos_fixture_v4");
-            db.execSQL("DROP TABLE movimientos_fixture_v4");
-            db.execSQL("CREATE INDEX movimientos_cuenta_fecha ON movimientos(cuenta_id,fecha,id)");
-            db.execSQL("DROP TABLE deudas"); db.setVersion(2);
+            assertTrue(db.getVersion() == 5, "Migración v2→v5");
+            assertTrue(original.equals(snapshotUbicacion(db,2)), "Todas las filas v2 intactas");
+            prepararDivisas(helper);
+            CompraService compras = new CompraService(helper);
+            long equitativa = compras.registrar(new Compra(0,"Compartida exacta",Compra.Estado.REALIZADA,3,1L,
+                    java.util.Arrays.asList(new DetalleCompra("Producto",1,10001)), Divisa.USD));
+            long custom = compras.registrar(new Compra(0,"Compartida personalizada",Compra.Estado.REALIZADA,4,null,
+                    java.util.Arrays.asList(new DetalleCompra("Servicio",1,10000)), Divisa.USD));
+            long prueba = compras.registrar(new Compra(0,"Prueba transacción",Compra.Estado.REALIZADA,5,null,
+                    java.util.Arrays.asList(new DetalleCompra("Producto",1,10000)), Divisa.USD));
             String previo = snapshot(db);
-            assertTrue(db.getVersion() == 2, "Fixture v2 confirmado"); helper.close();
-            helper = new LocalCashDbHelper(getTargetContext()); db = helper.getWritableDatabase();
-            assertTrue(db.getVersion() == 4, "Migración v2→v4 real");
-            assertTrue(previo.equals(snapshot(db)), "Todas las filas v2 intactas");
             assertTrue(new MovimientoService(helper).calcularSaldo(1) == 12550, "Saldo conservado");
-            log.append("PASS MIG-02: fixture SQLite v2→v4; snapshot exacto de cuentas, movimientos, contactos, compras y detalles intacto.\n");
+            log.append("PASS MIG-02: fixture SQLite v2→v5; datos anteriores intactos.\n");
             com.aik1a.localcash.application.DeudaService service = new com.aik1a.localcash.application.DeudaService(helper);
             final com.aik1a.localcash.application.DeudaService svc = service;
             final long plan = comprasIdPlan(helper);
@@ -268,7 +259,7 @@ public final class FlowChecks extends Instrumentation {
                 assertTrue(repo.listarPorCompra(prueba).isEmpty(), "Segundo insert fallido revierte todo");
             } finally { db.execSQL("DROP TRIGGER test_falla_deuda"); }
             Compra falsa = new Compra(prueba,"Falsa",Compra.Estado.REALIZADA,0,null,
-                    java.util.Arrays.asList(new DetalleCompra("X",1,1)));
+                    java.util.Arrays.asList(new DetalleCompra("X",1,1)), Divisa.USD);
             rechazar(() -> repo.registrar(Reparto.equitativo(falsa,java.util.Arrays.asList(1L,2L))));
             assertTrue(repo.listarPorCompra(prueba).isEmpty(), "Total ficticio rechazado");
             service.repartirPersonalizado(prueba,java.util.Arrays.asList(1L,2L),java.util.Arrays.asList(0L,10000L));
@@ -293,25 +284,25 @@ public final class FlowChecks extends Instrumentation {
             info.flags |= AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
             getUiAutomation().setServiceInfo(info);
             abrir(); clickId("abrir_compras"); clickText("Compartida exacta");
-            nodeText("Total: 100,01"); clickId("abrir_reparto");
-            assertTrue(!nodeText("Ana (#1)").isChecked(), "Contacto asociado no automático");
-            clickId("guardar_reparto"); nodeText("Selecciona al menos dos contactos distintos.");
-            clickText("Luis (#2)"); clickId("guardar_reparto"); nodeText("Selecciona al menos dos contactos distintos.");
-            clickText("Marta (#3)"); clickText("Ana (#1)"); clickId("guardar_reparto");
-            nodeText("Ana (#1): 33,34 · PENDIENTE"); nodeText("Luis (#2): 33,34 · PENDIENTE"); nodeText("Marta (#3): 33,33 · PENDIENTE");
+            nodeText("Total: USD 100,01"); clickId("abrir_reparto");
+            assertTrue(!nodeText("Ana").isChecked(), "Contacto asociado no automático");
+            clickId("guardar_reparto"); nodeText("Elige al menos un contacto para compartir contigo.");
+            clickText("Luis");
+            clickText("Marta"); clickText("Ana"); clickId("guardar_reparto");
+            nodeText("Tú: USD 25,01"); nodeText("Ana: USD 25,00 · PENDIENTE"); nodeText("Luis: USD 25,00 · PENDIENTE"); nodeText("Marta: USD 25,00 · PENDIENTE");
             clickId("volver"); clickId("volver"); clickText("Compartida personalizada"); clickId("abrir_reparto");
-            clickId("personalizado"); clickText("Ana (#1)"); clickText("Luis (#2)"); clickText("Marta (#3)");
-            setCuota("Ana (#1)","-1"); setCuota("Luis (#2)","30"); setCuota("Marta (#3)","50"); clickId("guardar_reparto");
+            clickId("personalizado"); clickText("Ana"); clickText("Luis"); clickText("Marta");
+            setCuota("Tú","0"); setCuota("Ana","-1"); setCuota("Luis","30"); setCuota("Marta","50"); clickId("guardar_reparto");
             nodeText("Cada contacto debe tener un monto no negativo.");
-            setCuota("Ana (#1)","19"); clickId("guardar_reparto"); nodeText("La suma debe coincidir exactamente con el total.");
-            setCuota("Ana (#1)","20,001"); clickId("guardar_reparto"); nodeText("Usa un número con hasta 2 decimales, sin separador de miles.");
-            setCuota("Ana (#1)","20"); clickId("guardar_reparto");
-            nodeText("Ana (#1): 20,00 · PENDIENTE"); nodeText("Luis (#2): 30,00 · PENDIENTE"); nodeText("Marta (#3): 50,00 · PENDIENTE");
-            clickId("volver"); clickId("abrir_reparto"); nodeText("Ana (#1): 20,00 · PENDIENTE");
+            setCuota("Ana","19"); clickId("guardar_reparto"); nodeText("La suma debe coincidir exactamente con el total.");
+            setCuota("Ana","20,001"); clickId("guardar_reparto"); nodeText("USD: usa hasta 2 decimales, sin separador de miles.");
+            setCuota("Ana","20"); clickId("guardar_reparto");
+            nodeText("Ana: USD 20,00 · PENDIENTE"); nodeText("Luis: USD 30,00 · PENDIENTE"); nodeText("Marta: USD 50,00 · PENDIENTE");
+            clickId("volver"); clickId("abrir_reparto"); nodeText("Ana: USD 20,00 · PENDIENTE");
             helper = new LocalCashDbHelper(getTargetContext());
             service = new com.aik1a.localcash.application.DeudaService(helper);
             List<Deuda> partes = service.listarDeudas(equitativa);
-            assertTrue(partes.size()==3 && partes.get(0).getMonto()==3334 && partes.get(1).getMonto()==3334 && partes.get(2).getMonto()==3333,"SQLite reparto exacto");
+            assertTrue(partes.size()==3 && partes.get(0).getMonto()==2500 && partes.get(1).getMonto()==2500 && partes.get(2).getMonto()==2500 && service.buscarMontoUsuario(equitativa)==2501,"SQLite reparto exacto");
             assertTrue(service.listarDeudas(custom).size()==3 && service.listarDeudas(custom).get(0).getMonto()==2000,"SQLite personalizado");
             assertTrue(previo.equals(snapshot(helper.getReadableDatabase())),"Regresión de todas las tablas anteriores");
             try (android.database.Cursor c = helper.getReadableDatabase().rawQuery("PRAGMA foreign_key_check",null)) {
@@ -367,7 +358,7 @@ public final class FlowChecks extends Instrumentation {
                 String antes=snapshotUbicacion(old,version); assertTrue(old.getVersion()==version,"Versión fixture"); old.close();
                 try (LocalCashDbHelper helper=new LocalCashDbHelper(getTargetContext())) {
                     android.database.sqlite.SQLiteDatabase db=helper.getWritableDatabase();
-                    assertTrue(db.getVersion()==4,"Migración a v4");
+                    assertTrue(db.getVersion()==5,"Migración a v5");
                     assertTrue(antes.equals(snapshotUbicacion(db,version)),"Todas las filas previas preservadas");
                     for (Movimiento m:new MovimientoService(helper).listarMovimientos(1)) assertTrue(!m.tieneUbicacion(),"Previos NULL");
                     assertTrue(new MovimientoService(helper).calcularSaldo(1)==12550,"Saldo anterior intacto");
@@ -378,7 +369,7 @@ public final class FlowChecks extends Instrumentation {
                         probarParUbicacion(db);
                     }
                 }
-                log.append("PASS MIG-").append(version).append(": v").append(version).append("→v4, snapshot exacto, NULL antiguos, saldo y FK.\n");
+                log.append("PASS MIG-").append(version).append(": v").append(version).append("→v5, snapshot exacto, NULL antiguos, saldo y FK.\n");
             }
             AccessibilityServiceInfo info=getUiAutomation().getServiceInfo(); info.flags|=AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
             getUiAutomation().setServiceInfo(info);
@@ -386,11 +377,11 @@ public final class FlowChecks extends Instrumentation {
             abrir(); clickText("Efectivo");
             nuevoMovimiento("Sin consentimiento");
             assertTrue(!nodeId("incluir_ubicacion").isChecked(),"Opt-in desmarcado"); clickText("Guardar");
-            nodeText("Saldo: 126,50");
+            nodeText("Saldo: USD 126,50");
             assertTrue(getTargetContext().checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)!=android.content.pm.PackageManager.PERMISSION_GRANTED,"No solicitó permiso por registrar");
             nuevoMovimiento("Permiso denegado"); clickId("incluir_ubicacion");
             clickSystemId("com.android.permissioncontroller:id/permission_deny_button");
-            nodeText("Permiso denegado. Puedes guardar sin ubicación."); clickText("Guardar"); nodeText("Saldo: 127,50");
+            nodeText("Permiso denegado. Puedes guardar sin ubicación."); clickText("Guardar"); nodeText("Saldo: USD 127,50");
             log.append("PASS GEO-PERM: sin solicitud automática; diálogo Android real denegado, movimiento guardado con NULL.\n");
             shell("pm grant com.aik1a.localcash android.permission.ACCESS_COARSE_LOCATION");
             shell("pm grant com.aik1a.localcash android.permission.ACCESS_FINE_LOCATION");
@@ -398,15 +389,15 @@ public final class FlowChecks extends Instrumentation {
             nuevoMovimiento("GPS simulado"); clickId("incluir_ubicacion");
             double[] capturada=esperarCaptura();
             log.append("GPS_EXPECTED: ").append(capturada[0]).append(", ").append(capturada[1]).append('\n');
-            clickText("Guardar"); nodeText("Saldo: 128,50");
+            clickText("Guardar"); nodeText("Saldo: USD 128,50");
             log.append("PASS GEO-GPS: permiso concedido, callback LocationManager productivo, GPS inyectado por adb emu geo fix.\n");
             nuevoMovimiento("Consentimiento retirado"); clickId("incluir_ubicacion");
             esperarCaptura(); clickId("incluir_ubicacion");
-            nodeText("Se guardará sin ubicación."); clickText("Guardar"); nodeText("Saldo: 129,50");
+            nodeText("Se guardará sin ubicación."); clickText("Guardar"); nodeText("Saldo: USD 129,50");
             shell("cmd location set-location-enabled false");
             nuevoMovimiento("GPS desactivado"); clickId("incluir_ubicacion");
             nodeText("Ubicación desactivada o proveedor no disponible. Puedes guardar sin ubicación.");
-            clickText("Guardar"); nodeText("Saldo: 130,50");
+            clickText("Guardar"); nodeText("Saldo: USD 130,50");
             shell("cmd location set-location-enabled true");
             // Proveedor Android de pruebas sin fix; usa el listener y timeout productivos.
             shell("appops set com.aik1a.localcash android:mock_location allow");
@@ -418,7 +409,7 @@ public final class FlowChecks extends Instrumentation {
             nodeText("Buscando ubicación (máximo 15 segundos). Puedes guardar sin ubicación.");
             SystemClock.sleep(15500);
             nodeText("No se obtuvo ubicación en 15 segundos. Puedes guardar sin ubicación.");
-            clickText("Guardar"); nodeText("Saldo: 131,50");
+            clickText("Guardar"); nodeText("Saldo: USD 131,50");
             lm.removeTestProvider(android.location.LocationManager.GPS_PROVIDER); testProvider=false;
             log.append("PASS GEO-FALLBACK: consentimiento retirado, GPS desactivado y timeout real sin fix permiten guardar sin ubicación.\n");
             try (LocalCashDbHelper helper=new LocalCashDbHelper(getTargetContext())) {
@@ -489,7 +480,8 @@ public final class FlowChecks extends Instrumentation {
         if (version>=3) tablas.add("deudas");
         for (String tabla:tablas) {
             rows.append(tabla);
-            String cols=tabla.equals("movimientos")?"id,cuenta_id,tipo,monto,descripcion,fecha":"*";
+            String cols=tabla.equals("movimientos")?"id,cuenta_id,tipo,monto,descripcion,fecha":
+                    tabla.equals("cuentas")?"id,nombre,saldo_inicial":tabla.equals("compras")?"id,nombre,estado,fecha,contacto_id":"*";
             try (android.database.Cursor c=db.rawQuery("SELECT "+cols+" FROM "+tabla+" ORDER BY "+(tabla.equals("deudas")?"compra_id,contacto_id":"id"),null)) {
                 while (c.moveToNext()) for (int col=0;col<c.getColumnCount();col++) {
                     String value=c.isNull(col)?"<NULL>":c.getString(col); rows.append(value.length()).append(':').append(value).append(';');
@@ -564,7 +556,7 @@ public final class FlowChecks extends Instrumentation {
         try {
             try {
                 new com.aik1a.localcash.data.CompraRepository(helper).crear(new Compra(0, "Rollback", Compra.Estado.REALIZADA, 0, null,
-                        java.util.Arrays.asList(new DetalleCompra("Primero",1,100),new DetalleCompra("Fallar",1,200))));
+                        java.util.Arrays.asList(new DetalleCompra("Primero",1,100),new DetalleCompra("Fallar",1,200)), Divisa.USD));
                 throw new AssertionError("Falló la prueba de rollback");
             } catch (android.database.sqlite.SQLiteException expected) {
                 try (android.database.Cursor c = db.rawQuery("SELECT (SELECT COUNT(*) FROM compras), (SELECT COUNT(*) FROM detalle_compra)", null)) {
@@ -575,6 +567,14 @@ public final class FlowChecks extends Instrumentation {
         } finally { db.execSQL("DROP TRIGGER test_falla_detalle"); }
     }
 
+    private void prepararDivisas(LocalCashDbHelper helper) {
+        new com.aik1a.localcash.data.ConfiguracionRepository(helper).configurarPrimeraVez(Divisa.USD);
+        com.aik1a.localcash.data.CuentaRepository cuentas = new com.aik1a.localcash.data.CuentaRepository(helper);
+        for (Cuenta c : cuentas.listar()) if (c.getDivisa() == null) cuentas.asignarDivisa(c.getId(), Divisa.USD);
+        com.aik1a.localcash.data.CompraRepository compras = new com.aik1a.localcash.data.CompraRepository(helper);
+        for (Compra c : compras.listar()) if (c.getDivisa() == null) compras.asignarDivisa(c.getId(), Divisa.USD);
+    }
+
     private void esperarUI() {
         try { getUiAutomation().waitForIdle(100, 3000); }
         catch (java.util.concurrent.TimeoutException ignored) {
@@ -582,6 +582,7 @@ public final class FlowChecks extends Instrumentation {
         }
     }
     private void abrir() {
+        try (LocalCashDbHelper helper = new LocalCashDbHelper(getTargetContext())) { prepararDivisas(helper); }
         Intent intent = new Intent(getTargetContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         main = startActivitySync(intent);

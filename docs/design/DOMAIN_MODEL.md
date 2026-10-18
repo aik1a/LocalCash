@@ -188,3 +188,19 @@ Compra 1 ---- N Deuda ---- 1 Contacto
 ```
 
 
+
+## Ampliación S01-T01 — Divisas y usuario del dispositivo
+
+Sustituye precisión uniforme y mínimo de dos contactos para nuevos formularios.
+Divisa es un enum inmutable con diez códigos/nombres, decimales y validación de unidad
+mínima. Cuenta y Compra tienen divisa fija; los constructores históricos delegan con
+null para poder reconstruir datos aún no clasificados. Los formularios nuevos y servicios
+requieren moneda. Dinero mantiene escala de centésimas y añade parseo/formato por
+divisa con BigDecimal exacto. No hay tipo de cambio ni suma multimoneda.
+
+Reparto agrega montoUsuario nullable. Las operaciones equitativoConUsuario y
+personalizadoConUsuario permiten un contacto más Tú, exigen suma exacta incluyendo
+ambos y mantienen la cuota propia separada del mapa de contactos. El mapa sigue
+inmutable y solo contiene IDs positivos reales. Para monedas sin decimales el resto
+se reparte en pesos/yenes completos. Las operaciones históricas sin usuario continúan
+leyendo/revalidando repartos anteriores; no se reinterpretan deudas guardadas.

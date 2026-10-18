@@ -44,7 +44,7 @@ public final class RepartoActivity extends ActividadProtegida {
             CheckBox tu = usuario.findViewById(R.id.seleccionar_contacto);
             tu.setText("Tú"); tu.setChecked(true); tu.setEnabled(false);
             cuotaUsuario = usuario.findViewById(R.id.cuota);
-            cuotaUsuario.setContentDescription("Tu parte"); DivisasUI.ejemplo(cuotaUsuario, divisa);
+            cuotaUsuario.setContentDescription("Monto para Tú"); DivisasUI.ejemplo(cuotaUsuario, divisa);
             if (state != null) cuotaUsuario.setText(state.getString("cuota_usuario", ""));
             filas.addView(usuario);
             for (Contacto contacto : contactos) {
