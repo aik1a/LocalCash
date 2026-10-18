@@ -15,6 +15,7 @@ public abstract class ActividadProtegida extends Activity {
     private Bundle estadoInicial;
     private final List<Dialog> dialogos = new ArrayList<>();
     private View privado;
+    private AlertDialog configuracion;
     @Override public final void onCreate(Bundle state) {
         super.onCreate(state); estadoInicial = state;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
@@ -33,6 +34,28 @@ public abstract class ActividadProtegida extends Activity {
     @Override protected void onResume() {
         super.onResume();
         if (!sesion().autenticada()) { if (privado != null) privado.setVisibility(View.GONE); abrirGate(); return; }
+        if (!asegurarConfiguracion()) return;
+        mostrarContenido();
+    }
+    private boolean asegurarConfiguracion() {
+        try (com.aik1a.localcash.data.LocalCashDbHelper helper = new com.aik1a.localcash.data.LocalCashDbHelper(this)) {
+            if (new com.aik1a.localcash.data.ConfiguracionRepository(helper).buscarDivisa() != null) return true;
+        } catch (android.database.sqlite.SQLiteException ex) {
+            android.widget.Toast.makeText(this, "No se pudo leer la configuración.", android.widget.Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (configuracion == null || !configuracion.isShowing()) {
+            configuracion = DivisasUI.solicitar(this, "Tu moneda principal",
+                    "Se usará al crear cuentas y compras. Puedes elegir otra moneda en cada una.",
+                    com.aik1a.localcash.domain.Divisa.CLP, true, divisa -> {
+                        try (com.aik1a.localcash.data.LocalCashDbHelper helper = new com.aik1a.localcash.data.LocalCashDbHelper(this)) {
+                            new com.aik1a.localcash.data.ConfiguracionRepository(helper).configurarPrimeraVez(divisa);
+                        }
+                    }, () -> { if (sesion().autenticada() && !isFinishing()) mostrarContenido(); });
+        }
+        return false;
+    }
+    private void mostrarContenido() {
         if (!creada) {
             crearContenido(estadoInicial); creada = true;
             ViewGroup content = findViewById(android.R.id.content);
@@ -70,3 +93,4 @@ public abstract class ActividadProtegida extends Activity {
         super.onStop();
     }
 }
+

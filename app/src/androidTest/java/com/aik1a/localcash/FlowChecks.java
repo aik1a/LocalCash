@@ -24,6 +24,7 @@ public final class FlowChecks extends Instrumentation {
     private boolean ubicaciones;
     private Bundle argumentosBiometricos;
     private boolean mapas;
+    private boolean divisas;
     @Override public void onCreate(Bundle arguments) {
         super.onCreate(arguments);
         compras = arguments != null && "purchases".equals(arguments.getString("mode"));
@@ -31,9 +32,10 @@ public final class FlowChecks extends Instrumentation {
         ubicaciones = arguments != null && "location".equals(arguments.getString("mode"));
         if (arguments != null && arguments.getString("mode", "").startsWith("bio-")) argumentosBiometricos = arguments;
         mapas = arguments != null && "maps".equals(arguments.getString("mode"));
+        divisas = arguments != null && "currency".equals(arguments.getString("mode"));
         start();
     }
-    @Override public void onStart() { if (mapas) { MapChecks.ejecutar(this); return; } if (argumentosBiometricos != null) BiometricChecks.ejecutar(this, argumentosBiometricos); else if (ubicaciones) verificarUbicaciones(); else if (compartidas) verificarCompartidas(); else if (compras) verificarCompras(); else verificarCuentas(); }
+    @Override public void onStart() { if (divisas) { CurrencyChecks.ejecutar(this); return; } if (mapas) { MapChecks.ejecutar(this); return; } if (argumentosBiometricos != null) BiometricChecks.ejecutar(this, argumentosBiometricos); else if (ubicaciones) verificarUbicaciones(); else if (compartidas) verificarCompartidas(); else if (compras) verificarCompras(); else verificarCuentas(); }
 
     private void verificarCuentas() {
         Bundle result = new Bundle();

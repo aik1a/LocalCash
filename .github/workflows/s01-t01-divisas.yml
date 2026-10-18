@@ -1,0 +1,67 @@
+name: LocalCash divisas y UX
+on:
+  push:
+    branches: [task/S01-T01-divisas]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: divisas-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        api: [24, 36]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - run: sdkmanager "platforms;android-36.1" "build-tools;36.0.0"
+      - name: Dominio y SQLite local
+        run: |
+          mkdir -p evidence
+          git rev-parse HEAD > evidence/validated-sha.txt
+          bash tests/domain-checks.sh | tee evidence/domain.log
+          python tests/sqlite-currency-checks.py | tee evidence/sqlite-host.log
+      - name: Build app y AndroidTest
+        run: bash gradlew --no-daemon --console=plain :app:assembleDebug :app:assembleDebugAndroidTest 2>&1 | tee evidence/build.log
+      - name: KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: SQLite nativo, biometría y UX
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          arch: x86_64
+          target: google_apis
+          ram-size: 2048M
+          disable-animations: true
+          script: |
+            adb install app/build/outputs/apk/debug/app-debug.apk
+            adb install app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            adb shell am instrument -w -e mode currency com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks > evidence/currency-native.log
+            cat evidence/currency-native.log
+            grep -q LOCALCASH_CURRENCY_PASS evidence/currency-native.log
+            python tests/biometric-emulator.py prepare
+            python tests/biometric-emulator.py enroll
+            python tests/biometric-emulator.py security
+            python tests/currency-ui.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: S01-T01-API${{ matrix.api }}-${{ github.sha }}
+          path: |
+            evidence/
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk

@@ -15,9 +15,11 @@ public final class CompraService {
     public List<Contacto> listarContactos() { return contactos.listar(); }
     public Contacto buscarContacto(long id) { return contactos.buscar(id); }
     public long registrar(Compra compra) {
+        if (compra.getDivisa() == null) throw new IllegalArgumentException("Selecciona la divisa de la compra.");
         if (compra.getContactoId() != null) contactos.buscar(compra.getContactoId());
         return compras.crear(compra);
     }
     public List<Compra> listarCompras() { return compras.listar(); }
     public Compra buscarCompra(long id) { return compras.buscar(id); }
 }
+

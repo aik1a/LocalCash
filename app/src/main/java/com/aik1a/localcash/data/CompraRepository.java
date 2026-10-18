@@ -15,6 +15,7 @@ public final class CompraRepository {
         db.beginTransaction();
         try {
             ContentValues values = new ContentValues();
+            values.put("divisa", compra.getDivisa() == null ? null : compra.getDivisa().name());
             values.put("nombre", compra.getNombre()); values.put("estado", compra.getEstado().name()); values.put("fecha", compra.getFecha());
             if (compra.getContactoId() == null) values.putNull("contacto_id"); else values.put("contacto_id", compra.getContactoId());
             long id = db.insertOrThrow("compras", null, values);
@@ -26,6 +27,24 @@ public final class CompraRepository {
             db.setTransactionSuccessful(); return id;
         } finally { db.endTransaction(); }
     }
+    public void asignarDivisa(long id, Divisa divisa) {
+        if (divisa == null) throw new IllegalArgumentException("Selecciona una divisa.");
+        SQLiteDatabase db = helper.getWritableDatabase(); db.beginTransaction();
+        try {
+            Compra compra = buscar(id);
+            if (compra.getDivisa() != null) throw new IllegalArgumentException("La compra ya tiene divisa.");
+            for (DetalleCompra d : compra.getDetalles()) divisa.validar(d.getPrecioUnitario());
+            DeudaRepository deudas = new DeudaRepository(helper);
+            for (Deuda d : deudas.listarPorCompra(id)) divisa.validar(d.getMonto());
+            Long propio = deudas.buscarMontoUsuario(id);
+            if (propio != null) divisa.validar(propio);
+            ContentValues values = new ContentValues(); values.put("divisa", divisa.name());
+            if (db.update("compras", values, "id=? AND divisa IS NULL", new String[]{Long.toString(id)}) != 1)
+                throw new IllegalArgumentException("La compra cambió. Vuelve a abrirla.");
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
+    }
+
     public List<Compra> listar() {
         List<Compra> resultado = new ArrayList<>();
         try (Cursor c = helper.getReadableDatabase().query("compras", null, null, null, null, null, "fecha DESC, id DESC")) {
@@ -48,6 +67,7 @@ public final class CompraRepository {
                     d.getLong(d.getColumnIndexOrThrow("cantidad")), d.getLong(d.getColumnIndexOrThrow("precio_unitario"))));
         }
         return new Compra(id, c.getString(c.getColumnIndexOrThrow("nombre")), Compra.Estado.valueOf(c.getString(c.getColumnIndexOrThrow("estado"))),
-                c.getLong(c.getColumnIndexOrThrow("fecha")), c.isNull(contact) ? null : c.getLong(contact), detalles);
+                c.getLong(c.getColumnIndexOrThrow("fecha")), c.isNull(contact) ? null : c.getLong(contact), detalles, Divisa.desdeCodigo(c.getString(c.getColumnIndexOrThrow("divisa"))));
     }
 }
+

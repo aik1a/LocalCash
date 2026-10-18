@@ -36,7 +36,7 @@ public final class ComprasActivity extends ActividadProtegida {
             for (Compra compra : compras) {
                 Map<String, String> fila = new HashMap<>(); fila.put("nombre", compra.getNombre());
                 fila.put("detalle", compra.getEstado().name() + " · " + formato.format(new Date(compra.getFecha()))
-                        + " · Total: " + Dinero.formatear(compra.calcularTotal())); filas.add(fila);
+                        + " · Total: " + Dinero.formatear(compra.calcularTotal(), compra.getDivisa())); filas.add(fila);
             }
             lista.setAdapter(new SimpleAdapter(this, filas, android.R.layout.simple_list_item_2,
                     new String[]{"nombre", "detalle"}, new int[]{android.R.id.text1, android.R.id.text2}));
@@ -46,4 +46,5 @@ public final class ComprasActivity extends ActividadProtegida {
     }
     @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
 }
+
 

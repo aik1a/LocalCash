@@ -27,6 +27,8 @@ public final class CuentaActivity extends ActividadProtegida {
     private CapturaUbicacion captura;
     private Ubicacion ubicacion;
     private boolean capturando;
+    private Divisa divisa;
+    private AlertDialog selectorDivisa;
 
 
     @Override protected void crearContenido(Bundle state) {
@@ -47,15 +49,19 @@ public final class CuentaActivity extends ActividadProtegida {
     private void actualizar() {
         try {
             Cuenta cuenta = service.buscarCuenta(cuentaId);
+            divisa = cuenta.getDivisa();
+            if (divisa == null && (selectorDivisa == null || !selectorDivisa.isShowing()))
+                selectorDivisa = DivisasUI.cuenta(this, cuentaId,
+                        new com.aik1a.localcash.data.ConfiguracionRepository(helper).exigirDivisa(), this::actualizar);
             ((TextView) findViewById(R.id.nombre_cuenta)).setText(cuenta.getNombre());
-            ((TextView) findViewById(R.id.saldo)).setText("Saldo: " + Dinero.formatear(service.calcularSaldo(cuentaId)));
+            ((TextView) findViewById(R.id.saldo)).setText("Saldo: " + Dinero.formatear(service.calcularSaldo(cuentaId), divisa));
             List<Movimiento> historial = service.listarMovimientos(cuentaId);
             Collections.reverse(historial);
             List<Map<String, String>> filas = new ArrayList<>();
             DateFormat fecha = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
             for (Movimiento movimiento : historial) {
                 Map<String, String> fila = new HashMap<>();
-                fila.put("monto", movimiento.getTipo().name() + " · " + Dinero.formatear(movimiento.getMontoConSigno()));
+                fila.put("monto", movimiento.getTipo().name() + " · " + Dinero.formatear(movimiento.getMontoConSigno(), divisa));
                 fila.put("detalle", fecha.format(new Date(movimiento.getFecha()))
                         + (movimiento.getDescripcion().isEmpty() ? "" : " · " + movimiento.getDescripcion())
                         + (movimiento.tieneUbicacion() ? "\nUbicación: " + movimiento.getUbicacion().getLatitud()
@@ -72,6 +78,7 @@ public final class CuentaActivity extends ActividadProtegida {
 
     private void mostrarFormulario() {
         if (formulario != null && formulario.isShowing()) return;
+        if (divisa == null) { actualizar(); return; }
         View form = getLayoutInflater().inflate(R.layout.dialog_movimiento, null);
         campos = form; ubicacion = null;
         CheckBox incluir = form.findViewById(R.id.incluir_ubicacion);
@@ -94,6 +101,7 @@ public final class CuentaActivity extends ActividadProtegida {
             if (incluir.isChecked()) solicitarUbicacion(); else incluir.setChecked(true);
         });
         EditText monto = form.findViewById(R.id.monto);
+        DivisasUI.ejemplo(monto, divisa);
         EditText descripcion = form.findViewById(R.id.descripcion);
         RadioGroup tipo = form.findViewById(R.id.tipo);
         AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Registrar movimiento")
@@ -105,7 +113,7 @@ public final class CuentaActivity extends ActividadProtegida {
             }
             try {
                 service.registrar(cuentaId, elegido == R.id.ingreso ? Movimiento.Tipo.INGRESO : Movimiento.Tipo.EGRESO,
-                        Dinero.parsear(monto.getText().toString()), descripcion.getText().toString(),
+                        Dinero.parsear(monto.getText().toString(), divisa), descripcion.getText().toString(),
                         incluir.isChecked() ? ubicacion : null);
                 dialog.dismiss(); actualizar();
             } catch (IllegalArgumentException ex) { monto.setError(ex.getMessage()); }
@@ -153,5 +161,6 @@ public final class CuentaActivity extends ActividadProtegida {
     @Override protected void onDestroy() { if (formulario != null) formulario.dismiss(); if (captura != null) captura.cancelar();
         if (helper != null) helper.close(); super.onDestroy(); }
 }
+
 
 

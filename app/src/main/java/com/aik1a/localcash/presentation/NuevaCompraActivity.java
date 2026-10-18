@@ -21,7 +21,8 @@ public final class NuevaCompraActivity extends ActividadProtegida {
     private List<Contacto> contactos;
     private long fecha;
     private EditText nombre, descripcion, cantidad, precio;
-    private Spinner estado, contacto;
+    private Spinner estado, contacto, selectorDivisa;
+    private Divisa divisa;
     private LinearLayout lista;
     private TextView error;
 
@@ -32,11 +33,23 @@ public final class NuevaCompraActivity extends ActividadProtegida {
         nombre = findViewById(R.id.nombre_compra); descripcion = findViewById(R.id.item_descripcion);
         cantidad = findViewById(R.id.item_cantidad); precio = findViewById(R.id.item_precio);
         estado = findViewById(R.id.estado_compra); contacto = findViewById(R.id.contacto_compra);
+        selectorDivisa = findViewById(R.id.divisa);
+        divisa = saved == null ? new com.aik1a.localcash.data.ConfiguracionRepository(helper).exigirDivisa()
+                : Divisa.valueOf(saved.getString("divisa", "CLP"));
+        DivisasUI.preparar(selectorDivisa, divisa);
+        selectorDivisa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Divisa elegida = (Divisa)selectorDivisa.getSelectedItem();
+                if (!detalles.isEmpty() && elegida != divisa) { selectorDivisa.setSelection(divisa.ordinal()); return; }
+                divisa = elegida; DivisasUI.ejemplo(precio, divisa); mostrarDetalles();
+            }
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
         lista = findViewById(R.id.detalles); error = findViewById(R.id.error_compra);
         estado.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Compra.Estado.values()));
         try {
             contactos = service.listarContactos(); List<String> opciones = new ArrayList<>(); opciones.add("Sin contacto");
-            for (Contacto c : contactos) opciones.add(c.getNombre() + " (#" + c.getId() + ")");
+            for (Contacto c : contactos) opciones.add(c.getNombre());
             contacto.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, opciones));
         } catch (SQLiteException ex) { Toast.makeText(this, "No se pudieron cargar los contactos.", Toast.LENGTH_LONG).show(); finish(); return; }
         fecha = saved == null ? System.currentTimeMillis() : saved.getLong("fecha");
@@ -62,9 +75,9 @@ public final class NuevaCompraActivity extends ActividadProtegida {
     private void agregarItem() {
         try {
             long unidades = Long.parseLong(cantidad.getText().toString().trim());
-            DetalleCompra detalle = new DetalleCompra(descripcion.getText().toString(), unidades, Dinero.parsear(precio.getText().toString()));
+            DetalleCompra detalle = new DetalleCompra(descripcion.getText().toString(), unidades, Dinero.parsear(precio.getText().toString(), divisa));
             List<DetalleCompra> nueva = new ArrayList<>(detalles); nueva.add(detalle);
-            new Compra(0, "Borrador", Compra.Estado.PLANIFICADA, fecha, null, nueva).calcularTotal();
+            new Compra(0, "Borrador", Compra.Estado.PLANIFICADA, fecha, null, nueva, divisa).calcularTotal();
             detalles.add(detalle); descripcion.setText(""); cantidad.setText("1"); precio.setText("");
             error.setText(""); mostrarDetalles();
         } catch (NumberFormatException ex) { error.setText("La cantidad debe ser un entero positivo dentro del rango permitido."); }
@@ -72,15 +85,16 @@ public final class NuevaCompraActivity extends ActividadProtegida {
         catch (ArithmeticException ex) { error.setText("Cantidad, precio o total fuera de rango."); }
     }
     private void mostrarDetalles() {
+        selectorDivisa.setEnabled(detalles.isEmpty());
         lista.removeAllViews();
         for (DetalleCompra d : detalles) {
             View fila = getLayoutInflater().inflate(R.layout.row_item_borrador, lista, false);
             ((TextView)fila.findViewById(R.id.item_texto)).setText(d.getDescripcion() + " · " + d.getCantidad() + " × "
-                    + Dinero.formatear(d.getPrecioUnitario()) + " = " + Dinero.formatear(d.calcularSubtotal()));
+                    + Dinero.formatear(d.getPrecioUnitario(), divisa) + " = " + Dinero.formatear(d.calcularSubtotal(), divisa));
             fila.findViewById(R.id.quitar_item).setOnClickListener(v -> { detalles.remove(d); mostrarDetalles(); }); lista.addView(fila);
         }
-        long total = detalles.isEmpty() ? 0 : new Compra(0, "Borrador", Compra.Estado.PLANIFICADA, fecha, null, detalles).calcularTotal();
-        ((TextView)findViewById(R.id.compra_total)).setText("Total: " + Dinero.formatear(total));
+        long total = detalles.isEmpty() ? 0 : new Compra(0, "Borrador", Compra.Estado.PLANIFICADA, fecha, null, detalles, divisa).calcularTotal();
+        ((TextView)findViewById(R.id.compra_total)).setText("Total: " + Dinero.formatear(total, divisa));
     }
     private void guardar() {
         if (!descripcion.getText().toString().trim().isEmpty() || !precio.getText().toString().trim().isEmpty()) {
@@ -88,7 +102,7 @@ public final class NuevaCompraActivity extends ActividadProtegida {
         }
         try {
             int elegido = contacto.getSelectedItemPosition(); Long idContacto = elegido == 0 ? null : contactos.get(elegido - 1).getId();
-            Compra compra = new Compra(0, nombre.getText().toString(), (Compra.Estado)estado.getSelectedItem(), fecha, idContacto, detalles);
+            Compra compra = new Compra(0, nombre.getText().toString(), (Compra.Estado)estado.getSelectedItem(), fecha, idContacto, detalles, divisa);
             long id = service.registrar(compra);
             startActivity(new Intent(this, CompraDetalleActivity.class).putExtra(CompraDetalleActivity.COMPRA_ID, id)); finish();
         } catch (IllegalArgumentException ex) { error.setText(ex.getMessage()); }
@@ -96,11 +110,12 @@ public final class NuevaCompraActivity extends ActividadProtegida {
         catch (SQLiteException ex) { error.setText("No se guardó la compra. Los datos del formulario se conservan."); }
     }
     @Override protected void onSaveInstanceState(Bundle out) {
-        super.onSaveInstanceState(out); if (!contenidoCreado()) return; out.putLong("fecha", fecha);
+        super.onSaveInstanceState(out); if (!contenidoCreado()) return; out.putLong("fecha", fecha); out.putString("divisa", divisa.name());
         ArrayList<String> nombres = new ArrayList<>(); long[] cantidades = new long[detalles.size()], precios = new long[detalles.size()];
         for (int i = 0; i < detalles.size(); i++) { DetalleCompra d = detalles.get(i); nombres.add(d.getDescripcion()); cantidades[i] = d.getCantidad(); precios[i] = d.getPrecioUnitario(); }
         out.putStringArrayList("items", nombres); out.putLongArray("cantidades", cantidades); out.putLongArray("precios", precios);
     }
     @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
 }
+
 
