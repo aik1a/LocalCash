@@ -82,7 +82,7 @@ public final class MainActivity extends ActividadProtegida {
                 AccionesUI.exito(this, "Cuenta creada");
             } catch (IllegalArgumentException ex) { saldo.setError(ex.getMessage()); }
             catch (SQLiteException ex) {
-                Toast.makeText(this, "No se guardó la cuenta. Intenta nuevamente.", Toast.LENGTH_LONG).show();
+                saldo.setError("No se guardó la cuenta. Intenta nuevamente.");
             }
         }));
         protegerDialogo(dialog).show();

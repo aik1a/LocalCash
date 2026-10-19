@@ -64,7 +64,9 @@ scroll(b.dump('currency-product-scroll'))
 text('item_descripcion','Pan');text('item_precio','100');tap(resource='agregar_item')
 # Both labels remain concise. No leaked validation requirements or database IDs.
 tree=b.dump('currency-clean-labels');assert 'hasta 2 decimales' not in b.texts(tree) and 'entera positiva' not in b.texts(tree)
-tap(resource='guardar_compra');visible('Pagar compra');tap(text='Confirmar pago');visible('Contacto: Valentina');visible('Total: CLP 100');tap(resource='abrir_reparto')
+tap(resource='guardar_compra');visible('Pagar compra');tap(text='Cancelar')
+# Cancelar conserva el borrador y no registra una compra realizada.
+visible('Registrar compra');tap(resource='guardar_compra');visible('Pagar compra');tap(text='Confirmar pago');visible('Contacto: Valentina');visible('Total: CLP 100');tap(resource='abrir_reparto')
 visible('Tú');visible('Valentina');tap(resource='guardar_reparto')
 visible('Tú: CLP 50');visible('Valentina: CLP 50')
 # Real process restart: preference and per-purchase allocations survive.

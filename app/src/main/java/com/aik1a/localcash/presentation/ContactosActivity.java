@@ -39,7 +39,7 @@ public final class ContactosActivity extends ActividadProtegida {
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             try { service.crearContacto(nombre.getText().toString()); dialog.dismiss(); actualizar(); AccionesUI.exito(this, "Contacto creado"); }
             catch (IllegalArgumentException ex) { nombre.setError(ex.getMessage()); }
-            catch (SQLiteException ex) { Toast.makeText(this, "No se guardó el contacto.", Toast.LENGTH_LONG).show(); }
+            catch (SQLiteException ex) { nombre.setError("No se guardó el contacto. Intenta nuevamente."); }
         }));
         protegerDialogo(dialog).show();
     }

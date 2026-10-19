@@ -130,7 +130,7 @@ public final class CuentaActivity extends ActividadProtegida {
             } catch (IllegalArgumentException ex) { monto.setError(ex.getMessage()); }
             catch (ArithmeticException ex) { monto.setError("El movimiento excede el rango del saldo."); }
             catch (SQLiteException ex) {
-                Toast.makeText(this, "No se guardó el movimiento. Intenta nuevamente.", Toast.LENGTH_LONG).show();
+                monto.setError("No se guardó el movimiento. Intenta nuevamente.");
             }
         }));
         formulario = dialog;
