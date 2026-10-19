@@ -40,8 +40,8 @@ compra CLP 100/3 → 34/33/33; fracciones CLP rechazadas; rotación y migración
 ## Progreso
 - [x] Inspección y autorización
 - [x] Implementación
-- [ ] Pruebas y revisión
-- [ ] Handoff y PR
+- [x] Pruebas y revisión del codificador
+- [x] Handoff y PR
 
 ## Decisiones y descubrimientos
 Se preserva escala de 100 unidades persistidas por unidad monetaria, también CLP/JPY.
@@ -49,7 +49,10 @@ Se rechaza exceso de precisión; no se redondea dinero del usuario silenciosamen
 Selección principal afecta valores iniciales de formularios, nunca registros existentes.
 
 ## Resultado final
-En curso.
+Codificación completa; PR #13 listo para auditoría independiente, sin merge.
+CI 39178585250 sobre 6b7813cb: SUCCESS API24/API36, incluidos build, 76 checks
+nativos por API, biometría, mapas, smoke divisas y regresión financiera/GPS API36.
+Ver docs/testing/S01-T01.md y docs/handoffs/S01-T01-coder.md.
 
 ## Ampliación de alcance autorizada
 Usuario pide «Tú + un contacto», retirar IDs visibles y aclaraciones técnicas.

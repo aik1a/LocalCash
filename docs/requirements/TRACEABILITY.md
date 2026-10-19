@@ -131,11 +131,12 @@ una ampliación funcional; no se presenta como exigencia literal del PDF docente
 
 | Cambio | Requisitos vinculados | Implementación | Evidencia actual |
 |---|---|---|---|
-| Moneda principal inicial persistida | LC-P02, LC-AUTH-01 | ActividadProtegida, ConfiguracionRepository, esquema v5 | Tests de SQLite; validación Android en curso |
+| Moneda principal inicial persistida | LC-P02, LC-AUTH-01 | ActividadProtegida, ConfiguracionRepository, esquema v5 | SQLite y UI API24/API36 PASS |
 | Divisa por cuenta/compra y precisión | LC-ACC-01, LC-MOV-01, LC-BUY-01 | Divisa, Dinero, Cuenta/Compra, formularios y repositorios | 28.917 checks específicos de dominio; SQL real sobre host |
-| Migración sin conversión ni pérdida | LC-TECH-01 | v1–v4→v5 aditiva, asignación explícita | 55 checks SQLite host; CurrencyChecks preparado para Android |
-| Tú + un contacto y cuota propia | LC-SHARED-02, LC-DEBT-01/02 | Reparto, DeudaService/Repository, reparto_usuario | Suma y precisión probadas; persistencia/UX Android en curso |
-| Etiquetas y nombres legibles | LC-CON-01, LC-BUY-01 | Sin IDs visibles; etiquetas simples y ejemplos | XML validado; smoke UI preparado |
+| Migración sin conversión ni pérdida | LC-TECH-01 | v1–v4→v5 aditiva, asignación explícita | 55 checks SQLite host; 76 checks Android por API PASS |
+| Tú + un contacto y cuota propia | LC-SHARED-02, LC-DEBT-01/02 | Reparto, DeudaService/Repository, reparto_usuario | Suma y precisión probadas; persistencia/UX Android API24/API36 PASS |
+| Etiquetas y nombres legibles | LC-CON-01, LC-BUY-01 | Sin IDs visibles; etiquetas simples y ejemplos | XML y smoke UI API24/API36 PASS |
 
 PR: https://github.com/aik1a/LocalCash/pull/13. Ver handoff S01-T01 y CI de la rama
-para resultado final; auditoría independiente y merge aún pendientes.
+para resultado final: CI 39178585250 SUCCESS sobre 6b7813cb (API24/API36).
+Auditoría independiente y merge aún pendientes.
