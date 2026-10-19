@@ -47,3 +47,28 @@ Cada participante debe poder tener un monto claramente asignado. Una deuda no pu
 ## BR-SEC-01 — Biometría
 
 LocalCash no almacena huellas ni plantillas biométricas. La validación se delega a Android mediante `BiometricPrompt`.
+
+## S01-T01 — Reglas aprobadas por Aikia, 18-10-2026
+
+Estas reglas sustituyen el mínimo de dos contactos y la precisión uniforme de S00
+para los nuevos formularios. No recalculan repartos históricos.
+
+- BR-CUR-01: elegir moneda principal una sola vez tras autenticar, persistida en SQLite;
+  se usa como selección inicial al crear cuentas y compras, que pueden usar otra divisa.
+- BR-CUR-02: catálogo CLP/USD/EUR/ARS/MXN/COP/PEN/BRL/GBP/JPY. CLP y JPY:
+  enteros; las demás: dos decimales. Exceso de precisión se rechaza, no se redondea.
+- BR-CUR-03: movimientos heredan divisa de cuenta; detalles, cuotas y deudas heredan
+  compra. Moneda asignada fija. No conversión ni total sumado entre distintas monedas.
+- BR-CUR-04: datos previos conservan importes exactos y requieren asignación explícita
+  de divisa; no asignar CLP/JPY mientras existan fracciones en sus importes relacionados.
+- BR-SHARE-03: el usuario participa como «Tú», sin necesitar contacto propio. Basta
+  un contacto seleccionado. Un único contacto existente se preselecciona; con varios,
+  el usuario elige a quién incluir. El contacto asociado a la compra no determina por sí
+  mismo el conjunto de participantes.
+- BR-SHARE-04: reparto equitativo divide en la unidad mínima de la moneda. El resto
+  va primero a Tú, luego a contactos por ID ascendente. Ejemplo 100 CLP entre Tú y
+  dos contactos: 34/33/33. La suma siempre coincide con el total.
+- BR-SHARE-05: personalizado exige tu importe y el de cada contacto seleccionado;
+  todos >=0, misma precisión que la compra y suma exacta. La cuota propia no es deuda.
+- BR-UX-01: nombres de contactos sin IDs visibles; etiquetas simples («Cantidad»,
+  «Precio unitario», «Monto»). Ejemplos en campos; validaciones se explican al fallar.

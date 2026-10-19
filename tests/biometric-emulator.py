@@ -20,7 +20,8 @@ def dump(label='window'):
     global sequence
     sequence+=1
     adb('shell','uiautomator','dump','/sdcard/bio.xml')
-    path=folder/f'bio-{label}-{sequence}.xml'
+    safe_label=re.sub(r'[^a-zA-Z0-9_-]+','-',label)
+    path=folder/f'bio-{safe_label}-{sequence}.xml'
     adb('pull','/sdcard/bio.xml',str(path))
     return ET.parse(path).getroot()
 
@@ -167,7 +168,7 @@ def security():
     lines.append('PASS éxito: cuentas/saldo visibles tras desafío.')
     # Navegación interna no invalida la sesión autenticada.
     assert tap(tree,text='Efectivo')
-    tree=wait(lambda t:has(t,'Saldo: 125,50'),'account');assert private(tree)
+    tree=wait(lambda t:has(t,'Saldo: USD 125,50'),'account');assert private(tree)
     assert tap(tree,resource='volver')
     tree=wait(lambda t:has(t,'Efectivo'),'main-back')
     assert tap(tree,resource='abrir_contactos')
@@ -177,12 +178,12 @@ def security():
     assert tap(tree,resource='abrir_compras')
     tree=wait(lambda t:has(t,'Compra previa'),'purchases');assert private(tree)
     assert tap(tree,text='Compra previa')
-    tree=wait(lambda t:has(t,'Total: 100,00'),'purchase-detail');assert private(tree)
+    tree=wait(lambda t:has(t,'Total: USD 100,00'),'purchase-detail');assert private(tree)
     assert tap(tree,resource='abrir_reparto')
-    tree=wait(lambda t:has(t,'Ana (#1): 50,00') and has(t,'Luis (#2): 50,00'),'debts');assert private(tree)
+    tree=wait(lambda t:has(t,'Ana: USD 50,00') and has(t,'Luis: USD 50,00'),'debts');assert private(tree)
     adb('shell','settings','put','system','accelerometer_rotation','0')
     adb('shell','settings','put','system','user_rotation','1');time.sleep(1)
-    tree=wait(lambda t:has(t,'Ana (#1): 50,00') and has(t,'Luis (#2): 50,00'),'private-rotation');assert private(tree)
+    tree=wait(lambda t:has(t,'Ana: USD 50,00') and has(t,'Luis: USD 50,00'),'private-rotation');assert private(tree)
     adb('shell','settings','put','system','user_rotation','0');time.sleep(1)
     lines.append('PASS navegación y rotación de pantalla privada: cuentas/movimientos, contactos, compras/detalles/deudas con sesión válida.')
     adb('shell','input','keyevent','3');time.sleep(1)
@@ -259,3 +260,4 @@ if __name__ == '__main__':
             try:(folder/'biometric-final-logcat.txt').write_text(adb('logcat','-d','-t','1000'))
             except Exception:pass
         raise
+

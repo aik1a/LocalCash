@@ -43,11 +43,12 @@ public final class MapChecks {
         log.append("PASS primera instalación: sin conectividad, sin permiso INTERNET y sin atlas/caché previo.\n");
         context.deleteDatabase("localcash.db");long cuenta,sinGps;
         try(LocalCashDbHelper helper=new LocalCashDbHelper(context)){
+            new com.aik1a.localcash.data.ConfiguracionRepository(helper).configurarPrimeraVez(Divisa.USD);
             MovimientoService service=new MovimientoService(helper);cuenta=service.crearCuenta("Demo mapa",10000);sinGps=service.crearCuenta("Sin GPS",5000);
             service.registrar(cuenta,Movimiento.Tipo.INGRESO,100,"Centro",new Ubicacion(-33.450,-70.660));
             service.registrar(cuenta,Movimiento.Tipo.EGRESO,50,"Fuera",new Ubicacion(-33.50,-70.70));
             service.registrar(cuenta,Movimiento.Tipo.INGRESO,25,"Sin coordenadas");
-            service.registrar(sinGps,Movimiento.Tipo.INGRESO,1,"Sin GPS");ok(helper.getReadableDatabase().getVersion()==4,"SQLite v4");
+            service.registrar(sinGps,Movimiento.Tipo.INGRESO,1,"Sin GPS");ok(helper.getReadableDatabase().getVersion()==5,"SQLite v5");
         }
         ins.startActivitySync(new Intent(context,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK));
         clickText("Demo mapa");
@@ -86,9 +87,9 @@ public final class MapChecks {
         log.append("PASS sin coordenadas: cero marcadores/estado vacío; ZIP corrupto: error local controlado; copia ausente: recuperada exclusivamente desde APK.\n");
         try{AtlasOffline.validar(context,new File(context.getFilesDir(),"no-existe.zip"));throw new AssertionError("Archivo ausente aceptado");}catch(IOException esperado){}
         try(LocalCashDbHelper helper=new LocalCashDbHelper(context)){
-            MovimientoService s=new MovimientoService(helper);ok(helper.getReadableDatabase().getVersion()==4,"No hay migración");ok(s.calcularSaldo(cuenta)==10075&&s.listarMovimientos(cuenta).size()==3,"Mapa no altera datos/saldo");
+            MovimientoService s=new MovimientoService(helper);ok(helper.getReadableDatabase().getVersion()==5,"No hay migración");ok(s.calcularSaldo(cuenta)==10075&&s.listarMovimientos(cuenta).size()==3,"Mapa no altera datos/saldo");
         }
-        log.append("PASS reapertura/lifecycle y SQLite v4: datos/saldos/coordenadas intactos.\nLOCALCASH_MAPS_PASS\n");
+        log.append("PASS reapertura/lifecycle y SQLite v5: datos/saldos/coordenadas intactos.\nLOCALCASH_MAPS_PASS\n");
         File evidence=new File(context.getFilesDir(),"map-evidence");evidence.mkdirs();try(FileWriter writer=new FileWriter(new File(evidence,"map-checks.log"))){writer.write(log.toString());}
         result.putString("stream",log.toString());ins.finish(Activity.RESULT_OK,result);
     }catch(Throwable ex){result.putString("stream",log+"\nLOCALCASH_MAPS_FAIL\n"+android.util.Log.getStackTraceString(ex));ins.finish(Activity.RESULT_CANCELED,result);}}

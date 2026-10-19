@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public final class LocalCashDbHelper extends SQLiteOpenHelper {
     public LocalCashDbHelper(Context context) {
-        super(context.getApplicationContext(), "localcash.db", null, 4);
+        super(context.getApplicationContext(), "localcash.db", null, 5);
     }
 
     @Override public void onConfigure(SQLiteDatabase db) {
@@ -27,6 +27,7 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
         crearCompras(db);
         crearDeudas(db);
         crearUbicacion(db);
+        crearDivisas(db);
     }
 
     private void crearCompras(SQLiteDatabase db) {
@@ -49,10 +50,11 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion >= 1 && oldVersion < newVersion && newVersion <= 4) {
+        if (oldVersion >= 1 && oldVersion < newVersion && newVersion <= 5) {
             if (oldVersion < 2 && newVersion >= 2) crearCompras(db);
             if (oldVersion < 3 && newVersion >= 3) crearDeudas(db);
             if (oldVersion < 4 && newVersion >= 4) crearUbicacion(db);
+            if (oldVersion < 5 && newVersion >= 5) crearDivisas(db);
             return;
         }
         throw new IllegalStateException("Migración no soportada: " + oldVersion + " → " + newVersion);
@@ -66,6 +68,48 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
                 + "(latitud IS NOT NULL AND longitud IS NOT NULL AND typeof(longitud) IN ('real','integer') "
                 + "AND longitud BETWEEN -180 AND 180))");
     }
+    private void crearDivisas(SQLiteDatabase db) {
+        String catalogo = "'CLP','USD','EUR','ARS','MXN','COP','PEN','BRL','GBP','JPY'";
+        db.execSQL("CREATE TABLE configuracion (id INTEGER PRIMARY KEY CHECK(id=1), "
+                + "divisa TEXT NOT NULL CHECK(divisa IN (" + catalogo + ")))");
+        db.execSQL("CREATE TABLE reparto_usuario (compra_id INTEGER PRIMARY KEY REFERENCES compras(id) ON DELETE RESTRICT, "
+                + "monto INTEGER NOT NULL CHECK(typeof(monto)='integer' AND monto>=0))");
+        for (String tabla : new String[]{"cuentas", "compras"}) {
+            db.execSQL("ALTER TABLE " + tabla + " ADD COLUMN divisa TEXT CHECK(divisa IS NULL OR divisa IN (" + catalogo + "))");
+            db.execSQL("CREATE TRIGGER " + tabla + "_divisa_fija BEFORE UPDATE OF divisa ON " + tabla
+                    + " WHEN OLD.divisa IS NOT NULL AND (NEW.divisa IS NULL OR NEW.divisa<>OLD.divisa) "
+                    + "BEGIN SELECT RAISE(ABORT,'La divisa asignada es fija'); END");
+        }
+        db.execSQL("CREATE TRIGGER cuentas_precision_insert BEFORE INSERT ON cuentas "
+                + "WHEN NEW.divisa IN ('CLP','JPY') AND NEW.saldo_inicial%100<>0 "
+                + "BEGIN SELECT RAISE(ABORT,'La divisa no admite fracciones'); END");
+        db.execSQL("CREATE TRIGGER cuentas_precision_update BEFORE UPDATE ON cuentas "
+                + "WHEN NEW.divisa IN ('CLP','JPY') AND (NEW.saldo_inicial%100<>0 OR EXISTS "
+                + "(SELECT 1 FROM movimientos WHERE cuenta_id=OLD.id AND monto%100<>0)) "
+                + "BEGIN SELECT RAISE(ABORT,'El historial contiene fracciones'); END");
+        db.execSQL("CREATE TRIGGER compras_precision_update BEFORE UPDATE OF divisa ON compras "
+                + "WHEN NEW.divisa IN ('CLP','JPY') AND (EXISTS "
+                + "(SELECT 1 FROM detalle_compra WHERE compra_id=OLD.id AND precio_unitario%100<>0) OR EXISTS "
+                + "(SELECT 1 FROM deudas WHERE compra_id=OLD.id AND monto%100<>0) OR EXISTS "
+                + "(SELECT 1 FROM reparto_usuario WHERE compra_id=OLD.id AND monto%100<>0)) "
+                + "BEGIN SELECT RAISE(ABORT,'La compra contiene fracciones'); END");
+        for (String evento : new String[]{"INSERT", "UPDATE"}) {
+            db.execSQL("CREATE TRIGGER usuario_precision_" + evento + " BEFORE " + evento + " ON reparto_usuario "
+                    + "WHEN (SELECT divisa FROM compras WHERE id=NEW.compra_id) IN ('CLP','JPY') AND NEW.monto%100<>0 "
+                    + "BEGIN SELECT RAISE(ABORT,'La divisa no admite fracciones'); END");
+            db.execSQL("CREATE TRIGGER movimientos_precision_" + evento + " BEFORE " + evento + " ON movimientos "
+                    + "WHEN (SELECT divisa FROM cuentas WHERE id=NEW.cuenta_id) IN ('CLP','JPY') AND NEW.monto%100<>0 "
+                    + "BEGIN SELECT RAISE(ABORT,'La divisa no admite fracciones'); END");
+            db.execSQL("CREATE TRIGGER detalles_precision_" + evento + " BEFORE " + evento + " ON detalle_compra "
+                    + "WHEN (SELECT divisa FROM compras WHERE id=NEW.compra_id) IN ('CLP','JPY') AND NEW.precio_unitario%100<>0 "
+                    + "BEGIN SELECT RAISE(ABORT,'La divisa no admite fracciones'); END");
+            db.execSQL("CREATE TRIGGER deudas_precision_" + evento + " BEFORE " + evento + " ON deudas "
+                    + "WHEN (SELECT divisa FROM compras WHERE id=NEW.compra_id) IN ('CLP','JPY') AND NEW.monto%100<>0 "
+                    + "BEGIN SELECT RAISE(ABORT,'La divisa no admite fracciones'); END");
+        }
+    }
+
 }
+
 
 

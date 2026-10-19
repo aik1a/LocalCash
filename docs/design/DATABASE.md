@@ -132,3 +132,45 @@ Cuando S01 cierre estas decisiones:
 5. actualizar trazabilidad.
 
 
+
+
+## S01-T01 — Divisas y cuota propia, esquema v5
+
+Ampliación solicitada por Aikia el 18-10-2026. Este apartado sustituye la regla
+«sin moneda» de los incrementos anteriores; no modifica sus evidencias históricas.
+
+| Tabla/campo | Regla |
+|---|---|
+| configuracion | Fila única id=1; divisa TEXT NOT NULL del catálogo. Ausencia significa configuración inicial pendiente. |
+| cuentas.divisa | Código TEXT del catálogo. Nullable únicamente para registros previos sin moneda identificada. |
+| compras.divisa | Igual; los detalles y las deudas heredan esta moneda. |
+| reparto_usuario | compra_id PK/FK compras RESTRICT; monto INTEGER >=0; cuota de «Tú», sin contacto o deuda ficticios. |
+
+Catálogo fijo: CLP, USD, EUR, ARS, MXN, COP, PEN, BRL, GBP, JPY. CLP/JPY admiten
+unidades enteras; las demás dos decimales. La representación existente NO se reescala:
+100 CLP continúa almacenándose como 10000. No usar REAL para dinero. Cantidades y
+precios se validan antes de guardar y la UI muestra códigos sin sumar distintas monedas.
+
+Migraciones v1–v4→v5 aditivas: se ejecutan pasos anteriores necesarios y luego
+se crean configuracion/reparto_usuario y se agregan columnas divisa. No se asigna
+moneda principal ni por registro automáticamente. Configuración se pide tras biometría;
+la moneda de cada cuenta/compra previa se asigna explícitamente al abrirla. Antes de
+asignar CLP/JPY se valida saldo inicial, movimientos, precios unitarios y cuotas/deudas
+según corresponda. Si hay fracciones se conserva todo y se rechaza la asignación.
+Nunca se redondea, divide ni multiplica el importe histórico durante la migración.
+
+Divisa ya asignada es fija (repositorios y triggers). CHECK protege catálogo; triggers
+protegen precisión CLP/JPY en INSERT/UPDATE de montos y asignación de moneda.
+Los servicios impiden nuevos movimientos/repartos sin divisa. Las lecturas históricas
+sin divisa conservan representación decimal exacta y se etiquetan «Sin divisa».
+Constructores antiguos se conservan para reconstrucción histórica y pruebas, sin
+inventar una moneda. Nuevos formularios siempre guardan divisa explícita.
+
+La cuota propia y todas las deudas de contactos se guardan en la misma transacción.
+DeudaRepository revalida contra la compra persistida, exige suma exacta incluyendo
+al usuario y rechaza un segundo reparto. Los repartos antiguos no reciben una cuota
+propia retroactiva. Persistir cuotas evita tener que inferirlas al cambiar reglas.
+
+Validación: tests/CurrencyDomainChecks.java, tests/sqlite-currency-checks.py,
+CurrencyChecks Android, tests/currency-ui.py y workflow s00-t06c-build.yml. La
+migración lógica SQLite no acredita actualización APK entre certificados distintos.

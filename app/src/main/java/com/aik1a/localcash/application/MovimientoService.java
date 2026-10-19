@@ -4,6 +4,7 @@ import com.aik1a.localcash.data.CuentaRepository;
 import com.aik1a.localcash.data.LocalCashDbHelper;
 import com.aik1a.localcash.data.MovimientoRepository;
 import com.aik1a.localcash.domain.Cuenta;
+import com.aik1a.localcash.domain.Divisa;
 import com.aik1a.localcash.domain.Movimiento;
 import com.aik1a.localcash.domain.Ubicacion;
 import java.util.List;
@@ -22,7 +23,11 @@ public final class MovimientoService {
     }
 
     public long crearCuenta(String nombre, long saldoInicial) {
-        return cuentas.crear(new Cuenta(0, nombre, saldoInicial));
+        return crearCuenta(nombre, saldoInicial, new com.aik1a.localcash.data.ConfiguracionRepository(helper).exigirDivisa());
+    }
+    public long crearCuenta(String nombre, long saldoInicial, Divisa divisa) {
+        if (divisa == null) throw new IllegalArgumentException("Selecciona una divisa.");
+        return cuentas.crear(new Cuenta(0, nombre, saldoInicial, divisa));
     }
     public List<Cuenta> listarCuentas() { return cuentas.listar(); }
     public Cuenta buscarCuenta(long id) { return cuentas.buscar(id); }
@@ -40,6 +45,8 @@ public final class MovimientoService {
         db.beginTransaction();
         try {
             Cuenta cuenta = cuentas.buscar(cuentaId);
+            if (cuenta.getDivisa() == null) throw new IllegalArgumentException("Define la divisa de esta cuenta primero.");
+            cuenta.getDivisa().validar(monto);
             List<Movimiento> historial = movimientos.listar(cuentaId);
             historial.add(nuevo);
             cuenta.calcularSaldo(historial); // Rechazar desbordamiento antes de persistir.
@@ -51,4 +58,5 @@ public final class MovimientoService {
         }
     }
 }
+
 

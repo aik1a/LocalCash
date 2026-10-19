@@ -20,7 +20,7 @@ def tap(tree,text=None,resource=None):
     adb('shell','input','tap',str((x1+x2)//2),str((y1+y2)//2))
 coordinates=next(line.split(': ',1)[1] for line in (folder/'location-flow.log').read_text().splitlines() if line.startswith('GPS_EXPECTED: '))
 main=screen('location-restarted-main')
-assert contains(main,'Saldo: 131,50')
+assert contains(main,'Saldo: USD 131,50')
 tap(main,text='Efectivo')
 seen=set()
 for index in range(5):
@@ -37,3 +37,4 @@ for index in range(5):
 assert len(seen)==6,seen
 (folder/'location-restart-checks.log').write_text('PASS: force-stop y relanzamiento; historial con un par geográfico, cinco nuevos sin ubicación y saldo 131,50 conservados.\n')
 print('LOCALCASH_LOCATION_RESTART_PASS')
+

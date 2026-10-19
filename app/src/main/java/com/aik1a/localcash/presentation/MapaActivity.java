@@ -24,10 +24,10 @@ public final class MapaActivity extends ActividadProtegida {
     @Override protected void crearContenido(Bundle state) {
         try {
             long id=getIntent().getLongExtra(CuentaActivity.CUENTA_ID,-1);
-            String nombre;List<Movimiento> movimientos;
+            String nombre;Divisa divisa;List<Movimiento> movimientos;
             try(LocalCashDbHelper helper=new LocalCashDbHelper(this)) {
                 MovimientoService service=new MovimientoService(helper);
-                nombre=service.buscarCuenta(id).getNombre();movimientos=service.listarMovimientos(id);
+                nombre=service.buscarCuenta(id).getNombre();divisa=service.buscarCuenta(id).getDivisa();movimientos=service.listarMovimientos(id);
             }
             Configuration.getInstance().setUserAgentValue(getPackageName());
             Configuration.getInstance().setOsmdroidBasePath(new File(getFilesDir(),"osmdroid"));
@@ -49,8 +49,8 @@ public final class MapaActivity extends ActividadProtegida {
                 Ubicacion u=movimiento.getUbicacion();puntos++;
                 Marker marker=new Marker(mapa);marker.setPosition(new GeoPoint(u.getLatitud(),u.getLongitud()));
                 marker.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM);
-                String detalle=movimiento.getTipo().name()+" · "+Dinero.formatear(movimiento.getMontoConSigno())+" · "+movimiento.getDescripcion()+" · "+DateFormat.getDateTimeInstance().format(new Date(movimiento.getFecha()))+"\n"+u.getLatitud()+", "+u.getLongitud();
-                marker.setTitle(detalle);marker.setSnippet("Movimiento #"+movimiento.getId());
+                String detalle=movimiento.getTipo().name()+" · "+Dinero.formatear(movimiento.getMontoConSigno(),divisa)+" · "+movimiento.getDescripcion()+" · "+DateFormat.getDateTimeInstance().format(new Date(movimiento.getFecha()))+"\n"+u.getLatitud()+", "+u.getLongitud();
+                marker.setTitle(detalle);marker.setSnippet("Movimiento");
                 marker.setOnMarkerClickListener((m,v)->{((TextView)findViewById(R.id.detalle_marcador)).setText(detalle);return true;});
                 mapa.getOverlays().add(marker);
                 if(!AtlasOffline.cubre(u.getLatitud(),u.getLongitud())){fuera++;exteriores.append("\n").append(u.getLatitud()).append(", ").append(u.getLongitud());}
@@ -76,3 +76,4 @@ public final class MapaActivity extends ActividadProtegida {
     @Override protected void onDestroy(){if(mapa!=null)mapa.onDetach();super.onDestroy();}
     @Override protected void onSaveInstanceState(Bundle out){super.onSaveInstanceState(out);if(mapa!=null){out.putDouble("map_zoom",mapa.getZoomLevelDouble());out.putDouble("map_lat",mapa.getMapCenter().getLatitude());out.putDouble("map_lon",mapa.getMapCenter().getLongitude());}}
 }
+

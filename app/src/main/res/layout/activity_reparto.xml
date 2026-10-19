@@ -7,7 +7,7 @@
         <TextView android:id="@+id/reparto_titulo" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="24sp" />
         <TextView android:id="@+id/reparto_total" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="22sp" />
         <TextView android:id="@+id/reparto_info" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="Selecciona dos o más contactos. El contacto de la compra no se selecciona automáticamente." />
+            android:text="Tú ya estás incluido. Elige con quién compartir la compra." />
         <LinearLayout android:id="@+id/formulario_reparto" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
             <RadioGroup android:id="@+id/modo_reparto" android:layout_width="match_parent" android:layout_height="wrap_content" android:checkedButton="@id/equitativo">
                 <RadioButton android:id="@+id/equitativo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Equitativo" />
@@ -20,3 +20,4 @@
         <LinearLayout android:id="@+id/deudas" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" />
     </LinearLayout>
 </ScrollView>
+

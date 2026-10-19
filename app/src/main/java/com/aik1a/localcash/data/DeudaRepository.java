@@ -14,10 +14,13 @@ public final class DeudaRepository {
         db.beginTransaction();
         try {
             Compra compra = new CompraRepository(helper).buscar(reparto.getCompraId());
+            if (compra.getDivisa() == null) throw new IllegalArgumentException("Define la divisa de la compra primero.");
             // Revalidar contra el total real dentro de la misma transacción.
-            Reparto.personalizado(compra, new ArrayList<>(reparto.getMontos().keySet()),
-                    new ArrayList<>(reparto.getMontos().values()));
-            if (!listarPorCompra(compra.getId()).isEmpty())
+            if (reparto.getMontoUsuario() == null)
+                Reparto.personalizado(compra, new ArrayList<>(reparto.getMontos().keySet()), new ArrayList<>(reparto.getMontos().values()));
+            else Reparto.personalizadoConUsuario(compra, new ArrayList<>(reparto.getMontos().keySet()),
+                    new ArrayList<>(reparto.getMontos().values()), reparto.getMontoUsuario());
+            if (!listarPorCompra(compra.getId()).isEmpty() || buscarMontoUsuario(compra.getId()) != null)
                 throw new IllegalArgumentException("Esta compra ya tiene un reparto.");
             for (Map.Entry<Long, Long> entry : reparto.getMontos().entrySet()) {
                 ContentValues values = new ContentValues();
@@ -25,8 +28,18 @@ public final class DeudaRepository {
                 values.put("monto", entry.getValue()); values.put("estado", "PENDIENTE");
                 db.insertOrThrow("deudas", null, values);
             }
+            if (reparto.getMontoUsuario() != null) {
+                ContentValues propio = new ContentValues(); propio.put("compra_id", compra.getId()); propio.put("monto", reparto.getMontoUsuario());
+                db.insertOrThrow("reparto_usuario", null, propio);
+            }
             db.setTransactionSuccessful();
         } finally { db.endTransaction(); }
+    }
+    public Long buscarMontoUsuario(long compraId) {
+        try (Cursor c = helper.getReadableDatabase().query("reparto_usuario", new String[]{"monto"},
+                "compra_id=?", new String[]{Long.toString(compraId)}, null, null, null)) {
+            return c.moveToFirst() ? c.getLong(0) : null;
+        }
     }
     public List<Deuda> listarPorCompra(long compraId) {
         List<Deuda> resultado = new ArrayList<>();
@@ -40,3 +53,4 @@ public final class DeudaRepository {
         return resultado;
     }
 }
+

@@ -27,14 +27,14 @@ def contains(tree, text):
     assert any(text in n.get('text', '') for n in tree.iter('node')), text
 
 main = screen('restarted-main')
-contains(main, 'Saldo: 125,50')
+contains(main, 'Saldo: USD 125,50')
 tap(main, resource='abrir_compras')
 compras = screen('restarted-purchases')
 for value in ['Compra realizada', 'Compra planificada', 'REALIZADA', 'PLANIFICADA']:
     contains(compras, value)
 tap(compras, text='Compra realizada')
 detalle = screen('restarted-purchase-detail')
-contains(detalle, 'Total: 232,00')
+contains(detalle, 'Total: USD 232,00')
 contains(detalle, 'Contacto: Ana')
 tap(detalle, resource='volver')
 compras = screen('restarted-purchases-back')
@@ -45,3 +45,4 @@ contactos = screen('restarted-contacts')
 contains(contactos, 'Ana'); contains(contactos, 'Luis')
 (folder/'restart-checks.log').write_text('PASS: force-stop + relanzamiento, saldo previo, dos compras/estados, detalle/total/contacto y dos contactos conservados.\n')
 print('LOCALCASH_RESTART_PASS')
+

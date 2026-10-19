@@ -13,6 +13,9 @@ import java.util.*;
 
 public final class RepartoActivity extends ActividadProtegida {
     private long compraId;
+    private Divisa divisa;
+    private EditText cuotaUsuario;
+    private Long montoUsuario;
     private final List<Contacto> contactos = new ArrayList<>();
     private final List<CheckBox> seleccion = new ArrayList<>();
     private final List<EditText> cuotas = new ArrayList<>();
@@ -25,17 +28,31 @@ public final class RepartoActivity extends ActividadProtegida {
         try (LocalCashDbHelper helper = new LocalCashDbHelper(this)) {
             DeudaService service = new DeudaService(helper);
             Compra compra = service.buscarCompra(compraId);
+            divisa = compra.getDivisa();
+            if (divisa == null) {
+                DivisasUI.compra(this, compraId, new com.aik1a.localcash.data.ConfiguracionRepository(helper).exigirDivisa(), this::recreate);
+                findViewById(R.id.formulario_reparto).setVisibility(View.GONE); return;
+            }
+            montoUsuario = service.buscarMontoUsuario(compraId);
             if (compra.getEstado() != Compra.Estado.REALIZADA)
                 throw new IllegalArgumentException("Solo se reparten compras realizadas.");
             ((TextView)findViewById(R.id.reparto_titulo)).setText(compra.getNombre());
-            ((TextView)findViewById(R.id.reparto_total)).setText("Total: " + Dinero.formatear(compra.calcularTotal()));
+            ((TextView)findViewById(R.id.reparto_total)).setText("Total: " + Dinero.formatear(compra.calcularTotal(), divisa));
             contactos.addAll(service.listarContactos());
             LinearLayout filas = findViewById(R.id.participantes);
+            View usuario = getLayoutInflater().inflate(R.layout.row_participante, filas, false);
+            CheckBox tu = usuario.findViewById(R.id.seleccionar_contacto);
+            tu.setText("Tú"); tu.setChecked(true); tu.setEnabled(false);
+            cuotaUsuario = usuario.findViewById(R.id.cuota);
+            cuotaUsuario.setContentDescription("Monto para Tú"); DivisasUI.ejemplo(cuotaUsuario, divisa);
+            if (state != null) cuotaUsuario.setText(state.getString("cuota_usuario", ""));
+            filas.addView(usuario);
             for (Contacto contacto : contactos) {
                 View fila = getLayoutInflater().inflate(R.layout.row_participante, filas, false);
                 CheckBox check = fila.findViewById(R.id.seleccionar_contacto);
                 EditText cuota = fila.findViewById(R.id.cuota);
-                String nombre = contacto.getNombre() + " (#" + contacto.getId() + ")";
+                String nombre = contacto.getNombre();
+                DivisasUI.ejemplo(cuota, divisa);
                 check.setText(nombre); cuota.setContentDescription("Monto para " + nombre);
                 check.setOnCheckedChangeListener((button, checked) -> actualizarCampos());
                 seleccion.add(check); cuotas.add(cuota); filas.addView(fila);
@@ -52,10 +69,11 @@ public final class RepartoActivity extends ActividadProtegida {
                             cuotas.get(i).setText(valores[j]); seleccion.get(i).setChecked(elegidos[j] == 1);
                         }
             }
+            if (state == null && contactos.size() == 1) seleccion.get(0).setChecked(true);
             actualizarCampos();
             mostrarDeudas(service.listarDeudas(compraId));
-            if (contactos.size() < 2 && service.listarDeudas(compraId).isEmpty())
-                mostrarError("Crea al menos dos contactos en la agenda antes de repartir.");
+            if (contactos.isEmpty() && service.listarDeudas(compraId).isEmpty())
+                mostrarError("Añade un contacto para compartir la compra contigo.");
         } catch (IllegalArgumentException | ArithmeticException | SQLiteException ex) {
             mostrarError("No se pudo abrir el reparto.");
             findViewById(R.id.formulario_reparto).setVisibility(View.GONE);
@@ -64,6 +82,7 @@ public final class RepartoActivity extends ActividadProtegida {
     }
     private boolean personalizado() { return ((RadioButton)findViewById(R.id.personalizado)).isChecked(); }
     private void actualizarCampos() {
+        if (cuotaUsuario != null) cuotaUsuario.setVisibility(personalizado() ? View.VISIBLE : View.GONE);
         for (int i = 0; i < cuotas.size(); i++) {
             cuotas.get(i).setVisibility(personalizado() ? View.VISIBLE : View.GONE);
             cuotas.get(i).setEnabled(seleccion.get(i).isChecked());
@@ -74,11 +93,13 @@ public final class RepartoActivity extends ActividadProtegida {
             List<Long> ids = new ArrayList<>(), montos = new ArrayList<>();
             for (int i = 0; i < contactos.size(); i++) if (seleccion.get(i).isChecked()) {
                 ids.add(contactos.get(i).getId());
-                if (personalizado()) montos.add(Dinero.parsear(cuotas.get(i).getText().toString()));
+                if (personalizado()) montos.add(Dinero.parsear(cuotas.get(i).getText().toString(), divisa));
             }
             DeudaService service = new DeudaService(helper);
-            if (personalizado()) service.repartirPersonalizado(compraId, ids, montos);
-            else service.repartirEquitativo(compraId, ids);
+            if (personalizado()) service.repartirPersonalizadoConUsuario(compraId, ids, montos,
+                    Dinero.parsear(cuotaUsuario.getText().toString(), divisa));
+            else service.repartirEquitativoConUsuario(compraId, ids);
+            montoUsuario = service.buscarMontoUsuario(compraId);
             mostrarDeudas(service.listarDeudas(compraId));
             mostrarError("");
         } catch (IllegalArgumentException ex) { mostrarError(ex.getMessage()); }
@@ -89,12 +110,16 @@ public final class RepartoActivity extends ActividadProtegida {
         LinearLayout filas = findViewById(R.id.deudas);
         filas.removeAllViews();
         if (deudas.isEmpty()) return;
+        if (montoUsuario != null) {
+            TextView tu = (TextView)getLayoutInflater().inflate(R.layout.row_detalle, filas, false);
+            tu.setText("Tú: " + Dinero.formatear(montoUsuario, divisa)); filas.addView(tu);
+        }
         findViewById(R.id.formulario_reparto).setVisibility(View.GONE);
         ((TextView)findViewById(R.id.reparto_info)).setText("Reparto registrado · deuda pendiente por contacto");
         for (Deuda deuda : deudas) {
             TextView fila = (TextView)getLayoutInflater().inflate(R.layout.row_detalle, filas, false);
-            fila.setText(deuda.getContacto().getNombre() + " (#" + deuda.getContacto().getId() + "): "
-                    + Dinero.formatear(deuda.getMonto()) + " · " + deuda.getEstado());
+            fila.setText(deuda.getContacto().getNombre() + ": "
+                    + Dinero.formatear(deuda.getMonto(), divisa) + " · " + deuda.getEstado());
             filas.addView(fila);
         }
     }
@@ -108,8 +133,10 @@ public final class RepartoActivity extends ActividadProtegida {
             ids[i] = contactos.get(i).getId(); elegidos[i] = seleccion.get(i).isChecked() ? 1 : 0;
             valores[i] = cuotas.get(i).getText().toString();
         }
+        if (cuotaUsuario != null) state.putString("cuota_usuario", cuotaUsuario.getText().toString());
         state.putLongArray("ids", ids); state.putLongArray("elegidos", elegidos);
         state.putStringArray("cuotas", valores); state.putBoolean("personalizado", personalizado());
     }
 }
+
 

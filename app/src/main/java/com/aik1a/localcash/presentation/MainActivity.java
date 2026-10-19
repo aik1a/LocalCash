@@ -12,6 +12,8 @@ import com.aik1a.localcash.application.MovimientoService;
 import com.aik1a.localcash.data.LocalCashDbHelper;
 import com.aik1a.localcash.domain.Cuenta;
 import com.aik1a.localcash.domain.Dinero;
+import com.aik1a.localcash.domain.Divisa;
+import com.aik1a.localcash.data.ConfiguracionRepository;
 import java.util.*;
 
 public final class MainActivity extends ActividadProtegida {
@@ -46,7 +48,7 @@ public final class MainActivity extends ActividadProtegida {
             for (Cuenta cuenta : cuentas) {
                 Map<String, String> fila = new HashMap<>();
                 fila.put("nombre", cuenta.getNombre());
-                fila.put("saldo", "Saldo: " + Dinero.formatear(service.calcularSaldo(cuenta.getId())));
+                fila.put("saldo", "Saldo: " + Dinero.formatear(service.calcularSaldo(cuenta.getId()), cuenta.getDivisa()));
                 filas.add(fila);
             }
             lista.setAdapter(new SimpleAdapter(this, filas, android.R.layout.simple_list_item_2,
@@ -60,12 +62,21 @@ public final class MainActivity extends ActividadProtegida {
         View form = getLayoutInflater().inflate(R.layout.dialog_cuenta, null);
         EditText nombre = form.findViewById(R.id.nombre);
         EditText saldo = form.findViewById(R.id.saldo_inicial);
+        Spinner divisa = form.findViewById(R.id.divisa);
+        DivisasUI.preparar(divisa, new ConfiguracionRepository(helper).exigirDivisa());
+        divisa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                DivisasUI.ejemplo(saldo, (Divisa)divisa.getSelectedItem());
+            }
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
         AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Crear cuenta")
                 .setView(form).setNegativeButton("Cancelar", null).setPositiveButton("Guardar", null).create();
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             if (nombre.getText().toString().trim().isEmpty()) { nombre.setError("Escribe un nombre."); return; }
             try {
-                service.crearCuenta(nombre.getText().toString(), Dinero.parsear(saldo.getText().toString()));
+                Divisa moneda = (Divisa)divisa.getSelectedItem();
+                service.crearCuenta(nombre.getText().toString(), Dinero.parsear(saldo.getText().toString(), moneda), moneda);
                 dialog.dismiss();
                 actualizar();
             } catch (IllegalArgumentException ex) { saldo.setError(ex.getMessage()); }
@@ -77,4 +88,5 @@ public final class MainActivity extends ActividadProtegida {
     }
     @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
 }
+
 

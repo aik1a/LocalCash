@@ -24,9 +24,9 @@ def tap(tree, resource=None, text=None):
     adb('shell','input','tap',str((x1+x2)//2),str((y1+y2)//2))
 
 main = screen('shared-restarted-main')
-contains(main, 'Saldo: 125,50')
+contains(main, 'Saldo: USD 125,50')
 tap(main,resource='abrir_compras')
-for nombre, montos in [('Compartida exacta',['33,34','33,34','33,33']),
+for nombre, montos in [('Compartida exacta',['25,00','25,00','25,00']),
                       ('Compartida personalizada',['20,00','30,00','50,00'])]:
     compras = screen('shared-restarted-purchases')
     tap(compras,text=nombre)
@@ -34,7 +34,7 @@ for nombre, montos in [('Compartida exacta',['33,34','33,34','33,33']),
     tap(detalle,resource='abrir_reparto')
     deudas = screen('shared-restarted-' + ('equal' if 'exacta' in nombre else 'custom'))
     for id,(contacto,monto) in enumerate(zip(['Ana','Luis','Marta'],montos),1):
-        contains(deudas,f'{contacto} (#{id}): {monto} · PENDIENTE')
+        contains(deudas,f'{contacto}: USD {monto} · PENDIENTE')
     assert not any(n.get('resource-id')=='com.aik1a.localcash:id/guardar_reparto' for n in deudas.iter('node'))
     adb('shell','screencap','-p','/sdcard/shared-restart.png')
     adb('pull','/sdcard/shared-restart.png',str(folder/('restart-equal.png' if 'exacta' in nombre else 'restart-custom.png')))
@@ -43,3 +43,4 @@ for nombre, montos in [('Compartida exacta',['33,34','33,34','33,33']),
     tap(detalle,resource='volver')
 (folder/'shared-restart-checks.log').write_text('PASS: force-stop y relanzamiento; deudas equitativas/personalizadas y saldo 125,50 conservados. No se ofrece guardar un segundo reparto.\n')
 print('LOCALCASH_SHARED_RESTART_PASS')
+

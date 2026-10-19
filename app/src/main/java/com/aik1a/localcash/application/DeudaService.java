@@ -22,8 +22,16 @@ public final class DeudaService {
     public void repartirPersonalizado(long compraId, List<Long> ids, List<Long> montos) {
         guardar(Reparto.personalizado(compras.buscar(compraId), ids, montos));
     }
+    public Long buscarMontoUsuario(long compraId) { return deudas.buscarMontoUsuario(compraId); }
+    public void repartirEquitativoConUsuario(long compraId, List<Long> ids) {
+        guardar(Reparto.equitativoConUsuario(compras.buscar(compraId), ids));
+    }
+    public void repartirPersonalizadoConUsuario(long compraId, List<Long> ids, List<Long> montos, long propio) {
+        guardar(Reparto.personalizadoConUsuario(compras.buscar(compraId), ids, montos, propio));
+    }
     private void guardar(Reparto reparto) {
         for (long id : reparto.getMontos().keySet()) contactos.buscar(id);
         deudas.registrar(reparto);
     }
 }
+
