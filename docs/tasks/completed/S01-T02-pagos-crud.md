@@ -1,5 +1,5 @@
 # S01-T02 — Saldo disponible, pago de compras y CRUD
-Estado: IN_PROGRESS. Autorización expresa de Aikia, 19-10-2026.
+Estado: CLOSED. Autorización expresa de Aikia, 19-10-2026.
 Base: main 523f3bd50c58f0f827e4e1efb864f05bd8ddea09; rama task/S01-T02-pagos-crud.
 ## Alcance y criterios
 - Nuevas cuentas sin saldo inicial negativo; egresos manuales y edición/eliminación de movimientos nunca dejan saldo negativo. Leer saldo histórico negativo sin reescribirlo; permitir ingresos de recuperación.
@@ -15,3 +15,6 @@ Base: main 523f3bd50c58f0f827e4e1efb864f05bd8ddea09; rama task/S01-T02-pagos-cru
 Sin conversión entre divisas ni cobros parciales. Se descuenta total de compra, no solo cuota propia; reparto registra deudas y no duplica cobro. Un egreso se genera exclusivamente con confirmación expresa. Guardar compras pagadas crea estado REALIZADA; guardado planificado no toca cuentas.
 ## Context Pack
 PROJECT_ROUTER, AGENTS, PROJECT_STATE, rol CODER, DATABASE, DOMAIN_MODEL, BUSINESS_RULES, servicios/repositories/Activities y pruebas afectadas.
+
+## Cierre — 19-10-2026
+Auditoría independiente docs/audits/S01/S01-T02-audit.md: PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE; sin BLOCKER/MAJOR. PR #14 integrado mediante c39b6e0d96bf34a2aa0ab1fb41f19951e6c76f94. CI39203915078 SUCCESS API24/API36 sobre1d6ce3b; dominio34400/SQL77, native76/91, UI ambas APIs y regresión completa API36. Físico, Studio limpio, recorrido humano y upgrade APK histórico con datos NOT TESTED; regresión heredada completa API24 NOT TESTED. Cierre del incremento, no del roadmap S01.

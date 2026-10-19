@@ -142,9 +142,9 @@ CI 39178585250 SUCCESS sobre 6b7813cb (API24/API36). Auditoría independiente
 [PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE](../audits/S01/S01-T01-audit.md),
 0 BLOCKER/MAJOR; tarea archivada en completed. El roadmap S01 no se declara cerrado.
 
-## Incremento S01-T02 — pagos, saldo y CRUD (validado, pendiente de auditoría)
+## Incremento S01-T02 — pagos, saldo y CRUD (integrado el 19-10-2026)
 
-Autorizado por Aikia el 19-10-2026. Sustituye las restricciones previas de admitir saldo negativo y no vincular compras a movimientos. Alcance: Task Brief docs/tasks/active/S01-T02-pagos-crud.md.
+Autorizado por Aikia el 19-10-2026. Sustituye las restricciones previas de admitir saldo negativo y no vincular compras a movimientos. Alcance: Task Brief docs/tasks/completed/S01-T02-pagos-crud.md.
 
 | Cambio | Correspondencia | Implementación | Evidencia |
 |---|---|---|---|
@@ -152,4 +152,4 @@ Autorizado por Aikia el 19-10-2026. Sustituye las restricciones previas de admit
 | Planificar/realizar desde cuenta | LC-BUY-01, LC-MOV-01 | CompraService/Repository, pago_compra v6, PagoCompraUI | Transacciones/rollback/reintento y UI API24/API36 PASS |
 | CRUD e interfaz | LC-CON-01, LC-ACC-01, LC-BUY-01 | Activities, AccionesUI, validaciones referenciales | Pruebas nativas/UI API24/API36 PASS |
 
-CI S01-T02: https://github.com/aik1a/LocalCash/actions/runs/39203915078, SHA1d6ce3b, SUCCESS ambas APIs; regresión completa financiera/GPS API36. Auditoría independiente y merge pendientes.
+CI S01-T02: https://github.com/aik1a/LocalCash/actions/runs/39203915078, SHA1d6ce3b, SUCCESS ambas APIs; regresión completa financiera/GPS API36. [Auditoría independiente](../audits/S01/S01-T02-audit.md) PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE, sin BLOCKER/MAJOR. PR #14 integrado mediante c39b6e0d96bf34a2aa0ab1fb41f19951e6c76f94; cierre formal del incremento, sin cerrar el roadmap S01.
