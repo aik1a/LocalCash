@@ -16,11 +16,15 @@ def scroll(tree):
     return True
 
 def tap(resource=None,text=None):
-    for attempt in range(6):
-        tree=b.dump('currency-before-tap')
+    deadline=time.monotonic()+25
+    scrolls=0
+    while time.monotonic()<deadline:
+        tree=b.dump('payments-before-tap')
         if b.tap(tree,resource=resource,text=text):return
-        if not scroll(tree):break
-    raise AssertionError(resource or text)
+        # Navegar entre Activities es asíncrono: no fallar por un snapshot de la anterior.
+        if scrolls<6 and scroll(tree):scrolls+=1
+        time.sleep(.3)
+    raise AssertionError((resource or text)+': '+b.texts(tree))
 
 def text(resource,value):
     import re
