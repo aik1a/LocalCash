@@ -7,6 +7,7 @@
         </RadioGroup>
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Monto" android:labelFor="@+id/monto" />
         <EditText android:id="@id/monto" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal|numberSigned" android:digits="0123456789.,-" android:maxLines="1" android:hint="Ej.: 2500,50" />
+        <TextView android:id="@+id/error_movimiento" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone" android:accessibilityLiveRegion="polite" android:paddingBottom="8dp" />
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Descripción" android:labelFor="@+id/descripcion" />
         <EditText android:id="@id/descripcion" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textCapSentences" android:hint="Ej.: Sueldo o transporte" />
         <CheckBox android:id="@+id/incluir_ubicacion" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Incluir ubicación actual" />

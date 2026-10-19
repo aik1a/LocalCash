@@ -1,6 +1,6 @@
 # Diseño SQLite
 
-**Estado actual:** esquema v5, integrado por S01-T01: configuración inicial, divisas de cuentas/compras y cuota propia del reparto. Incluye cuentas/movimientos (T03), contactos/compras/detalles (T04), deudas (T05) y ubicación opcional (T06A). Las secciones v1–v4 siguientes conservan la evolución histórica; la sección S01-T01 documenta v5.
+**Estado actual:** esquema v6, integrado por S01-T01: configuración inicial, divisas de cuentas/compras y cuota propia del reparto. Incluye cuentas/movimientos (T03), contactos/compras/detalles (T04), deudas (T05) y ubicación opcional (T06A). Las secciones v1–v4 siguientes conservan la evolución histórica; la sección S01-T01 documenta v5.
 
 ## Esquema mínimo S00-T03 (decisiones implementadas)
 
@@ -174,3 +174,11 @@ propia retroactiva. Persistir cuotas evita tener que inferirlas al cambiar regla
 Validación: tests/CurrencyDomainChecks.java, tests/sqlite-currency-checks.py,
 CurrencyChecks Android, tests/currency-ui.py y workflow s00-t06c-build.yml. La
 migración lógica SQLite no acredita actualización APK entre certificados distintos.
+
+## S01-T02 — SQLite v6, pagos y CRUD (19-10-2026)
+
+La migración v5→v6 es aditiva: agrega `pago_compra(compra_id PRIMARY KEY REFERENCES compras(id) ON DELETE RESTRICT, movimiento_id INTEGER NOT NULL UNIQUE REFERENCES movimientos(id) ON DELETE RESTRICT)` y triggers que rechazan nuevos saldos iniciales negativos y cambios al saldo inicial. No cambia filas históricas ni cobra compras realizadas anteriores.
+
+El vínculo identifica el egreso de una compra. Crear una realizada o pagar una planificada guarda compra/ítems, egreso, vínculo y estado dentro de una transacción SQLite; verifica total positivo, moneda coincidente y fondos. Reintentar el mismo pago no vuelve a descontar. El dominio sigue calculando saldos exactos; repositories revalidan en transacción antes de insertar/editar/borrar movimientos. Un saldo negativo histórico se conserva y solo se permite mantenerlo/mejorarlo, nunca empeorarlo.
+
+CRUD: cuenta cambia nombre y se elimina solo sin movimientos; saldo inicial/divisa permanecen fijos. Contacto cambia nombre y se elimina sin compras/deudas vinculadas. Movimiento manual conserva fecha/ubicación al editar; edición/borrado no puede producir saldo negativo. Movimiento de compra se protege. Compra planificada puede editar sus datos/ítems sin cambiar divisa; realizada solo cambia nombre. Eliminar compra sin reparto borra sus ítems y revierte su egreso/vínculo en una transacción; un reparto bloquea esa eliminación. No se borran deudas en cascada.

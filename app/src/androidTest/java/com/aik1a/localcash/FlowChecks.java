@@ -25,6 +25,7 @@ public final class FlowChecks extends Instrumentation {
     private Bundle argumentosBiometricos;
     private boolean mapas;
     private boolean divisas;
+    private boolean pagos;
     @Override public void onCreate(Bundle arguments) {
         super.onCreate(arguments);
         compras = arguments != null && "purchases".equals(arguments.getString("mode"));
@@ -33,9 +34,10 @@ public final class FlowChecks extends Instrumentation {
         if (arguments != null && arguments.getString("mode", "").startsWith("bio-")) argumentosBiometricos = arguments;
         mapas = arguments != null && "maps".equals(arguments.getString("mode"));
         divisas = arguments != null && "currency".equals(arguments.getString("mode"));
+        pagos = arguments != null && "payments".equals(arguments.getString("mode"));
         start();
     }
-    @Override public void onStart() { if (divisas) { CurrencyChecks.ejecutar(this); return; } if (mapas) { MapChecks.ejecutar(this); return; } if (argumentosBiometricos != null) BiometricChecks.ejecutar(this, argumentosBiometricos); else if (ubicaciones) verificarUbicaciones(); else if (compartidas) verificarCompartidas(); else if (compras) verificarCompras(); else verificarCuentas(); }
+    @Override public void onStart() { if (pagos) { PaymentCrudChecks.ejecutar(this); return; } if (divisas) { CurrencyChecks.ejecutar(this); return; } if (mapas) { MapChecks.ejecutar(this); return; } if (argumentosBiometricos != null) BiometricChecks.ejecutar(this, argumentosBiometricos); else if (ubicaciones) verificarUbicaciones(); else if (compartidas) verificarCompartidas(); else if (compras) verificarCompras(); else verificarCuentas(); }
 
     private void verificarCuentas() {
         Bundle result = new Bundle();
@@ -111,8 +113,8 @@ public final class FlowChecks extends Instrumentation {
             }
             // Prueba FK real además de validación de aplicación.
             try {
-                new com.aik1a.localcash.data.MovimientoRepository(helper).crear(
-                        new Movimiento(0, 999999, Movimiento.Tipo.INGRESO, 1, "", 0));
+                helper.getWritableDatabase().execSQL("INSERT INTO movimientos(cuenta_id,tipo,monto,descripcion,fecha) "
+                        + "VALUES(999999,'INGRESO',1,'FK inválida',0)");
                 throw new AssertionError("FK desactivada");
             } catch (android.database.sqlite.SQLiteConstraintException expected) {
                 log.append("PASS integridad referencial SQLite.\n");
@@ -142,7 +144,7 @@ public final class FlowChecks extends Instrumentation {
         try {
             prepararV1();
             LocalCashDbHelper helper = new LocalCashDbHelper(getTargetContext());
-            assertTrue(helper.getWritableDatabase().getVersion() == 5, "Migración a versión 5");
+            assertTrue(helper.getWritableDatabase().getVersion() == 6, "Migración a versión 6");
             MovimientoService contabilidad = new MovimientoService(helper);
             assertTrue(contabilidad.listarCuentas().size() == 2, "Dos cuentas preservadas");
             assertTrue(contabilidad.calcularSaldo(1) == 12550, "Saldo v1 preservado");
@@ -152,7 +154,7 @@ public final class FlowChecks extends Instrumentation {
             assertTrue(compras.listarCompras().isEmpty() && compras.listarContactos().isEmpty(), "Tablas nuevas vacías");
             probarRollback(helper);
             helper.close();
-            log.append("PASS MIG-01: v1 real con dos cuentas y dos movimientos → v5, saldos 125,50 y 300,00 conservados.\n");
+            log.append("PASS MIG-01: v1 real con dos cuentas y dos movimientos → v6, saldos 125,50 y 300,00 conservados.\n");
             AccessibilityServiceInfo info = getUiAutomation().getServiceInfo();
             info.flags |= AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
             getUiAutomation().setServiceInfo(info);
@@ -163,18 +165,19 @@ public final class FlowChecks extends Instrumentation {
             clickId("crear_contacto"); setText("nombre_contacto", "Luis"); clickText("Guardar"); nodeText("Luis");
             clickId("volver"); clickId("abrir_compras"); clickId("crear_compra");
             setText("nombre_compra", "Compra realizada");
-            clickId("estado_compra"); clickText("REALIZADA");
+            clickId("estado_compra"); clickText("Realizada");
             clickId("contacto_compra"); clickText("Ana");
             setText("item_descripcion", "Cuaderno"); setText("item_cantidad", "0"); setText("item_precio", "100,25");
             clickId("agregar_item"); nodeText("El ítem necesita descripción, cantidad entera positiva y precio no negativo.");
             setText("item_cantidad", "-1"); clickId("agregar_item");
             nodeText("El ítem necesita descripción, cantidad entera positiva y precio no negativo.");
             setText("item_cantidad", "1,5"); clickId("agregar_item");
-            nodeText("La cantidad debe ser un entero positivo dentro del rango permitido.");
+            nodeText("Escribe una cantidad válida. Ej.: 2");
             setText("item_cantidad", "2"); clickId("agregar_item");
             setText("item_descripcion", "Servicio"); setText("item_cantidad", "3"); setText("item_precio", "10,50"); clickId("agregar_item");
             nodeText("Total: USD 232,00"); clickId("guardar_compra");
-            nodeText("Total: USD 232,00"); nodeText("Contacto: Ana"); assertTrue(nodeId("compra_info").getText().toString().startsWith("REALIZADA"), "Estado realizada visible");
+            nodeText("Pagar compra"); clickId("cuenta_pago"); clickText("Banco · USD 300,00"); clickText("Confirmar pago");
+            nodeText("Total: USD 232,00"); nodeText("Contacto: Ana"); assertTrue(nodeId("compra_info").getText().toString().startsWith("Realizada"), "Estado realizada visible");
             clickId("volver"); nodeText("Compra realizada"); clickId("crear_compra");
             setText("nombre_compra", "Compra planificada");
             clickId("guardar_compra"); nodeText("La compra necesita nombre, estado, fecha y al menos un ítem válido.");
@@ -184,7 +187,7 @@ public final class FlowChecks extends Instrumentation {
             clickText(Integer.toString(year));
             clickText(Integer.toString(year + 1));
             clickText("OK"); clickId("guardar_compra");
-            assertTrue(nodeId("compra_info").getText().toString().startsWith("PLANIFICADA"), "Estado planificada visible"); nodeText("Contacto: Sin contacto"); nodeText("Total: USD 50,00");
+            assertTrue(nodeId("compra_info").getText().toString().startsWith("Planificada"), "Estado planificada visible"); nodeText("Contacto: Sin contacto"); nodeText("Total: USD 50,00");
             clickId("volver"); nodeText("Compra realizada"); nodeText("Compra planificada");
             clickText("Compra realizada"); nodeText("Total: USD 232,00"); nodeText("Contacto: Ana");
             log.append("PASS CON/BUY-01/02/03: dos contactos por UI, compra realizada con dos ítems y total 232,00 vinculada a Ana; planificada con fecha futura sin contacto; historial y detalles.\n");
@@ -194,16 +197,17 @@ public final class FlowChecks extends Instrumentation {
             for (Compra c : compras.listarCompras()) { if (c.getEstado() == Compra.Estado.PLANIFICADA) plan = c; else realizada = c; }
             assertTrue(plan != null && plan.getFecha() > System.currentTimeMillis() && plan.getContactoId() == null, "Fecha futura y contacto opcional");
             assertTrue(realizada != null && realizada.getDetalles().size() == 2 && realizada.calcularTotal() == 23200 && realizada.getContactoId() == 1, "Compra reconstruida");
-            assertTrue(new MovimientoService(helper).calcularSaldo(1) == 12550 && new MovimientoService(helper).listarMovimientos(1).size() == 2, "Compras no crean movimientos ni alteran saldo");
+            assertTrue(new MovimientoService(helper).calcularSaldo(1) == 12550 && new MovimientoService(helper).listarMovimientos(1).size() == 2, "Planificada no altera saldo ni historial Efectivo");
             try {
                 compras.registrar(new Compra(0, "Inválida", Compra.Estado.REALIZADA, 0, 9999L, realizada.getDetalles(), Divisa.USD));
                 throw new AssertionError("Contacto inexistente aceptado");
             } catch (IllegalArgumentException expected) { assertTrue(compras.listarCompras().size() == 2, "Compra inválida no persistida"); }
             helper.close();
             helper = new LocalCashDbHelper(getTargetContext());
-            assertTrue(new CompraService(helper).listarCompras().size() == 2 && new MovimientoService(helper).calcularSaldo(1) == 12550, "Reapertura v5");
+            assertTrue(new CompraService(helper).listarCompras().size() == 2 && new MovimientoService(helper).calcularSaldo(1) == 12550, "Reapertura v6");
+            assertTrue(new MovimientoService(helper).calcularSaldo(2) == 6800, "Compra realizada descontada de Banco");
             helper.close();
-            log.append("PASS regresión contable, persistencia v5, validaciones y ausencia de movimientos automáticos.\n");
+            log.append("PASS regresión contable, persistencia v6, validaciones y pago confirmado en Banco.\n");
             result.putString("stream", "LOCALCASH_PURCHASE_PASS\n" + log); finish(Activity.RESULT_OK, result);
         } catch (Throwable failure) {
             dump(getUiAutomation().getRootInActiveWindow(), 0);
@@ -220,19 +224,19 @@ public final class FlowChecks extends Instrumentation {
             String original = snapshotUbicacion(old,2); old.close();
             LocalCashDbHelper helper = new LocalCashDbHelper(getTargetContext());
             android.database.sqlite.SQLiteDatabase db = helper.getWritableDatabase();
-            assertTrue(db.getVersion() == 5, "Migración v2→v5");
+            assertTrue(db.getVersion() == 6, "Migración v2→v6");
             assertTrue(original.equals(snapshotUbicacion(db,2)), "Todas las filas v2 intactas");
             prepararDivisas(helper);
             CompraService compras = new CompraService(helper);
-            long equitativa = compras.registrar(new Compra(0,"Compartida exacta",Compra.Estado.REALIZADA,3,1L,
+            long equitativa = LegacyFixtures.realizada(helper,new Compra(0,"Compartida exacta",Compra.Estado.REALIZADA,3,1L,
                     java.util.Arrays.asList(new DetalleCompra("Producto",1,10001)), Divisa.USD));
-            long custom = compras.registrar(new Compra(0,"Compartida personalizada",Compra.Estado.REALIZADA,4,null,
+            long custom = LegacyFixtures.realizada(helper,new Compra(0,"Compartida personalizada",Compra.Estado.REALIZADA,4,null,
                     java.util.Arrays.asList(new DetalleCompra("Servicio",1,10000)), Divisa.USD));
-            long prueba = compras.registrar(new Compra(0,"Prueba transacción",Compra.Estado.REALIZADA,5,null,
+            long prueba = LegacyFixtures.realizada(helper,new Compra(0,"Prueba transacción",Compra.Estado.REALIZADA,5,null,
                     java.util.Arrays.asList(new DetalleCompra("Producto",1,10000)), Divisa.USD));
             String previo = snapshot(db);
             assertTrue(new MovimientoService(helper).calcularSaldo(1) == 12550, "Saldo conservado");
-            log.append("PASS MIG-02: fixture SQLite v2→v5; datos anteriores intactos.\n");
+            log.append("PASS MIG-02: fixture SQLite v2→v6; datos anteriores intactos.\n");
             com.aik1a.localcash.application.DeudaService service = new com.aik1a.localcash.application.DeudaService(helper);
             final com.aik1a.localcash.application.DeudaService svc = service;
             final long plan = comprasIdPlan(helper);
@@ -309,7 +313,7 @@ public final class FlowChecks extends Instrumentation {
                 assertTrue(!c.moveToFirst(), "Sin FK huérfanas");
             }
             helper.close();
-            log.append("PASS SHARED-UI: selección explícita, validación de 2+, reparto 100,01/3 y personalizado 20+30+50; errores visibles; lectura al volver, persistencia/reapertura y regresión contable.\n");
+            log.append("PASS SHARED-UI: selección explícita, Tú + contactos, reparto exacto 100,01/4 y personalizado Tú 0 + 20+30+50; errores visibles; lectura al volver, persistencia/reapertura y regresión contable.\n");
             result.putString("stream","LOCALCASH_SHARED_PASS\n"+log); finish(Activity.RESULT_OK,result);
         } catch (Throwable failure) {
             dump(getUiAutomation().getRootInActiveWindow(),0);
@@ -358,7 +362,7 @@ public final class FlowChecks extends Instrumentation {
                 String antes=snapshotUbicacion(old,version); assertTrue(old.getVersion()==version,"Versión fixture"); old.close();
                 try (LocalCashDbHelper helper=new LocalCashDbHelper(getTargetContext())) {
                     android.database.sqlite.SQLiteDatabase db=helper.getWritableDatabase();
-                    assertTrue(db.getVersion()==5,"Migración a v5");
+                    assertTrue(db.getVersion()==6,"Migración a v6");
                     assertTrue(antes.equals(snapshotUbicacion(db,version)),"Todas las filas previas preservadas");
                     for (Movimiento m:new MovimientoService(helper).listarMovimientos(1)) assertTrue(!m.tieneUbicacion(),"Previos NULL");
                     assertTrue(new MovimientoService(helper).calcularSaldo(1)==12550,"Saldo anterior intacto");
@@ -369,7 +373,7 @@ public final class FlowChecks extends Instrumentation {
                         probarParUbicacion(db);
                     }
                 }
-                log.append("PASS MIG-").append(version).append(": v").append(version).append("→v5, snapshot exacto, NULL antiguos, saldo y FK.\n");
+                log.append("PASS MIG-").append(version).append(": v").append(version).append("→v6, snapshot exacto, NULL antiguos, saldo y FK.\n");
             }
             AccessibilityServiceInfo info=getUiAutomation().getServiceInfo(); info.flags|=AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
             getUiAutomation().setServiceInfo(info);
@@ -555,7 +559,7 @@ public final class FlowChecks extends Instrumentation {
         db.execSQL("CREATE TRIGGER test_falla_detalle BEFORE INSERT ON detalle_compra WHEN NEW.descripcion = 'Fallar' BEGIN SELECT RAISE(ABORT, 'fallo inducido'); END");
         try {
             try {
-                new com.aik1a.localcash.data.CompraRepository(helper).crear(new Compra(0, "Rollback", Compra.Estado.REALIZADA, 0, null,
+                new com.aik1a.localcash.data.CompraRepository(helper).crear(new Compra(0, "Rollback", Compra.Estado.PLANIFICADA, 0, null,
                         java.util.Arrays.asList(new DetalleCompra("Primero",1,100),new DetalleCompra("Fallar",1,200)), Divisa.USD));
                 throw new AssertionError("Falló la prueba de rollback");
             } catch (android.database.sqlite.SQLiteException expected) {
