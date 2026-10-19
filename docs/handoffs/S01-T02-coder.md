@@ -1,7 +1,7 @@
 # Handoff — S01-T02
 Rol saliente: Codificador. Fecha: 2026-10-19.
 Rama: task/S01-T02-pagos-crud. PR: https://github.com/aik1a/LocalCash/pull/14.
-Base: 523f3bd50c58f0f827e4e1efb864f05bd8ddea09. SHA técnico: 0be6676910737d6bde98ed44f4e62d5517523d22.
+Base: 523f3bd50c58f0f827e4e1efb864f05bd8ddea09. SHA técnico: 1d6ce3b64262468081345c5e3464daeef52b8640.
 
 ## Estado
 PARTIAL: implementación completa y pruebas locales PASS; CI Android en curso. No es auditoría ni autorización de merge.
@@ -17,7 +17,7 @@ PARTIAL: implementación completa y pruebas locales PASS; CI Android en curso. N
 
 ## Validación local
 Dominio34.400 PASS; SQLite host77 PASS con DDL real y migraciones v1–v5→6; XML y Python válidos, diff sin errores. Compilación parcial con stubs usada por capa data no equivale a build Android.
-CI final: https://github.com/aik1a/LocalCash/actions/runs/39200284123, sobre SHA técnico0be6676. Build app/AndroidTest PASS ambos jobs; nativo/UI aún en curso.
+CI final: https://github.com/aik1a/LocalCash/actions/runs/39203915078, sobre SHA técnico1d6ce3b. Build y nativo/UI de este SHA en curso.
 PaymentCrudChecks prueba fondos exactos/insuficientes/divisa, snapshots de rollback/rechazo, creación realizada, reintento, reapertura, reembolso, CRUD protegido y migración negativa legada.
 currency-ui crea realizada, cancela pago y conserva borrador, luego confirma; payments-crud recorre plan→realizada, rechazo por fondos, edición de ítem, reinicio, egreso rechazado y reembolso. Regresión heredada conserva el recorrido completo financiero/GPS en API36.
 
@@ -29,3 +29,6 @@ Esperar resultados CI y actualizar informe; auditoría independiente antes de in
 Upgrade histórico con firmantes diferentes sigue BLOCKED_SIGNER_MISMATCH; migración SQLite no acredita ese upgrade y no se debe desinstalar una instalación con datos.
 Compras gratuitas pueden planificarse, pero realizar requiere total positivo. No se agregan cambio de moneda, pagos parciales ni cierre/pago de deudas.
 No se han generado un nuevo paquete académico ni instalado APK en el equipo del usuario.
+
+## Incidencias verificadas y corregidas, pendientes de repetir
+Run39200828583 API24: tap buscó Mercado sobre snapshot Main tras reinicio; helper payments ahora espera transición25s. Run39202278898 API24: misma carrera en helper currency, corregida. API36 del mismo run: egreso marcado y monto1, pero setError no expuso texto; formulario ahora muestra TextView persistente/liveRegion en registro y edición. En ambos runs nativos Currency76 y Payments91 pasaron, sin calificar esos runs globalmente PASS. La prueba FK heredada se ajustó a SQL directo pues el repository ahora valida la cuenta antes de llegar al motor; no se debilitó la aserción FK.

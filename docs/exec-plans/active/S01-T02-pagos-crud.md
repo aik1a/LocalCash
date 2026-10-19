@@ -16,5 +16,5 @@ Ver Task Brief docs/tasks/active/S01-T02-pagos-crud.md. El cobro usa total compl
 ## Validación
 Fondos exactos/insuficientes, doble pago, cancelación, rollback, mismo código de moneda, migraciones v1–v5, CRUD con referencias, protección de egresos vinculados, reinicio y biometría. Regresión heredada adaptada al nuevo requisito sin eliminar cobertura.
 
-## Checkpoint previo a CI
-Dominio34400 y SQLite host77 PASS, XML/Python/diff correctos. SDK/emulador local no disponible; Android build/recorridos pendientes del workflow de la rama.
+## Evidencia y correcciones
+Locales dominio34400/SQL77 PASS. CI39202278898 mostró carreras en helpers UI y error de saldo solo en tooltip. Corregidos helpercurrency/payments con espera acotada, feedback persistente de movimiento y pruebaFK motor. Repetición completaCI39203915078 sobre1d6ce3b en curso; no se declara PASS global ni merge.
