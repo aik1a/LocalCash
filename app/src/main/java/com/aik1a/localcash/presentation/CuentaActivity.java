@@ -119,7 +119,7 @@ public final class CuentaActivity extends ActividadProtegida {
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             int elegido = tipo.getCheckedRadioButtonId();
             if (elegido != R.id.ingreso && elegido != R.id.egreso) {
-                Toast.makeText(this, "Selecciona ingreso o egreso.", Toast.LENGTH_SHORT).show(); return;
+                errorMovimiento(form, "Selecciona ingreso o egreso."); return;
             }
             try {
                 service.registrar(cuentaId, elegido == R.id.ingreso ? Movimiento.Tipo.INGRESO : Movimiento.Tipo.EGRESO,
@@ -127,10 +127,10 @@ public final class CuentaActivity extends ActividadProtegida {
                         incluir.isChecked() ? ubicacion : null);
                 dialog.dismiss(); actualizar();
                 AccionesUI.exito(this, "Movimiento guardado");
-            } catch (IllegalArgumentException ex) { monto.setError(ex.getMessage()); }
-            catch (ArithmeticException ex) { monto.setError("El movimiento excede el rango del saldo."); }
+            } catch (IllegalArgumentException ex) { errorMovimiento(form, ex.getMessage()); }
+            catch (ArithmeticException ex) { errorMovimiento(form, "El movimiento excede el rango del saldo."); }
             catch (SQLiteException ex) {
-                monto.setError("No se guardó el movimiento. Intenta nuevamente.");
+                errorMovimiento(form, "No se guardó el movimiento. Intenta nuevamente.");
             }
         }));
         formulario = dialog;
@@ -168,11 +168,15 @@ public final class CuentaActivity extends ActividadProtegida {
                 service.editarMovimiento(movimiento.getId(), tipo.getCheckedRadioButtonId() == R.id.ingreso ? Movimiento.Tipo.INGRESO : Movimiento.Tipo.EGRESO,
                         Dinero.parsear(monto.getText().toString(), divisa), descripcion.getText().toString());
                 dialog.dismiss(); actualizar(); AccionesUI.exito(this, "Movimiento actualizado");
-            } catch (IllegalArgumentException ex) { monto.setError(ex.getMessage()); }
-            catch (ArithmeticException ex) { monto.setError("El importe está fuera de rango."); }
-            catch (SQLiteException ex) { monto.setError("No se pudo guardar. Intenta nuevamente."); }
+            } catch (IllegalArgumentException ex) { errorMovimiento(form, ex.getMessage()); }
+            catch (ArithmeticException ex) { errorMovimiento(form, "El importe está fuera de rango."); }
+            catch (SQLiteException ex) { errorMovimiento(form, "No se pudo guardar. Intenta nuevamente."); }
         }));
         protegerDialogo(dialog).show();
+    }
+    private void errorMovimiento(View form, String mensaje) {
+        TextView error = form.findViewById(R.id.error_movimiento);
+        error.setText(mensaje); error.setVisibility(View.VISIBLE);
     }
     private void estadoUbicacion(String mensaje) {
         if (campos != null) ((TextView)campos.findViewById(R.id.estado_ubicacion)).setText(mensaje);
