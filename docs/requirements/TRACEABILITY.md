@@ -124,7 +124,7 @@ S00-T02 fue cerrada el 2026-10-12; S00-T03 quedó READY. El sprint S00 continúa
 - **S00 permanece IN_PROGRESS.** T07 es la próxima tarea de integración/cierre, sujeta a Task Brief y gate integral independiente.
 
 
-## Incremento solicitado S01-T01 — 18-10-2026 (rama de trabajo, no integrado)
+## Incremento S01-T01 — integrado el 19-10-2026
 
 El cierre y las evidencias de S00 anteriores se conservan. Aikia autoriza en conversación
 una ampliación funcional; no se presenta como exigencia literal del PDF docente.
@@ -137,6 +137,7 @@ una ampliación funcional; no se presenta como exigencia literal del PDF docente
 | Tú + un contacto y cuota propia | LC-SHARED-02, LC-DEBT-01/02 | Reparto, DeudaService/Repository, reparto_usuario | Suma y precisión probadas; persistencia/UX Android API24/API36 PASS |
 | Etiquetas y nombres legibles | LC-CON-01, LC-BUY-01 | Sin IDs visibles; etiquetas simples y ejemplos | XML y smoke UI API24/API36 PASS |
 
-PR: https://github.com/aik1a/LocalCash/pull/13. Ver handoff S01-T01 y CI de la rama
-para resultado final: CI 39178585250 SUCCESS sobre 6b7813cb (API24/API36).
-Auditoría independiente y merge aún pendientes.
+PR: https://github.com/aik1a/LocalCash/pull/13, merge a34cc2e3e09e499136cd529eea7cc05053647fb5.
+CI 39178585250 SUCCESS sobre 6b7813cb (API24/API36). Auditoría independiente
+[PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE](../audits/S01/S01-T01-audit.md),
+0 BLOCKER/MAJOR; tarea archivada en completed. El roadmap S01 no se declara cerrado.

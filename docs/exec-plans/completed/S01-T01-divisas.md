@@ -5,7 +5,7 @@ Configuración inicial SQLite y moneda fija en cuentas y compras; precisión dep
 
 ## Requisitos relacionados
 Ampliación expresamente solicitada por Aikia sobre cuentas, movimientos, compras y reparto
-académicos. Ver docs/tasks/active/S01-T01-divisas.md. No cambia encargo docente.
+académicos. Ver docs/tasks/completed/S01-T01-divisas.md. No cambia encargo docente.
 
 ## Estado inicial
 main 171aacfb: SQLite v4; Dinero convierte a centésimas y siempre muestra dos decimales.
@@ -49,7 +49,8 @@ Se rechaza exceso de precisión; no se redondea dinero del usuario silenciosamen
 Selección principal afecta valores iniciales de formularios, nunca registros existentes.
 
 ## Resultado final
-Codificación completa; PR #13 listo para auditoría independiente, sin merge.
+CLOSED: auditoría independiente PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE; PR #13 fusionado en a34cc2e3e09e499136cd529eea7cc05053647fb5 el 2026-10-19.
+Informe: docs/audits/S01/S01-T01-audit.md. H-01/H-02 documentales aclaradas en cierre; no constituye gate de sprint S01.
 CI 39178585250 sobre 6b7813cb: SUCCESS API24/API36, incluidos build, 76 checks
 nativos por API, biometría, mapas, smoke divisas y regresión financiera/GPS API36.
 Ver docs/testing/S01-T01.md y docs/handoffs/S01-T01-coder.md.

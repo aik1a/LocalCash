@@ -2,7 +2,7 @@
 
 Autorización: Aikia, conversación del 18-10-2026: implementar selector de 10 divisas,
 configuración inicial persistente y divisa por cuenta. Base main 171aacfb15f8a4974ce228e33fef08e841f6bc46.
-Rama: task/S01-T01-divisas. Trabajo adicional a S00 cerrado; sin merge automático.
+Rama: task/S01-T01-divisas. Trabajo adicional a S00 cerrado; merge condicionado al gate independiente.
 
 ## Objetivo y alcance
 Elegir moneda principal una vez, guardarla en SQLite y usarla como selección inicial
@@ -27,3 +27,7 @@ numerales/IDs visibles y quitar aclaraciones técnicas entre paréntesis de form
 Criterios adicionales: cuota propia persistida como participación, no deuda ficticia;
 reparto personalizado valida suma de Tú + contactos; reparto previo conserva sus cuotas;
 UI sin #id y etiquetas Cantidad/Precio unitario/Monto con ejemplos.
+
+## Cierre administrativo — 2026-10-19
+Estado: CLOSED por Orquestador tras auditoría independiente PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE, sin BLOCKER/MAJOR. Informe: docs/audits/S01/S01-T01-audit.md, commit 6ceee39e5875df7c3a44c0f9d122bb67528464c0.
+PR #13 fusionado en main: a34cc2e3e09e499136cd529eea7cc05053647fb5. CI técnica 6b7813cb, run39178585250 API24/API36 SUCCESS. H-01/H-02 documentales aclaradas; informe original conservado. No se cierra el roadmap integral S01 ni se altera el gate histórico S00.

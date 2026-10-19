@@ -1,6 +1,6 @@
 # Diseño SQLite
 
-**Estado:** esquema v4: cuentas/movimientos (T03), contactos/compras/detalles (T04) y deudas (T05), con ubicación opcional de movimientos (T06A).
+**Estado actual:** esquema v5, integrado por S01-T01: configuración inicial, divisas de cuentas/compras y cuota propia del reparto. Incluye cuentas/movimientos (T03), contactos/compras/detalles (T04), deudas (T05) y ubicación opcional (T06A). Las secciones v1–v4 siguientes conservan la evolución histórica; la sección S01-T01 documenta v5.
 
 ## Esquema mínimo S00-T03 (decisiones implementadas)
 

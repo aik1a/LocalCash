@@ -9,16 +9,18 @@
 - **Repositorio:** `aik1a/LocalCash`, `main`. **Fecha objetivo de entrega:** 19 de octubre de 2026.
 - **Sprint:** S00, `CLOSED` (cierre académico con observaciones, 2026-10-18; recepción docente NOT VERIFIED).
 - **Tareas cerradas:** S00-T01, T02, T03, T04, T05, T06A (GPS opcional), T06C (biometría), T06B (mapas offline) y **T07A (integración/regresión)** y **T07B (firmas/upgrade: diagnóstico)** y **T07C (documentación/entrega)** y **T07D (gate integral)**.
-- **Funcionalidades integradas:** cuentas/movimientos/saldos, contactos/compras, gastos compartidos/deudas, ubicación opcional, acceso biométrico mediante AndroidX `BiometricPrompt` y mapas offline Santiago Centro mediante osmdroid 6.1.18. SQLite **v4**, Java/XML, almacenamiento financiero local.
-- **Último merge funcional:** [PR #8](https://github.com/aik1a/LocalCash/pull/8) — `f1664ec4d87bf16cd9f7668cbda62e0ef0f406e9` (T06B).
+- **Funcionalidades integradas:** cuentas/movimientos/saldos, contactos/compras, gastos compartidos/deudas, ubicación opcional, acceso biométrico mediante AndroidX `BiometricPrompt` y mapas offline Santiago Centro mediante osmdroid 6.1.18. SQLite **v5**, Java/XML, almacenamiento financiero local.
+- **Último merge funcional:** [PR #13](https://github.com/aik1a/LocalCash/pull/13) — `a34cc2e3e09e499136cd529eea7cc05053647fb5` (S01-T01, 2026-10-19). Diez divisas, configuración inicial SQLite, moneda por cuenta/compra, participación «Tú» y formularios simplificados.
 - **Gate T06C:** [auditoría independiente](docs/audits/S00/S00-T06C-audit.md) `PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE`, 97,5/100, sin defectos BLOCKER/MAJOR; observación documental para T07.
 - **CI T06C:** [run 38625086287](https://github.com/aik1a/LocalCash/actions/runs/38625086287), SHA `0f79e6c57be54144b1a756b3aff3a9644b025ca8`, build exit 0, 5483 comprobaciones por API24 y API36, pruebas biométricas y regresión T03–T06A PASS.
 - **T06B:** CLOSED, auditoría independiente `PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE`, 97,5/100; [informe](docs/audits/S00/S00-T06B-audit.md); [CI 39042930625](https://github.com/aik1a/LocalCash/actions/runs/39042930625) API24/API36 PASS; SHA funcional `c289b0614d9d891c6ea4cfcdeec48dabc342c459`.
 - **Última integración de auditoría:** S00-T07D CLOSED, [PR #12](https://github.com/aik1a/LocalCash/pull/12), merge `53c1517ec6a7eb64a7ab646df5565145aa455fd3`; gate PASS WITH OBSERVATIONS / APPROVED_FOR_SPRINT_ADVANCE (suficiencia académica, 0 BLOCKER, 0 MAJOR, 3 MINOR). H-01 documental corregida en T07C; paquete académico contrastado. Upgrade histórico BLOCKED_SIGNER_MISMATCH; conservación SQLite tras upgrade NOT TESTED.
 
+- **Incremento posterior a S00:** S01-T01 CLOSED, auditoría [S01-T01](docs/audits/S01/S01-T01-audit.md) PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE; CI [39178585250](https://github.com/aik1a/LocalCash/actions/runs/39178585250) API24/API36 SUCCESS sobre `6b7813cb81a8742c1b6fd12f8259ec637852487f`. No representa cierre integral del roadmap S01.
+
 ## Próxima acción autorizada
 
-**S00 CLOSED por decisión del Orquestador** tras auditoría independiente T07D PASS WITH OBSERVATIONS / APPROVED_FOR_SPRINT_ADVANCE. Preparar entrega efectiva y verificar acceso del docente al repositorio/paquete; recepción docente y exposición NOT VERIFIED. Se recomienda ensayo manual en Android Studio sobre emulador descartable, sin convertirlo retroactivamente en prueba realizada. No abrir cambios funcionales sin nueva tarea y nueva validación.
+**S00 CLOSED por decisión del Orquestador** tras auditoría independiente T07D PASS WITH OBSERVATIONS / APPROVED_FOR_SPRINT_ADVANCE. Preparar entrega efectiva y verificar acceso del docente al repositorio/paquete; el paquete histórico S00 no incluye S01-T01 y no se declara regenerado. El APK del incremento está en los artefactos de CI 39178585250; recepción docente y exposición NOT VERIFIED. Se recomienda ensayo manual en Android Studio sobre emulador descartable, sin convertirlo retroactivamente en prueba realizada. No abrir cambios funcionales sin nueva tarea y nueva validación.
 
 ## Decisiones vigentes
 
