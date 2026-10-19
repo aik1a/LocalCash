@@ -72,3 +72,15 @@ para los nuevos formularios. No recalculan repartos históricos.
   todos >=0, misma precisión que la compra y suma exacta. La cuota propia no es deuda.
 - BR-UX-01: nombres de contactos sin IDs visibles; etiquetas simples («Cantidad»,
   «Precio unitario», «Monto»). Ejemplos en campos; validaciones se explican al fallar.
+
+## S01-T02 — Reglas autorizadas de saldo y pago (19-10-2026)
+
+Estas reglas sustituyen para operaciones nuevas las decisiones anteriores que admitían saldos negativos y compras sin efecto financiero.
+
+- Saldo inicial nuevo no negativo. Egreso manual, edición o borrado se rechaza si deja saldo negativo; los negativos históricos se leen intactos y admiten ingresos para recuperarlos.
+- Planificar no descuenta. Confirmar una compra realizada exige cuenta de la misma divisa y fondos para el total completo. Se muestra importe/cuenta y se confirma antes de guardar; cancelar no genera compra realizada ni egreso.
+- Total de pago positivo. Compra gratuita puede permanecer planificada; no se fabrica un movimiento de importe cero.
+- Pago único, atómico y persistente: estado REALIZADA + egreso + vínculo. Repartir después solo crea participaciones/deudas, no otro cargo; se descuenta el total completo, no únicamente la cuota propia.
+- No se cobra retroactivamente una compra realizada antigua sin vínculo.
+- CRUD con confirmación de eliminación: cuentas sin movimientos y contactos sin referencias; compras sin reparto. Borrar una compra pagada devuelve su cargo; no permite tocar su movimiento por separado. Editar compras realizadas permite corregir el nombre y conserva el pago/ítems.
+- Toast confirma acciones exitosas. Los errores de formulario y fondos permanecen visibles hasta poder corregirlos.

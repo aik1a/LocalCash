@@ -1,4 +1,4 @@
-name: LocalCash biometría, divisas y regresión
+name: LocalCash pagos, CRUD y regresión
 on:
   push:
     branches: [task/S00-T06C-biometria]
@@ -76,11 +76,15 @@ jobs:
             adb shell am instrument -w -e mode currency com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks > evidence/currency-native.log
             cat evidence/currency-native.log
             grep -q LOCALCASH_CURRENCY_PASS evidence/currency-native.log
+            adb shell am instrument -w -e mode payments com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks > evidence/payments-native.log
+            cat evidence/payments-native.log
+            grep -q LOCALCASH_PAYMENTS_PASS evidence/payments-native.log
             python tests/biometric-emulator.py prepare
             python tests/biometric-emulator.py enroll
             python tests/biometric-emulator.py security
             python tests/maps-emulator.py
             python tests/currency-ui.py
+            python tests/payments-crud.py
             python tests/biometric-regression-dispatch.py ${{ matrix.api }}
             adb logcat -d -t 1000 > evidence/biometric-final-logcat.txt
       - name: Preserve evidence and APK

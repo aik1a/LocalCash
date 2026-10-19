@@ -141,3 +141,13 @@ PR: https://github.com/aik1a/LocalCash/pull/13, merge a34cc2e3e09e499136cd529eea
 CI 39178585250 SUCCESS sobre 6b7813cb (API24/API36). Auditoría independiente
 [PASS WITH OBSERVATIONS / APPROVED_FOR_MERGE](../audits/S01/S01-T01-audit.md),
 0 BLOCKER/MAJOR; tarea archivada en completed. El roadmap S01 no se declara cerrado.
+
+## Incremento S01-T02 — pagos, saldo y CRUD (en validación)
+
+Autorizado por Aikia el 19-10-2026. Sustituye las restricciones previas de admitir saldo negativo y no vincular compras a movimientos. Alcance: Task Brief docs/tasks/active/S01-T02-pagos-crud.md.
+
+| Cambio | Correspondencia | Implementación | Evidencia |
+|---|---|---|---|
+| Saldo suficiente | LC-ACC-01, LC-MOV-01 | MovimientoService/Repository, CuentaRepository | PaymentCrudChecks; pendiente CI Android |
+| Planificar/realizar desde cuenta | LC-BUY-01, LC-MOV-01 | CompraService/Repository, pago_compra v6, PagoCompraUI | Transacciones/rollback/reintento; pendiente CI |
+| CRUD e interfaz | LC-CON-01, LC-ACC-01, LC-BUY-01 | Activities, AccionesUI, validaciones referenciales | Pruebas nativas/UI en validación |

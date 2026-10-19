@@ -35,7 +35,7 @@ public final class ComprasActivity extends ActividadProtegida {
             DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT);
             for (Compra compra : compras) {
                 Map<String, String> fila = new HashMap<>(); fila.put("nombre", compra.getNombre());
-                fila.put("detalle", compra.getEstado().name() + " · " + formato.format(new Date(compra.getFecha()))
+                fila.put("detalle", (compra.getEstado() == Compra.Estado.PLANIFICADA ? "Planificada" : "Realizada") + " · " + formato.format(new Date(compra.getFecha()))
                         + " · Total: " + Dinero.formatear(compra.calcularTotal(), compra.getDivisa())); filas.add(fila);
             }
             lista.setAdapter(new SimpleAdapter(this, filas, android.R.layout.simple_list_item_2,

@@ -31,7 +31,7 @@ def text(resource,value):
     b.adb('shell','input','tap',str((x1+x2)//2),str((y1+y2)//2))
     # ACTION_SET_TEXT por Accessibility se verifica en native runner; aquí usa teclado real.
     b.adb('shell','input','keyevent','KEYCODE_MOVE_END')
-    b.adb('shell','input','keyevent','--longpress','KEYCODE_DEL')
+    b.adb('shell','input','keyevent',*['67']*80)
     b.adb('shell','input','text',value)
     b.adb('shell','input','keyevent','4')
 
@@ -56,7 +56,7 @@ text('saldo_inicial','25.50');tap(text='Guardar');visible('USD 25,50')
 # Exactly one contact.
 tap(resource='abrir_contactos');tap(resource='crear_contacto');text('nombre_contacto','Valentina');tap(text='Guardar');visible('Valentina');tap(resource='volver')
 tap(resource='abrir_compras');tap(resource='crear_compra');text('nombre_compra','Almuerzo')
-tap(resource='estado_compra');tap(text='REALIZADA')
+tap(resource='estado_compra');tap(text='Realizada')
 tap(resource='contacto_compra')
 tree=visible('Valentina');assert '(#' not in b.texts(tree);tap(text='Valentina')
 # Scroll to product inputs.
@@ -64,7 +64,7 @@ scroll(b.dump('currency-product-scroll'))
 text('item_descripcion','Pan');text('item_precio','100');tap(resource='agregar_item')
 # Both labels remain concise. No leaked validation requirements or database IDs.
 tree=b.dump('currency-clean-labels');assert 'hasta 2 decimales' not in b.texts(tree) and 'entera positiva' not in b.texts(tree)
-tap(resource='guardar_compra');visible('Contacto: Valentina');visible('Total: CLP 100');tap(resource='abrir_reparto')
+tap(resource='guardar_compra');visible('Pagar compra');tap(text='Confirmar pago');visible('Contacto: Valentina');visible('Total: CLP 100');tap(resource='abrir_reparto')
 visible('Tú');visible('Valentina');tap(resource='guardar_reparto')
 visible('Tú: CLP 50');visible('Valentina: CLP 50')
 # Real process restart: preference and per-purchase allocations survive.

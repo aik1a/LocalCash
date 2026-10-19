@@ -29,6 +29,7 @@ public final class CuentaActivity extends ActividadProtegida {
     private boolean capturando;
     private Divisa divisa;
     private AlertDialog selectorDivisa;
+    private List<Movimiento> historial = new ArrayList<>();
 
 
     @Override protected void crearContenido(Bundle state) {
@@ -43,6 +44,15 @@ public final class CuentaActivity extends ActividadProtegida {
         lista.setEmptyView(findViewById(R.id.vacio));
         findViewById(R.id.volver).setOnClickListener(v -> finish());
         findViewById(R.id.registrar_movimiento).setOnClickListener(v -> mostrarFormulario());
+        findViewById(R.id.editar_cuenta).setOnClickListener(v -> AccionesUI.nombre(this, "Editar cuenta",
+                service.buscarCuenta(cuentaId).getNombre(), nombre -> {
+                    service.editarCuenta(cuentaId, nombre); actualizar(); AccionesUI.exito(this, "Cuenta actualizada");
+                }));
+        findViewById(R.id.eliminar_cuenta).setOnClickListener(v -> AccionesUI.confirmar(this, "Eliminar cuenta",
+                "Solo se puede eliminar una cuenta sin movimientos. ¿Eliminar esta cuenta?", () -> {
+                    service.eliminarCuenta(cuentaId); AccionesUI.exito(this, "Cuenta eliminada"); finish();
+                }));
+        lista.setOnItemClickListener((parent, view, position, id) -> opcionesMovimiento(historial.get(position)));
     }
     @Override protected void actualizarContenido() { actualizar(); }
 
@@ -55,7 +65,7 @@ public final class CuentaActivity extends ActividadProtegida {
                         new com.aik1a.localcash.data.ConfiguracionRepository(helper).exigirDivisa(), this::actualizar);
             ((TextView) findViewById(R.id.nombre_cuenta)).setText(cuenta.getNombre());
             ((TextView) findViewById(R.id.saldo)).setText("Saldo: " + Dinero.formatear(service.calcularSaldo(cuentaId), divisa));
-            List<Movimiento> historial = service.listarMovimientos(cuentaId);
+            historial = service.listarMovimientos(cuentaId);
             Collections.reverse(historial);
             List<Map<String, String>> filas = new ArrayList<>();
             DateFormat fecha = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
@@ -116,6 +126,7 @@ public final class CuentaActivity extends ActividadProtegida {
                         Dinero.parsear(monto.getText().toString(), divisa), descripcion.getText().toString(),
                         incluir.isChecked() ? ubicacion : null);
                 dialog.dismiss(); actualizar();
+                AccionesUI.exito(this, "Movimiento guardado");
             } catch (IllegalArgumentException ex) { monto.setError(ex.getMessage()); }
             catch (ArithmeticException ex) { monto.setError("El movimiento excede el rango del saldo."); }
             catch (SQLiteException ex) {
@@ -126,6 +137,41 @@ public final class CuentaActivity extends ActividadProtegida {
         dialog.setOnDismissListener(ignored -> {
             captura.cancelar(); capturando = false; ubicacion = null; campos = null; formulario = null;
         });
+        protegerDialogo(dialog).show();
+    }
+    private void opcionesMovimiento(Movimiento movimiento) {
+        if (service.esPagoCompra(movimiento.getId())) {
+            AccionesUI.error(this, "Este movimiento corresponde a una compra. Gestiona el pago desde su compra."); return;
+        }
+        protegerDialogo(new AlertDialog.Builder(this).setTitle("Movimiento")
+                .setItems(new String[]{"Editar movimiento", "Eliminar movimiento"}, (d, elegido) -> {
+                    if (elegido == 0) editarMovimiento(movimiento);
+                    else AccionesUI.confirmar(this, "Eliminar movimiento", "El saldo se actualizará al eliminarlo. ¿Continuar?", () -> {
+                        service.eliminarMovimiento(movimiento.getId()); actualizar(); AccionesUI.exito(this, "Movimiento eliminado");
+                    });
+                }).setNegativeButton("Cancelar", null).create()).show();
+    }
+    private void editarMovimiento(Movimiento movimiento) {
+        View form = getLayoutInflater().inflate(R.layout.dialog_movimiento, null);
+        form.findViewById(R.id.incluir_ubicacion).setVisibility(View.GONE);
+        form.findViewById(R.id.reintentar_ubicacion).setVisibility(View.GONE);
+        ((TextView)form.findViewById(R.id.estado_ubicacion)).setText(movimiento.tieneUbicacion() ? "Se conserva la ubicación." : "");
+        EditText monto = form.findViewById(R.id.monto), descripcion = form.findViewById(R.id.descripcion);
+        monto.setText(java.math.BigDecimal.valueOf(movimiento.getMonto(), 2).stripTrailingZeros().toPlainString());
+        DivisasUI.ejemplo(monto, divisa); descripcion.setText(movimiento.getDescripcion());
+        RadioGroup tipo = form.findViewById(R.id.tipo);
+        tipo.check(movimiento.getTipo() == Movimiento.Tipo.INGRESO ? R.id.ingreso : R.id.egreso);
+        AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Editar movimiento").setView(form)
+                .setNegativeButton("Cancelar", null).setPositiveButton("Guardar", null).create();
+        dialog.setOnShowListener(x -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            try {
+                service.editarMovimiento(movimiento.getId(), tipo.getCheckedRadioButtonId() == R.id.ingreso ? Movimiento.Tipo.INGRESO : Movimiento.Tipo.EGRESO,
+                        Dinero.parsear(monto.getText().toString(), divisa), descripcion.getText().toString());
+                dialog.dismiss(); actualizar(); AccionesUI.exito(this, "Movimiento actualizado");
+            } catch (IllegalArgumentException ex) { monto.setError(ex.getMessage()); }
+            catch (ArithmeticException ex) { monto.setError("El importe está fuera de rango."); }
+            catch (SQLiteException ex) { monto.setError("No se pudo guardar. Intenta nuevamente."); }
+        }));
         protegerDialogo(dialog).show();
     }
     private void estadoUbicacion(String mensaje) {

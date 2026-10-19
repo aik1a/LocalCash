@@ -204,3 +204,7 @@ ambos y mantienen la cuota propia separada del mapa de contactos. El mapa sigue
 inmutable y solo contiene IDs positivos reales. Para monedas sin decimales el resto
 se reparte en pesos/yenes completos. Las operaciones históricas sin usuario continúan
 leyendo/revalidando repartos anteriores; no se reinterpretan deudas guardadas.
+
+## S01-T02 — Operaciones de pago y mantenimiento
+
+MovimientoService expone edición de nombre/eliminación de cuentas y CRUD manual de movimientos. CompraService coordina mantenimiento de contactos/compras y pago explícito de una planificada desde una cuenta. Los repositories preservan invariantes transaccionales; las Activities no contienen SQL ni calculan el saldo. La relación persistida pago_compra vincula compra y egreso sin duplicar importes ni convertir monedas. Las entidades conservan reconstrucción de históricos, incluidos saldos negativos anteriores; los repositories bloquean nuevas operaciones que produzcan/empeoren negativos.
