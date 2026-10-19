@@ -113,8 +113,8 @@ public final class FlowChecks extends Instrumentation {
             }
             // Prueba FK real además de validación de aplicación.
             try {
-                new com.aik1a.localcash.data.MovimientoRepository(helper).crear(
-                        new Movimiento(0, 999999, Movimiento.Tipo.INGRESO, 1, "", 0));
+                helper.getWritableDatabase().execSQL("INSERT INTO movimientos(cuenta_id,tipo,monto,descripcion,fecha) "
+                        + "VALUES(999999,'INGRESO',1,'FK inválida',0)");
                 throw new AssertionError("FK desactivada");
             } catch (android.database.sqlite.SQLiteConstraintException expected) {
                 log.append("PASS integridad referencial SQLite.\n");
@@ -154,7 +154,7 @@ public final class FlowChecks extends Instrumentation {
             assertTrue(compras.listarCompras().isEmpty() && compras.listarContactos().isEmpty(), "Tablas nuevas vacías");
             probarRollback(helper);
             helper.close();
-            log.append("PASS MIG-01: v1 real con dos cuentas y dos movimientos → v5, saldos 125,50 y 300,00 conservados.\n");
+            log.append("PASS MIG-01: v1 real con dos cuentas y dos movimientos → v6, saldos 125,50 y 300,00 conservados.\n");
             AccessibilityServiceInfo info = getUiAutomation().getServiceInfo();
             info.flags |= AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
             getUiAutomation().setServiceInfo(info);
@@ -313,7 +313,7 @@ public final class FlowChecks extends Instrumentation {
                 assertTrue(!c.moveToFirst(), "Sin FK huérfanas");
             }
             helper.close();
-            log.append("PASS SHARED-UI: selección explícita, validación de 2+, reparto 100,01/3 y personalizado 20+30+50; errores visibles; lectura al volver, persistencia/reapertura y regresión contable.\n");
+            log.append("PASS SHARED-UI: selección explícita, Tú + contactos, reparto exacto 100,01/4 y personalizado Tú 0 + 20+30+50; errores visibles; lectura al volver, persistencia/reapertura y regresión contable.\n");
             result.putString("stream","LOCALCASH_SHARED_PASS\n"+log); finish(Activity.RESULT_OK,result);
         } catch (Throwable failure) {
             dump(getUiAutomation().getRootInActiveWindow(),0);
