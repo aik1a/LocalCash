@@ -49,7 +49,7 @@ SQLite es la única fuente persistente financiera. Nueve tablas: cuentas, movimi
 - Reparto equitativo respeta la unidad mínima de la divisa; personalizado exige suma exacta. Incluye «Tú» y al menos un contacto; la cuota propia se persiste separada de las deudas. El resto se asigna primero a Tú y luego por ID ascendente.
 - Deuda.getEstado devuelve PENDIENTE; no se implementa marcarComoPagada ni pagos parciales.
 - Planificar no descuenta saldo. Realizar exige elegir y confirmar una cuenta de misma divisa con fondos suficientes; compra/estado, egreso y vínculo se guardan atómicamente y no se cobran dos veces. Las realizadas antiguas no reciben cargos retroactivos; repartir no vuelve a cobrar.
-- CRUD básico: nombres de cuentas/contactos, movimientos manuales y compras planificadas; realizadas conservan ítems/pago y permiten renombrar. Borrado confirmado con protección de relaciones. Eliminar una compra sin reparto revierte su pago atómicamente; su egreso no se edita/borrar por separado.
+- CRUD básico: nombres de cuentas/contactos, movimientos manuales y compras planificadas; realizadas conservan ítems/pago y permiten renombrar. Borrado confirmado con protección de relaciones. Eliminar una compra sin reparto revierte su pago atómicamente; su egreso no se edita ni se borra por separado.
 - Nuevos saldos iniciales y operaciones no producen saldos negativos. Negativos históricos se conservan y permiten recuperación sin empeorarlos. Diez divisas, precisión específica y configuración principal SQLite; sin conversiones.
 - Toast confirma acciones y los errores de formularios/pago permanecen visibles. No hay notificaciones del sistema.
 
