@@ -101,7 +101,6 @@ public final class RepartoActivity extends ActividadProtegida {
             else service.repartirEquitativoConUsuario(compraId, ids);
             montoUsuario = service.buscarMontoUsuario(compraId);
             mostrarDeudas(service.listarDeudas(compraId));
-            AccionesUI.exito(this, "Reparto guardado");
             mostrarError("");
         } catch (IllegalArgumentException ex) { mostrarError(ex.getMessage()); }
         catch (ArithmeticException ex) { mostrarError("La suma supera el rango permitido."); }

@@ -7,13 +7,7 @@
     <TextView android:id="@+id/saldo" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="22sp" android:paddingVertical="8dp" />
     <Button android:id="@+id/registrar_movimiento" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Registrar ingreso o egreso" />
     <Button android:id="@+id/abrir_mapa" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Ver mapa offline" />
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-        <Button android:id="@+id/editar_cuenta" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Editar cuenta" />
-        <Button android:id="@+id/eliminar_cuenta" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Eliminar cuenta" />
-    </LinearLayout>
-    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Movimientos · Toca uno para ver opciones" android:paddingVertical="8dp" />
     <TextView android:id="@+id/vacio" android:layout_width="match_parent" android:layout_height="wrap_content"
         android:padding="16dp" android:text="Todavía no hay movimientos en esta cuenta." />
     <ListView android:id="@+id/movimientos" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
 </LinearLayout>
-

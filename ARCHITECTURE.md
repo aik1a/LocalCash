@@ -1,6 +1,6 @@
 # Arquitectura de LocalCash
 
-**Vigente en S01-T02: 2026-10-19.** Incluye el incremento de divisas S01-T01 y el pago explícito/CRUD S01-T02. La validación específica se registra en los informes de cada tarea; se conserva el antecedente histórico al final.
+**Vigente: 2026-10-18, T07C.** Contraste sobre main `9084b573ebe055485e3cdda11ca8db2d8df6a3bc`, posterior a PR #10. Este documento describe lo implementado; no cambia decisiones ni declara cerrado S00. [Entrega académica](docs/delivery/S00-final-delivery.md).
 
 ## Estructura y responsabilidades
 
@@ -10,9 +10,9 @@ Aplicación Android nativa en Java con interfaz XML y Gradle/Groovy. No usa Fire
 |---|---|
 | presentation | Activities, XML, formularios, navegación, gate biométrico, captura opcional de ubicación y visualización del mapa |
 | application | MovimientoService, CompraService y DeudaService coordinan operaciones de dominio y repositorios |
-| domain | Cuenta, Movimiento, Compra, DetalleCompra, Contacto, Deuda, Reparto, Dinero, Divisa y Ubicacion; estado privado e invariantes |
-| data | CuentaRepository, MovimientoRepository, ContactoRepository, CompraRepository, DeudaRepository y ConfiguracionRepository; SQL y mapeo |
-| data.LocalCashDbHelper | SQLiteOpenHelper; creación/migraciones y claves foráneas; base localcash.db, versión 6 |
+| domain | Cuenta, Movimiento, Compra, DetalleCompra, Contacto, Deuda, Reparto, Dinero y Ubicacion; estado privado e invariantes |
+| data | CuentaRepository, MovimientoRepository, ContactoRepository, CompraRepository y DeudaRepository; SQL y mapeo |
+| data.LocalCashDbHelper | SQLiteOpenHelper; creación/migraciones y claves foráneas; base localcash.db, versión 4 |
 
 El flujo de una operación financiera es UI → servicio → dominio/repositorios → SQLiteOpenHelper → SQLite. La UI instancia helper/servicio, pero no ejecuta SQL ni calcula saldos/repartos. Los servicios usan el dominio y los repositorios según la operación; no es una cadena obligatoria de clases ni una arquitectura empresarial.
 
@@ -39,21 +39,18 @@ LocalCashApplication conserva la sesión solo en memoria; la invalida al quedar 
 
 FLAG_SECURE se mantiene en ventanas y diálogos privados. El contenido se oculta al pausar; los diálogos se descartan al detener la Activity. Los intents internos también pasan por el gate, aunque la entrada principal sea exportada. Esto protege el acceso de UI; **no implica cifrado de SQLite ni una auditoría de seguridad exhaustiva**. [Pruebas biométricas/integración](docs/testing/S00-T07A.md).
 
-## SQLite v6 y reglas implementadas
+## SQLite v4 y reglas implementadas
 
-SQLite es la única fuente persistente financiera. Nueve tablas: cuentas, movimientos, contactos, compras, detalle_compra, deudas, configuracion, reparto_usuario y pago_compra. Las coordenadas son dos columnas nullable de movimientos; no una tabla adicional. [DDL, constraints y migraciones](docs/design/DATABASE.md).
+SQLite es la única fuente persistente financiera. Seis tablas: cuentas, movimientos, contactos, compras, detalle_compra y deudas. Las coordenadas son dos columnas nullable de movimientos; no una tabla adicional. [DDL, constraints y migraciones](docs/design/DATABASE.md).
 
 - FK activas; RESTRICT conserva relaciones. Compra con ítems y reparto de deudas usan transacciones.
 - Dinero en centésimas enteras long; saldo derivado por Cuenta.calcularSaldo y total por Compra.calcularTotal; no saldo/total modificable redundante.
 - Movimiento es inmutable: ubicación opcional en constructor, tieneUbicacion y getMontoConSigno. No existe asignarUbicacion como operación vigente.
-- Reparto equitativo respeta la unidad mínima de la divisa; personalizado exige suma exacta. Incluye «Tú» y al menos un contacto; la cuota propia se persiste separada de las deudas. El resto se asigna primero a Tú y luego por ID ascendente.
+- Reparto equitativo distribuye resto por ID ascendente; personalizado exige suma exacta. Mínimo dos contactos distintos seleccionados explícitamente.
 - Deuda.getEstado devuelve PENDIENTE; no se implementa marcarComoPagada ni pagos parciales.
-- Planificar no descuenta saldo. Realizar exige elegir y confirmar una cuenta de misma divisa con fondos suficientes; compra/estado, egreso y vínculo se guardan atómicamente y no se cobran dos veces. Las realizadas antiguas no reciben cargos retroactivos; repartir no vuelve a cobrar.
-- CRUD básico: nombres de cuentas/contactos, movimientos manuales y compras planificadas; realizadas conservan ítems/pago y permiten renombrar. Borrado confirmado con protección de relaciones. Eliminar una compra sin reparto revierte su pago atómicamente; su egreso no se edita ni se borra por separado.
-- Nuevos saldos iniciales y operaciones no producen saldos negativos. Negativos históricos se conservan y permiten recuperación sin empeorarlos. Diez divisas, precisión específica y configuración principal SQLite; sin conversiones.
-- Toast confirma acciones y los errores de formularios/pago permanecen visibles. No hay notificaciones del sistema.
+- Compras realizadas/planificadas y repartos no generan movimientos automáticos. No hay notificaciones ni edición/borrado general.
 
-Las migraciones internas históricas v1/v2/v3→v4 fueron probadas en API36. S01-T01 prueba v1–v4→v5 y S01-T02 amplía instalación/migración a v6; ver informes de validación. No equivalen a una actualización de APK con otro certificado.
+Las migraciones internas v1/v2/v3→v4 fueron probadas en API36. No equivalen a una actualización de APK con otro certificado.
 
 ## Ubicación y cartografía offline
 

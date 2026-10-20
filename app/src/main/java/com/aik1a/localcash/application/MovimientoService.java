@@ -29,13 +29,6 @@ public final class MovimientoService {
         if (divisa == null) throw new IllegalArgumentException("Selecciona una divisa.");
         return cuentas.crear(new Cuenta(0, nombre, saldoInicial, divisa));
     }
-    public void editarCuenta(long id, String nombre) { cuentas.editar(id, nombre); }
-    public void eliminarCuenta(long id) { cuentas.eliminar(id); }
-    public void editarMovimiento(long id, Movimiento.Tipo tipo, long monto, String descripcion) {
-        movimientos.editar(id, tipo, monto, descripcion);
-    }
-    public void eliminarMovimiento(long id) { movimientos.eliminar(id); }
-    public boolean esPagoCompra(long id) { return movimientos.esPagoCompra(id); }
     public List<Cuenta> listarCuentas() { return cuentas.listar(); }
     public Cuenta buscarCuenta(long id) { return cuentas.buscar(id); }
     public List<Movimiento> listarMovimientos(long cuentaId) { return movimientos.listar(cuentaId); }

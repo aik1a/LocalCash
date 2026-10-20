@@ -20,7 +20,7 @@ public void execSQL(String s){System.out.println(java.util.Base64.getEncoder().e
         'Emit.java': '''import com.aik1a.localcash.data.LocalCashDbHelper;
 public class Emit { public static void main(String[] a) { LocalCashDbHelper h=new LocalCashDbHelper(new android.content.Context());
 android.database.sqlite.SQLiteDatabase d=new android.database.sqlite.SQLiteDatabase();
-if(a.length==0) h.onCreate(d); else h.onUpgrade(d,Integer.parseInt(a[0]),a.length>1?Integer.parseInt(a[1]):6); } }'''
+if(a.length==0) h.onCreate(d); else h.onUpgrade(d,Integer.parseInt(a[0]),5); } }'''
     }
     paths = []
     for name, text in sources.items():
@@ -42,20 +42,17 @@ if(a.length==0) h.onCreate(d); else h.onUpgrade(d,Integer.parseInt(a[0]),a.lengt
         try: db.execute(statement)
         except sqlite3.IntegrityError: checks += 1
         else: raise AssertionError(statement)
-    for version, count in [(1,3),(2,7),(3,8),(4,10),(5,None)]:
+    for version, count in [(1,3),(2,7),(3,8),(4,10)]:
         db=sqlite3.connect(':memory:'); db.execute('PRAGMA foreign_keys=ON')
-        for statement in (legacy[:count] if count else [*legacy,*sql(4,5)]): db.execute(statement)
+        for statement in legacy[:count]: db.execute(statement)
         db.execute("INSERT INTO cuentas(id,nombre,saldo_inicial) VALUES(1,'Anterior',10025)")
         db.execute("INSERT INTO movimientos(id,cuenta_id,tipo,monto,fecha) VALUES(1,1,'INGRESO',2550,1234)")
         if version >= 2:
             db.execute("INSERT INTO contactos VALUES(1,'Valentina')")
-            db.execute("INSERT INTO compras(id,nombre,estado,fecha,contacto_id) VALUES(1,'Compra','REALIZADA',1234,1)")
+            db.execute("INSERT INTO compras VALUES(1,'Compra','REALIZADA',1234,1)")
             db.execute("INSERT INTO detalle_compra VALUES(1,1,'Pan',1,10000)")
         if version >= 3: db.execute("INSERT INTO deudas VALUES(1,1,5001,'PENDIENTE')")
-        if version >= 4: db.execute("UPDATE movimientos SET latitud=-33.45,longitud=-70.66")
-        if version == 5:
-            db.execute("INSERT INTO configuracion VALUES(1,'USD')")
-            db.execute("INSERT INTO reparto_usuario VALUES(1,4999)")
+        if version == 4: db.execute("UPDATE movimientos SET latitud=-33.45,longitud=-70.66")
         tables = [row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")]
         before = {t:(list(db.execute(f'SELECT * FROM {t}')), [r[1] for r in db.execute(f'PRAGMA table_info({t})')]) for t in tables}
         db.commit()
@@ -94,12 +91,4 @@ if(a.length==0) h.onCreate(d); else h.onUpgrade(d,Integer.parseInt(a[0]),a.lengt
     reject(db,"UPDATE cuentas SET divisa=NULL WHERE id=1")
     reject(db,"UPDATE compras SET divisa='USD' WHERE id=1")
     check(not list(db.execute('PRAGMA foreign_key_check')))
-    reject(db,"INSERT INTO cuentas(nombre,saldo_inicial,divisa) VALUES('Negativa',-100,'USD')")
-    reject(db,"UPDATE cuentas SET saldo_inicial=20000 WHERE id=1")
-    db.execute("INSERT INTO pago_compra(compra_id,movimiento_id) VALUES(1,1)")
-    reject(db,"INSERT INTO pago_compra(compra_id,movimiento_id) VALUES(1,1)")
-    reject(db,"INSERT INTO pago_compra(compra_id,movimiento_id) VALUES(999,1)")
-    reject(db,"DELETE FROM movimientos WHERE id=1")
-    reject(db,"DELETE FROM compras WHERE id=1")
-    check(db.execute('SELECT COUNT(*) FROM pago_compra').fetchone()==(1,))
-    print(f'PASS: {checks} host SQLite checks; actual Java DDL, fresh install and migrations v1-v5→v6.')
+    print(f'PASS: {checks} host SQLite checks; actual Java DDL, fresh install and migrations v1-v4→v5.')

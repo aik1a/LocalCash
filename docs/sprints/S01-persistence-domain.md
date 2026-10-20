@@ -1,6 +1,6 @@
 # S01 — Persistence & Domain
 
-> Plan histórico preliminar anterior a la implementación de S00. El esquema integrado actual es v6, no v1. Este listado no representa tareas vigentes ni un sprint completado. El identificador S01-T01 se reutilizó para el incremento de divisas autorizado el 18-10-2026, cerrado mediante PR #13; su alcance vigente consta en [Task Brief completado](../tasks/completed/S01-T01-divisas.md). S01-T02 se reutilizó para pagos, saldo y CRUD, cerrado mediante PR #14; ver [Task Brief completado](../tasks/completed/S01-T02-pagos-crud.md). Las tareas descritas abajo conservan exclusivamente su significado histórico.
+> Plan histórico preliminar anterior a la implementación de S00. El esquema integrado actual es v5, no v1. Este listado no representa tareas vigentes ni un sprint completado. El identificador S01-T01 se reutilizó para el incremento de divisas autorizado el 18-10-2026, cerrado mediante PR #13; su alcance vigente consta en [Task Brief completado](../tasks/completed/S01-T01-divisas.md). Las tareas descritas abajo conservan exclusivamente su significado histórico.
 
 ## Objetivo
 

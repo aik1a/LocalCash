@@ -33,7 +33,7 @@ public final class CurrencyChecks {
             context.deleteDatabase("localcash.db");
             long cuentaClp, cuentaUsd, compraId, contacto;
             try (LocalCashDbHelper helper = new LocalCashDbHelper(context)) {
-                check(helper.getWritableDatabase().getVersion() == 6, "Instalación v6");
+                check(helper.getWritableDatabase().getVersion() == 5, "Instalación v5");
                 ConfiguracionRepository config = new ConfiguracionRepository(helper);
                 check(config.buscarDivisa() == null, "Primera vez pendiente");
                 config.configurarPrimeraVez(Divisa.CLP); config.configurarPrimeraVez(Divisa.CLP);
@@ -52,7 +52,7 @@ public final class CurrencyChecks {
                 reject(() -> new CuentaRepository(helper).asignarDivisa(cuentaClp, Divisa.USD));
                 CompraService compras = new CompraService(helper);
                 contacto = compras.crearContacto("Valentina");
-                compraId = LegacyFixtures.realizada(helper,compra(10000, Divisa.CLP));
+                compraId = compras.registrar(compra(10000, Divisa.CLP));
                 DeudaService deudas = new DeudaService(helper);
                 deudas.repartirEquitativoConUsuario(compraId, Arrays.asList(contacto));
                 check(deudas.buscarMontoUsuario(compraId) == 5000, "Cuota Tú 50");
@@ -60,13 +60,13 @@ public final class CurrencyChecks {
                         "Solo contacto tiene deuda 50");
                 check(compras.listarContactos().size() == 1, "No crea contacto fantasma");
                 reject(() -> deudas.repartirEquitativoConUsuario(compraId, Arrays.asList(contacto)));
-                long personalizada = LegacyFixtures.realizada(helper,compra(10000, Divisa.CLP));
+                long personalizada = compras.registrar(compra(10000, Divisa.CLP));
                 reject(() -> deudas.repartirPersonalizadoConUsuario(personalizada, Arrays.asList(contacto), Arrays.asList(9900L), 50));
                 check(deudas.buscarMontoUsuario(personalizada) == null && deudas.listarDeudas(personalizada).isEmpty(), "Error no escribe");
                 deudas.repartirPersonalizadoConUsuario(personalizada, Arrays.asList(contacto), Arrays.asList(6000L), 4000);
                 check(deudas.buscarMontoUsuario(personalizada) == 4000, "Personalizado conserva Tú");
                 SQLiteDatabase db = helper.getWritableDatabase();
-                long rollback = LegacyFixtures.realizada(helper,compra(10000, Divisa.CLP));
+                long rollback = compras.registrar(compra(10000, Divisa.CLP));
                 db.execSQL("CREATE TRIGGER falla_usuario BEFORE INSERT ON reparto_usuario BEGIN SELECT RAISE(ABORT,'test'); END");
                 reject(() -> deudas.repartirEquitativoConUsuario(rollback, Arrays.asList(contacto)));
                 check(deudas.listarDeudas(rollback).isEmpty() && deudas.buscarMontoUsuario(rollback) == null, "Rollback cuota propia y deudas");
@@ -84,7 +84,7 @@ public final class CurrencyChecks {
                 check(new DeudaRepository(helper).buscarMontoUsuario(compraId) == 5000, "Cuota propia tras reabrir");
                 check(new DeudaRepository(helper).listarPorCompra(compraId).get(0).getMonto() == 5000, "Deuda tras reabrir");
             }
-            result.putString("stream", "LOCALCASH_CURRENCY_PASS\nPASS " + checks + " Android SQLite/repository checks; migrations v1-v4→v6.\n");
+            result.putString("stream", "LOCALCASH_CURRENCY_PASS\nPASS " + checks + " Android SQLite/repository checks; migrations v1-v4→v5.\n");
             test.finish(Activity.RESULT_OK, result);
         } catch (Throwable error) {
             result.putString("stream", "LOCALCASH_CURRENCY_FAIL\n" + android.util.Log.getStackTraceString(error));
@@ -97,7 +97,7 @@ public final class CurrencyChecks {
         try (SQLiteOpenHelper old = fixture(context, version)) { antes = snapshot(old.getWritableDatabase()); }
         try (LocalCashDbHelper helper = new LocalCashDbHelper(context)) {
             SQLiteDatabase db = helper.getWritableDatabase();
-            check(db.getVersion() == 6, "Migración v" + version);
+            check(db.getVersion() == 5, "Migración v" + version);
             check(antes.equals(snapshot(db)), "Conserva datos históricos v" + version);
             ConfiguracionRepository config = new ConfiguracionRepository(helper);
             check(config.buscarDivisa() == null, "Migración no inventa preferencia");

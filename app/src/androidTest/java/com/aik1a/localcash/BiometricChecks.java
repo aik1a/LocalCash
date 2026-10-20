@@ -33,7 +33,7 @@ public final class BiometricChecks {
                     cuentas.registrar(cuenta,Movimiento.Tipo.INGRESO,2550,"Previo",new Ubicacion(-33.45,-70.66));
                     CompraService compras=new CompraService(helper);
                     long ana=compras.crearContacto("Ana"),luis=compras.crearContacto("Luis");
-                    long compra=LegacyFixtures.realizada(helper,new Compra(0,"Compra previa",Compra.Estado.REALIZADA,0,ana,
+                    long compra=compras.registrar(new Compra(0,"Compra previa",Compra.Estado.REALIZADA,0,ana,
                             Arrays.asList(new DetalleCompra("Producto",1,10000)), Divisa.USD));
                     new DeudaService(helper).repartirEquitativo(compra,Arrays.asList(ana,luis));
                 }

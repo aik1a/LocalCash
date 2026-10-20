@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public final class LocalCashDbHelper extends SQLiteOpenHelper {
     public LocalCashDbHelper(Context context) {
-        super(context.getApplicationContext(), "localcash.db", null, 6);
+        super(context.getApplicationContext(), "localcash.db", null, 5);
     }
 
     @Override public void onConfigure(SQLiteDatabase db) {
@@ -28,7 +28,6 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
         crearDeudas(db);
         crearUbicacion(db);
         crearDivisas(db);
-        crearPagos(db);
     }
 
     private void crearCompras(SQLiteDatabase db) {
@@ -51,12 +50,11 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion >= 1 && oldVersion < newVersion && newVersion <= 6) {
+        if (oldVersion >= 1 && oldVersion < newVersion && newVersion <= 5) {
             if (oldVersion < 2 && newVersion >= 2) crearCompras(db);
             if (oldVersion < 3 && newVersion >= 3) crearDeudas(db);
             if (oldVersion < 4 && newVersion >= 4) crearUbicacion(db);
             if (oldVersion < 5 && newVersion >= 5) crearDivisas(db);
-            if (oldVersion < 6 && newVersion >= 6) crearPagos(db);
             return;
         }
         throw new IllegalStateException("Migración no soportada: " + oldVersion + " → " + newVersion);
@@ -70,15 +68,6 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
                 + "(latitud IS NOT NULL AND longitud IS NOT NULL AND typeof(longitud) IN ('real','integer') "
                 + "AND longitud BETWEEN -180 AND 180))");
     }
-    private void crearPagos(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE pago_compra (compra_id INTEGER PRIMARY KEY REFERENCES compras(id) ON DELETE RESTRICT, "
-                + "movimiento_id INTEGER NOT NULL UNIQUE REFERENCES movimientos(id) ON DELETE RESTRICT)");
-        db.execSQL("CREATE TRIGGER cuentas_saldo_inicial_insert BEFORE INSERT ON cuentas "
-                + "WHEN NEW.saldo_inicial<0 BEGIN SELECT RAISE(ABORT,'El saldo inicial no puede ser negativo'); END");
-        db.execSQL("CREATE TRIGGER cuentas_saldo_inicial_fijo BEFORE UPDATE OF saldo_inicial ON cuentas "
-                + "WHEN NEW.saldo_inicial<>OLD.saldo_inicial BEGIN SELECT RAISE(ABORT,'El saldo inicial es fijo'); END");
-    }
-
     private void crearDivisas(SQLiteDatabase db) {
         String catalogo = "'CLP','USD','EUR','ARS','MXN','COP','PEN','BRL','GBP','JPY'";
         db.execSQL("CREATE TABLE configuracion (id INTEGER PRIMARY KEY CHECK(id=1), "

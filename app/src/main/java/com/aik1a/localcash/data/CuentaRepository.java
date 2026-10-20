@@ -12,32 +12,11 @@ public final class CuentaRepository {
     public CuentaRepository(LocalCashDbHelper helper) { this.helper = helper; }
 
     public long crear(Cuenta cuenta) {
-        if (cuenta.getSaldoInicial() < 0) throw new IllegalArgumentException("El saldo inicial no puede ser negativo.");
         ContentValues values = new ContentValues();
         values.put("nombre", cuenta.getNombre());
         values.put("saldo_inicial", cuenta.getSaldoInicial());
         values.put("divisa", cuenta.getDivisa() == null ? null : cuenta.getDivisa().name());
         return helper.getWritableDatabase().insertOrThrow("cuentas", null, values);
-    }
-
-    public void editar(long id, String nombre) {
-        Cuenta actual = buscar(id);
-        Cuenta editada = new Cuenta(id, nombre, actual.getSaldoInicial(), actual.getDivisa());
-        ContentValues values = new ContentValues(); values.put("nombre", editada.getNombre());
-        if (helper.getWritableDatabase().update("cuentas", values, "id=?", new String[]{Long.toString(id)}) != 1)
-            throw new IllegalArgumentException("La cuenta no existe.");
-    }
-
-    public void eliminar(long id) {
-        android.database.sqlite.SQLiteDatabase db = helper.getWritableDatabase(); db.beginTransaction();
-        try {
-            buscar(id);
-            if (!new MovimientoRepository(helper).listar(id).isEmpty())
-                throw new IllegalArgumentException("Solo puedes eliminar cuentas sin movimientos.");
-            if (db.delete("cuentas", "id=?", new String[]{Long.toString(id)}) != 1)
-                throw new IllegalArgumentException("La cuenta no existe.");
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
     }
 
     public void asignarDivisa(long id, Divisa divisa) {

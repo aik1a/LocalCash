@@ -30,7 +30,7 @@ main = screen('restarted-main')
 contains(main, 'Saldo: USD 125,50')
 tap(main, resource='abrir_compras')
 compras = screen('restarted-purchases')
-for value in ['Compra realizada', 'Compra planificada', 'Realizada', 'Planificada']:
+for value in ['Compra realizada', 'Compra planificada', 'REALIZADA', 'PLANIFICADA']:
     contains(compras, value)
 tap(compras, text='Compra realizada')
 detalle = screen('restarted-purchase-detail')
