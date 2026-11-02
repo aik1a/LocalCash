@@ -1,0 +1,2852 @@
+{
+  "schema_version": 1,
+  "goal_id": "LOCALCASH-MVP-PULIDO",
+  "baseline": "9b8a651d66982eea3a41e1979342468fe4cad176",
+  "target_date": "2026-11-02",
+  "timezone": "America/Santiago",
+  "scope_mode": "COMPLETE_NO_CUTS",
+  "execution_started": false,
+  "current_phase": "MVP-S01-T01",
+  "current_microtask": "MVP-S01-T01-M01",
+  "last_verified_microtask": null,
+  "sprints": [
+    {
+      "id": "MVP-S01",
+      "title": "Base, reglas y protección de saldo",
+      "status": "PLANNED",
+      "path": "docs/sprints/MVP-S01-base-reglas-y-proteccion-de-saldo.md",
+      "depends_on": [],
+      "phase_ids": [
+        "MVP-S01-T01",
+        "MVP-S01-T02",
+        "MVP-S01-T03",
+        "MVP-S01-T04"
+      ]
+    },
+    {
+      "id": "MVP-S02",
+      "title": "CRUD de cuentas, contactos y movimientos",
+      "status": "PLANNED",
+      "path": "docs/sprints/MVP-S02-crud-de-cuentas-contactos-y-movimientos.md",
+      "depends_on": [
+        "MVP-S01"
+      ],
+      "phase_ids": [
+        "MVP-S02-T01",
+        "MVP-S02-T02",
+        "MVP-S02-T03"
+      ]
+    },
+    {
+      "id": "MVP-S03",
+      "title": "CRUD y organización de compras",
+      "status": "PLANNED",
+      "path": "docs/sprints/MVP-S03-crud-y-organizacion-de-compras.md",
+      "depends_on": [
+        "MVP-S02"
+      ],
+      "phase_ids": [
+        "MVP-S03-T01",
+        "MVP-S03-T02",
+        "MVP-S03-T03"
+      ]
+    },
+    {
+      "id": "MVP-S04",
+      "title": "Pago de compras y devolución",
+      "status": "PLANNED",
+      "path": "docs/sprints/MVP-S04-pago-de-compras-y-devolucion.md",
+      "depends_on": [
+        "MVP-S03"
+      ],
+      "phase_ids": [
+        "MVP-S04-T01",
+        "MVP-S04-T02",
+        "MVP-S04-T03"
+      ]
+    },
+    {
+      "id": "MVP-S05",
+      "title": "Deudas y anulación de repartos",
+      "status": "PLANNED",
+      "path": "docs/sprints/MVP-S05-deudas-y-anulacion-de-repartos.md",
+      "depends_on": [
+        "MVP-S04"
+      ],
+      "phase_ids": [
+        "MVP-S05-T01",
+        "MVP-S05-T02",
+        "MVP-S05-T03"
+      ]
+    },
+    {
+      "id": "MVP-S06",
+      "title": "Interfaz, gestos, respuesta y privacidad",
+      "status": "PLANNED",
+      "path": "docs/sprints/MVP-S06-interfaz-gestos-respuesta-y-privacidad.md",
+      "depends_on": [
+        "MVP-S05"
+      ],
+      "phase_ids": [
+        "MVP-S06-T01",
+        "MVP-S06-T02",
+        "MVP-S06-T03",
+        "MVP-S06-T04"
+      ]
+    },
+    {
+      "id": "MVP-S07",
+      "title": "Regresión, APK y entrega",
+      "status": "PLANNED",
+      "path": "docs/sprints/MVP-S07-regresion-apk-y-entrega.md",
+      "depends_on": [
+        "MVP-S06"
+      ],
+      "phase_ids": [
+        "MVP-S07-T01",
+        "MVP-S07-T02",
+        "MVP-S07-T03"
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "id": "MVP-S01-T01",
+      "title": "Baseline y entorno",
+      "sprint_id": "MVP-S01",
+      "role": "Codificador",
+      "status": "READY",
+      "path": "docs/tasks/active/MVP-S01-T01-baseline-y-entorno.md",
+      "branch": "task/MVP-S01-T01-baseline-y-entorno",
+      "depends_on": [],
+      "microtask_ids": [
+        "MVP-S01-T01-M01",
+        "MVP-S01-T01-M02",
+        "MVP-S01-T01-M03"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S01-T02",
+      "title": "Reglas y contratos del incremento",
+      "sprint_id": "MVP-S01",
+      "role": "Orquestador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S01-T02-reglas-y-contratos-del-incremento.md",
+      "branch": "task/MVP-S01-T02-reglas-y-contratos-del-incremento",
+      "depends_on": [
+        "MVP-S01-T01"
+      ],
+      "microtask_ids": [
+        "MVP-S01-T02-M01",
+        "MVP-S01-T02-M02",
+        "MVP-S01-T02-M03",
+        "MVP-S01-T02-M04"
+      ],
+      "audit_required": false,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S01-T03",
+      "title": "Saldo suficiente y validación central",
+      "sprint_id": "MVP-S01",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S01-T03-saldo-suficiente-y-validacion-central.md",
+      "branch": "task/MVP-S01-T03-saldo-suficiente-y-validacion-central",
+      "depends_on": [
+        "MVP-S01-T02"
+      ],
+      "microtask_ids": [
+        "MVP-S01-T03-M01",
+        "MVP-S01-T03-M02",
+        "MVP-S01-T03-M03",
+        "MVP-S01-T03-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S01-T04",
+      "title": "Validación continua del nuevo ciclo",
+      "sprint_id": "MVP-S01",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S01-T04-validacion-continua-del-nuevo-ciclo.md",
+      "branch": "task/MVP-S01-T04-validacion-continua-del-nuevo-ciclo",
+      "depends_on": [
+        "MVP-S01-T03"
+      ],
+      "microtask_ids": [
+        "MVP-S01-T04-M01",
+        "MVP-S01-T04-M02"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S02-T01",
+      "title": "CRUD de cuentas",
+      "sprint_id": "MVP-S02",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S02-T01-crud-de-cuentas.md",
+      "branch": "task/MVP-S02-T01-crud-de-cuentas",
+      "depends_on": [
+        "MVP-S01-T04"
+      ],
+      "microtask_ids": [
+        "MVP-S02-T01-M01",
+        "MVP-S02-T01-M02",
+        "MVP-S02-T01-M03",
+        "MVP-S02-T01-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S02-T02",
+      "title": "CRUD de contactos",
+      "sprint_id": "MVP-S02",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S02-T02-crud-de-contactos.md",
+      "branch": "task/MVP-S02-T02-crud-de-contactos",
+      "depends_on": [
+        "MVP-S02-T01"
+      ],
+      "microtask_ids": [
+        "MVP-S02-T02-M01",
+        "MVP-S02-T02-M02",
+        "MVP-S02-T02-M03",
+        "MVP-S02-T02-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S02-T03",
+      "title": "CRUD de movimientos manuales",
+      "sprint_id": "MVP-S02",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S02-T03-crud-de-movimientos-manuales.md",
+      "branch": "task/MVP-S02-T03-crud-de-movimientos-manuales",
+      "depends_on": [
+        "MVP-S02-T02"
+      ],
+      "microtask_ids": [
+        "MVP-S02-T03-M01",
+        "MVP-S02-T03-M02",
+        "MVP-S02-T03-M03",
+        "MVP-S02-T03-M04",
+        "MVP-S02-T03-M05"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S03-T01",
+      "title": "Edición de compras y detalles",
+      "sprint_id": "MVP-S03",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S03-T01-edicion-de-compras-y-detalles.md",
+      "branch": "task/MVP-S03-T01-edicion-de-compras-y-detalles",
+      "depends_on": [
+        "MVP-S02-T03"
+      ],
+      "microtask_ids": [
+        "MVP-S03-T01-M01",
+        "MVP-S03-T01-M02",
+        "MVP-S03-T01-M03",
+        "MVP-S03-T01-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S03-T02",
+      "title": "Eliminación segura de compras",
+      "sprint_id": "MVP-S03",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S03-T02-eliminacion-segura-de-compras.md",
+      "branch": "task/MVP-S03-T02-eliminacion-segura-de-compras",
+      "depends_on": [
+        "MVP-S03-T01"
+      ],
+      "microtask_ids": [
+        "MVP-S03-T02-M01",
+        "MVP-S03-T02-M02",
+        "MVP-S03-T02-M03",
+        "MVP-S03-T02-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S03-T03",
+      "title": "Formularios y lista de compras",
+      "sprint_id": "MVP-S03",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S03-T03-formularios-y-lista-de-compras.md",
+      "branch": "task/MVP-S03-T03-formularios-y-lista-de-compras",
+      "depends_on": [
+        "MVP-S03-T02"
+      ],
+      "microtask_ids": [
+        "MVP-S03-T03-M01",
+        "MVP-S03-T03-M02",
+        "MVP-S03-T03-M03"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S04-T01",
+      "title": "Vínculo compra-pago y migración",
+      "sprint_id": "MVP-S04",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S04-T01-vinculo-compra-pago-y-migracion.md",
+      "branch": "task/MVP-S04-T01-vinculo-compra-pago-y-migracion",
+      "depends_on": [
+        "MVP-S03-T03"
+      ],
+      "microtask_ids": [
+        "MVP-S04-T01-M01",
+        "MVP-S04-T01-M02",
+        "MVP-S04-T01-M03",
+        "MVP-S04-T01-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S04-T02",
+      "title": "Comprar desde cuenta",
+      "sprint_id": "MVP-S04",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S04-T02-comprar-desde-cuenta.md",
+      "branch": "task/MVP-S04-T02-comprar-desde-cuenta",
+      "depends_on": [
+        "MVP-S04-T01"
+      ],
+      "microtask_ids": [
+        "MVP-S04-T02-M01",
+        "MVP-S04-T02-M02",
+        "MVP-S04-T02-M03",
+        "MVP-S04-T02-M04",
+        "MVP-S04-T02-M05"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S04-T03",
+      "title": "Deshacer y eliminar compra pagada",
+      "sprint_id": "MVP-S04",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S04-T03-deshacer-y-eliminar-compra-pagada.md",
+      "branch": "task/MVP-S04-T03-deshacer-y-eliminar-compra-pagada",
+      "depends_on": [
+        "MVP-S04-T02"
+      ],
+      "microtask_ids": [
+        "MVP-S04-T03-M01",
+        "MVP-S04-T03-M02",
+        "MVP-S04-T03-M03",
+        "MVP-S04-T03-M04",
+        "MVP-S04-T03-M05"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S05-T01",
+      "title": "Estados reales de deuda y migración",
+      "sprint_id": "MVP-S05",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S05-T01-estados-reales-de-deuda-y-migracion.md",
+      "branch": "task/MVP-S05-T01-estados-reales-de-deuda-y-migracion",
+      "depends_on": [
+        "MVP-S04-T03"
+      ],
+      "microtask_ids": [
+        "MVP-S05-T01-M01",
+        "MVP-S05-T01-M02",
+        "MVP-S05-T01-M03",
+        "MVP-S05-T01-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S05-T02",
+      "title": "Registrar deuda pagada y corregir estado",
+      "sprint_id": "MVP-S05",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S05-T02-registrar-deuda-pagada-y-corregir-estado.md",
+      "branch": "task/MVP-S05-T02-registrar-deuda-pagada-y-corregir-estado",
+      "depends_on": [
+        "MVP-S05-T01"
+      ],
+      "microtask_ids": [
+        "MVP-S05-T02-M01",
+        "MVP-S05-T02-M02",
+        "MVP-S05-T02-M03",
+        "MVP-S05-T02-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S05-T03",
+      "title": "Anulación de reparto y compra compartida",
+      "sprint_id": "MVP-S05",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S05-T03-anulacion-de-reparto-y-compra-compartida.md",
+      "branch": "task/MVP-S05-T03-anulacion-de-reparto-y-compra-compartida",
+      "depends_on": [
+        "MVP-S05-T02"
+      ],
+      "microtask_ids": [
+        "MVP-S05-T03-M01",
+        "MVP-S05-T03-M02",
+        "MVP-S05-T03-M03",
+        "MVP-S05-T03-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S06-T01",
+      "title": "Coherencia visual y navegación",
+      "sprint_id": "MVP-S06",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S06-T01-coherencia-visual-y-navegacion.md",
+      "branch": "task/MVP-S06-T01-coherencia-visual-y-navegacion",
+      "depends_on": [
+        "MVP-S05-T03"
+      ],
+      "microtask_ids": [
+        "MVP-S06-T01-M01",
+        "MVP-S06-T01-M02",
+        "MVP-S06-T01-M03",
+        "MVP-S06-T01-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S06-T02",
+      "title": "Acciones visibles y swipe izquierdo",
+      "sprint_id": "MVP-S06",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S06-T02-acciones-visibles-y-swipe-izquierdo.md",
+      "branch": "task/MVP-S06-T02-acciones-visibles-y-swipe-izquierdo",
+      "depends_on": [
+        "MVP-S06-T01"
+      ],
+      "microtask_ids": [
+        "MVP-S06-T02-M01",
+        "MVP-S06-T02-M02",
+        "MVP-S06-T02-M03",
+        "MVP-S06-T02-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S06-T03",
+      "title": "Respuesta y ciclo de vida",
+      "sprint_id": "MVP-S06",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S06-T03-respuesta-y-ciclo-de-vida.md",
+      "branch": "task/MVP-S06-T03-respuesta-y-ciclo-de-vida",
+      "depends_on": [
+        "MVP-S06-T02"
+      ],
+      "microtask_ids": [
+        "MVP-S06-T03-M01",
+        "MVP-S06-T03-M02",
+        "MVP-S06-T03-M03",
+        "MVP-S06-T03-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S06-T04",
+      "title": "Privacidad, cobertura y documentación de UX",
+      "sprint_id": "MVP-S06",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S06-T04-privacidad-cobertura-y-documentacion-de-ux.md",
+      "branch": "task/MVP-S06-T04-privacidad-cobertura-y-documentacion-de-ux",
+      "depends_on": [
+        "MVP-S06-T03"
+      ],
+      "microtask_ids": [
+        "MVP-S06-T04-M01",
+        "MVP-S06-T04-M02",
+        "MVP-S06-T04-M03",
+        "MVP-S06-T04-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S07-T01",
+      "title": "Regresión integral automatizada",
+      "sprint_id": "MVP-S07",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S07-T01-regresion-integral-automatizada.md",
+      "branch": "task/MVP-S07-T01-regresion-integral-automatizada",
+      "depends_on": [
+        "MVP-S06-T04"
+      ],
+      "microtask_ids": [
+        "MVP-S07-T01-M01",
+        "MVP-S07-T01-M02",
+        "MVP-S07-T01-M03",
+        "MVP-S07-T01-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S07-T02",
+      "title": "Recorrido real de UX y offline",
+      "sprint_id": "MVP-S07",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S07-T02-recorrido-real-de-ux-y-offline.md",
+      "branch": "task/MVP-S07-T02-recorrido-real-de-ux-y-offline",
+      "depends_on": [
+        "MVP-S07-T01"
+      ],
+      "microtask_ids": [
+        "MVP-S07-T02-M01",
+        "MVP-S07-T02-M02",
+        "MVP-S07-T02-M03",
+        "MVP-S07-T02-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    },
+    {
+      "id": "MVP-S07-T03",
+      "title": "APK, entrega y gate final",
+      "sprint_id": "MVP-S07",
+      "role": "Codificador",
+      "status": "DRAFT",
+      "path": "docs/tasks/active/MVP-S07-T03-apk-entrega-y-gate-final.md",
+      "branch": "task/MVP-S07-T03-apk-entrega-y-gate-final",
+      "depends_on": [
+        "MVP-S07-T02"
+      ],
+      "microtask_ids": [
+        "MVP-S07-T03-M01",
+        "MVP-S07-T03-M02",
+        "MVP-S07-T03-M03",
+        "MVP-S07-T03-M04"
+      ],
+      "audit_required": true,
+      "audit_ref": null,
+      "accepted_sha": null
+    }
+  ],
+  "microtasks": [
+    {
+      "id": "MVP-S01-T01-M01",
+      "phase_id": "MVP-S01-T01",
+      "sprint_id": "MVP-S01",
+      "title": "Identificar checkout y cambios ajenos",
+      "objective": "Identificar checkout y cambios ajenos",
+      "acceptance": [
+        "Registrar SHA, rama y árbol limpio o cambios ajenos preservados; confirmar rollback y v5."
+      ],
+      "verification": "git status y git rev-parse HEAD",
+      "status": "PENDING",
+      "depends_on": [],
+      "owner_role": "Codificador",
+      "context": [
+        "PROJECT_STATE.md",
+        "app/build.gradle",
+        "docs/delivery/BUILD.md",
+        ".github/workflows/s00-t06c-build.yml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S01-T01-M02",
+      "phase_id": "MVP-S01-T01",
+      "sprint_id": "MVP-S01",
+      "title": "Ejecutar suites existentes",
+      "objective": "Ejecutar suites existentes",
+      "acceptance": [
+        "Registrar dominio y SQLite host con resultados reales; si falla, aislar causa sin tocar features."
+      ],
+      "verification": "bash tests/domain-checks.sh; python tests/sqlite-currency-checks.py",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S01-T01-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "PROJECT_STATE.md",
+        "app/build.gradle",
+        "docs/delivery/BUILD.md",
+        ".github/workflows/s00-t06c-build.yml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S01-T01-M03",
+      "phase_id": "MVP-S01-T01",
+      "sprint_id": "MVP-S01",
+      "title": "Comprobar build y apertura de baseline",
+      "objective": "Comprobar build y apertura de baseline",
+      "acceptance": [
+        "Build Android y apertura/autenticación en entorno disponible; sin dispositivo físico, registrar el límite y usar emulador/CI sin llamarlo teléfono."
+      ],
+      "verification": "assembleDebug, assembleDebugAndroidTest y logcat/smoke",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S01-T01-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "PROJECT_STATE.md",
+        "app/build.gradle",
+        "docs/delivery/BUILD.md",
+        ".github/workflows/s00-t06c-build.yml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S01-T02-M01",
+      "phase_id": "MVP-S01-T02",
+      "sprint_id": "MVP-S01",
+      "title": "Registrar reglas de saldo y legado",
+      "objective": "Registrar reglas de saldo y legado",
+      "acceptance": [
+        "Nuevas operaciones no crean déficit; negativos previos legibles y recuperables; cálculo puro no se convierte en validación de lectura."
+      ],
+      "verification": "Revisión de reglas POL-01 a POL-04 y ejemplos",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S01-T01-M03"
+      ],
+      "owner_role": "Orquestador",
+      "context": [
+        "docs/design/BUSINESS_RULES.md",
+        "docs/design/DATABASE.md",
+        "docs/requirements/TRACEABILITY.md",
+        "docs/requirements/PROJECT_SPEC.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S01-T02-M02",
+      "phase_id": "MVP-S01-T02",
+      "sprint_id": "MVP-S01",
+      "title": "Registrar contratos de pago y devolución",
+      "objective": "Registrar contratos de pago y devolución",
+      "acceptance": [
+        "Definir cuenta de igual divisa, cargo total único, compra cero e históricos sin cobro retroactivo."
+      ],
+      "verification": "Tabla de estados y casos POL-05 a POL-08",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S01-T02-M01"
+      ],
+      "owner_role": "Orquestador",
+      "context": [
+        "docs/design/BUSINESS_RULES.md",
+        "docs/design/DATABASE.md",
+        "docs/requirements/TRACEABILITY.md",
+        "docs/requirements/PROJECT_SPEC.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S01-T02-M03",
+      "phase_id": "MVP-S01-T02",
+      "sprint_id": "MVP-S01",
+      "title": "Registrar reglas CRUD y deudas",
+      "objective": "Registrar reglas CRUD y deudas",
+      "acceptance": [
+        "Definir borrado protegido, corrección de pago registrado y anulación de reparto pendiente sin borrar pagos reales."
+      ],
+      "verification": "Tabla POL-09 a POL-12",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S01-T02-M02"
+      ],
+      "owner_role": "Orquestador",
+      "context": [
+        "docs/design/BUSINESS_RULES.md",
+        "docs/design/DATABASE.md",
+        "docs/requirements/TRACEABILITY.md",
+        "docs/requirements/PROJECT_SPEC.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S01-T02-M04",
+      "phase_id": "MVP-S01-T02",
+      "sprint_id": "MVP-S01",
+      "title": "Actualizar trazabilidad y contexto",
+      "objective": "Actualizar trazabilidad y contexto",
+      "acceptance": [
+        "Mapear matriz EV3 y pedidos UX a fases; separar decisión registrada de función implementada."
+      ],
+      "verification": "Diff documental; sin marcar requisitos funcionales DONE",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S01-T02-M03"
+      ],
+      "owner_role": "Orquestador",
+      "context": [
+        "docs/design/BUSINESS_RULES.md",
+        "docs/design/DATABASE.md",
+        "docs/requirements/TRACEABILITY.md",
+        "docs/requirements/PROJECT_SPEC.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S01-T03-M01",
+      "phase_id": "MVP-S01-T03",
+      "sprint_id": "MVP-S01",
+      "title": "Crear validación de saldo proyectado reutilizable",
+      "objective": "Crear validación de saldo proyectado reutilizable",
+      "acceptance": [
+        "La misma regla admite cero; en legado negativo permite mantener/mejorar e impide empeorar; sin Android en dominio."
+      ],
+      "verification": "Casos de borde para política de saldo",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S01-T02-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/domain/Cuenta.java",
+        "app/src/main/java/com/aik1a/localcash/data/CuentaRepository.java",
+        "tests/DomainChecks.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S01-T03-M02",
+      "phase_id": "MVP-S01-T03",
+      "sprint_id": "MVP-S01",
+      "title": "Aplicarla al crear cuentas y registrar movimientos",
+      "objective": "Aplicarla al crear cuentas y registrar movimientos",
+      "acceptance": [
+        "Saldo inicial nuevo negativo y egreso excesivo se rechazan dentro de operación transaccional sin escritura parcial."
+      ],
+      "verification": "Pruebas servicio/SQLite y comparación antes/después",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S01-T03-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/domain/Cuenta.java",
+        "app/src/main/java/com/aik1a/localcash/data/CuentaRepository.java",
+        "tests/DomainChecks.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S01-T03-M03",
+      "phase_id": "MVP-S01-T03",
+      "sprint_id": "MVP-S01",
+      "title": "Preservar precisión y lectura antigua",
+      "objective": "Preservar precisión y lectura antigua",
+      "acceptance": [
+        "CLP/JPY enteros, USD dos decimales; constructor de reconstrucción y calcularSaldo siguen leyendo históricos negativos."
+      ],
+      "verification": "Regresión dominio/divisas y fixture legado",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S01-T03-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/domain/Cuenta.java",
+        "app/src/main/java/com/aik1a/localcash/data/CuentaRepository.java",
+        "tests/DomainChecks.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S01-T03-M04",
+      "phase_id": "MVP-S01-T03",
+      "sprint_id": "MVP-S01",
+      "title": "Mostrar saldo insuficiente y verificar fase",
+      "objective": "Mostrar saldo insuficiente y verificar fase",
+      "acceptance": [
+        "Error útil con disponible e importe; formulario conservado; pruebas Android de rechazo/cero."
+      ],
+      "verification": "UI/API24/API36 en entorno real disponible",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S01-T03-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/domain/Cuenta.java",
+        "app/src/main/java/com/aik1a/localcash/data/CuentaRepository.java",
+        "tests/DomainChecks.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S01-T04-M01",
+      "phase_id": "MVP-S01-T04",
+      "sprint_id": "MVP-S01",
+      "title": "Corregir filtros y disparadores del workflow vigente",
+      "objective": "Corregir filtros y disparadores del workflow vigente",
+      "acceptance": [
+        "PR y cambios app/tests/Gradle relevantes ejecutan validación del SHA correcto; conservar manual y evitar duplicación innecesaria."
+      ],
+      "verification": "Diff YAML y ejecución CI de la rama exacta",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S01-T03-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        ".github/workflows/s00-t06c-build.yml",
+        "build.gradle",
+        "settings.gradle",
+        "gradle/wrapper/gradle-wrapper.properties"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S01-T04-M02",
+      "phase_id": "MVP-S01-T04",
+      "sprint_id": "MVP-S01",
+      "title": "Preparar evidencia de sprint para revisión",
+      "objective": "Preparar evidencia de sprint para revisión",
+      "acceptance": [
+        "Handoff registra suites, casos nuevos, APK/SHA y límites; entrega lista para Auditor sin declarar sprint aceptado."
+      ],
+      "verification": "Handoff y checklist de revisión; gate externo queda pendiente",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S01-T04-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        ".github/workflows/s00-t06c-build.yml",
+        "build.gradle",
+        "settings.gradle",
+        "gradle/wrapper/gradle-wrapper.properties"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S02-T01-M01",
+      "phase_id": "MVP-S02-T01",
+      "sprint_id": "MVP-S02",
+      "title": "Añadir edición de nombre y saldo inicial",
+      "objective": "Añadir edición de nombre y saldo inicial",
+      "acceptance": [
+        "Actualizar por ID, validar saldo proyectado y precisión; divisa asignada permanece fija."
+      ],
+      "verification": "Prueba update, inexistente, renombrado legado negativo",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S01-T04-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/CuentaRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/MainActivity.java",
+        "app/src/main/res/layout/dialog_cuenta.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S02-T01-M02",
+      "phase_id": "MVP-S02-T01",
+      "sprint_id": "MVP-S02",
+      "title": "Añadir borrado de cuenta vacía",
+      "objective": "Añadir borrado de cuenta vacía",
+      "acceptance": [
+        "Eliminar solo sin movimientos ni pagos; comprobar filas afectadas y preservar cuentas ajenas."
+      ],
+      "verification": "Pruebas delete vacío y bloqueo con referencias",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S02-T01-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/CuentaRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/MainActivity.java",
+        "app/src/main/res/layout/dialog_cuenta.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S02-T01-M03",
+      "phase_id": "MVP-S02-T01",
+      "sprint_id": "MVP-S02",
+      "title": "Exponer acciones visibles en cuenta",
+      "objective": "Exponer acciones visibles en cuenta",
+      "acceptance": [
+        "Editar precarga datos; eliminar confirma con nombre y explica bloqueo; no exige gesto."
+      ],
+      "verification": "Recorrido UI de acciones y cancelación",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S02-T01-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/CuentaRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/MainActivity.java",
+        "app/src/main/res/layout/dialog_cuenta.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S02-T01-M04",
+      "phase_id": "MVP-S02-T01",
+      "sprint_id": "MVP-S02",
+      "title": "Verificar saldo y persistencia tras editar",
+      "objective": "Verificar saldo y persistencia tras editar",
+      "acceptance": [
+        "Crear/ver/editar/borrar/reabrir; sin corrección accidental de importes o moneda."
+      ],
+      "verification": "Suite Android CRUD cuentas y reinicio",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S02-T01-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/CuentaRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/MainActivity.java",
+        "app/src/main/res/layout/dialog_cuenta.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S02-T02-M01",
+      "phase_id": "MVP-S02-T02",
+      "sprint_id": "MVP-S02",
+      "title": "Añadir edición de contacto",
+      "objective": "Añadir edición de contacto",
+      "acceptance": [
+        "Nombre válido por ID; conservar identidad y referencias existentes."
+      ],
+      "verification": "Pruebas nombre vacío/renombrado/ID inexistente",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S02-T01-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/ContactoRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/ContactosActivity.java",
+        "app/src/main/res/layout/dialog_contacto.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S02-T02-M02",
+      "phase_id": "MVP-S02-T02",
+      "sprint_id": "MVP-S02",
+      "title": "Añadir borrado protegido de contacto",
+      "objective": "Añadir borrado protegido de contacto",
+      "acceptance": [
+        "Contacto sin uso se elimina; referencias de compra/deuda lo bloquean con motivo concreto."
+      ],
+      "verification": "Pruebas FK y filas no relacionadas",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S02-T02-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/ContactoRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/ContactosActivity.java",
+        "app/src/main/res/layout/dialog_contacto.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S02-T02-M03",
+      "phase_id": "MVP-S02-T02",
+      "sprint_id": "MVP-S02",
+      "title": "Conectar acciones a la agenda",
+      "objective": "Conectar acciones a la agenda",
+      "acceptance": [
+        "Editar con valor actual y eliminar con confirmación accesible; éxito/errores claros."
+      ],
+      "verification": "Recorrido UI con contacto usado y libre",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S02-T02-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/ContactoRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/ContactosActivity.java",
+        "app/src/main/res/layout/dialog_contacto.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S02-T02-M04",
+      "phase_id": "MVP-S02-T02",
+      "sprint_id": "MVP-S02",
+      "title": "Verificar referencias tras renombrar y reiniciar",
+      "objective": "Verificar referencias tras renombrar y reiniciar",
+      "acceptance": [
+        "Compra y reparto muestran nuevo nombre sin crear persona duplicada ni perder montos."
+      ],
+      "verification": "Integración contacto-compra-deuda y reapertura",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S02-T02-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/ContactoRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/ContactosActivity.java",
+        "app/src/main/res/layout/dialog_contacto.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S02-T03-M01",
+      "phase_id": "MVP-S02-T03",
+      "sprint_id": "MVP-S02",
+      "title": "Añadir consulta y edición por ID",
+      "objective": "Añadir consulta y edición por ID",
+      "acceptance": [
+        "Editar tipo, monto y descripción sustituyendo el original; conservar cuenta, fecha y coordenadas en este alcance."
+      ],
+      "verification": "Update exacto, inexistente y ubicación preservada",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S02-T02-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/MovimientoRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CuentaActivity.java",
+        "app/src/main/res/layout/dialog_movimiento.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S02-T03-M02",
+      "phase_id": "MVP-S02-T03",
+      "sprint_id": "MVP-S02",
+      "title": "Añadir eliminación transaccional",
+      "objective": "Añadir eliminación transaccional",
+      "acceptance": [
+        "Simular retirar original y aplicar política de saldo; borrar ingreso necesario se rechaza."
+      ],
+      "verification": "Delete ingreso/egreso con snapshot de filas",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S02-T03-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/MovimientoRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CuentaActivity.java",
+        "app/src/main/res/layout/dialog_movimiento.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S02-T03-M03",
+      "phase_id": "MVP-S02-T03",
+      "sprint_id": "MVP-S02",
+      "title": "Proteger movimientos de compras vinculadas",
+      "objective": "Proteger movimientos de compras vinculadas",
+      "acceptance": [
+        "Preparar comprobación compatible con v5; al existir vínculo se gestionan solo desde compra; no crear tabla anticipada en esta fase."
+      ],
+      "verification": "Contrato y test de guardia; revalidación en sprint 4",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S02-T03-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/MovimientoRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CuentaActivity.java",
+        "app/src/main/res/layout/dialog_movimiento.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S02-T03-M04",
+      "phase_id": "MVP-S02-T03",
+      "sprint_id": "MVP-S02",
+      "title": "Reutilizar formulario y actualizar listado",
+      "objective": "Reutilizar formulario y actualizar listado",
+      "acceptance": [
+        "Precargar valores y refrescar saldo solo tras guardar; confirmar eliminación y conservar datos si falla."
+      ],
+      "verification": "Flujos editar 300 a 400 y borrar egreso",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S02-T03-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/MovimientoRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CuentaActivity.java",
+        "app/src/main/res/layout/dialog_movimiento.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S02-T03-M05",
+      "phase_id": "MVP-S02-T03",
+      "sprint_id": "MVP-S02",
+      "title": "Validar aislamiento y fallos",
+      "objective": "Validar aislamiento y fallos",
+      "acceptance": [
+        "Rollback y otras cuentas intactas; eliminar inexistente no comunica éxito; mismo caso tras reinicio."
+      ],
+      "verification": "Pruebas transaccionales Android + regresión mapas",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S02-T03-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/MovimientoRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CuentaActivity.java",
+        "app/src/main/res/layout/dialog_movimiento.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S03-T01-M01",
+      "phase_id": "MVP-S03-T01",
+      "sprint_id": "MVP-S03",
+      "title": "Habilitar carga de compra para editar",
+      "objective": "Habilitar carga de compra para editar",
+      "acceptance": [
+        "Reutilizar formulario con modo edición por ID; precargar fecha, contacto, detalles y moneda sin duplicar compra."
+      ],
+      "verification": "Prueba de lectura y precarga completa",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S02-T03-M05"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/NuevaCompraActivity.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S03-T01-M02",
+      "phase_id": "MVP-S03-T01",
+      "sprint_id": "MVP-S03",
+      "title": "Actualizar metadatos y detalles atómicamente",
+      "objective": "Actualizar metadatos y detalles atómicamente",
+      "acceptance": [
+        "Modificar nombre/fecha/contacto/detalles; total derivado, al menos un ítem y precisión válida."
+      ],
+      "verification": "Pruebas actualización e inyección de fallo de detalle",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S03-T01-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/NuevaCompraActivity.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S03-T01-M03",
+      "phase_id": "MVP-S03-T01",
+      "sprint_id": "MVP-S03",
+      "title": "Proteger importes de compras repartidas o pagadas",
+      "objective": "Proteger importes de compras repartidas o pagadas",
+      "acceptance": [
+        "Permitir metadatos inocuos; impedir cambiar total/moneda si hay reparto/pago y explicar cómo gestionarlo."
+      ],
+      "verification": "Pruebas de prohibición y metadatos sin cambio monetario",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S03-T01-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/NuevaCompraActivity.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S03-T01-M04",
+      "phase_id": "MVP-S03-T01",
+      "sprint_id": "MVP-S03",
+      "title": "Verificar preservación de estado y legado",
+      "objective": "Verificar preservación de estado y legado",
+      "acceptance": [
+        "No permitir cambio de estado por edición para eludir flujo futuro de compra; divisa fija e históricos conservados."
+      ],
+      "verification": "Regresión planificada/realizada/reparto/rotación",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S03-T01-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/NuevaCompraActivity.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S03-T02-M01",
+      "phase_id": "MVP-S03-T02",
+      "sprint_id": "MVP-S03",
+      "title": "Definir y aplicar elegibilidad de borrado",
+      "objective": "Definir y aplicar elegibilidad de borrado",
+      "acceptance": [
+        "Sin reparto ni pago se permite; con reparto o pago se deriva al flujo explícito de anulación; no cascada ciega."
+      ],
+      "verification": "Pruebas de elegibilidad por estado y dependencias",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S03-T01-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/data/DeudaRepository.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S03-T02-M02",
+      "phase_id": "MVP-S03-T02",
+      "sprint_id": "MVP-S03",
+      "title": "Eliminar detalles y cabecera juntos",
+      "objective": "Eliminar detalles y cabecera juntos",
+      "acceptance": [
+        "Transacción explícita con FK activas; si falla cualquier delete se conserva la compra entera."
+      ],
+      "verification": "Rollback inyectado y foreign_key_check vacío",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S03-T02-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/data/DeudaRepository.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S03-T02-M03",
+      "phase_id": "MVP-S03-T02",
+      "sprint_id": "MVP-S03",
+      "title": "Mostrar confirmación con consecuencia",
+      "objective": "Mostrar confirmación con consecuencia",
+      "acceptance": [
+        "Nombre de compra y efecto financiero correcto; cancelar no cambia filas; nunca prometer devolución si no hay cargo."
+      ],
+      "verification": "UI cancelación/confirmación/histórico",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S03-T02-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/data/DeudaRepository.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S03-T02-M04",
+      "phase_id": "MVP-S03-T02",
+      "sprint_id": "MVP-S03",
+      "title": "Validar borrado y reapertura",
+      "objective": "Validar borrado y reapertura",
+      "acceptance": [
+        "Compra desaparece tras reinicio; restantes compras, movimientos y deudas intactos."
+      ],
+      "verification": "Integración y snapshots SQLite",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S03-T02-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/data/DeudaRepository.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S03-T03-M01",
+      "phase_id": "MVP-S03-T03",
+      "sprint_id": "MVP-S03",
+      "title": "Separar consulta de planificadas y realizadas",
+      "objective": "Separar consulta de planificadas y realizadas",
+      "acceptance": [
+        "Filtro simple Todas/Planificadas/Realizadas; fecha, total y divisa legibles; estados vacíos útiles."
+      ],
+      "verification": "Pruebas de filtros con datos mezclados",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S03-T02-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/presentation/ComprasActivity.java",
+        "app/src/main/res/layout/activity_compras.xml",
+        "app/src/main/res/layout/activity_nueva_compra.xml",
+        "app/src/main/res/values/strings.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S03-T03-M02",
+      "phase_id": "MVP-S03-T03",
+      "sprint_id": "MVP-S03",
+      "title": "Corregir etiquetas, teclado y mensajes",
+      "objective": "Corregir etiquetas, teclado y mensajes",
+      "acceptance": [
+        "Cantidad entera positiva, ejemplos por divisa, Estado/Contacto accesibles; error conserva formulario."
+      ],
+      "verification": "Validación UI y revisión de recursos",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S03-T03-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/presentation/ComprasActivity.java",
+        "app/src/main/res/layout/activity_compras.xml",
+        "app/src/main/res/layout/activity_nueva_compra.xml",
+        "app/src/main/res/values/strings.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S03-T03-M03",
+      "phase_id": "MVP-S03-T03",
+      "sprint_id": "MVP-S03",
+      "title": "Verificar CRUD completo de compras",
+      "objective": "Verificar CRUD completo de compras",
+      "acceptance": [
+        "Crear/ver/editar/eliminar con y sin referencias, filtro y reinicio; documentar transición de pago aún pendiente."
+      ],
+      "verification": "Suite Android de compra y handoff",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S03-T03-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/presentation/ComprasActivity.java",
+        "app/src/main/res/layout/activity_compras.xml",
+        "app/src/main/res/layout/activity_nueva_compra.xml",
+        "app/src/main/res/values/strings.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T01-M01",
+      "phase_id": "MVP-S04-T01",
+      "sprint_id": "MVP-S04",
+      "title": "Diseñar tabla de vínculo mínima",
+      "objective": "Diseñar tabla de vínculo mínima",
+      "acceptance": [
+        "Una compra como máximo un pago activo y un movimiento como máximo una compra; total cero representado sin movimiento de monto cero."
+      ],
+      "verification": "DDL propuesto y restricciones por escrito",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S03-T03-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/LocalCashDbHelper.java",
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/data/MovimientoRepository.java",
+        "docs/design/DATABASE.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T01-M02",
+      "phase_id": "MVP-S04-T01",
+      "sprint_id": "MVP-S04",
+      "title": "Añadir migración aditiva v5 a v6",
+      "objective": "Añadir migración aditiva v5 a v6",
+      "acceptance": [
+        "Crear vínculo sin modificar compras/montos previos ni inferir pagos históricos; no reaplicar PR14."
+      ],
+      "verification": "Prueba instalación nueva y migración poblada",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T01-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/LocalCashDbHelper.java",
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/data/MovimientoRepository.java",
+        "docs/design/DATABASE.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T01-M03",
+      "phase_id": "MVP-S04-T01",
+      "sprint_id": "MVP-S04",
+      "title": "Añadir acceso al vínculo y guardias CRUD",
+      "objective": "Añadir acceso al vínculo y guardias CRUD",
+      "acceptance": [
+        "Crear/consultar/retirar vínculo dentro de transacción; proteger movimiento vinculado y cuenta referenciada."
+      ],
+      "verification": "Unicidad, FK, guards y rollback",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T01-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/LocalCashDbHelper.java",
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/data/MovimientoRepository.java",
+        "docs/design/DATABASE.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T01-M04",
+      "phase_id": "MVP-S04-T01",
+      "sprint_id": "MVP-S04",
+      "title": "Verificar migraciones y compatibilidad",
+      "objective": "Verificar migraciones y compatibilidad",
+      "acceptance": [
+        "Conservar IDs, divisas, deudas y coordenadas desde versiones soportadas; actualizar SQLite host runner sin debilitarlo."
+      ],
+      "verification": "Suites v1-v5 a v6 y foreign_key_check",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T01-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/LocalCashDbHelper.java",
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/data/MovimientoRepository.java",
+        "docs/design/DATABASE.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T02-M01",
+      "phase_id": "MVP-S04-T02",
+      "sprint_id": "MVP-S04",
+      "title": "Añadir comando de compra transaccional",
+      "objective": "Añadir comando de compra transaccional",
+      "acceptance": [
+        "Releer compra/cuenta, exigir planificada, moneda igual y saldo válido; cargo total, vínculo y estado juntos."
+      ],
+      "verification": "Prueba servicio de pago y rollback intermedio",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T01-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/NuevaCompraActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T02-M02",
+      "phase_id": "MVP-S04-T02",
+      "sprint_id": "MVP-S04",
+      "title": "Añadir selector de cuenta y resumen",
+      "objective": "Añadir selector de cuenta y resumen",
+      "acceptance": [
+        "Mostrar cuenta, total, disponible y saldo posterior; sin cuentas aptas explicar acción necesaria."
+      ],
+      "verification": "UI sin cuenta, moneda distinta y saldo insuficiente",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T02-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/NuevaCompraActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T02-M03",
+      "phase_id": "MVP-S04-T02",
+      "sprint_id": "MVP-S04",
+      "title": "Proteger doble toque y reintento",
+      "objective": "Proteger doble toque y reintento",
+      "acceptance": [
+        "Guardar deshabilitado mientras procesa; estado/único vínculo impiden doble cargo aun sin protección visual."
+      ],
+      "verification": "Prueba dos invocaciones y reinicio",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T02-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/NuevaCompraActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T02-M04",
+      "phase_id": "MVP-S04-T02",
+      "sprint_id": "MVP-S04",
+      "title": "Unificar creación de compra realizada",
+      "objective": "Unificar creación de compra realizada",
+      "acceptance": [
+        "Elegir realizada usa el mismo pago; si se cancela no deja compra realizada sin cargo; total cero no crea egreso."
+      ],
+      "verification": "Pruebas creación+confirmación/cancelación/cero",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T02-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/NuevaCompraActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T02-M05",
+      "phase_id": "MVP-S04-T02",
+      "sprint_id": "MVP-S04",
+      "title": "Actualizar regresión de compras financieras",
+      "objective": "Actualizar regresión de compras financieras",
+      "acceptance": [
+        "Reemplazar solo aserciones afectadas de compras sin movimiento; conservar históricos sin pago y evidencia del nuevo flujo."
+      ],
+      "verification": "FlowChecks actualizado + CI de SHA exacto",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T02-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/application/MovimientoService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/NuevaCompraActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T03-M01",
+      "phase_id": "MVP-S04-T03",
+      "sprint_id": "MVP-S04",
+      "title": "Implementar deshacer pago sin reparto",
+      "objective": "Implementar deshacer pago sin reparto",
+      "acceptance": [
+        "Retirar vínculo/egreso y volver a planificada en una transacción; saldo vuelve a cuenta original; no añadir ingreso duplicado."
+      ],
+      "verification": "Prueba devolución exacta, FK y rollback",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T02-M05"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T03-M02",
+      "phase_id": "MVP-S04-T03",
+      "sprint_id": "MVP-S04",
+      "title": "Gestionar compra cero e histórico sin vínculo",
+      "objective": "Gestionar compra cero e histórico sin vínculo",
+      "acceptance": [
+        "Cero no devuelve dinero; histórico no tiene devolución inventada, solo cambio de registro explícito si se ofrece."
+      ],
+      "verification": "Pruebas de ramas sin cargo",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T03-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T03-M03",
+      "phase_id": "MVP-S04-T03",
+      "sprint_id": "MVP-S04",
+      "title": "Conectar confirmación y doble ejecución",
+      "objective": "Conectar confirmación y doble ejecución",
+      "acceptance": [
+        "Mensaje muestra devolución y cuenta correctas; segunda ejecución no devuelve dos veces; importe pagado no editable directamente."
+      ],
+      "verification": "UI confirmación y prueba de repetición",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T03-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T03-M04",
+      "phase_id": "MVP-S04-T03",
+      "sprint_id": "MVP-S04",
+      "title": "Conectar eliminación con pago",
+      "objective": "Conectar eliminación con pago",
+      "acceptance": [
+        "Compra pagada sin reparto puede eliminarse con devolución explícita atómica; con reparto se bloquea hasta sprint 5."
+      ],
+      "verification": "Borrado integral, cancelación y ausencia de huérfanos",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T03-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S04-T03-M05",
+      "phase_id": "MVP-S04-T03",
+      "sprint_id": "MVP-S04",
+      "title": "Validar ciclo completo y regresiones",
+      "objective": "Validar ciclo completo y regresiones",
+      "acceptance": [
+        "Planificar/comprar/deshacer/recomprar/borrar; bloquear acciones directas del movimiento vinculado; otra cuenta intacta."
+      ],
+      "verification": "Suite Android API24/API36 y handoff",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T03-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/data/CompraRepository.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S05-T01-M01",
+      "phase_id": "MVP-S05-T01",
+      "sprint_id": "MVP-S05",
+      "title": "Definir estado de deuda y compatibilidad",
+      "objective": "Definir estado de deuda y compatibilidad",
+      "acceptance": [
+        "Leer estado persistido; conservar constructor/fixture compatible si hace falta; no hardcodear PENDIENTE."
+      ],
+      "verification": "Pruebas dominio ambos estados e inválidos",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S04-T03-M05"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/LocalCashDbHelper.java",
+        "app/src/main/java/com/aik1a/localcash/domain/Deuda.java",
+        "app/src/main/java/com/aik1a/localcash/data/DeudaRepository.java",
+        "docs/design/DATABASE.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S05-T01-M02",
+      "phase_id": "MVP-S05-T01",
+      "sprint_id": "MVP-S05",
+      "title": "Migrar restricción de deudas v6 a v7",
+      "objective": "Migrar restricción de deudas v6 a v7",
+      "acceptance": [
+        "Reconstrucción transaccional con claves/filas/montos conservados; permitir solo estados definidos y mantener FK."
+      ],
+      "verification": "Prueba nueva instalación y v1-v6 a v7",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S05-T01-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/LocalCashDbHelper.java",
+        "app/src/main/java/com/aik1a/localcash/domain/Deuda.java",
+        "app/src/main/java/com/aik1a/localcash/data/DeudaRepository.java",
+        "docs/design/DATABASE.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S05-T01-M03",
+      "phase_id": "MVP-S05-T01",
+      "sprint_id": "MVP-S05",
+      "title": "Actualizar lectura y escritura por clave compuesta",
+      "objective": "Actualizar lectura y escritura por clave compuesta",
+      "acceptance": [
+        "Consultar/actualizar por compra_id+contacto_id; verificar fila afectada y evitar tocar otras deudas."
+      ],
+      "verification": "Pruebas DAO estado, inexistente y aislamiento",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S05-T01-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/LocalCashDbHelper.java",
+        "app/src/main/java/com/aik1a/localcash/domain/Deuda.java",
+        "app/src/main/java/com/aik1a/localcash/data/DeudaRepository.java",
+        "docs/design/DATABASE.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S05-T01-M04",
+      "phase_id": "MVP-S05-T01",
+      "sprint_id": "MVP-S05",
+      "title": "Verificar históricos y relaciones",
+      "objective": "Verificar históricos y relaciones",
+      "acceptance": [
+        "Todas las deudas previas siguen pendientes e idénticas; pagos de compras y coordenadas no cambian."
+      ],
+      "verification": "Snapshot pre/post + foreign_key_check",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S05-T01-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/data/LocalCashDbHelper.java",
+        "app/src/main/java/com/aik1a/localcash/domain/Deuda.java",
+        "app/src/main/java/com/aik1a/localcash/data/DeudaRepository.java",
+        "docs/design/DATABASE.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S05-T02-M01",
+      "phase_id": "MVP-S05-T02",
+      "sprint_id": "MVP-S05",
+      "title": "Añadir comandos de pago y corrección de estado",
+      "objective": "Añadir comandos de pago y corrección de estado",
+      "acceptance": [
+        "Marcar pagada idempotente; corregir registro a pendiente solo con confirmación; no implica devolución real ni transferencia."
+      ],
+      "verification": "Pruebas de transiciones y saldo intacto",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S05-T01-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/DeudaService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/RepartoActivity.java",
+        "app/src/main/res/layout/activity_reparto.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S05-T02-M02",
+      "phase_id": "MVP-S05-T02",
+      "sprint_id": "MVP-S05",
+      "title": "Mostrar pendientes/pagadas y cuotas",
+      "objective": "Mostrar pendientes/pagadas y cuotas",
+      "acceptance": [
+        "Cada persona conserva importe/divisa y estado; Tú no se convierte en deuda ni se ofrece pago parcial."
+      ],
+      "verification": "UI con mezcla de estados y cuota propia",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S05-T02-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/DeudaService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/RepartoActivity.java",
+        "app/src/main/res/layout/activity_reparto.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S05-T02-M03",
+      "phase_id": "MVP-S05-T02",
+      "sprint_id": "MVP-S05",
+      "title": "Añadir confirmación y mensajes humanos",
+      "objective": "Añadir confirmación y mensajes humanos",
+      "acceptance": [
+        "Texto distingue registrar pago completo de mover dinero; corregir estado no se presenta como devolución."
+      ],
+      "verification": "Recorrido confirmación/cancelación y errores",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S05-T02-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/DeudaService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/RepartoActivity.java",
+        "app/src/main/res/layout/activity_reparto.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S05-T02-M04",
+      "phase_id": "MVP-S05-T02",
+      "sprint_id": "MVP-S05",
+      "title": "Verificar persistencia y límites",
+      "objective": "Verificar persistencia y límites",
+      "acceptance": [
+        "Reabrir conserva estado; modificar otra persona no altera deudas ajenas ni cuentas; doble toque no duplica nada."
+      ],
+      "verification": "Suite deuda Android y reinicio",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S05-T02-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/DeudaService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/RepartoActivity.java",
+        "app/src/main/res/layout/activity_reparto.xml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S05-T03-M01",
+      "phase_id": "MVP-S05-T03",
+      "sprint_id": "MVP-S05",
+      "title": "Añadir anulación de reparto totalmente pendiente",
+      "objective": "Añadir anulación de reparto totalmente pendiente",
+      "acceptance": [
+        "Confirmar pérdida de asignaciones; borrar deudas y cuota Tú juntas; si hay una pagada, impedir anulación."
+      ],
+      "verification": "Pruebas todo pendiente/pago registrado/rollback",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S05-T02-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/DeudaService.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/RepartoActivity.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S05-T03-M02",
+      "phase_id": "MVP-S05-T03",
+      "sprint_id": "MVP-S05",
+      "title": "Integrar deshacer compra con reparto pendiente",
+      "objective": "Integrar deshacer compra con reparto pendiente",
+      "acceptance": [
+        "Una confirmación detalla cancelación de reparto y devolución; todo atómico; con pagadas bloquear sin sugerir falsear estados."
+      ],
+      "verification": "Prueba fallo entre anulación y devolución",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S05-T03-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/DeudaService.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/RepartoActivity.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S05-T03-M03",
+      "phase_id": "MVP-S05-T03",
+      "sprint_id": "MVP-S05",
+      "title": "Resolver edición y eliminación compartidas",
+      "objective": "Resolver edición y eliminación compartidas",
+      "acceptance": [
+        "Con reparto existente, metadatos inocuos permitidos; cambios monetarios requieren anular reparto pendiente; no borrar pagos reales."
+      ],
+      "verification": "UI de rutas protegidas y permisos",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S05-T03-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/DeudaService.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/RepartoActivity.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S05-T03-M04",
+      "phase_id": "MVP-S05-T03",
+      "sprint_id": "MVP-S05",
+      "title": "Verificar reparto nuevamente tras corrección",
+      "objective": "Verificar reparto nuevamente tras corrección",
+      "acceptance": [
+        "Anular pendiente, corregir compra, volver a repartir conserva exactitud; pagadas no se eliminan por esa ruta."
+      ],
+      "verification": "Regresión equitativo/personalizado CLP/USD y handoff",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S05-T03-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/application/DeudaService.java",
+        "app/src/main/java/com/aik1a/localcash/application/CompraService.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/RepartoActivity.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T01-M01",
+      "phase_id": "MVP-S06-T01",
+      "sprint_id": "MVP-S06",
+      "title": "Fijar jerarquía y estilos reutilizables",
+      "objective": "Fijar jerarquía y estilos reutilizables",
+      "acceptance": [
+        "Saldo/importe/moneda/estado primero; espaciado y tamaños coherentes sin rehacer navegación ni añadir dependencia visual."
+      ],
+      "verification": "Revisión render de cuentas/compras/contactos",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S05-T03-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/res/layout",
+        "app/src/main/res/values/styles.xml",
+        "app/src/main/res/values/strings.xml",
+        "app/src/main/java/com/aik1a/localcash/presentation/Pantalla.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T01-M02",
+      "phase_id": "MVP-S06-T01",
+      "sprint_id": "MVP-S06",
+      "title": "Aplicar etiquetas y estados comprensibles",
+      "objective": "Aplicar etiquetas y estados comprensibles",
+      "acceptance": [
+        "Planificada/Realizada/Pendiente/Pagada legibles, sin IDs técnicos ni mayúsculas de enum; textos nuevos en recursos."
+      ],
+      "verification": "Inspección XML/Java y UI con datos reales",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T01-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/res/layout",
+        "app/src/main/res/values/styles.xml",
+        "app/src/main/res/values/strings.xml",
+        "app/src/main/java/com/aik1a/localcash/presentation/Pantalla.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T01-M03",
+      "phase_id": "MVP-S06-T01",
+      "sprint_id": "MVP-S06",
+      "title": "Completar vacíos, carga, error y éxito",
+      "objective": "Completar vacíos, carga, error y éxito",
+      "acceptance": [
+        "Cada lista orienta si está vacía; error no borra entradas; éxito discreto; operaciones en curso evitan toques repetidos."
+      ],
+      "verification": "Recorrido sin datos/con datos/error",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T01-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/res/layout",
+        "app/src/main/res/values/styles.xml",
+        "app/src/main/res/values/strings.xml",
+        "app/src/main/java/com/aik1a/localcash/presentation/Pantalla.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T01-M04",
+      "phase_id": "MVP-S06-T01",
+      "sprint_id": "MVP-S06",
+      "title": "Verificar accesibilidad visual y navegación",
+      "objective": "Verificar accesibilidad visual y navegación",
+      "acceptance": [
+        "Controles >=48dp, contraste legible, fuente grande, teclado y nombres largos; volver no duplica pantallas."
+      ],
+      "verification": "Render y recorrido Android con configuraciones registradas",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T01-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/res/layout",
+        "app/src/main/res/values/styles.xml",
+        "app/src/main/res/values/strings.xml",
+        "app/src/main/java/com/aik1a/localcash/presentation/Pantalla.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T02-M01",
+      "phase_id": "MVP-S06-T02",
+      "sprint_id": "MVP-S06",
+      "title": "Centralizar disponibilidad de acciones",
+      "objective": "Centralizar disponibilidad de acciones",
+      "acceptance": [
+        "Editar/Eliminar/Comprar/Deshacer se calculan por estado, pago y reparto; mismo comportamiento en menú/detalle/gesto."
+      ],
+      "verification": "Tabla de acciones y pruebas de estados",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T01-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/presentation/ComprasActivity.java",
+        "app/src/main/res/layout/activity_compras.xml",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T02-M02",
+      "phase_id": "MVP-S06-T02",
+      "sprint_id": "MVP-S06",
+      "title": "Añadir alternativa visible y accesible",
+      "objective": "Añadir alternativa visible y accesible",
+      "acceptance": [
+        "Menú o botones utilizables sin gesto; TalkBack anuncia acciones; confirmaciones existentes reutilizadas."
+      ],
+      "verification": "Recorrido touch, menú y accesibilidad",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T02-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/presentation/ComprasActivity.java",
+        "app/src/main/res/layout/activity_compras.xml",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T02-M03",
+      "phase_id": "MVP-S06-T02",
+      "sprint_id": "MVP-S06",
+      "title": "Añadir deslizar izquierda para revelar acciones",
+      "objective": "Añadir deslizar izquierda para revelar acciones",
+      "acceptance": [
+        "Revelar, no ejecutar borrado; una fila abierta; no interferir con scroll/tap/volver; usar controles existentes si es viable."
+      ],
+      "verification": "Prueba gesto lento/rápido/vertical/cancelado",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T02-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/presentation/ComprasActivity.java",
+        "app/src/main/res/layout/activity_compras.xml",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T02-M04",
+      "phase_id": "MVP-S06-T02",
+      "sprint_id": "MVP-S06",
+      "title": "Verificar sincronización y selección correcta",
+      "objective": "Verificar sincronización y selección correcta",
+      "acceptance": [
+        "Acción usa ID estable y datos recientes, no posición obsoleta tras filtrar/borrar; gesto y menú dan mismo resultado."
+      ],
+      "verification": "UI con filtros, varias filas y reinicio",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T02-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/presentation/ComprasActivity.java",
+        "app/src/main/res/layout/activity_compras.xml",
+        "app/src/main/java/com/aik1a/localcash/presentation/CompraDetalleActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T03-M01",
+      "phase_id": "MVP-S06-T03",
+      "sprint_id": "MVP-S06",
+      "title": "Introducir ejecución de I/O acotada",
+      "objective": "Introducir ejecución de I/O acotada",
+      "acceptance": [
+        "ExecutorService simple reutilizable; BD/atlas fuera del hilo principal en rutas intervenidas; propiedad y cierre de helper explícitos."
+      ],
+      "verification": "Prueba de tareas con navegación y cierre",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T02-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/presentation/LocalCashApplication.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/ActividadProtegida.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/AtlasOffline.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/MapaActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T03-M02",
+      "phase_id": "MVP-S06-T03",
+      "sprint_id": "MVP-S06",
+      "title": "Devolver resultados solo a pantalla y sesión vigentes",
+      "objective": "Devolver resultados solo a pantalla y sesión vigentes",
+      "acceptance": [
+        "Callbacks en hilo UI, ignorar actividad destruida/solicitud obsoleta y no revelar datos con sesión bloqueada."
+      ],
+      "verification": "Pruebas Home, huella, rotación y respuesta tardía",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T03-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/presentation/LocalCashApplication.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/ActividadProtegida.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/AtlasOffline.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/MapaActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T03-M03",
+      "phase_id": "MVP-S06-T03",
+      "sprint_id": "MVP-S06",
+      "title": "Conservar borradores y estado de lista",
+      "objective": "Conservar borradores y estado de lista",
+      "acceptance": [
+        "Campos, ítems, filtro y scroll razonables ante recreación; no persistir sesión biométrica ni repetir pago."
+      ],
+      "verification": "Pruebas rotación/muerte proceso y guardado pendiente",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T03-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/presentation/LocalCashApplication.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/ActividadProtegida.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/AtlasOffline.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/MapaActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T03-M04",
+      "phase_id": "MVP-S06-T03",
+      "sprint_id": "MVP-S06",
+      "title": "Medir respuesta y corregir solo problemas observados",
+      "objective": "Medir respuesta y corregir solo problemas observados",
+      "acceptance": [
+        "Dataset representativo sin cuelgues; consultas agrupadas solo si hay lentitud demostrada; no reescribir persistencia."
+      ],
+      "verification": "Smoke rendimiento/StrictMode si disponible y regresión",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T03-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/java/com/aik1a/localcash/presentation/LocalCashApplication.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/ActividadProtegida.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/AtlasOffline.java",
+        "app/src/main/java/com/aik1a/localcash/presentation/MapaActivity.java"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T04-M01",
+      "phase_id": "MVP-S06-T04",
+      "sprint_id": "MVP-S06",
+      "title": "Explicitar política de backup del sistema",
+      "objective": "Explicitar política de backup del sistema",
+      "acceptance": [
+        "Configurar exclusión de BD financiera cloud/D2D por versiones soportadas; aclarar límites OEM sin afirmar prueba no hecha."
+      ],
+      "verification": "Manifest fusionado y reglas XML API24/API36",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T03-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/AndroidManifest.xml",
+        "app/src/main/res/xml",
+        "app/src/main/java/com/aik1a/localcash/presentation/MapaActivity.java",
+        "docs/delivery/BUILD.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T04-M02",
+      "phase_id": "MVP-S06-T04",
+      "sprint_id": "MVP-S06",
+      "title": "Conservar biometría y permisos mínimos",
+      "objective": "Conservar biometría y permisos mínimos",
+      "acceptance": [
+        "Sin huellas almacenadas ni fallback abierto; FLAG_SECURE mantenido; GPS opcional y errores recuperables."
+      ],
+      "verification": "Suite biométrica y permisos denegados",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T04-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/AndroidManifest.xml",
+        "app/src/main/res/xml",
+        "app/src/main/java/com/aik1a/localcash/presentation/MapaActivity.java",
+        "docs/delivery/BUILD.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T04-M03",
+      "phase_id": "MVP-S06-T04",
+      "sprint_id": "MVP-S06",
+      "title": "Comunicar cobertura del mapa sin ampliar atlas",
+      "objective": "Comunicar cobertura del mapa sin ampliar atlas",
+      "acceptance": [
+        "Mantener atlas Santiago Centro y atribución; punto fuera de cobertura explicado; no descargar mapas ni usar red."
+      ],
+      "verification": "Prueba dentro/fuera/sin ubicación modo avión",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T04-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/AndroidManifest.xml",
+        "app/src/main/res/xml",
+        "app/src/main/java/com/aik1a/localcash/presentation/MapaActivity.java",
+        "docs/delivery/BUILD.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S06-T04-M04",
+      "phase_id": "MVP-S06-T04",
+      "sprint_id": "MVP-S06",
+      "title": "Actualizar documentación del pulido",
+      "objective": "Actualizar documentación del pulido",
+      "acceptance": [
+        "Guía/versiones/reglas/diagrama textual coinciden con implementación, no con aspiraciones del dibujo."
+      ],
+      "verification": "Diff documental trazado al código y handoff",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T04-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/src/main/AndroidManifest.xml",
+        "app/src/main/res/xml",
+        "app/src/main/java/com/aik1a/localcash/presentation/MapaActivity.java",
+        "docs/delivery/BUILD.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S07-T01-M01",
+      "phase_id": "MVP-S07-T01",
+      "sprint_id": "MVP-S07",
+      "title": "Ejecutar dominio y SQLite final",
+      "objective": "Ejecutar dominio y SQLite final",
+      "acceptance": [
+        "Suites heredadas y nuevas pasan; migraciones hasta versión final; conteos se reportan como aserciones, no usuarios."
+      ],
+      "verification": "Logs con comandos, exit codes y SHA",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S06-T04-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "tests",
+        "app/src/androidTest/java/com/aik1a/localcash/FlowChecks.java",
+        "app/src/androidTest/java/com/aik1a/localcash/CurrencyChecks.java",
+        ".github/workflows/s00-t06c-build.yml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S07-T01-M02",
+      "phase_id": "MVP-S07-T01",
+      "sprint_id": "MVP-S07",
+      "title": "Ejecutar build y pruebas Android exactas",
+      "objective": "Ejecutar build y pruebas Android exactas",
+      "acceptance": [
+        "assembleDebug y AndroidTest; CRUD/saldo/pago/deudas en APIs24/36, ajustar dispatcher sin aparentar cobertura inexistente."
+      ],
+      "verification": "CI exacta y logs por API",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S07-T01-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "tests",
+        "app/src/androidTest/java/com/aik1a/localcash/FlowChecks.java",
+        "app/src/androidTest/java/com/aik1a/localcash/CurrencyChecks.java",
+        ".github/workflows/s00-t06c-build.yml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S07-T01-M03",
+      "phase_id": "MVP-S07-T01",
+      "sprint_id": "MVP-S07",
+      "title": "Inyectar fallos y repetir comandos críticos",
+      "objective": "Inyectar fallos y repetir comandos críticos",
+      "acceptance": [
+        "Compra/update detalles/deshacer/anular reparto revierte completa; doble toque/reintento sin duplicación."
+      ],
+      "verification": "Pruebas de rollback e idempotencia",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S07-T01-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "tests",
+        "app/src/androidTest/java/com/aik1a/localcash/FlowChecks.java",
+        "app/src/androidTest/java/com/aik1a/localcash/CurrencyChecks.java",
+        ".github/workflows/s00-t06c-build.yml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S07-T01-M04",
+      "phase_id": "MVP-S07-T01",
+      "sprint_id": "MVP-S07",
+      "title": "Revisar diff y corregir fallos encontrados",
+      "objective": "Revisar diff y corregir fallos encontrados",
+      "acceptance": [
+        "Solo correcciones relacionadas y su regresión; sin reabrir módulos sanos ni introducir features nuevas."
+      ],
+      "verification": "Diff acotado y handoff de resultados",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S07-T01-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "tests",
+        "app/src/androidTest/java/com/aik1a/localcash/FlowChecks.java",
+        "app/src/androidTest/java/com/aik1a/localcash/CurrencyChecks.java",
+        ".github/workflows/s00-t06c-build.yml"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S07-T02-M01",
+      "phase_id": "MVP-S07-T02",
+      "sprint_id": "MVP-S07",
+      "title": "Recorrer pantallas con teclado y fuente grande",
+      "objective": "Recorrer pantallas con teclado y fuente grande",
+      "acceptance": [
+        "Todas las operaciones alcanzables, importes legibles, nombres largos y cancelaciones correctas."
+      ],
+      "verification": "Registro entorno/API/tamaño/fuente; evidencia respetando FLAG_SECURE",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S07-T01-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "docs/testing/MANUAL_TESTS.md",
+        "docs/testing/TEST_PLAN.md",
+        "app/src/main/res/layout"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S07-T02-M02",
+      "phase_id": "MVP-S07-T02",
+      "sprint_id": "MVP-S07",
+      "title": "Probar apertura, huella y lifecycle",
+      "objective": "Probar apertura, huella y lifecycle",
+      "acceptance": [
+        "Frío, reabrir, Home, bloqueo, cancelación, rotación y reinicio sin perder dinero ni abrir contenido privado."
+      ],
+      "verification": "Logcat y recorrido Android reproducible",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S07-T02-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "docs/testing/MANUAL_TESTS.md",
+        "docs/testing/TEST_PLAN.md",
+        "app/src/main/res/layout"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S07-T02-M03",
+      "phase_id": "MVP-S07-T02",
+      "sprint_id": "MVP-S07",
+      "title": "Probar modo avión con datos persistidos",
+      "objective": "Probar modo avión con datos persistidos",
+      "acceptance": [
+        "Crear/editar/borrar/consultar/mapa/deudas funcionan offline y sobreviven reinicio; ubicación denegada no bloquea guardar sin GPS."
+      ],
+      "verification": "Registro recorrido offline y snapshots",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S07-T02-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "docs/testing/MANUAL_TESTS.md",
+        "docs/testing/TEST_PLAN.md",
+        "app/src/main/res/layout"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S07-T02-M04",
+      "phase_id": "MVP-S07-T02",
+      "sprint_id": "MVP-S07",
+      "title": "Comprobar teléfono físico o registrar bloqueo real",
+      "objective": "Comprobar teléfono físico o registrar bloqueo real",
+      "acceptance": [
+        "No llamar físico al emulador; si no hay acceso, dejar evidencia parcial y tarea BLOCKED, no goal terminado."
+      ],
+      "verification": "Modelo/API real y resultado o motivo de bloqueo",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S07-T02-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "docs/testing/MANUAL_TESTS.md",
+        "docs/testing/TEST_PLAN.md",
+        "app/src/main/res/layout"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S07-T03-M01",
+      "phase_id": "MVP-S07-T03",
+      "sprint_id": "MVP-S07",
+      "title": "Preparar versión y firmante estable",
+      "objective": "Preparar versión y firmante estable",
+      "acceptance": [
+        "Incrementar versión apropiada; firmar sin versionar claves/secretos; identificar SHA/certificado/APK y no desinstalar datos para resolver incompatibilidad."
+      ],
+      "verification": "Certificado, versionCode, hash y build exacto",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S07-T02-M04"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/build.gradle",
+        "docs/delivery/BUILD.md",
+        "docs/delivery/PRESENTATION.md",
+        "docs/requirements/TRACEABILITY.md",
+        "PROJECT_STATE.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S07-T03-M02",
+      "phase_id": "MVP-S07-T03",
+      "sprint_id": "MVP-S07",
+      "title": "Probar actualización con datos",
+      "objective": "Probar actualización con datos",
+      "acceptance": [
+        "Baseline y nueva versión de mismo firmante en instalación de prueba; cuentas/deudas/pagos/ubicaciones conservados."
+      ],
+      "verification": "Instalación upgrade y comparación pre/post; bloqueo histórico separado",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S07-T03-M01"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/build.gradle",
+        "docs/delivery/BUILD.md",
+        "docs/delivery/PRESENTATION.md",
+        "docs/requirements/TRACEABILITY.md",
+        "PROJECT_STATE.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S07-T03-M03",
+      "phase_id": "MVP-S07-T03",
+      "sprint_id": "MVP-S07",
+      "title": "Preparar guía y demo completas",
+      "objective": "Preparar guía y demo completas",
+      "acceptance": [
+        "Instrucciones llevan al SHA/APK final; demostración cubre matriz y pedidos extra sin inventar resultados."
+      ],
+      "verification": "Paquete/documentación comprobados",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S07-T03-M02"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/build.gradle",
+        "docs/delivery/BUILD.md",
+        "docs/delivery/PRESENTATION.md",
+        "docs/requirements/TRACEABILITY.md",
+        "PROJECT_STATE.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    },
+    {
+      "id": "MVP-S07-T03-M04",
+      "phase_id": "MVP-S07-T03",
+      "sprint_id": "MVP-S07",
+      "title": "Preparar entrega al Auditor y cierre administrativo",
+      "objective": "Preparar entrega al Auditor y cierre administrativo",
+      "acceptance": [
+        "Entregar artefactos, trazabilidad y contexto de revisión; dejar READY_FOR_AUDIT. Auditor y Orquestador ejecutan después sus gates externos."
+      ],
+      "verification": "Handoff final y lista de gates pendientes; no autoproclamar PASS",
+      "status": "PENDING",
+      "depends_on": [
+        "MVP-S07-T03-M03"
+      ],
+      "owner_role": "Codificador",
+      "context": [
+        "app/build.gradle",
+        "docs/delivery/BUILD.md",
+        "docs/delivery/PRESENTATION.md",
+        "docs/requirements/TRACEABILITY.md",
+        "PROJECT_STATE.md"
+      ],
+      "evidence": [],
+      "implementation_sha": null,
+      "blocker": null
+    }
+  ]
+}

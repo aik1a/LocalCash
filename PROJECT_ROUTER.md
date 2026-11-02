@@ -112,3 +112,7 @@ Para coordinación por roles:
 - handoff: `docs/agent/HANDOFF_TEMPLATE.md`
 
 El prompt de un agente es solo un bootstrap. No reemplaza el repositorio como fuente de verdad.
+
+## 10. Ciclo de pulido completo MVP
+
+Para el encargo de pulido con fecha objetivo 02/11/2026, comenzar en docs/agent/goals/LOCALCASH-MVP-PULIDO.md. El ExecPlan es docs/exec-plans/active/MVP-PULIDO-COMPLETO.md; las reglas de incremento están en docs/design/MVP-PULIDO-CONTRATOS.md. La cola y checkpoint del goal indican la fase/microtarea actual. Incluye 7 sprints MVP-S01–MVP-S07, 23 fases y 91 microtareas, sin sustituir ni reabrir por nombre el roadmap histórico S00–S07. Estado inicial: PREPARED, implementación no iniciada.

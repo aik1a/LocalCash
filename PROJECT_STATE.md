@@ -72,3 +72,17 @@ El Orquestador debe actualizar este archivo cuando:
 - una decisión pendiente pasa a aceptada mediante documentación correspondiente.
 
 No registrar aquí detalles extensos de implementación; usar handoffs, auditorías, ADRs y documentos del sprint.
+
+## Ciclo nuevo — pulido completo MVP (01/11/2026)
+
+**Esta sección define la próxima acción del nuevo encargo y no altera los cierres históricos anteriores.** Aikia solicita documentar el alcance completo por sprints/fases/microtareas para ejecución paso a paso. Fecha objetivo nueva: **02/11/2026**, sin hora oficial informada.
+
+- Baseline inspeccionado: 9b8a651d66982eea3a41e1979342468fe4cad176, rollback S01-T02 conservado; código SQLite v5 y S01-T01 funcional. No se ha implementado este nuevo plan.
+- Plan: docs/exec-plans/active/MVP-PULIDO-COMPLETO.md.
+- Entrada del agente: docs/agent/goals/LOCALCASH-MVP-PULIDO.md.
+- Cola y checkpoint: docs/agent/goals/LOCALCASH-MVP-PULIDO.queue.json y .checkpoint.md.
+- Alcance completo: CRUD, saldo suficiente, compras/pagos/undo, deudas pagadas y anulación segura, UI/swipe, privacidad, validación y entrega. Las compras con movimiento y el estado PAGADA son ampliaciones planificadas del nuevo ciclo; su implementación no se infiere del encargo documental.
+- Desglose: **7 sprints, 23 fases, 91 microtareas**. No hay cortes A/B. Prefijo MVP-Sxx independiente de sprints históricos.
+- Estado: **PREPARED / NOT_STARTED**; fases futuras DRAFT. Primera fase preparada READY: MVP-S01-T01, microtarea MVP-S01-T01-M01 PENDING.
+- Próxima acción cuando se invoque la implementación: identificar checkout/entorno y comprobar baseline en MVP-S01-T01. Registrar reglas nuevas en documentos canónicos durante MVP-S01-T02. No implementar ni fusionar funcionalidad solo porque se creó este plan.
+- Gates de roles vigentes. No declarar entregado/validado el producto por documentar tareas ni retirar alcance automáticamente por la fecha.
