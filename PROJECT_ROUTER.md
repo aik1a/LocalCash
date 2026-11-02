@@ -116,3 +116,7 @@ El prompt de un agente es solo un bootstrap. No reemplaza el repositorio como fu
 ## 10. Ciclo de pulido completo MVP
 
 Para el encargo de pulido con fecha objetivo 02/11/2026, comenzar en docs/agent/goals/LOCALCASH-MVP-PULIDO.md. El ExecPlan es docs/exec-plans/active/MVP-PULIDO-COMPLETO.md; las reglas de incremento están en docs/design/MVP-PULIDO-CONTRATOS.md. La cola y checkpoint del goal indican la fase/microtarea actual. Incluye 7 sprints MVP-S01–MVP-S07, 23 fases y 91 microtareas, sin sustituir ni reabrir por nombre el roadmap histórico S00–S07. Estado inicial: PREPARED, implementación no iniciada.
+
+## 11. Ejecución actual limitada hasta MVP-S03 (02/11/2026)
+
+Para el encargo posterior de trabajar solo hasta S03, comenzar en docs/agent/goals/LOCALCASH-MVP-HASTA-S03.md y usar su cola/checkpoint propios. Prompt para OTRO CHAT de Work: docs/agent/prompts/WORK-MVP-HASTA-S03.md; prompt de Codificador: docs/agent/prompts/CODER-MVP-HASTA-S03.md. Rama preparada: task/mvp-s01-s03-goal-20261102. El plan completo permanece como referencia, pero esta ejecución comprende únicamente 3 sprints/10 fases/37 microtareas y se detiene antes de MVP-S04. Documentación preparada; ejecución funcional no iniciada en este chat.

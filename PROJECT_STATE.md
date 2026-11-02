@@ -86,3 +86,16 @@ No registrar aquí detalles extensos de implementación; usar handoffs, auditor�
 - Estado: **PREPARED / NOT_STARTED**; fases futuras DRAFT. Primera fase preparada READY: MVP-S01-T01, microtarea MVP-S01-T01-M01 PENDING.
 - Próxima acción cuando se invoque la implementación: identificar checkout/entorno y comprobar baseline en MVP-S01-T01. Registrar reglas nuevas en documentos canónicos durante MVP-S01-T02. No implementar ni fusionar funcionalidad solo porque se creó este plan.
 - Gates de roles vigentes. No declarar entregado/validado el producto por documentar tareas ni retirar alcance automáticamente por la fecha.
+
+
+## Alcance de ejecución preparado hasta MVP-S03 (02/11/2026)
+
+Esta instrucción posterior limita temporalmente la ejecución, sin eliminar el roadmap completo. Aikia solicita un prompt y paquete para OTRO CHAT de Work, en una rama nueva.
+
+- Rama de entrada/integración: task/mvp-s01-s03-goal-20261102, basada en el commit documental 3254707ced46afa983bdd6831711da3621587664 del PR15 aún no fusionado. El código funcional sigue correspondiendo a 9b8a651d66982eea3a41e1979342468fe4cad176 al preparar el paquete.
+- Goal aplicable: docs/agent/goals/LOCALCASH-MVP-HASTA-S03.md.
+- Prompt Work: docs/agent/prompts/WORK-MVP-HASTA-S03.md. Prompt Codificador: docs/agent/prompts/CODER-MVP-HASTA-S03.md.
+- Cola y checkpoint: archivos LOCALCASH-MVP-HASTA-S03 bajo docs/agent/goals/.
+- Alcance autorizado para la invocación posterior: MVP-S01–S03, **10 fases / 37 microtareas**. Primera fase READY MVP-S01-T01; primera microtarea PENDING MVP-S01-T01-M01.
+- Parada obligatoria tras cierre de MVP-S03; S04–S07 no forman parte de esta ejecución. No anticipar pagos, devoluciones, deudas pagadas, swipe ni migraciones de esas etapas.
+- Estado: **PREPARED / NOT_STARTED**. Se documentaron instrucciones; no se inició un agente de código en este chat ni un trabajo en segundo plano.
