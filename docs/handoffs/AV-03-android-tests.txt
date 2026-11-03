@@ -1,0 +1,16 @@
+feedback
+FEEDBACK_PASS 16 comprobaciones de validación y mensajes sobre vistas Android en memoria.
+
+crud
+CRUD02_PASS 36 comprobaciones Android: migración real v6→v7, estados, nombres, restricciones, edición, rollback y monedas.
+
+currency
+LOCALCASH_CURRENCY_PASS
+PASS 76 Android SQLite/repository checks; migrations v1-v4→v7.
+
+
+payment
+PASS: pago completo, transición, saldo, moneda y duplicados.
+
+Motivos de rechazo añadidos:
+CRUD02_PASS 38 comprobaciones Android: migración real v6→v7, estados, nombres, restricciones, edición, rollback y monedas.

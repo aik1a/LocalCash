@@ -72,3 +72,19 @@ para los nuevos formularios. No recalculan repartos históricos.
   todos >=0, misma precisión que la compra y suma exacta. La cuota propia no es deuda.
 - BR-UX-01: nombres de contactos sin IDs visibles; etiquetas simples («Cantidad»,
   «Precio unitario», «Monto»). Ejemplos en campos; validaciones se explican al fallar.
+
+## UX-01 — Pago explícito de compras (autorización 2026-11-02)
+
+Sustituye la exclusión previa de compra→movimiento únicamente para el pago completo confirmado por el usuario. Las compras PLANIFICADAS no alteran saldos. Desde el detalle se elige una cuenta con la misma divisa y se confirma el importe total efectivamente pagado. Esto crea exactamente un EGRESO y cambia la compra a REALIZADA en una transacción. La asociación persistente impide repetir el pago desde la compra. El reparto y las deudas no descuentan dinero adicional; no se descuentan únicamente las cuotas propias si el usuario pagó el total.
+
+Las compras históricas permanecen sin pago asociado; antes de registrar su pago se advierte comprobar que el egreso no fue anotado manualmente. No se detectan automáticamente duplicados semánticos históricos. Un total cero no produce movimiento, ya que BR-MOV-01 exige un monto positivo. Pagos parciales, múltiples pagadores, conversión, vincular movimientos históricos y cobro de deudas quedan fuera de este incremento.
+
+## CRUD-02 — Primera ronda aprobada, 2026-11-03
+
+Las deudas positivas admiten PENDIENTE/PAGADA y se puede corregir una marca accidental. Cambiar estado no genera ingresos ni modifica saldos; la UI lo explica. La cuota cero conserva su participación pero se presenta Sin deuda, sin acción de cobro. No hay aceptación remota ni pagos parciales.
+
+Renombrar cuentas/contactos conserva IDs, divisas e historial. Solo se permite eliminar una cuenta sin movimientos o un contacto sin referencias de compras/deudas; confirmar no evita la revalidación en persistencia.
+
+Solo se edita/elimina una compra PLANIFICADA sin pago ni reparto. Edición conserva ID, moneda y estado, exige detalles válidos y recalcula total. Borrado elimina cabecera/detalles atómicamente. Compras realizadas y movimientos asociados no se alteran desde este flujo.
+
+La consulta por contacto muestra compras y estados, suma solo deudas positivas pendientes y separa monedas. Importes sin moneda definida se muestran por compra sin agregarlos. Cobros que creen ingreso, corrección de movimientos y rehacer repartos quedan para la segunda ronda.

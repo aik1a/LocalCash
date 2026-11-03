@@ -24,8 +24,13 @@ public final class Reparto {
             suma = Math.addExact(suma, entry.getValue());
             ordenados.put(entry.getKey(), entry.getValue());
         }
-        if (suma != compra.calcularTotal())
-            throw new IllegalArgumentException("La suma debe coincidir exactamente con el total.");
+        if (suma != compra.calcularTotal()) {
+            long diferencia = Math.subtractExact(compra.calcularTotal(), suma);
+            String ajuste = diferencia > 0 ? "Faltan " + Dinero.formatear(diferencia, compra.getDivisa())
+                    : "Sobran " + Dinero.formatear(Math.negateExact(diferencia), compra.getDivisa());
+            throw new IllegalArgumentException("Total: " + Dinero.formatear(compra.calcularTotal(), compra.getDivisa())
+                    + ". Ingresado: " + Dinero.formatear(suma, compra.getDivisa()) + ". " + ajuste + ". Ajusta los importes para que coincidan.");
+        }
         this.montoUsuario = montoUsuario;
         this.compraId = compra.getId();
         this.montos = Collections.unmodifiableMap(ordenados);
@@ -88,4 +93,5 @@ public final class Reparto {
     public long getCompraId() { return compraId; }
     public Map<Long, Long> getMontos() { return montos; }
 }
+
 

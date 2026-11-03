@@ -25,6 +25,10 @@ public final class FlowChecks extends Instrumentation {
     private Bundle argumentosBiometricos;
     private boolean mapas;
     private boolean divisas;
+    private boolean pagos;
+    private boolean crud;
+    private boolean upgradeCrud;
+    private boolean feedback;
     @Override public void onCreate(Bundle arguments) {
         super.onCreate(arguments);
         compras = arguments != null && "purchases".equals(arguments.getString("mode"));
@@ -33,9 +37,13 @@ public final class FlowChecks extends Instrumentation {
         if (arguments != null && arguments.getString("mode", "").startsWith("bio-")) argumentosBiometricos = arguments;
         mapas = arguments != null && "maps".equals(arguments.getString("mode"));
         divisas = arguments != null && "currency".equals(arguments.getString("mode"));
+        pagos = arguments != null && "payment".equals(arguments.getString("mode"));
+        crud = arguments != null && "crud".equals(arguments.getString("mode"));
+        upgradeCrud = arguments != null && "crud-upgrade".equals(arguments.getString("mode"));
+        feedback = arguments != null && "feedback".equals(arguments.getString("mode"));
         start();
     }
-    @Override public void onStart() { if (divisas) { CurrencyChecks.ejecutar(this); return; } if (mapas) { MapChecks.ejecutar(this); return; } if (argumentosBiometricos != null) BiometricChecks.ejecutar(this, argumentosBiometricos); else if (ubicaciones) verificarUbicaciones(); else if (compartidas) verificarCompartidas(); else if (compras) verificarCompras(); else verificarCuentas(); }
+    @Override public void onStart() { if (feedback) { com.aik1a.localcash.presentation.FeedbackChecks.ejecutar(this); return; } if (upgradeCrud) { CrudChecks.verificarActualizacionInstalada(this); return; } if (crud) { CrudChecks.ejecutar(this); return; } if (pagos) { PaymentChecks.ejecutar(this); return; } if (divisas) { CurrencyChecks.ejecutar(this); return; } if (mapas) { MapChecks.ejecutar(this); return; } if (argumentosBiometricos != null) BiometricChecks.ejecutar(this, argumentosBiometricos); else if (ubicaciones) verificarUbicaciones(); else if (compartidas) verificarCompartidas(); else if (compras) verificarCompras(); else verificarCuentas(); }
 
     private void verificarCuentas() {
         Bundle result = new Bundle();
@@ -142,7 +150,7 @@ public final class FlowChecks extends Instrumentation {
         try {
             prepararV1();
             LocalCashDbHelper helper = new LocalCashDbHelper(getTargetContext());
-            assertTrue(helper.getWritableDatabase().getVersion() == 5, "Migración a versión 5");
+            assertTrue(helper.getWritableDatabase().getVersion() == 7, "Migración a versión 7");
             MovimientoService contabilidad = new MovimientoService(helper);
             assertTrue(contabilidad.listarCuentas().size() == 2, "Dos cuentas preservadas");
             assertTrue(contabilidad.calcularSaldo(1) == 12550, "Saldo v1 preservado");
@@ -163,21 +171,21 @@ public final class FlowChecks extends Instrumentation {
             clickId("crear_contacto"); setText("nombre_contacto", "Luis"); clickText("Guardar"); nodeText("Luis");
             clickId("volver"); clickId("abrir_compras"); clickId("crear_compra");
             setText("nombre_compra", "Compra realizada");
-            clickId("estado_compra"); clickText("REALIZADA");
+            clickId("estado_compra"); clickText("Realizada");
             clickId("contacto_compra"); clickText("Ana");
             setText("item_descripcion", "Cuaderno"); setText("item_cantidad", "0"); setText("item_precio", "100,25");
-            clickId("agregar_item"); nodeText("El ítem necesita descripción, cantidad entera positiva y precio no negativo.");
-            setText("item_cantidad", "-1"); clickId("agregar_item");
-            nodeText("El ítem necesita descripción, cantidad entera positiva y precio no negativo.");
-            setText("item_cantidad", "1,5"); clickId("agregar_item");
-            nodeText("La cantidad debe ser un entero positivo dentro del rango permitido.");
+            clickId("agregar_item"); assertTrue(nodeId("item_cantidad").getError().toString().contains("mayor que cero"), "Cantidad cero explicada en el campo");
+            setText("item_cantidad", "2"); setText("item_precio", "-1"); clickId("agregar_item");
+            assertTrue(nodeId("item_precio").getError().toString().contains("negativo"), "Precio negativo explicado en el campo");
+            setText("item_cantidad", "999999999999999999999999"); setText("item_precio", "100,25"); clickId("agregar_item");
+            assertTrue(nodeId("item_cantidad").getError().toString().contains("entera"), "Cantidad fuera de capacidad explicada");
             setText("item_cantidad", "2"); clickId("agregar_item");
             setText("item_descripcion", "Servicio"); setText("item_cantidad", "3"); setText("item_precio", "10,50"); clickId("agregar_item");
             nodeText("Total: USD 232,00"); clickId("guardar_compra");
-            nodeText("Total: USD 232,00"); nodeText("Contacto: Ana"); assertTrue(nodeId("compra_info").getText().toString().startsWith("REALIZADA"), "Estado realizada visible");
+            nodeText("Total: USD 232,00"); nodeText("Contacto: Ana"); assertTrue(nodeId("compra_info").getText().toString().startsWith("Realizada"), "Estado realizada visible");
             clickId("volver"); nodeText("Compra realizada"); clickId("crear_compra");
             setText("nombre_compra", "Compra planificada");
-            clickId("guardar_compra"); nodeText("La compra necesita nombre, estado, fecha y al menos un ítem válido.");
+            clickId("guardar_compra"); nodeText("Añade al menos un producto o servicio antes de guardar la compra.");
             setText("item_descripcion", "Producto futuro"); setText("item_cantidad", "1"); setText("item_precio", "50"); clickId("agregar_item");
             clickId("fecha_compra");
             int year = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
@@ -201,9 +209,9 @@ public final class FlowChecks extends Instrumentation {
             } catch (IllegalArgumentException expected) { assertTrue(compras.listarCompras().size() == 2, "Compra inválida no persistida"); }
             helper.close();
             helper = new LocalCashDbHelper(getTargetContext());
-            assertTrue(new CompraService(helper).listarCompras().size() == 2 && new MovimientoService(helper).calcularSaldo(1) == 12550, "Reapertura v5");
+            assertTrue(new CompraService(helper).listarCompras().size() == 2 && new MovimientoService(helper).calcularSaldo(1) == 12550, "Reapertura v7");
             helper.close();
-            log.append("PASS regresión contable, persistencia v5, validaciones y ausencia de movimientos automáticos.\n");
+            log.append("PASS regresión contable, persistencia v7, validaciones y ausencia de movimientos automáticos.\n");
             result.putString("stream", "LOCALCASH_PURCHASE_PASS\n" + log); finish(Activity.RESULT_OK, result);
         } catch (Throwable failure) {
             dump(getUiAutomation().getRootInActiveWindow(), 0);
@@ -220,7 +228,7 @@ public final class FlowChecks extends Instrumentation {
             String original = snapshotUbicacion(old,2); old.close();
             LocalCashDbHelper helper = new LocalCashDbHelper(getTargetContext());
             android.database.sqlite.SQLiteDatabase db = helper.getWritableDatabase();
-            assertTrue(db.getVersion() == 5, "Migración v2→v5");
+            assertTrue(db.getVersion() == 7, "Migración v2→v7");
             assertTrue(original.equals(snapshotUbicacion(db,2)), "Todas las filas v2 intactas");
             prepararDivisas(helper);
             CompraService compras = new CompraService(helper);
@@ -232,7 +240,7 @@ public final class FlowChecks extends Instrumentation {
                     java.util.Arrays.asList(new DetalleCompra("Producto",1,10000)), Divisa.USD));
             String previo = snapshot(db);
             assertTrue(new MovimientoService(helper).calcularSaldo(1) == 12550, "Saldo conservado");
-            log.append("PASS MIG-02: fixture SQLite v2→v5; datos anteriores intactos.\n");
+            log.append("PASS MIG-02: fixture SQLite v2→v7; datos anteriores intactos.\n");
             com.aik1a.localcash.application.DeudaService service = new com.aik1a.localcash.application.DeudaService(helper);
             final com.aik1a.localcash.application.DeudaService svc = service;
             final long plan = comprasIdPlan(helper);
@@ -286,19 +294,19 @@ public final class FlowChecks extends Instrumentation {
             abrir(); clickId("abrir_compras"); clickText("Compartida exacta");
             nodeText("Total: USD 100,01"); clickId("abrir_reparto");
             assertTrue(!nodeText("Ana").isChecked(), "Contacto asociado no automático");
-            clickId("guardar_reparto"); nodeText("Elige al menos un contacto para compartir contigo.");
+            clickId("guardar_reparto"); nodeText("Selecciona al menos un contacto para compartir la compra contigo.");
             clickText("Luis");
             clickText("Marta"); clickText("Ana"); clickId("guardar_reparto");
-            nodeText("Tú: USD 25,01"); nodeText("Ana: USD 25,00 · PENDIENTE"); nodeText("Luis: USD 25,00 · PENDIENTE"); nodeText("Marta: USD 25,00 · PENDIENTE");
+            nodeText("Tú: USD 25,01"); nodeText("Ana: USD 25,00 · Pendiente"); nodeText("Luis: USD 25,00 · Pendiente"); nodeText("Marta: USD 25,00 · Pendiente");
             clickId("volver"); clickId("volver"); clickText("Compartida personalizada"); clickId("abrir_reparto");
             clickId("personalizado"); clickText("Ana"); clickText("Luis"); clickText("Marta");
             setCuota("Tú","0"); setCuota("Ana","-1"); setCuota("Luis","30"); setCuota("Marta","50"); clickId("guardar_reparto");
-            nodeText("Cada contacto debe tener un monto no negativo.");
-            setCuota("Ana","19"); clickId("guardar_reparto"); nodeText("La suma debe coincidir exactamente con el total.");
-            setCuota("Ana","20,001"); clickId("guardar_reparto"); nodeText("USD: usa hasta 2 decimales, sin separador de miles.");
+            assertTrue(nodeText("Monto para Ana").getError().toString().contains("Ana"), "Cuota inválida identifica a Ana");
+            setCuota("Ana","19"); clickId("guardar_reparto"); assertTrue(nodeId("error_reparto").getText().toString().contains("Faltan USD 1,00"), "Diferencia de reparto explicada");
+            setCuota("Ana","20,001"); clickId("guardar_reparto"); assertTrue(nodeText("Monto para Ana").getError().toString().contains("2 decimales"), "Precisión explicada en la cuota de Ana");
             setCuota("Ana","20"); clickId("guardar_reparto");
-            nodeText("Ana: USD 20,00 · PENDIENTE"); nodeText("Luis: USD 30,00 · PENDIENTE"); nodeText("Marta: USD 50,00 · PENDIENTE");
-            clickId("volver"); clickId("abrir_reparto"); nodeText("Ana: USD 20,00 · PENDIENTE");
+            nodeText("Ana: USD 20,00 · Pendiente"); nodeText("Luis: USD 30,00 · Pendiente"); nodeText("Marta: USD 50,00 · Pendiente");
+            clickId("volver"); clickId("abrir_reparto"); nodeText("Ana: USD 20,00 · Pendiente");
             helper = new LocalCashDbHelper(getTargetContext());
             service = new com.aik1a.localcash.application.DeudaService(helper);
             List<Deuda> partes = service.listarDeudas(equitativa);
@@ -358,7 +366,7 @@ public final class FlowChecks extends Instrumentation {
                 String antes=snapshotUbicacion(old,version); assertTrue(old.getVersion()==version,"Versión fixture"); old.close();
                 try (LocalCashDbHelper helper=new LocalCashDbHelper(getTargetContext())) {
                     android.database.sqlite.SQLiteDatabase db=helper.getWritableDatabase();
-                    assertTrue(db.getVersion()==5,"Migración a v5");
+                    assertTrue(db.getVersion()==7,"Migración a v7");
                     assertTrue(antes.equals(snapshotUbicacion(db,version)),"Todas las filas previas preservadas");
                     for (Movimiento m:new MovimientoService(helper).listarMovimientos(1)) assertTrue(!m.tieneUbicacion(),"Previos NULL");
                     assertTrue(new MovimientoService(helper).calcularSaldo(1)==12550,"Saldo anterior intacto");
@@ -369,7 +377,7 @@ public final class FlowChecks extends Instrumentation {
                         probarParUbicacion(db);
                     }
                 }
-                log.append("PASS MIG-").append(version).append(": v").append(version).append("→v5, snapshot exacto, NULL antiguos, saldo y FK.\n");
+                log.append("PASS MIG-").append(version).append(": v").append(version).append("→v7, snapshot exacto, NULL antiguos, saldo y FK.\n");
             }
             AccessibilityServiceInfo info=getUiAutomation().getServiceInfo(); info.flags|=AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
             getUiAutomation().setServiceInfo(info);
@@ -396,8 +404,8 @@ public final class FlowChecks extends Instrumentation {
             nodeText("Se guardará sin ubicación."); clickText("Guardar"); nodeText("Saldo: USD 129,50");
             shell("cmd location set-location-enabled false");
             nuevoMovimiento("GPS desactivado"); clickId("incluir_ubicacion");
-            nodeText("Ubicación desactivada o proveedor no disponible. Puedes guardar sin ubicación.");
-            clickText("Guardar"); nodeText("Saldo: USD 130,50");
+            nodeText("Activa la ubicación del teléfono y reintenta. Puedes guardar sin ubicación.");
+            clickText("Guardar"); clickText("Guardar sin ubicación"); nodeText("Saldo: USD 130,50");
             shell("cmd location set-location-enabled true");
             // Proveedor Android de pruebas sin fix; usa el listener y timeout productivos.
             shell("appops set com.aik1a.localcash android:mock_location allow");
@@ -409,7 +417,7 @@ public final class FlowChecks extends Instrumentation {
             nodeText("Buscando ubicación (máximo 15 segundos). Puedes guardar sin ubicación.");
             SystemClock.sleep(15500);
             nodeText("No se obtuvo ubicación en 15 segundos. Puedes guardar sin ubicación.");
-            clickText("Guardar"); nodeText("Saldo: USD 131,50");
+            clickText("Guardar"); clickText("Guardar sin ubicación"); nodeText("Saldo: USD 131,50");
             lm.removeTestProvider(android.location.LocationManager.GPS_PROVIDER); testProvider=false;
             log.append("PASS GEO-FALLBACK: consentimiento retirado, GPS desactivado y timeout real sin fix permiten guardar sin ubicación.\n");
             try (LocalCashDbHelper helper=new LocalCashDbHelper(getTargetContext())) {
@@ -636,6 +644,3 @@ public final class FlowChecks extends Instrumentation {
         esperarUI();
     }
 }
-
-
-

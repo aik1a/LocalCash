@@ -30,12 +30,17 @@ public final class ComprasActivity extends ActividadProtegida {
     @Override protected void actualizarContenido() { actualizar(); }
     private void actualizar() {
         try {
-            compras = service.listarCompras();
+            long cuentaId = getIntent().getLongExtra(CuentaActivity.CUENTA_ID, -1);
+            compras = cuentaId > 0 ? service.listarComprasDeCuenta(cuentaId) : service.listarCompras();
+            if (cuentaId > 0) {
+                findViewById(R.id.crear_compra).setVisibility(android.view.View.GONE);
+                ((TextView)findViewById(R.id.vacio)).setText("Aún no hay compras pagadas desde esta cuenta.");
+            }
             List<Map<String, String>> filas = new ArrayList<>();
             DateFormat formato = DateFormat.getDateInstance(DateFormat.SHORT);
             for (Compra compra : compras) {
                 Map<String, String> fila = new HashMap<>(); fila.put("nombre", compra.getNombre());
-                fila.put("detalle", compra.getEstado().name() + " · " + formato.format(new Date(compra.getFecha()))
+                fila.put("detalle", (compra.getEstado() == Compra.Estado.PLANIFICADA ? "Planificada" : "Realizada") + " · " + formato.format(new Date(compra.getFecha()))
                         + " · Total: " + Dinero.formatear(compra.calcularTotal(), compra.getDivisa())); filas.add(fila);
             }
             lista.setAdapter(new SimpleAdapter(this, filas, android.R.layout.simple_list_item_2,
@@ -46,5 +51,3 @@ public final class ComprasActivity extends ActividadProtegida {
     }
     @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
 }
-
-

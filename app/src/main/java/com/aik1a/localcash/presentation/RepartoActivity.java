@@ -1,6 +1,7 @@
 package com.aik1a.localcash.presentation;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.database.sqlite.SQLiteException;
 import android.view.View;
@@ -74,8 +75,12 @@ public final class RepartoActivity extends ActividadProtegida {
             mostrarDeudas(service.listarDeudas(compraId));
             if (contactos.isEmpty() && service.listarDeudas(compraId).isEmpty())
                 mostrarError("Añade un contacto para compartir la compra contigo.");
-        } catch (IllegalArgumentException | ArithmeticException | SQLiteException ex) {
-            mostrarError("No se pudo abrir el reparto.");
+        } catch (IllegalArgumentException ex) {
+            String motivo = "La compra no existe.".equals(ex.getMessage()) || "Solo se reparten compras realizadas.".equals(ex.getMessage())
+                    ? ex.getMessage() : "Los datos del reparto no están disponibles. Vuelve a abrir la compra.";
+            mostrarError(motivo); findViewById(R.id.formulario_reparto).setVisibility(View.GONE);
+        } catch (ArithmeticException | SQLiteException ex) {
+            mostrarError("No se pudo cargar el reparto. Vuelve a abrir la compra e intenta de nuevo.");
             findViewById(R.id.formulario_reparto).setVisibility(View.GONE);
         }
         findViewById(R.id.guardar_reparto).setOnClickListener(v -> guardar());
@@ -89,22 +94,39 @@ public final class RepartoActivity extends ActividadProtegida {
         }
     }
     private void guardar() {
+        mostrarError("");
+        boolean alguno = false;
+        for (CheckBox check : seleccion) if (check.isChecked()) alguno = true;
+        if (!alguno) { mostrarError("Selecciona al menos un contacto para compartir la compra contigo."); return; }
+        boolean guardado = false;
         try (LocalCashDbHelper helper = new LocalCashDbHelper(this)) {
             List<Long> ids = new ArrayList<>(), montos = new ArrayList<>();
             for (int i = 0; i < contactos.size(); i++) if (seleccion.get(i).isChecked()) {
                 ids.add(contactos.get(i).getId());
-                if (personalizado()) montos.add(Dinero.parsear(cuotas.get(i).getText().toString(), divisa));
+                if (personalizado()) {
+                    Long monto = AccionesUI.leerMonto(cuotas.get(i), divisa, true, "el monto de " + contactos.get(i).getNombre());
+                    if (monto == null) return;
+                    montos.add(monto);
+                }
             }
             DeudaService service = new DeudaService(helper);
-            if (personalizado()) service.repartirPersonalizadoConUsuario(compraId, ids, montos,
-                    Dinero.parsear(cuotaUsuario.getText().toString(), divisa));
-            else service.repartirEquitativoConUsuario(compraId, ids);
+            if (personalizado()) {
+                Long propio = AccionesUI.leerMonto(cuotaUsuario, divisa, true, "tu parte del reparto");
+                if (propio == null) return;
+                service.repartirPersonalizadoConUsuario(compraId, ids, montos, propio);
+            } else service.repartirEquitativoConUsuario(compraId, ids);
+            guardado = true;
+            findViewById(R.id.guardar_reparto).setEnabled(false);
+            AccionesUI.exito(this, "Reparto guardado.");
             montoUsuario = service.buscarMontoUsuario(compraId);
-            mostrarDeudas(service.listarDeudas(compraId));
-            mostrarError("");
-        } catch (IllegalArgumentException ex) { mostrarError(ex.getMessage()); }
-        catch (ArithmeticException ex) { mostrarError("La suma supera el rango permitido."); }
-        catch (SQLiteException ex) { mostrarError("No se guardó el reparto. Revisa los datos e intenta de nuevo."); }
+            mostrarDeudas(service.listarDeudas(compraId)); mostrarError("");
+        } catch (IllegalArgumentException ex) {
+            mostrarError(guardado ? "El reparto se guardó. Vuelve a abrir la compra para ver los datos actualizados." : ex.getMessage());
+        } catch (ArithmeticException ex) {
+            mostrarError(guardado ? "El reparto se guardó. Vuelve a abrir la compra para ver los datos actualizados." : "La suma es demasiado grande. Revisa y reduce los importes.");
+        } catch (SQLiteException ex) {
+            mostrarError(guardado ? "El reparto se guardó, pero no se pudo actualizar la pantalla. Vuelve a abrir la compra." : "No se guardó el reparto. Tus importes se conservan; intenta de nuevo.");
+        }
     }
     private void mostrarDeudas(List<Deuda> deudas) {
         LinearLayout filas = findViewById(R.id.deudas);
@@ -115,15 +137,43 @@ public final class RepartoActivity extends ActividadProtegida {
             tu.setText("Tú: " + Dinero.formatear(montoUsuario, divisa)); filas.addView(tu);
         }
         findViewById(R.id.formulario_reparto).setVisibility(View.GONE);
-        ((TextView)findViewById(R.id.reparto_info)).setText("Reparto registrado · deuda pendiente por contacto");
+        ((TextView)findViewById(R.id.reparto_info)).setText("Reparto registrado. Marcar una deuda pagada no modifica los saldos de tus cuentas.");
         for (Deuda deuda : deudas) {
             TextView fila = (TextView)getLayoutInflater().inflate(R.layout.row_detalle, filas, false);
             fila.setText(deuda.getContacto().getNombre() + ": "
-                    + Dinero.formatear(deuda.getMonto(), divisa) + " · " + deuda.getEstado());
+                    + Dinero.formatear(deuda.getMonto(), divisa) + " · " + (deuda.getMonto() == 0 ? "Sin deuda" : "PAGADA".equals(deuda.getEstado()) ? "Pagada" : "Pendiente"));
             filas.addView(fila);
+            if (deuda.getMonto() > 0) {
+                Button accion = new Button(this);
+                boolean pagada = "PAGADA".equals(deuda.getEstado());
+                accion.setText(pagada ? "Volver a pendiente: " + deuda.getContacto().getNombre() : "Marcar como pagada: " + deuda.getContacto().getNombre());
+                accion.setOnClickListener(v -> confirmarEstado(deuda, !pagada)); filas.addView(accion);
+            }
         }
     }
-    private void mostrarError(String mensaje) { ((TextView)findViewById(R.id.error_reparto)).setText(mensaje); }
+    private void confirmarEstado(Deuda deuda, boolean pagada) {
+        protegerDialogo(new AlertDialog.Builder(this).setTitle(pagada ? "Marcar deuda pagada" : "Volver a pendiente")
+                .setMessage(deuda.getContacto().getNombre() + " · " + Dinero.formatear(deuda.getMonto(), divisa)
+                        + ". Esta acción no modifica los saldos de tus cuentas.")
+                .setNegativeButton("Cancelar", null).setPositiveButton("Confirmar", (dialog, which) -> {
+                    boolean actualizado = false;
+                    try (LocalCashDbHelper helper = new LocalCashDbHelper(this)) {
+                        DeudaService service = new DeudaService(helper);
+                        service.cambiarEstado(compraId, deuda.getContacto().getId(), pagada);
+                        actualizado = true;
+                        AccionesUI.exito(this, pagada ? "Deuda marcada como pagada." : "Deuda marcada pendiente.");
+                        mostrarDeudas(service.listarDeudas(compraId)); mostrarError("");
+                    } catch (IllegalArgumentException ex) {
+                        AccionesUI.aviso(this, actualizado ? "Estado guardado" : "No se puede cambiar el estado", actualizado
+                                ? "El cambio se guardó. Vuelve a abrir el reparto para actualizar la pantalla." : ex.getMessage());
+                    } catch (SQLiteException ex) {
+                        AccionesUI.aviso(this, actualizado ? "Estado guardado" : "No se pudo cambiar el estado", actualizado
+                                ? "El cambio se guardó. Vuelve a abrir el reparto para actualizar la pantalla."
+                                : "No se completó el cambio. Vuelve a abrir el reparto e intenta de nuevo.");
+                    }
+                }).create()).show();
+    }
+    private void mostrarError(String mensaje) { AccionesUI.errorTexto((TextView)findViewById(R.id.error_reparto), mensaje); }
     @Override public void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         if (!contenidoCreado()) return;
@@ -138,5 +188,3 @@ public final class RepartoActivity extends ActividadProtegida {
         state.putStringArray("cuotas", valores); state.putBoolean("personalizado", personalizado());
     }
 }
-
-

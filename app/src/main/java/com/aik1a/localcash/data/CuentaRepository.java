@@ -35,6 +35,20 @@ public final class CuentaRepository {
         } finally { db.endTransaction(); }
     }
 
+    public void renombrar(long id, String nombre) {
+        Cuenta actual = buscar(id);
+        Cuenta validada = new Cuenta(id, nombre, actual.getSaldoInicial(), actual.getDivisa());
+        ContentValues values = new ContentValues(); values.put("nombre", validada.getNombre());
+        if (helper.getWritableDatabase().update("cuentas", values, "id=?", new String[]{Long.toString(id)}) != 1)
+            throw new IllegalArgumentException("La cuenta ya no existe.");
+    }
+    public void eliminarSinUso(long id) {
+        if (helper.getWritableDatabase().delete("cuentas", "id=? AND NOT EXISTS (SELECT 1 FROM movimientos WHERE cuenta_id=cuentas.id)", new String[]{Long.toString(id)}) != 1) {
+            buscar(id);
+            throw new IllegalArgumentException("No puedes eliminar esta cuenta porque tiene movimientos registrados. Su historial se conserva.");
+        }
+    }
+
     public List<Cuenta> listar() {
         List<Cuenta> cuentas = new ArrayList<>();
         try (Cursor cursor = helper.getReadableDatabase().query("cuentas", null,
@@ -59,4 +73,5 @@ public final class CuentaRepository {
                 Divisa.desdeCodigo(cursor.getString(cursor.getColumnIndexOrThrow("divisa"))));
     }
 }
+
 

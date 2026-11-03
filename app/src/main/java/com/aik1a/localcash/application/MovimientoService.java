@@ -29,6 +29,9 @@ public final class MovimientoService {
         if (divisa == null) throw new IllegalArgumentException("Selecciona una divisa.");
         return cuentas.crear(new Cuenta(0, nombre, saldoInicial, divisa));
     }
+    public void renombrarCuenta(long id, String nombre) { cuentas.renombrar(id, nombre); }
+    public void eliminarCuenta(long id) { cuentas.eliminarSinUso(id); }
+
     public List<Cuenta> listarCuentas() { return cuentas.listar(); }
     public Cuenta buscarCuenta(long id) { return cuentas.buscar(id); }
     public List<Movimiento> listarMovimientos(long cuentaId) { return movimientos.listar(cuentaId); }
@@ -58,5 +61,6 @@ public final class MovimientoService {
         }
     }
 }
+
 
 

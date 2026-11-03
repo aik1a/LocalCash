@@ -13,6 +13,18 @@ public final class DeudaService {
         compras = new CompraRepository(helper); contactos = new ContactoRepository(helper);
         deudas = new DeudaRepository(helper);
     }
+    public void cambiarEstado(long compraId, long contactoId, boolean pagada) { deudas.cambiarEstado(compraId, contactoId, pagada); }
+    public List<Deuda> listarPorContacto(long contactoId) { return deudas.listarPorContacto(contactoId); }
+    public java.util.Map<Divisa, Long> totalesPendientes(long contactoId) {
+        java.util.Map<Divisa, Long> totales = new java.util.EnumMap<>(Divisa.class);
+        for (Deuda deuda : deudas.listarPorContacto(contactoId)) {
+            Divisa divisa = compras.buscar(deuda.getCompraId()).getDivisa();
+            if (divisa != null && "PENDIENTE".equals(deuda.getEstado()) && deuda.getMonto() > 0)
+                totales.put(divisa, Math.addExact(totales.containsKey(divisa) ? totales.get(divisa) : 0, deuda.getMonto()));
+        }
+        return totales;
+    }
+
     public Compra buscarCompra(long id) { return compras.buscar(id); }
     public List<Contacto> listarContactos() { return contactos.listar(); }
     public List<Deuda> listarDeudas(long compraId) { return deudas.listarPorCompra(compraId); }
@@ -34,4 +46,5 @@ public final class DeudaService {
         deudas.registrar(reparto);
     }
 }
+
 

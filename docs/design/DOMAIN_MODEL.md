@@ -204,3 +204,11 @@ ambos y mantienen la cuota propia separada del mapa de contactos. El mapa sigue
 inmutable y solo contiene IDs positivos reales. Para monedas sin decimales el resto
 se reparte en pesos/yenes completos. Las operaciones históricas sin usuario continúan
 leyendo/revalidando repartos anteriores; no se reinterpretan deudas guardadas.
+
+## UX-01 — Relación compra y pago
+
+Una compra puede asociarse con un movimiento de egreso único mediante compra_movimiento. La cuenta se obtiene a través del movimiento; no se duplica el saldo ni el importe. CompraService coordina el pago explícito del total y el cambio a REALIZADA; entidades siguen independientes de Android/SQLite. Repartos y deudas se mantienen como información separada del pago. Nueva conducta autorizada el 2026-11-02, pendiente de gate independiente.
+
+## CRUD-02 — Estado y operaciones de mantenimiento
+
+Deuda reconstruye y valida estado persistido PENDIENTE/PAGADA. Cuota cero es Sin deuda en presentación, manteniendo asociación. Repositorios realizan cambios de estado, nombres y borrados condicionados; servicios exponen operaciones y calculan totales por moneda. No se introducen setters genéricos ni dependencia Android en entidades. Edición de una planificación crea una Compra válida con la identidad y divisa originales antes de persistirla.

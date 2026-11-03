@@ -73,13 +73,14 @@ public final class MainActivity extends ActividadProtegida {
         AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Crear cuenta")
                 .setView(form).setNegativeButton("Cancelar", null).setPositiveButton("Guardar", null).create();
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-            if (nombre.getText().toString().trim().isEmpty()) { nombre.setError("Escribe un nombre."); return; }
+            if (nombre.getText().toString().trim().isEmpty()) { AccionesUI.errorCampo(nombre, "Escribe un nombre."); return; }
+            if (saldo.getText().toString().trim().isEmpty()) { AccionesUI.errorCampo(saldo, "Ingresa el saldo inicial. Si partes desde cero, escribe 0."); return; }
             try {
                 Divisa moneda = (Divisa)divisa.getSelectedItem();
                 service.crearCuenta(nombre.getText().toString(), Dinero.parsear(saldo.getText().toString(), moneda), moneda);
-                dialog.dismiss();
+                dialog.dismiss(); AccionesUI.exito(this, "Cuenta creada.");
                 actualizar();
-            } catch (IllegalArgumentException ex) { saldo.setError(ex.getMessage()); }
+            } catch (IllegalArgumentException ex) { AccionesUI.errorCampo(saldo, ex.getMessage()); }
             catch (SQLiteException ex) {
                 Toast.makeText(this, "No se guardó la cuenta. Intenta nuevamente.", Toast.LENGTH_LONG).show();
             }
@@ -88,5 +89,6 @@ public final class MainActivity extends ActividadProtegida {
     }
     @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
 }
+
 
 

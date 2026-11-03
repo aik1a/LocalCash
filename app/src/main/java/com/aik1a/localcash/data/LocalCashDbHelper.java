@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public final class LocalCashDbHelper extends SQLiteOpenHelper {
     public LocalCashDbHelper(Context context) {
-        super(context.getApplicationContext(), "localcash.db", null, 5);
+        super(context.getApplicationContext(), "localcash.db", null, 7);
     }
 
     @Override public void onConfigure(SQLiteDatabase db) {
@@ -28,6 +28,7 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
         crearDeudas(db);
         crearUbicacion(db);
         crearDivisas(db);
+        crearVinculoCompra(db);
     }
 
     private void crearCompras(SQLiteDatabase db) {
@@ -41,23 +42,32 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE INDEX detalle_por_compra ON detalle_compra(compra_id, id)");
     }
 
-    private void crearDeudas(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE deudas (compra_id INTEGER NOT NULL REFERENCES compras(id) ON DELETE RESTRICT, "
+    private void crearDeudas(SQLiteDatabase db) { crearTablaDeudas(db, "deudas"); }
+
+    private void crearTablaDeudas(SQLiteDatabase db, String tabla) {
+        db.execSQL("CREATE TABLE " + tabla + " (compra_id INTEGER NOT NULL REFERENCES compras(id) ON DELETE RESTRICT, "
                 + "contacto_id INTEGER NOT NULL REFERENCES contactos(id) ON DELETE RESTRICT, "
                 + "monto INTEGER NOT NULL CHECK(typeof(monto)='integer' AND monto >= 0), "
-                + "estado TEXT NOT NULL DEFAULT 'PENDIENTE' CHECK(estado = 'PENDIENTE'), "
+                + "estado TEXT NOT NULL DEFAULT 'PENDIENTE' CHECK(estado IN ('PENDIENTE','PAGADA')), "
                 + "PRIMARY KEY(compra_id, contacto_id))");
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion >= 1 && oldVersion < newVersion && newVersion <= 5) {
+        if (oldVersion >= 1 && oldVersion < newVersion && newVersion <= 7) {
             if (oldVersion < 2 && newVersion >= 2) crearCompras(db);
             if (oldVersion < 3 && newVersion >= 3) crearDeudas(db);
             if (oldVersion < 4 && newVersion >= 4) crearUbicacion(db);
             if (oldVersion < 5 && newVersion >= 5) crearDivisas(db);
+            if (oldVersion < 6 && newVersion >= 6) crearVinculoCompra(db);
+            if (oldVersion < 7 && newVersion >= 7) migrarDeudas(db);
             return;
         }
         throw new IllegalStateException("Migración no soportada: " + oldVersion + " → " + newVersion);
+    }
+
+    private void crearVinculoCompra(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE compra_movimiento (compra_id INTEGER PRIMARY KEY REFERENCES compras(id) ON DELETE RESTRICT, "
+                + "movimiento_id INTEGER NOT NULL UNIQUE REFERENCES movimientos(id) ON DELETE RESTRICT)");
     }
 
     private void crearUbicacion(SQLiteDatabase db) {
@@ -87,12 +97,7 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
                 + "WHEN NEW.divisa IN ('CLP','JPY') AND (NEW.saldo_inicial%100<>0 OR EXISTS "
                 + "(SELECT 1 FROM movimientos WHERE cuenta_id=OLD.id AND monto%100<>0)) "
                 + "BEGIN SELECT RAISE(ABORT,'El historial contiene fracciones'); END");
-        db.execSQL("CREATE TRIGGER compras_precision_update BEFORE UPDATE OF divisa ON compras "
-                + "WHEN NEW.divisa IN ('CLP','JPY') AND (EXISTS "
-                + "(SELECT 1 FROM detalle_compra WHERE compra_id=OLD.id AND precio_unitario%100<>0) OR EXISTS "
-                + "(SELECT 1 FROM deudas WHERE compra_id=OLD.id AND monto%100<>0) OR EXISTS "
-                + "(SELECT 1 FROM reparto_usuario WHERE compra_id=OLD.id AND monto%100<>0)) "
-                + "BEGIN SELECT RAISE(ABORT,'La compra contiene fracciones'); END");
+        crearTriggerPrecisionCompra(db);
         for (String evento : new String[]{"INSERT", "UPDATE"}) {
             db.execSQL("CREATE TRIGGER usuario_precision_" + evento + " BEFORE " + evento + " ON reparto_usuario "
                     + "WHEN (SELECT divisa FROM compras WHERE id=NEW.compra_id) IN ('CLP','JPY') AND NEW.monto%100<>0 "
@@ -103,13 +108,37 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
             db.execSQL("CREATE TRIGGER detalles_precision_" + evento + " BEFORE " + evento + " ON detalle_compra "
                     + "WHEN (SELECT divisa FROM compras WHERE id=NEW.compra_id) IN ('CLP','JPY') AND NEW.precio_unitario%100<>0 "
                     + "BEGIN SELECT RAISE(ABORT,'La divisa no admite fracciones'); END");
+
+        }
+        crearTriggersDeudas(db);
+    }
+
+
+    private void crearTriggerPrecisionCompra(SQLiteDatabase db) {
+        db.execSQL("CREATE TRIGGER compras_precision_update BEFORE UPDATE OF divisa ON compras "
+                + "WHEN NEW.divisa IN ('CLP','JPY') AND (EXISTS "
+                + "(SELECT 1 FROM detalle_compra WHERE compra_id=OLD.id AND precio_unitario%100<>0) OR EXISTS "
+                + "(SELECT 1 FROM deudas WHERE compra_id=OLD.id AND monto%100<>0) OR EXISTS "
+                + "(SELECT 1 FROM reparto_usuario WHERE compra_id=OLD.id AND monto%100<>0)) "
+                + "BEGIN SELECT RAISE(ABORT,'La compra contiene fracciones'); END");
+    }
+    private void crearTriggersDeudas(SQLiteDatabase db) {
+        for (String evento : new String[]{"INSERT", "UPDATE"}) {
             db.execSQL("CREATE TRIGGER deudas_precision_" + evento + " BEFORE " + evento + " ON deudas "
                     + "WHEN (SELECT divisa FROM compras WHERE id=NEW.compra_id) IN ('CLP','JPY') AND NEW.monto%100<>0 "
                     + "BEGIN SELECT RAISE(ABORT,'La divisa no admite fracciones'); END");
         }
     }
-
+    private void migrarDeudas(SQLiteDatabase db) {
+        // SQLiteOpenHelper ejecuta onUpgrade dentro de una transacción.
+        db.execSQL("DROP TRIGGER IF EXISTS compras_precision_update");
+        db.execSQL("DROP TRIGGER IF EXISTS deudas_precision_INSERT");
+        db.execSQL("DROP TRIGGER IF EXISTS deudas_precision_UPDATE");
+        crearTablaDeudas(db, "deudas_v7");
+        db.execSQL("INSERT INTO deudas_v7(compra_id,contacto_id,monto,estado) SELECT compra_id,contacto_id,monto,estado FROM deudas");
+        db.execSQL("DROP TABLE deudas");
+        db.execSQL("ALTER TABLE deudas_v7 RENAME TO deudas");
+        crearTriggerPrecisionCompra(db);
+        crearTriggersDeudas(db);
+    }
 }
-
-
-

@@ -6,8 +6,8 @@ import subprocess
 import tempfile
 
 root = pathlib.Path(__file__).resolve().parents[1]
-with tempfile.TemporaryDirectory() as tmp:
-    tmp = pathlib.Path(tmp)
+with __import__("contextlib").nullcontext(root/"verification"/"sqlite-currency") as tmp:
+    tmp = pathlib.Path(tmp); tmp.mkdir(parents=True, exist_ok=True)
     sources = {
         'android/content/Context.java': 'package android.content; public class Context { public Context getApplicationContext(){return this;} }',
         'android/database/sqlite/SQLiteOpenHelper.java': '''package android.database.sqlite; import android.content.Context;
@@ -20,7 +20,7 @@ public void execSQL(String s){System.out.println(java.util.Base64.getEncoder().e
         'Emit.java': '''import com.aik1a.localcash.data.LocalCashDbHelper;
 public class Emit { public static void main(String[] a) { LocalCashDbHelper h=new LocalCashDbHelper(new android.content.Context());
 android.database.sqlite.SQLiteDatabase d=new android.database.sqlite.SQLiteDatabase();
-if(a.length==0) h.onCreate(d); else h.onUpgrade(d,Integer.parseInt(a[0]),5); } }'''
+if(a.length==0) h.onCreate(d); else h.onUpgrade(d,Integer.parseInt(a[0]),7); } }'''
     }
     paths = []
     for name, text in sources.items():
@@ -91,4 +91,4 @@ if(a.length==0) h.onCreate(d); else h.onUpgrade(d,Integer.parseInt(a[0]),5); } }
     reject(db,"UPDATE cuentas SET divisa=NULL WHERE id=1")
     reject(db,"UPDATE compras SET divisa='USD' WHERE id=1")
     check(not list(db.execute('PRAGMA foreign_key_check')))
-    print(f'PASS: {checks} host SQLite checks; actual Java DDL, fresh install and migrations v1-v4→v5.')
+    print(f'PASS: {checks} host SQLite checks; actual Java DDL, fresh install and migrations v1-v4→v7.')

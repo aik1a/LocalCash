@@ -1,0 +1,17 @@
+{
+  "result": "PASS",
+  "upgrade": "APK in-place, SQLite v6\u2192v7",
+  "unchanged_rows": {
+    "cuentas": 4,
+    "movimientos": 3,
+    "contactos": 1,
+    "compras": 4,
+    "detalle_compra": 4,
+    "deudas": 2,
+    "reparto_usuario": 2,
+    "configuracion": 1,
+    "compra_movimiento": 1
+  },
+  "integrity": "ok",
+  "foreign_key_check": []
+}

@@ -39,6 +39,9 @@ public final class CuentaActivity extends ActividadProtegida {
         helper = new LocalCashDbHelper(this);
         service = new MovimientoService(helper);
         findViewById(R.id.abrir_mapa).setOnClickListener(v -> startActivity(new android.content.Intent(this, MapaActivity.class).putExtra(CUENTA_ID, cuentaId)));
+        findViewById(R.id.ver_compras_cuenta).setOnClickListener(v -> startActivity(
+                new android.content.Intent(this, ComprasActivity.class).putExtra(CUENTA_ID, cuentaId)));
+        findViewById(R.id.opciones_cuenta).setOnClickListener(v -> opcionesCuenta());
         lista = findViewById(R.id.movimientos);
         lista.setEmptyView(findViewById(R.id.vacio));
         findViewById(R.id.volver).setOnClickListener(v -> finish());
@@ -61,7 +64,7 @@ public final class CuentaActivity extends ActividadProtegida {
             DateFormat fecha = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
             for (Movimiento movimiento : historial) {
                 Map<String, String> fila = new HashMap<>();
-                fila.put("monto", movimiento.getTipo().name() + " · " + Dinero.formatear(movimiento.getMontoConSigno(), divisa));
+                fila.put("monto", (movimiento.getTipo() == Movimiento.Tipo.INGRESO ? "Ingreso" : "Egreso") + " · " + Dinero.formatear(movimiento.getMontoConSigno(), divisa));
                 fila.put("detalle", fecha.format(new Date(movimiento.getFecha()))
                         + (movimiento.getDescripcion().isEmpty() ? "" : " · " + movimiento.getDescripcion())
                         + (movimiento.tieneUbicacion() ? "\nUbicación: " + movimiento.getUbicacion().getLatitud()
@@ -76,6 +79,20 @@ public final class CuentaActivity extends ActividadProtegida {
         }
     }
 
+    private void opcionesCuenta() {
+        try {
+            Cuenta cuenta = service.buscarCuenta(cuentaId);
+            protegerDialogo(new AlertDialog.Builder(this).setTitle(cuenta.getNombre())
+                    .setItems(new String[]{"Cambiar nombre", "Eliminar cuenta"}, (dialog, opcion) -> {
+                        if (opcion == 0) AccionesUI.nombre(this, "Cambiar nombre de la cuenta", cuenta.getNombre(),
+                                nombre -> service.renombrarCuenta(cuentaId, nombre), this::actualizar);
+                        else AccionesUI.eliminar(this, "¿Eliminar " + cuenta.getNombre() + "? Solo se eliminará si no tiene movimientos.",
+                                () -> service.eliminarCuenta(cuentaId), this::finish);
+                    }).setNegativeButton("Cancelar", null).create()).show();
+        } catch (IllegalArgumentException | SQLiteException ex) {
+            Toast.makeText(this, "No se pudo abrir la cuenta.", Toast.LENGTH_LONG).show();
+        }
+    }
     private void mostrarFormulario() {
         if (formulario != null && formulario.isShowing()) return;
         if (divisa == null) { actualizar(); return; }
@@ -109,17 +126,32 @@ public final class CuentaActivity extends ActividadProtegida {
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             int elegido = tipo.getCheckedRadioButtonId();
             if (elegido != R.id.ingreso && elegido != R.id.egreso) {
-                Toast.makeText(this, "Selecciona ingreso o egreso.", Toast.LENGTH_SHORT).show(); return;
+                AccionesUI.aviso(this, "Selecciona el tipo", "Elige Ingreso o Egreso para indicar cómo afecta este movimiento al saldo."); return;
+            }
+            Long montoIngresado = AccionesUI.leerMonto(monto, divisa, false, "el monto del movimiento");
+            if (montoIngresado == null) return;
+            if (incluir.isChecked() && ubicacion == null) {
+                protegerDialogo(new AlertDialog.Builder(this).setTitle("Aún no hay ubicación")
+                        .setMessage("Puedes seguir esperando o guardar el movimiento sin ubicación.")
+                        .setNegativeButton("Volver", null)
+                        .setPositiveButton("Guardar sin ubicación", (aviso, opcion) -> {
+                            incluir.setChecked(false);
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
+                        }).create()).show();
+                return;
             }
             try {
                 service.registrar(cuentaId, elegido == R.id.ingreso ? Movimiento.Tipo.INGRESO : Movimiento.Tipo.EGRESO,
-                        Dinero.parsear(monto.getText().toString(), divisa), descripcion.getText().toString(),
+                        montoIngresado, descripcion.getText().toString(),
                         incluir.isChecked() ? ubicacion : null);
-                dialog.dismiss(); actualizar();
-            } catch (IllegalArgumentException ex) { monto.setError(ex.getMessage()); }
-            catch (ArithmeticException ex) { monto.setError("El movimiento excede el rango del saldo."); }
+                dialog.dismiss(); AccionesUI.exito(this, "Movimiento guardado."); actualizar();
+            } catch (IllegalArgumentException ex) {
+                String motivo = "La cuenta no existe.".equals(ex.getMessage()) || "Define la divisa de esta cuenta primero.".equals(ex.getMessage())
+                        ? ex.getMessage() : "Revisa la cuenta y vuelve a intentar. Los datos del formulario se conservan.";
+                AccionesUI.aviso(this, "No se pudo guardar el movimiento", motivo);
+            } catch (ArithmeticException ex) { AccionesUI.errorCampo(monto, "El importe supera el límite admitido por la cuenta. Usa otro monto."); }
             catch (SQLiteException ex) {
-                Toast.makeText(this, "No se guardó el movimiento. Intenta nuevamente.", Toast.LENGTH_LONG).show();
+                AccionesUI.aviso(this, "No se guardó el movimiento", "No se completó la operación. Los datos del formulario se conservan; intenta de nuevo.");
             }
         }));
         formulario = dialog;
@@ -161,6 +193,3 @@ public final class CuentaActivity extends ActividadProtegida {
     @Override protected void onDestroy() { if (formulario != null) formulario.dismiss(); if (captura != null) captura.cancelar();
         if (helper != null) helper.close(); super.onDestroy(); }
 }
-
-
-
