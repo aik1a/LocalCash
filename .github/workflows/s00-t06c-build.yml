@@ -1,8 +1,8 @@
 name: LocalCash biometría, divisas y regresión
 on:
   push:
-    branches: [task/S00-T06C-biometria]
-    paths: ['app/**', 'tests/**', '.github/workflows/s00-t06c-build.yml']
+    branches: [main, task/S00-T06C-biometria]
+    paths: ['app/**', 'tests/**', 'build.gradle', 'settings.gradle', 'gradle/**', 'gradle.properties', '.github/workflows/s00-t06c-build.yml']
   pull_request:
     types: [opened, synchronize, reopened]
     paths: ['app/**', 'tests/**', 'gradle.properties', '.github/workflows/s00-t06c-build.yml']
@@ -41,8 +41,9 @@ jobs:
           java -version 2>&1 | tee evidence/java-version.txt
           bash tests/domain-checks.sh 2>&1 | tee evidence/domain-checks.log
           python tests/sqlite-currency-checks.py | tee evidence/sqlite-host.log
+          python tests/payment-sqlite-checks.py | tee evidence/payment-sqlite-host.log
           set +e
-          bash gradlew --no-daemon --console=plain :app:assembleDebug :app:assembleDebugAndroidTest 2>&1 | tee evidence/assembleDebug.log
+          bash gradlew --no-daemon --console=plain :app:assembleDebug :app:assembleDebugAndroidTest :app:testDebugUnitTest 2>&1 | tee evidence/assembleDebug.log
           result=${PIPESTATUS[0]}
           echo "$result" | tee evidence/exit-code.txt
           if [ "$result" -eq 0 ]; then
@@ -76,6 +77,15 @@ jobs:
             adb shell am instrument -w -e mode currency com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks > evidence/currency-native.log
             cat evidence/currency-native.log
             grep -q LOCALCASH_CURRENCY_PASS evidence/currency-native.log
+            adb shell am instrument -w -e mode payment com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks > evidence/payment-native.log
+            cat evidence/payment-native.log
+            grep -q 'PASS: pago completo' evidence/payment-native.log
+            adb shell am instrument -w -e mode crud com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks > evidence/crud-native.log
+            cat evidence/crud-native.log
+            grep -q CRUD02_PASS evidence/crud-native.log
+            adb shell am instrument -w -e mode feedback com.aik1a.localcash.test/com.aik1a.localcash.FlowChecks > evidence/feedback-native.log
+            cat evidence/feedback-native.log
+            grep -q FEEDBACK_PASS evidence/feedback-native.log
             python tests/biometric-emulator.py prepare
             python tests/biometric-emulator.py enroll
             python tests/biometric-emulator.py security
@@ -91,6 +101,7 @@ jobs:
           path: |
             evidence/
             app/build/outputs/apk/debug/app-debug.apk
+            app/build/test-results/testDebugUnitTest/
           if-no-files-found: warn
 
 

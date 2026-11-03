@@ -68,6 +68,40 @@ if(a.length==0) h.onCreate(d); else h.onUpgrade(d,Integer.parseInt(a[0]),7); } }
             check(db.execute('SELECT monto FROM deudas').fetchone() == (5001,))
         check(not list(db.execute('PRAGMA foreign_key_check')))
         db.close()
+    # Direct upgrades must preserve historical money, paid debts and payment links.
+    for version in (5, 6):
+        for currency in ('USD', 'CLP', None):
+            db=sqlite3.connect(':memory:'); db.execute('PRAGMA foreign_keys=ON')
+            for statement in fresh:
+                if version == 5 and statement.startswith('CREATE TABLE compra_movimiento'): continue
+                if statement.startswith('CREATE TABLE deudas '):
+                    statement = statement.replace('monto >= 0', 'monto > 0')
+                db.execute(statement)
+            db.execute("INSERT INTO configuracion VALUES(1,'USD')")
+            db.execute("INSERT INTO cuentas VALUES(1,'Anterior',10000,?)", (currency,))
+            db.execute("INSERT INTO movimientos(id,cuenta_id,tipo,monto,fecha,latitud,longitud) VALUES(1,1,'EGRESO',1000,1234,-33.45,-70.66)")
+            db.execute("INSERT INTO contactos VALUES(1,'Valentina')")
+            db.execute("INSERT INTO compras VALUES(1,'Compra','REALIZADA',1234,1,?)", (currency,))
+            db.execute("INSERT INTO detalle_compra VALUES(1,1,'Pan',1,1000)")
+            db.execute("INSERT INTO deudas VALUES(1,1,500,'PAGADA')")
+            db.execute("INSERT INTO reparto_usuario VALUES(1,500)")
+            if version == 6: db.execute('INSERT INTO compra_movimiento VALUES(1,1)')
+            tables = [row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")]
+            before = {table:list(db.execute(f'SELECT * FROM {table}')) for table in tables}
+            db.commit()
+            with db:
+                for statement in sql(version): db.execute(statement)
+            for table, rows in before.items(): check(rows == list(db.execute(f'SELECT * FROM {table}')))
+            check(db.execute('PRAGMA integrity_check').fetchone() == ('ok',))
+            check(not list(db.execute('PRAGMA foreign_key_check')))
+            check(db.execute('SELECT count(*) FROM compra_movimiento').fetchone()[0] == (1 if version == 6 else 0))
+            db.execute("INSERT INTO contactos VALUES(2,'Sin deuda')")
+            db.execute("INSERT INTO deudas VALUES(1,2,0,'PENDIENTE')")
+            check(db.execute('SELECT monto FROM deudas WHERE contacto_id=2').fetchone() == (0,))
+            reject(db,"UPDATE deudas SET monto=-1 WHERE contacto_id=2")
+            if currency == 'CLP': reject(db,"UPDATE deudas SET monto=501 WHERE contacto_id=1")
+            if currency is not None: reject(db,"UPDATE compras SET divisa=NULL WHERE id=1")
+            db.close()
     db=sqlite3.connect(':memory:');db.execute('PRAGMA foreign_keys=ON')
     for statement in fresh: db.execute(statement)
     db.execute("INSERT INTO configuracion VALUES(1,'CLP')")
@@ -90,4 +124,4 @@ if(a.length==0) h.onCreate(d); else h.onUpgrade(d,Integer.parseInt(a[0]),7); } }
     reject(db,"UPDATE cuentas SET divisa=NULL WHERE id=1")
     reject(db,"UPDATE compras SET divisa='USD' WHERE id=1")
     check(not list(db.execute('PRAGMA foreign_key_check')))
-    print(f'PASS: {checks} host SQLite checks; actual Java DDL, fresh install and migrations v1-v4→v7.')
+    print(f'PASS: {checks} host SQLite checks; actual Java DDL, fresh install and migrations v1-v6→v7.')
