@@ -3,6 +3,8 @@ import pathlib
 import re
 import subprocess
 import xml.etree.ElementTree as ET
+import importlib
+ui = importlib.import_module('biometric-emulator')
 folder = pathlib.Path('evidence')
 def adb(*args):
     subprocess.run(['adb',*args],check=True)
@@ -25,15 +27,16 @@ tap(main,text='Efectivo')
 seen=set()
 for index in range(5):
     tree=screen('location-restarted-history-'+str(index))
-    for n in tree.iter('node'):
-        value=n.get('text','')
+    history=next(n for n in tree.iter('node') if n.get('resource-id')=='com.aik1a.localcash:id/movimientos')
+    for row in history:
+        value=' | '.join(n.get('text','') for n in row.iter('node'))
         for label in ['GPS simulado','Sin consentimiento','Permiso denegado','Consentimiento retirado','GPS desactivado','Sin fix']:
             if label in value:
                 assert (('Ubicación: '+coordinates) in value) if label=='GPS simulado' else ('Sin ubicación' in value)
                 seen.add(label)
     adb('shell','screencap','-p','/sdcard/location-restart.png')
     adb('pull','/sdcard/location-restart.png',str(folder/('location-restarted-'+str(index)+'.png')))
-    adb('shell','input','swipe','160','540','160','240','350')
+    ui.scroll_forward(tree)
 assert len(seen)==6,seen
 (folder/'location-restart-checks.log').write_text('PASS: force-stop y relanzamiento; historial con un par geográfico, cinco nuevos sin ubicación y saldo 131,50 conservados.\n')
 print('LOCALCASH_LOCATION_RESTART_PASS')
