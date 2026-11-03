@@ -3,10 +3,13 @@ import importlib.util,os,pathlib,re,signal,subprocess,sys,time
 spec=importlib.util.spec_from_file_location('bio','tests/biometric-emulator.py');bio=importlib.util.module_from_spec(spec);spec.loader.exec_module(bio)
 try:
     e=pathlib.Path('evidence');e.mkdir(exist_ok=True)
-    bio.adb('shell','pm','grant',bio.package,'android.permission.ACCESS_FINE_LOCATION')
     bio.adb('shell','pm','grant',bio.package,'android.permission.ACCESS_COARSE_LOCATION')
+    bio.adb('shell','pm','grant',bio.package,'android.permission.ACCESS_FINE_LOCATION')
     bio.adb('shell','appops','set',bio.package,'android:mock_location','allow')
-    bio.adb('shell','cmd','location','set-location-enabled','true')
+    if int(bio.adb('shell','getprop','ro.build.version.sdk').strip()) < 28:
+        bio.adb('shell','settings','put','secure','location_mode','3')
+    else:
+        bio.adb('shell','cmd','location','set-location-enabled','true')
     network_commands=[]
     for args in [('shell','svc','wifi','disable'),('shell','svc','data','disable')]:
      try:r=subprocess.run(['adb',*args],capture_output=True,text=True,timeout=20)

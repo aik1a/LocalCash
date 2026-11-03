@@ -32,6 +32,10 @@ jobs:
         with:
           packages: platform-tools
       - run: sdkmanager "platforms;android-36.1" "build-tools;36.0.0"
+      - uses: actions/cache@v4
+        with:
+          path: app/build/generated/offlineMaps
+          key: mapsforge-world-chile-v5-2026-11-03
       - name: Build exact pushed SHA and tests
         shell: bash
         run: |
@@ -92,6 +96,7 @@ jobs:
             evidence/
             app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: warn
+
 
 
 

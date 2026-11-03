@@ -45,7 +45,7 @@ public final class MapChecks {
             }});feed.start();
             context.deleteDatabase("localcash.db");long cuenta;
             try(LocalCashDbHelper helper=new LocalCashDbHelper(context)){
-                new ConfiguracionRepository(helper).configurarPrimeraVez(Divisa.CLP);
+                new ConfiguracionRepository(helper).configurarPrimeraVez(Divisa.USD);
                 MovimientoService service=new MovimientoService(helper);cuenta=service.crearCuenta("Demo mapa",10000);
                 service.registrar(cuenta,Movimiento.Tipo.INGRESO,100,"La Florida",new Ubicacion(-33.55,-70.58));
                 service.registrar(cuenta,Movimiento.Tipo.EGRESO,50,"París",new Ubicacion(48.8566,2.3522));

@@ -8,6 +8,6 @@ Se conserva osmdroid 6.1.18 y se incorpora su módulo oficial `org.osmdroid:osmd
 
 Un archivo mundial básico no tiene todas las calles. La cobertura navegable es mundial; el detalle depende de los paquetes incluidos o importados. No se limita el desplazamiento a un rectángulo ni se rechazan marcadores exteriores. GPS usa permisos Android y datos frescos, no coordenadas prefijadas o caché presentada como actual.
 
-Los archivos grandes se obtienen durante la compilación; se guardan SHA256/URL/licencia en los assets y se cachean en CI. Primer build requiere Python3/internet; builds posteriores reutilizan recursos. El APK contiene los datos para primera apertura sin red. Esto incrementa significativamente su tamaño: archivo Chile aproximadamente 651 MB. Los proveedores no reciben coordenadas ni datos financieros.
+Los archivos grandes se obtienen durante la compilación; se guardan SHA256/URL/licencia en los assets y se cachean en CI. Primer build requiere internet; builds posteriores reutilizan recursos. El APK contiene los datos para primera apertura sin red. Esto incrementa significativamente su tamaño: archivo Chile aproximadamente 651 MB. Los proveedores no reciben coordenadas ni datos financieros.
 
 Fuentes: https://github.com/osmdroid/osmdroid/tree/osmdroid-parent-6.1.18/osmdroid-mapsforge ; https://download.mapsforge.org/ ; https://www.openstreetmap.org/copyright .

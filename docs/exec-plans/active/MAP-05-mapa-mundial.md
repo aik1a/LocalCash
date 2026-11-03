@@ -9,7 +9,7 @@ Main c28a27b87aeeb092a936b8ba6b05b83404ac1c13: atlas raster limitado al centro d
 ## Alcance y diseño
 - Adaptador oficial osmdroid-mapsforge 6.1.18, misma versión que osmdroid actual.
 - Base mundial Mapsforge de baja resolución y Chile detallado incluidos en APK. Ningún permiso INTERNET ni API remota en ejecución.
-- Preparación de recursos durante compilación mediante script Python: URLs y SHA256 guardados en provenance.json. Assets generados grandes, no versionados en Git.
+- Preparación de recursos durante compilación mediante Gradle/Groovy (script Python de CI equivalente): URLs y SHA256 guardados en provenance.json. Assets generados grandes, no versionados en Git.
 - Copia privada de mapas en hilo de archivos; validación SHA256 inicial y cabecera Mapsforge.
 - Selector Android para importar localmente otro .map; validación y sustitución atómica.
 - LocationManager foreground, fix fresco con timeout, permisos y cancelación al pausar.

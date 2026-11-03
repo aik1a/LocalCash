@@ -1,5 +1,5 @@
 """Download licensed vector data at build time only; Android never uses the network."""
-import hashlib, json, os, pathlib, shutil, sys, urllib.request
+import hashlib, json, os, pathlib, shutil, struct, sys, urllib.request
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = ROOT / 'app/build/generated/offlineMaps/maps/vector'
 SOURCES = {
@@ -13,7 +13,8 @@ def digest(path):
     return h.hexdigest()
 def valid(path):
     if not path.exists() or path.stat().st_size < 1000: return False
-    with path.open('rb') as f: return f.read(20) == b'mapsforge binary OSM'
+    with path.open('rb') as f: header = f.read(36)
+    return len(header) == 36 and header[:20] == b'mapsforge binary OSM' and struct.unpack('>q', header[28:36])[0] == path.stat().st_size
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     records = []

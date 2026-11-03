@@ -103,7 +103,11 @@ public final class MapaActivity extends ActividadProtegida {
                     if (!visible || mapa == null) return;
                     if (posicion != null) mapa.getOverlays().remove(posicion);
                     posicion = new Marker(mapa); posicion.setPosition(punto); posicion.setTitle("Mi ubicación"); posicion.setSnippet("Posición actual del teléfono");
-                    posicion.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM); mapa.getOverlays().add(posicion);
+                    android.graphics.drawable.GradientDrawable puntoActual = new android.graphics.drawable.GradientDrawable();
+                    int tamano = Math.round(18 * getResources().getDisplayMetrics().density);
+                    puntoActual.setShape(android.graphics.drawable.GradientDrawable.OVAL); puntoActual.setColor(0xff1565c0);
+                    puntoActual.setStroke(Math.max(2,tamano/8),0xffffffff); puntoActual.setSize(tamano,tamano); posicion.setIcon(puntoActual);
+                    posicion.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_CENTER); mapa.getOverlays().add(0,posicion);
                     mapa.getController().setZoom(15.0); mapa.getController().setCenter(punto); mapa.invalidate();
                     estadoUbicacion("Mi ubicación: " + punto.getLatitude() + ", " + punto.getLongitude());
                 }
