@@ -189,7 +189,7 @@ public final class FlowChecks extends Instrumentation {
             clickText(Integer.toString(year));
             clickText(Integer.toString(year + 1));
             clickText("OK"); clickId("guardar_compra");
-            assertTrue(nodeId("compra_info").getText().toString().startsWith("PLANIFICADA"), "Estado planificada visible"); nodeText("Contacto: Sin contacto"); nodeText("Total: USD 50,00");
+            assertTrue(nodeId("compra_info").getText().toString().startsWith("Planificada"), "Estado planificada visible"); nodeText("Contacto: Sin contacto"); nodeText("Total: USD 50,00");
             clickId("volver"); nodeText("Compra realizada"); nodeText("Compra planificada");
             clickText("Compra realizada"); nodeText("Total: USD 232,00"); nodeText("Contacto: Ana");
             log.append("PASS CON/BUY-01/02/03: dos contactos por UI, compra realizada con dos ítems y total 232,00 vinculada a Ana; planificada con fecha futura sin contacto; historial y detalles.\n");
