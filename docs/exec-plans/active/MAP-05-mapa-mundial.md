@@ -25,8 +25,8 @@ Descarga mundial detallada dentro de la app, servidor/backend, geocodificación 
 - [x] Implementar proveedor vectorial y preparación de datos.
 - [x] Implementar navegación mundial, Mi ubicación e importación.
 - [x] Sustituir pruebas que aceptaban el rechazo territorial por pruebas mundiales.
-- [ ] Compilar app/instrumentación y ejecutar unitarias.
-- [ ] Ejecutar pruebas offline/GPS y regresión en emulador.
+- [x] Compilar app/instrumentación y ejecutar unitarias.
+- [ ] Completar suite ampliada en emulador; GPS La Florida/París y cartografía real La Florida/Tokio/Europa PASS sin conexión en CI41724571305.
 - [ ] Registrar resultados reales y entregar APK/PR.
 
 ## Validación
@@ -36,4 +36,7 @@ CI dedicado: prepare_vector_maps.py, tests/domain-checks.sh, assembleDebug, asse
 El usuario elige base mundial offline con paquetes por zonas frente a calles mundiales por internet. Incluir Chile detallado produce un APK grande (mapa fuente aproximadamente 651 MB). Se informa esta consecuencia. Los datos OSM se descargan desde servidor de paquetes vectoriales permitido, nunca desde tile.openstreetmap.org. La adquisición inicial durante build sí necesita internet; ejecución Android no.
 
 ## Resultado
-En implementación y validación; no se declara aceptación hasta obtener resultados del build y emulador.
+Implementación compilada; GPS y cartografía offline comprobados. La suite ampliada CI41725781487 sigue en ejecución; no se declara aceptación independiente ni merge. Ver handoff MAP-05.
+
+### Corrección de carga inicial
+El primer encuadre usaba mapa.post sin garantizar layout y margen80px fijo. En una vista pequeña esto podía generar dimensiones negativas, zoom NaN y bloqueo. d22ec16 espera layout válido y limita el margen al20% de la menor dimensión. La ejecución posterior confirmó apertura/GPS/cartografía. La tolerancia a zoom5 se adaptó a la resolución de la proyección; los resultados completos permanecen pendientes.
