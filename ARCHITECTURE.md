@@ -207,3 +207,8 @@ La ubicación de un movimiento es opcional. En dominio se representa mediante `U
 
 No introducir patrones o capas únicamente para demostrar conocimiento. Cada abstracción debe resolver un problema observable del proyecto.
 </details>
+
+
+## Corrección MAP-05 — sustituye los límites cartográficos anteriores
+
+La restricción a Santiago Centro queda sustituida en esta rama por cartografía vectorial: base mundial y detalle de Chile incluidos, archivo regional adicional importable. osmdroid conserva el visor y usa su adaptador Mapsforge 6.1.18. LocationManager centra un fix actual con permisos/timeout; carga/importación se ejecutan fuera del hilo UI, manteniendo el root de seguridad. SQLite/biometría sin cambios. La base mundial tiene detalle general; otras calles requieren paquetes regionales. Ver [ADR-005](docs/design/decisions/ADR-005-mapa-mundial-offline.md).

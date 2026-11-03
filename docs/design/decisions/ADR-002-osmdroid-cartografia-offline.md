@@ -48,3 +48,8 @@ El proyecto requiere `MapView` y marcadores georreferenciados, demostrables **of
 - OSMF, prohibición explícita de archivo/prefetch de tiles públicos: https://operations.osmfoundation.org/policies/tiles/
 - OSMF, atribución y ODbL: https://osmfoundation.org/wiki/Licence/Attribution_Guidelines y https://www.openstreetmap.org/copyright
 - Overpass QL: https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL
+
+
+## Sustitución por MAP-05, 2026-11-03
+
+La limitación a Santiago Centro era una decisión interna de demostración, no un requisito del docente. El usuario solicita y autoriza navegación mundial offline y posición actual. ADR-005 sustituye esa restricción en la rama de corrección; el texto anterior conserva únicamente valor histórico. No usar los tests de rechazo territorial anteriores como criterio de éxito del nuevo mapa.

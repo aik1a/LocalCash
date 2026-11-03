@@ -40,3 +40,9 @@ Consultar primero:
 `ORQUESTADOR → TASK BRIEF → CODIFICADOR → BUILD/TEST → HANDOFF → AUDITOR → ORQUESTADOR`
 
 GitHub es la fuente de verdad mutable del proyecto. Library conserva un espejo persistente de documentos y artefactos importantes.
+
+## Corrección MAP-05: mapa mundial offline
+
+La rama de corrección incorpora base mundial offline, calles de Chile e importación local de archivos Mapsforge para otras zonas. Al abrir, solicita la ubicación actual; el botón se llama **Mi ubicación**. No hay bloqueo a Santiago Centro. La base mundial es general: el detalle de calles requiere el paquete regional correspondiente.
+
+Primer build: Python 3 e internet para preparar los archivos cartográficos, además del SDK/Gradle. `bash gradlew :app:assembleDebug` ejecuta la preparación automáticamente y reutiliza los assets generados. El APK incluye los datos y funciona sin conexión desde primera apertura. El archivo Chile ocupa aproximadamente 651 MB; se necesita espacio adicional durante instalación. Procedencia/hashes en `assets/maps/vector/provenance.json` del APK. Ver [ADR-005](docs/design/decisions/ADR-005-mapa-mundial-offline.md).
