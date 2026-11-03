@@ -4,13 +4,13 @@ import android.app.AlertDialog;
 import android.graphics.Rect;
 import android.view.View;
 import android.widget.TextView;
+import com.aik1a.localcash.R;
 import com.aik1a.localcash.domain.Dinero;
 import com.aik1a.localcash.domain.Divisa;
 import android.database.sqlite.SQLiteException;
 import android.widget.EditText;
 import android.widget.Toast;
 
-/** Formularios pequeños compartidos para correcciones de nombres y borrado confirmado. */
 final class AccionesUI {
     interface GuardarNombre { void guardar(String nombre); }
     private AccionesUI() { }
@@ -28,7 +28,7 @@ final class AccionesUI {
         aviso(activity, titulo, mensaje, () -> { });
     }
     static void aviso(ActividadProtegida activity, String titulo, String mensaje, Runnable alCerrar) {
-        AlertDialog dialog = new AlertDialog.Builder(activity).setTitle(titulo).setMessage(mensaje)
+        AlertDialog dialog = new AlertDialog.Builder(CuentasVisual.contexto(activity)).setTitle(titulo).setMessage(mensaje)
                 .setPositiveButton("Entendido", null).create();
         dialog.setOnDismissListener(ignored -> alCerrar.run());
         activity.protegerDialogo(dialog).show();
@@ -36,7 +36,7 @@ final class AccionesUI {
     static void exito(android.content.Context contexto, String mensaje) {
         Toast.makeText(contexto, mensaje, Toast.LENGTH_SHORT).show();
     }
-    /** Validación de entrada compartida; los servicios mantienen las invariantes persistentes. */
+
     static Long leerMonto(EditText campo, Divisa divisa, boolean permiteCero, String descripcion) {
         campo.setError(null);
         if (campo.getText().toString().trim().isEmpty()) { errorCampo(campo, "Ingresa " + descripcion + "."); return null; }
@@ -50,9 +50,9 @@ final class AccionesUI {
         } catch (IllegalArgumentException ex) { errorCampo(campo, "Revisa " + descripcion + ": " + ex.getMessage()); return null; }
     }
     static void nombre(ActividadProtegida activity, String titulo, String actual, GuardarNombre guardar, Runnable despues) {
-        EditText campo = new EditText(activity); campo.setSingleLine(true); campo.setText(actual);
+        EditText campo = new EditText(CuentasVisual.contexto(activity)); campo.setSingleLine(true); campo.setText(actual);
         campo.setContentDescription("Nombre"); campo.setSelectAllOnFocus(true);
-        AlertDialog dialog = new AlertDialog.Builder(activity).setTitle(titulo).setView(campo)
+        AlertDialog dialog = new AlertDialog.Builder(CuentasVisual.contexto(activity)).setTitle(titulo).setView(CuentasVisual.enmarcarNombre(activity, campo))
                 .setNegativeButton("Cancelar", null).setPositiveButton("Guardar", null).create();
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             try { guardar.guardar(campo.getText().toString()); dialog.dismiss(); exito(activity, "Nombre actualizado."); despues.run(); }
@@ -62,7 +62,7 @@ final class AccionesUI {
         activity.protegerDialogo(dialog).show();
     }
     static void eliminar(ActividadProtegida activity, String mensaje, Runnable eliminar, Runnable despues) {
-        activity.protegerDialogo(new AlertDialog.Builder(activity).setTitle("Confirmar eliminación")
+        activity.protegerDialogo(new AlertDialog.Builder(CuentasVisual.contexto(activity), R.style.Cuentas_DialogoPeligro).setTitle("Confirmar eliminación")
                 .setMessage(mensaje).setNegativeButton("Cancelar", null).setPositiveButton("Eliminar", (dialog, which) -> {
                     try { eliminar.run(); exito(activity, "Eliminado correctamente."); despues.run(); }
                     catch (IllegalArgumentException ex) { aviso(activity, "No se puede eliminar", ex.getMessage()); }

@@ -11,7 +11,6 @@ import com.aik1a.localcash.data.*;
 import com.aik1a.localcash.domain.*;
 import java.util.*;
 
-/** Ejecutar únicamente en emulador descartable: crea fixtures y elimina su base de pruebas. */
 public final class CurrencyChecks {
     private static int checks;
     private static void check(boolean condition, String message) {
@@ -40,7 +39,7 @@ public final class CurrencyChecks {
                 reject(() -> config.configurarPrimeraVez(Divisa.USD));
                 check(config.buscarDivisa() == Divisa.CLP, "Configuración única");
                 MovimientoService movimientos = new MovimientoService(helper);
-                cuentaClp = movimientos.crearCuenta("Efectivo", 10000); // Usa preferencia principal.
+                cuentaClp = movimientos.crearCuenta("Efectivo", 10000);
                 cuentaUsd = movimientos.crearCuenta("Dólares", 2550, Divisa.USD);
                 check(movimientos.buscarCuenta(cuentaClp).getDivisa() == Divisa.CLP, "Cuenta hereda principal");
                 check(movimientos.buscarCuenta(cuentaUsd).getDivisa() == Divisa.USD, "Otra moneda por cuenta");

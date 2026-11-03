@@ -64,15 +64,27 @@ public final class CuentaActivity extends ActividadProtegida {
             DateFormat fecha = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
             for (Movimiento movimiento : historial) {
                 Map<String, String> fila = new HashMap<>();
-                fila.put("monto", (movimiento.getTipo() == Movimiento.Tipo.INGRESO ? "Ingreso" : "Egreso") + " · " + Dinero.formatear(movimiento.getMontoConSigno(), divisa));
-                fila.put("detalle", fecha.format(new Date(movimiento.getFecha()))
-                        + (movimiento.getDescripcion().isEmpty() ? "" : " · " + movimiento.getDescripcion())
-                        + (movimiento.tieneUbicacion() ? "\nUbicación: " + movimiento.getUbicacion().getLatitud()
-                        + ", " + movimiento.getUbicacion().getLongitud() : "\nSin ubicación"));
+                String tipo = movimiento.getTipo() == Movimiento.Tipo.INGRESO ? "Ingreso" : "Egreso";
+                fila.put("titulo", movimiento.getDescripcion().isEmpty() ? tipo : movimiento.getDescripcion());
+                fila.put("fecha", tipo + " · " + fecha.format(new Date(movimiento.getFecha())));
+                fila.put("monto", Dinero.formatear(movimiento.getMontoConSigno(), divisa));
+                fila.put("detalle", movimiento.tieneUbicacion() ? "Ubicación: " + movimiento.getUbicacion().getLatitud()
+                        + ", " + movimiento.getUbicacion().getLongitud() : "Sin ubicación");
                 filas.add(fila);
             }
-            lista.setAdapter(new SimpleAdapter(this, filas, android.R.layout.simple_list_item_2,
-                    new String[]{"monto", "detalle"}, new int[]{android.R.id.text1, android.R.id.text2}));
+            lista.setAdapter(new SimpleAdapter(this, filas, R.layout.row_movimiento,
+                    new String[]{"monto", "detalle", "titulo", "fecha"},
+                    new int[]{android.R.id.text1, android.R.id.text2, R.id.titulo_movimiento, R.id.fecha_movimiento}) {
+                @Override public View getView(int position, View convertView, android.view.ViewGroup parent) {
+                    View fila = super.getView(position, convertView, parent);
+                    boolean ingreso = historial.get(position).getTipo() == Movimiento.Tipo.INGRESO;
+                    ((TextView) fila.findViewById(android.R.id.text1)).setTextColor(getColor(
+                            ingreso ? R.color.cuentas_ingreso : R.color.cuentas_error));
+                    ((ImageView) fila.findViewById(R.id.icono_movimiento)).setImageResource(
+                            ingreso ? R.drawable.cuentas_ic_ingreso : R.drawable.cuentas_ic_egreso);
+                    return fila;
+                }
+            });
         } catch (IllegalArgumentException | SQLiteException | ArithmeticException ex) {
             Toast.makeText(this, "No se pudo abrir la cuenta.", Toast.LENGTH_LONG).show();
             finish();
@@ -82,7 +94,7 @@ public final class CuentaActivity extends ActividadProtegida {
     private void opcionesCuenta() {
         try {
             Cuenta cuenta = service.buscarCuenta(cuentaId);
-            protegerDialogo(new AlertDialog.Builder(this).setTitle(cuenta.getNombre())
+            protegerDialogo(new AlertDialog.Builder(CuentasVisual.contexto(this)).setTitle(cuenta.getNombre())
                     .setItems(new String[]{"Cambiar nombre", "Eliminar cuenta"}, (dialog, opcion) -> {
                         if (opcion == 0) AccionesUI.nombre(this, "Cambiar nombre de la cuenta", cuenta.getNombre(),
                                 nombre -> service.renombrarCuenta(cuentaId, nombre), this::actualizar);
@@ -96,7 +108,7 @@ public final class CuentaActivity extends ActividadProtegida {
     private void mostrarFormulario() {
         if (formulario != null && formulario.isShowing()) return;
         if (divisa == null) { actualizar(); return; }
-        View form = getLayoutInflater().inflate(R.layout.dialog_movimiento, null);
+        View form = getLayoutInflater().cloneInContext(CuentasVisual.contexto(this)).inflate(R.layout.dialog_movimiento, null);
         campos = form; ubicacion = null;
         CheckBox incluir = form.findViewById(R.id.incluir_ubicacion);
         captura = new CapturaUbicacion(this, new CapturaUbicacion.Resultado() {
@@ -121,7 +133,7 @@ public final class CuentaActivity extends ActividadProtegida {
         DivisasUI.ejemplo(monto, divisa);
         EditText descripcion = form.findViewById(R.id.descripcion);
         RadioGroup tipo = form.findViewById(R.id.tipo);
-        AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Registrar movimiento")
+        AlertDialog dialog = new AlertDialog.Builder(CuentasVisual.contexto(this)).setTitle("Registrar movimiento")
                 .setView(form).setNegativeButton("Cancelar", null).setPositiveButton("Guardar", null).create();
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             int elegido = tipo.getCheckedRadioButtonId();
@@ -131,7 +143,7 @@ public final class CuentaActivity extends ActividadProtegida {
             Long montoIngresado = AccionesUI.leerMonto(monto, divisa, false, "el monto del movimiento");
             if (montoIngresado == null) return;
             if (incluir.isChecked() && ubicacion == null) {
-                protegerDialogo(new AlertDialog.Builder(this).setTitle("Aún no hay ubicación")
+                protegerDialogo(new AlertDialog.Builder(CuentasVisual.contexto(this)).setTitle("Aún no hay ubicación")
                         .setMessage("Puedes seguir esperando o guardar el movimiento sin ubicación.")
                         .setNegativeButton("Volver", null)
                         .setPositiveButton("Guardar sin ubicación", (aviso, opcion) -> {

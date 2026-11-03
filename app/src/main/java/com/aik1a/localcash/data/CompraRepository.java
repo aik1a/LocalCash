@@ -89,7 +89,7 @@ public final class CompraRepository {
             return c.moveToFirst() ? c.getLong(0) : null;
         }
     }
-    /** Invocado dentro de la transacción de pago del service. */
+
     public void registrarPago(long compraId, long movimientoId) {
         ContentValues enlace = new ContentValues();
         enlace.put("compra_id", compraId); enlace.put("movimiento_id", movimientoId);

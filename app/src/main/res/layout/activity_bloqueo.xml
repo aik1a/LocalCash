@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/raiz_bloqueo" android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:gravity="center" android:padding="24dp">
-    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="LocalCash bloqueado" android:textSize="24sp" />
-    <TextView android:id="@+id/estado_acceso" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="Autentícate para acceder a LocalCash." android:paddingTop="16dp" android:accessibilityLiveRegion="polite" />
-    <Button android:id="@+id/autenticar" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Reintentar autenticación" />
-    <Button android:id="@+id/salir" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Salir" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/raiz_bloqueo" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="24dp" android:background="@drawable/cuentas_fondo" android:theme="@style/ThemeOverlay.LocalCash.Cuentas">
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center_vertical">
+            <ImageView android:layout_width="56dp" android:layout_height="56dp" android:src="@drawable/cuentas_ic_wallet"
+                android:padding="16dp" android:background="@drawable/cuentas_secundario" android:layout_marginBottom="24dp" android:importantForAccessibility="no" />
+            <TextView style="@style/Cuentas.Texto" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="LocalCash" android:textColor="@color/cuentas_lavanda" android:fontFamily="sans-serif-medium" />
+            <TextView style="@style/Cuentas.Titulo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="LocalCash bloqueado" android:accessibilityHeading="true" />
+            <TextView android:id="@+id/estado_acceso" style="@style/Cuentas.Texto" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Autentícate para acceder a LocalCash." android:padding="20dp" android:background="@drawable/cuentas_vidrio"
+                android:layout_marginTop="16dp" android:layout_marginBottom="24dp" android:accessibilityLiveRegion="polite" />
+            <Button android:id="@+id/autenticar" style="@style/Cuentas.Boton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Reintentar autenticación" />
+            <Button android:id="@+id/salir" style="@style/Cuentas.BotonSecundario" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Salir" android:layout_marginTop="12dp" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

@@ -8,7 +8,6 @@ public final class Cuenta {
     private final long saldoInicial;
     private final Divisa divisa;
 
-    /** Reconstrucción de registros históricos aún sin divisa. */
     public Cuenta(long id, String nombre, long saldoInicial) { this(id, nombre, saldoInicial, null); }
 
     public Cuenta(long id, String nombre, long saldoInicial, Divisa divisa) {

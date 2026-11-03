@@ -89,7 +89,7 @@ public final class CompraDetalleActivity extends ActividadProtegida {
             Compra compra = service.buscarCompra(compraId());
             List<Cuenta> cuentas = service.listarCuentasPago(compraId());
             if (cuentas.isEmpty()) {
-                protegerDialogo(new AlertDialog.Builder(this).setTitle("Necesitas una cuenta en " + compra.getDivisa().name())
+                protegerDialogo(new AlertDialog.Builder(CuentasVisual.contexto(this)).setTitle("Necesitas una cuenta en " + compra.getDivisa().name())
                         .setMessage("Crea una cuenta con la misma moneda desde la pantalla de cuentas y vuelve a esta compra.")
                         .setPositiveButton("Entendido", null).create()).show();
                 return;
@@ -97,7 +97,7 @@ public final class CompraDetalleActivity extends ActividadProtegida {
             String[] nombres = new String[cuentas.size()];
             for (int i = 0; i < cuentas.size(); i++) nombres[i] = cuentas.get(i).getNombre()
                     + " · " + Dinero.formatear(new MovimientoService(helper).calcularSaldo(cuentas.get(i).getId()), compra.getDivisa());
-            protegerDialogo(new AlertDialog.Builder(this).setTitle("¿Desde qué cuenta pagaste?")
+            protegerDialogo(new AlertDialog.Builder(CuentasVisual.contexto(this)).setTitle("¿Desde qué cuenta pagaste?")
                     .setItems(nombres, (dialog, posicion) -> confirmarPago(compra, cuentas.get(posicion)))
                     .setNegativeButton("Cancelar", null).create()).show();
         } catch (IllegalArgumentException | ArithmeticException | SQLiteException ex) {
@@ -105,7 +105,7 @@ public final class CompraDetalleActivity extends ActividadProtegida {
         }
     }
     private void confirmarPago(Compra compra, Cuenta cuenta) {
-        AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Confirmar pago")
+        AlertDialog dialog = new AlertDialog.Builder(CuentasVisual.contexto(this)).setTitle("Confirmar pago")
                 .setMessage("Se descontará " + Dinero.formatear(compra.calcularTotal(), compra.getDivisa())
                         + " de " + cuenta.getNombre() + ". Confirma solo si pagaste el total y aún no registraste este gasto como movimiento. "
                         + "Las deudas del reparto quedan aparte.")

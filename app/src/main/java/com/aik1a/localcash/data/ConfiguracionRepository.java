@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import com.aik1a.localcash.domain.Divisa;
 
-/** Una sola preferencia persistente, sin duplicar estado en SharedPreferences. */
 public final class ConfiguracionRepository {
     private final LocalCashDbHelper helper;
     public ConfiguracionRepository(LocalCashDbHelper helper) { this.helper = helper; }
@@ -27,3 +26,4 @@ public final class ConfiguracionRepository {
         return divisa;
     }
 }
+

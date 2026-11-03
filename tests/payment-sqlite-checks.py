@@ -1,4 +1,3 @@
-"""Comprueba el DDL Java real y la migración aditiva v5→v6 sobre SQLite del host."""
 import base64, pathlib, sqlite3, subprocess, tempfile
 
 root = pathlib.Path(__file__).resolve().parents[1]

@@ -65,11 +65,11 @@ public final class NuevaCompraActivity extends ActividadProtegida {
             }
             public void onNothingSelected(AdapterView<?> parent) { }
         });
-        estado.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"Planificada", "Realizada"}));
+        estado.setAdapter(new ArrayAdapter<>(estado.getContext(), android.R.layout.simple_spinner_dropdown_item, new String[]{"Planificada", "Realizada"}));
         try {
             contactos = service.listarContactos(); List<String> opciones = new ArrayList<>(); opciones.add("Sin contacto");
             for (Contacto c : contactos) opciones.add(c.getNombre());
-            contacto.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, opciones));
+            contacto.setAdapter(new ArrayAdapter<>(contacto.getContext(), android.R.layout.simple_spinner_dropdown_item, opciones));
         } catch (SQLiteException ex) { Toast.makeText(this, "No se pudieron cargar los contactos.", Toast.LENGTH_LONG).show(); finish(); return; }
         fecha = saved == null ? System.currentTimeMillis() : saved.getLong("fecha");
         if (saved != null) {
@@ -97,7 +97,7 @@ public final class NuevaCompraActivity extends ActividadProtegida {
     }
     private void elegirFecha() {
         Calendar c = Calendar.getInstance(); c.setTimeInMillis(fecha);
-        protegerDialogo(new DatePickerDialog(this, (view, year, month, day) -> {
+        protegerDialogo(new DatePickerDialog(CuentasVisual.contexto(this), R.style.Cuentas_Dialogo, (view, year, month, day) -> {
             Calendar elegida = Calendar.getInstance(); elegida.clear(); elegida.set(year, month, day);
             fecha = elegida.getTimeInMillis(); mostrarFecha();
         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH))).show();

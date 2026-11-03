@@ -1,4 +1,3 @@
-"""Ejecuta el DDL real de LocalCashDbHelper sobre SQLite del host; no sustituye Android."""
 import base64
 import pathlib
 import sqlite3
@@ -31,7 +30,7 @@ if(a.length==0) h.onCreate(d); else h.onUpgrade(d,Integer.parseInt(a[0]),7); } }
         output = subprocess.check_output(['java','-cp',str(tmp),'Emit',*map(str,args)],text=True)
         return [base64.b64decode(line).decode() for line in output.splitlines()]
     fresh = sql()
-    legacy = fresh[:10]  # v4 DDL ends after both optional coordinate columns; first 3/7/8 are v1/v2/v3.
+    legacy = fresh[:10]
     assert legacy[-1].startswith('ALTER TABLE movimientos ADD COLUMN longitud'), legacy
     checks = 0
     def check(value):

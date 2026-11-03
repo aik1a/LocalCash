@@ -8,7 +8,6 @@ import org.osmdroid.tileprovider.util.SimpleRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.BitmapTileSourceBase;
 import java.io.File;
 
-/** Constructor XML sin MapTileProviderBasic ni descargador: archivos locales exclusivamente. */
 public final class MapaLocalView extends MapView {
     public MapaLocalView(Context context,AttributeSet attrs) {
         super(context,new OfflineTileProvider(new SimpleRegisterReceiver(context),new File[]{AtlasOffline.archivo(context)}),null,attrs);
@@ -16,3 +15,4 @@ public final class MapaLocalView extends MapView {
         setTileSource(new BitmapTileSourceBase(AtlasOffline.FUENTE,14,16,256,".png","© OpenStreetMap contributors · ODbL") { });
     }
 }
+

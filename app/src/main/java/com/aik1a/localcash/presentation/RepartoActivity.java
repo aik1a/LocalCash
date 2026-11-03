@@ -144,7 +144,7 @@ public final class RepartoActivity extends ActividadProtegida {
                     + Dinero.formatear(deuda.getMonto(), divisa) + " · " + (deuda.getMonto() == 0 ? "Sin deuda" : "PAGADA".equals(deuda.getEstado()) ? "Pagada" : "Pendiente"));
             filas.addView(fila);
             if (deuda.getMonto() > 0) {
-                Button accion = new Button(this);
+                Button accion = (Button)getLayoutInflater().inflate(R.layout.row_accion, filas, false);
                 boolean pagada = "PAGADA".equals(deuda.getEstado());
                 accion.setText(pagada ? "Volver a pendiente: " + deuda.getContacto().getNombre() : "Marcar como pagada: " + deuda.getContacto().getNombre());
                 accion.setOnClickListener(v -> confirmarEstado(deuda, !pagada)); filas.addView(accion);
@@ -152,7 +152,7 @@ public final class RepartoActivity extends ActividadProtegida {
         }
     }
     private void confirmarEstado(Deuda deuda, boolean pagada) {
-        protegerDialogo(new AlertDialog.Builder(this).setTitle(pagada ? "Marcar deuda pagada" : "Volver a pendiente")
+        protegerDialogo(new AlertDialog.Builder(CuentasVisual.contexto(this)).setTitle(pagada ? "Marcar deuda pagada" : "Volver a pendiente")
                 .setMessage(deuda.getContacto().getNombre() + " · " + Dinero.formatear(deuda.getMonto(), divisa)
                         + ". Esta acción no modifica los saldos de tus cuentas.")
                 .setNegativeButton("Cancelar", null).setPositiveButton("Confirmar", (dialog, which) -> {

@@ -17,7 +17,6 @@ import java.io.*;
 import java.text.DateFormat;
 import java.util.*;
 
-/** Lectura de movimientos existentes: no captura GPS ni modifica SQLite. */
 public final class MapaActivity extends ActividadProtegida {
     private MapaLocalView mapa;
     private boolean reanudado;
@@ -66,9 +65,10 @@ public final class MapaActivity extends ActividadProtegida {
             attribution.setText(link);attribution.setMovementMethod(android.text.method.LinkMovementMethod.getInstance());
         } catch(IOException|IllegalArgumentException|SQLiteException|android.view.InflateException ex) {
             if(mapa!=null){mapa.onDetach();mapa=null;}
-            LinearLayout error=new LinearLayout(this);error.setOrientation(LinearLayout.VERTICAL);error.setPadding(24,24,24,24);error.setId(R.id.root);
-            TextView text=new TextView(this);text.setId(R.id.estado_mapa);text.setText("No se pudo abrir el mapa local. No se usarán mapas de Internet. "+(ex instanceof IOException?ex.getMessage():"Comprueba la cuenta y los archivos del atlas."));error.addView(text);
-            Button volver=new Button(this);volver.setId(R.id.volver);volver.setText("Volver a movimientos");volver.setOnClickListener(v->finish());error.addView(volver);setContentView(error);Pantalla.aplicarMargenes(error);
+            setContentView(R.layout.activity_mapa_error);
+            ((TextView)findViewById(R.id.estado_mapa)).setText("No se pudo abrir el mapa local. No se usarán mapas de Internet. "+(ex instanceof IOException?ex.getMessage():"Comprueba la cuenta y los archivos del atlas."));
+            findViewById(R.id.volver).setOnClickListener(v->finish());
+            Pantalla.aplicarMargenes(findViewById(R.id.root));
         }
     }
     @Override protected void onResume(){super.onResume();if(mapa!=null){mapa.onResume();reanudado=true;}}

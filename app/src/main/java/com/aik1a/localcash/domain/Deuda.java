@@ -1,6 +1,5 @@
 package com.aik1a.localcash.domain;
 
-/** Una asignación completa por compra/contacto. Sin pagos parciales en T05. */
 public final class Deuda {
     private final long compraId;
     private final Contacto contacto;

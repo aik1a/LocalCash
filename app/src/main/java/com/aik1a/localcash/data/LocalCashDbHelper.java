@@ -113,7 +113,6 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
         crearTriggersDeudas(db);
     }
 
-
     private void crearTriggerPrecisionCompra(SQLiteDatabase db) {
         db.execSQL("CREATE TRIGGER compras_precision_update BEFORE UPDATE OF divisa ON compras "
                 + "WHEN NEW.divisa IN ('CLP','JPY') AND (EXISTS "
@@ -130,7 +129,7 @@ public final class LocalCashDbHelper extends SQLiteOpenHelper {
         }
     }
     private void migrarDeudas(SQLiteDatabase db) {
-        // SQLiteOpenHelper ejecuta onUpgrade dentro de una transacción.
+
         db.execSQL("DROP TRIGGER IF EXISTS compras_precision_update");
         db.execSQL("DROP TRIGGER IF EXISTS deudas_precision_INSERT");
         db.execSQL("DROP TRIGGER IF EXISTS deudas_precision_UPDATE");

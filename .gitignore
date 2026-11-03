@@ -10,3 +10,8 @@ captures/
 *.jks
 *.keystore
 .android-user-home/
+
+# Archivos generados por las verificaciones locales y referencias de trabajo.
+/verification/
+/sources/
+*.class

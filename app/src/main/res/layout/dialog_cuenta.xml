@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:fillViewport="true"
+    android:theme="@style/ThemeOverlay.LocalCash.Cuentas">
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Nombre" android:labelFor="@+id/nombre" />
-        <EditText android:id="@id/nombre" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textCapSentences" android:maxLines="1" android:hint="Ej.: Efectivo" />
-<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Divisa" android:labelFor="@+id/divisa" />
-<Spinner android:id="@id/divisa" android:layout_width="match_parent" android:layout_height="48dp" android:contentDescription="Divisa" />
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Saldo inicial" android:labelFor="@+id/saldo_inicial" />
-        <EditText android:id="@id/saldo_inicial" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal|numberSigned" android:digits="0123456789.,-" android:text="0" android:maxLines="1" android:selectAllOnFocus="true" />
+        <TextView style="@style/Cuentas.Etiqueta" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Nombre" android:labelFor="@+id/nombre" />
+        <EditText style="@style/Cuentas.Campo" android:id="@id/nombre" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textCapSentences" android:maxLines="1" android:hint="Ej.: Efectivo" />
+        <TextView style="@style/Cuentas.Etiqueta" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Divisa" android:labelFor="@+id/divisa" />
+        <Spinner android:id="@id/divisa" android:layout_width="match_parent" android:layout_height="48dp" android:contentDescription="Divisa"
+            android:background="@drawable/cuentas_selector" android:popupBackground="#30233E" android:paddingStart="8dp" android:paddingEnd="36dp" />
+        <TextView style="@style/Cuentas.Etiqueta" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Saldo inicial" android:labelFor="@+id/saldo_inicial" />
+        <EditText style="@style/Cuentas.Campo" android:id="@id/saldo_inicial" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal|numberSigned" android:digits="0123456789.,-" android:text="0" android:maxLines="1" android:selectAllOnFocus="true" />
     </LinearLayout>
 </ScrollView>
-

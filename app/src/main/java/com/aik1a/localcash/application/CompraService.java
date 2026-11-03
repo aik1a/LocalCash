@@ -4,7 +4,6 @@ import com.aik1a.localcash.data.*;
 import com.aik1a.localcash.domain.*;
 import java.util.List;
 
-/** Coordina compras y su contacto opcional. El pago explícito vincula un único egreso. */
 public final class CompraService {
     private final LocalCashDbHelper helper;
     private final ContactoRepository contactos;
@@ -45,7 +44,7 @@ public final class CompraService {
         }
         return resultado;
     }
-    /** Compra, egreso y vínculo se confirman o revierten juntos. */
+
     public long pagar(long compraId, long cuentaId) {
         android.database.sqlite.SQLiteDatabase db = helper.getWritableDatabase();
         db.beginTransaction();

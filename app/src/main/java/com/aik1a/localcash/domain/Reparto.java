@@ -2,7 +2,6 @@ package com.aik1a.localcash.domain;
 
 import java.util.*;
 
-/** Reparto inicial del total; importes exactos en centésimas y orden estable por ID. */
 public final class Reparto {
     private final long compraId;
     private final Map<Long, Long> montos;
@@ -61,7 +60,7 @@ public final class Reparto {
         }
         return new Reparto(compra, montos);
     }
-    /** El resto se asigna primero a Tú, luego a contactos por ID; suma exacta. */
+
     public static Reparto equitativoConUsuario(Compra compra, List<Long> contactos) {
         if (compra == null || contactos == null || contactos.isEmpty())
             throw new IllegalArgumentException("Elige al menos un contacto para compartir contigo.");
@@ -93,5 +92,4 @@ public final class Reparto {
     public long getCompraId() { return compraId; }
     public Map<Long, Long> getMontos() { return montos; }
 }
-
 

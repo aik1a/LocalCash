@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:fillViewport="true" android:theme="@style/ThemeOverlay.LocalCash.Cuentas">
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
-        <RadioGroup android:id="@+id/tipo" android:layout_width="match_parent" android:layout_height="wrap_content">
-            <RadioButton android:id="@+id/ingreso" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Ingreso" />
-            <RadioButton android:id="@+id/egreso" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Egreso" />
+        <RadioGroup android:id="@+id/tipo" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+            <RadioButton android:id="@+id/ingreso" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="48dp"
+                android:background="@drawable/cuentas_opcion_ingreso" android:layout_marginEnd="5dp" android:padding="8dp" android:textColor="@color/cuentas_ingreso" android:buttonTint="@color/cuentas_ingreso" android:text="Ingreso" />
+            <RadioButton android:id="@+id/egreso" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="48dp"
+                android:background="@drawable/cuentas_opcion_egreso" android:layout_marginStart="5dp" android:padding="8dp" android:textColor="@color/cuentas_error" android:buttonTint="@color/cuentas_error" android:text="Egreso" />
         </RadioGroup>
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Monto" android:labelFor="@+id/monto" />
-        <EditText android:id="@id/monto" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal|numberSigned" android:digits="0123456789.,-" android:maxLines="1" android:hint="Ej.: 2500,50" />
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Descripción" android:labelFor="@+id/descripcion" />
-        <EditText android:id="@id/descripcion" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textCapSentences" android:hint="Ej.: Sueldo o transporte" />
-        <CheckBox android:id="@+id/incluir_ubicacion" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Incluir ubicación actual" />
-        <TextView android:id="@+id/estado_ubicacion" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Se guardará sin ubicación." android:accessibilityLiveRegion="polite" />
-        <Button android:id="@+id/reintentar_ubicacion" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Capturar / reintentar ubicación" />
+        <TextView style="@style/Cuentas.Etiqueta" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Monto" android:labelFor="@+id/monto" />
+        <EditText style="@style/Cuentas.Campo" android:id="@id/monto" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal|numberSigned" android:digits="0123456789.,-" android:maxLines="1" android:hint="Ej.: 2500,50" />
+        <TextView style="@style/Cuentas.Etiqueta" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Descripción" android:labelFor="@+id/descripcion" />
+        <EditText style="@style/Cuentas.Campo" android:id="@id/descripcion" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textCapSentences" android:hint="Ej.: Sueldo o transporte" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"
+            android:background="@drawable/cuentas_secundario" android:padding="12dp" android:layout_marginTop="20dp">
+            <CheckBox android:id="@+id/incluir_ubicacion" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp"
+                android:textColor="@color/cuentas_texto" android:text="Incluir ubicación actual" />
+            <TextView android:id="@+id/estado_ubicacion" style="@style/Cuentas.Texto" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textColor="@color/cuentas_secundario" android:textSize="12sp" android:paddingTop="8dp" android:paddingBottom="12dp"
+                android:text="Se guardará sin ubicación." android:accessibilityLiveRegion="polite" />
+            <Button android:id="@+id/reintentar_ubicacion" style="@style/Cuentas.BotonSecundario" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Capturar / reintentar ubicación" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
-
-

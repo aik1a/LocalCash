@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="8dp">
-    <CheckBox android:id="@+id/seleccionar_contacto" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp" android:saveEnabled="false" />
-    <EditText android:id="@+id/cuota" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:hint="Ej.: 2500" android:inputType="numberDecimal|numberSigned" android:minHeight="48dp" android:saveEnabled="false" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"
+    android:gravity="center_vertical" android:padding="12dp" android:layout_marginBottom="8dp" android:background="@drawable/cuentas_fila" android:theme="@style/ThemeOverlay.LocalCash.Cuentas">
+    <CheckBox android:id="@+id/seleccionar_contacto" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+        android:minHeight="48dp" android:saveEnabled="false" android:textColor="@color/cuentas_texto" />
+    <EditText android:id="@+id/cuota" style="@style/Cuentas.Campo" android:layout_width="112dp" android:layout_height="wrap_content"
+        android:layout_marginStart="8dp" android:hint="Ej.: 2500" android:inputType="numberDecimal|numberSigned" android:minHeight="48dp" android:saveEnabled="false" />
 </LinearLayout>
-

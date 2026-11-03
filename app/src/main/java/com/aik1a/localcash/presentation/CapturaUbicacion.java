@@ -8,7 +8,6 @@ import android.location.*;
 import android.os.*;
 import com.aik1a.localcash.domain.Ubicacion;
 
-/** Captura acotada mientras el formulario está visible; sin caché ni tracking. */
 final class CapturaUbicacion implements LocationListener {
     interface Resultado {
         void recibido(Ubicacion ubicacion);
@@ -35,7 +34,7 @@ final class CapturaUbicacion implements LocationListener {
             boolean gps = fine && manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             if (!red && !gps) { resultado.noDisponible("Activa la ubicación del teléfono y reintenta. Puedes guardar sin ubicación."); return; }
             activa = true;
-            // El primer proveedor que responda termina la captura; no esperar solo al GPS en interiores.
+
             if (red) manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this, Looper.getMainLooper());
             if (gps) manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this, Looper.getMainLooper());
             handler.postDelayed(timeout, 15000);
@@ -50,7 +49,7 @@ final class CapturaUbicacion implements LocationListener {
         } catch (IllegalArgumentException ex) { fallar("Coordenadas inválidas. Puedes guardar sin ubicación."); }
     }
     @Override public void onProviderDisabled(String provider) {
-        // Otro proveedor puede seguir activo. El plazo acotado resuelve la falta de señal.
+
     }
     @Override public void onProviderEnabled(String provider) { }
     @Override public void onStatusChanged(String provider, int status, Bundle extras) { }
@@ -59,7 +58,7 @@ final class CapturaUbicacion implements LocationListener {
         activa = false; handler.removeCallbacks(timeout);
         if (manager != null) {
             try { manager.removeUpdates(this); }
-            catch (SecurityException ex) { /* El permiso puede revocarse durante la captura; ya no está activa. */ }
+            catch (SecurityException ex) {                                                                         }
         }
     }
 }

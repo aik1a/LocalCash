@@ -43,7 +43,7 @@ public final class ComprasActivity extends ActividadProtegida {
                 fila.put("detalle", (compra.getEstado() == Compra.Estado.PLANIFICADA ? "Planificada" : "Realizada") + " · " + formato.format(new Date(compra.getFecha()))
                         + " · Total: " + Dinero.formatear(compra.calcularTotal(), compra.getDivisa())); filas.add(fila);
             }
-            lista.setAdapter(new SimpleAdapter(this, filas, android.R.layout.simple_list_item_2,
+            lista.setAdapter(new SimpleAdapter(this, filas, R.layout.row_compra,
                     new String[]{"nombre", "detalle"}, new int[]{android.R.id.text1, android.R.id.text2}));
         } catch (SQLiteException | IllegalArgumentException | ArithmeticException ex) {
             Toast.makeText(this, "No se pudieron cargar las compras.", Toast.LENGTH_LONG).show();

@@ -7,7 +7,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.aik1a.localcash.domain.Divisa;
 
-/** Vistas en memoria: no abre pantallas privadas ni altera la sesión biométrica. */
 public final class FeedbackChecks {
     private static int checks;
     private static void check(boolean value, String message) {

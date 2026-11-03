@@ -10,7 +10,6 @@ import com.aik1a.localcash.domain.Ubicacion;
 import java.util.List;
 import android.database.sqlite.SQLiteDatabase;
 
-/** Coordina cuentas y movimientos; el dominio calcula el saldo. */
 public final class MovimientoService {
     private final LocalCashDbHelper helper;
     private final CuentaRepository cuentas;
@@ -52,7 +51,7 @@ public final class MovimientoService {
             cuenta.getDivisa().validar(monto);
             List<Movimiento> historial = movimientos.listar(cuentaId);
             historial.add(nuevo);
-            cuenta.calcularSaldo(historial); // Rechazar desbordamiento antes de persistir.
+            cuenta.calcularSaldo(historial);
             long id = movimientos.crear(nuevo);
             db.setTransactionSuccessful();
             return id;
@@ -61,6 +60,4 @@ public final class MovimientoService {
         }
     }
 }
-
-
 

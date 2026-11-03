@@ -13,7 +13,6 @@ import com.aik1a.localcash.domain.*;
 import java.io.File;
 import java.util.*;
 
-/** Fixture con nombre independiente: no borra ni sustituye localcash.db. */
 public final class CrudChecks {
     private static int checks;
     private static void check(boolean value, String message) {

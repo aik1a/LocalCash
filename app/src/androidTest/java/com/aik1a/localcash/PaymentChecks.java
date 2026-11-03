@@ -7,7 +7,6 @@ import com.aik1a.localcash.data.*;
 import com.aik1a.localcash.domain.*;
 import java.util.Collections;
 
-/** Ejecutar solo en emulador descartable: trabaja sobre localcash.db. */
 public final class PaymentChecks {
     private static void require(boolean value) { if (!value) throw new AssertionError(); }
     public static void ejecutar(Instrumentation runner) {

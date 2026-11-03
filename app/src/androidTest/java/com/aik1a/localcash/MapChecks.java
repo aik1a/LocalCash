@@ -23,7 +23,6 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 
-/** Instrumentación destructiva solo en emulador desechable. Gate biométrico siempre activo. */
 public final class MapChecks {
     private final Instrumentation ins;private final Context context;private final StringBuilder log=new StringBuilder();
     private Activity pantalla;private MapaLocalView mapa;

@@ -4,7 +4,6 @@ import com.aik1a.localcash.data.*;
 import com.aik1a.localcash.domain.*;
 import java.util.List;
 
-/** Coordina la compra existente, los contactos y el reparto. No altera cuentas. */
 public final class DeudaService {
     private final CompraRepository compras;
     private final ContactoRepository contactos;
@@ -46,5 +45,4 @@ public final class DeudaService {
         deudas.registrar(reparto);
     }
 }
-
 

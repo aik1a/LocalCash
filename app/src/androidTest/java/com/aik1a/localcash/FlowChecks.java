@@ -14,7 +14,6 @@ import com.aik1a.localcash.domain.*;
 import com.aik1a.localcash.presentation.MainActivity;
 import java.util.List;
 
-/** Prueba de flujo en emulador desechable; sin framework ni dependencias adicionales. */
 public final class FlowChecks extends Instrumentation {
     private final StringBuilder log = new StringBuilder();
     private Activity main;
@@ -117,7 +116,7 @@ public final class FlowChecks extends Instrumentation {
                 assertTrue(service.listarMovimientos(limite).isEmpty(), "Rollback de overflow");
                 log.append("PASS overflow rechazado sin insertar.\n");
             }
-            // Prueba FK real además de validación de aplicación.
+
             try {
                 new com.aik1a.localcash.data.MovimientoRepository(helper).crear(
                         new Movimiento(0, 999999, Movimiento.Tipo.INGRESO, 1, "", 0));
@@ -142,8 +141,6 @@ public final class FlowChecks extends Instrumentation {
             finish(Activity.RESULT_CANCELED, result);
         }
     }
-
-
 
     private void verificarCompras() {
         Bundle result = new Bundle();
@@ -407,7 +404,7 @@ public final class FlowChecks extends Instrumentation {
             nodeText("Activa la ubicación del teléfono y reintenta. Puedes guardar sin ubicación.");
             clickText("Guardar"); clickText("Guardar sin ubicación"); nodeText("Saldo: USD 130,50");
             shell("cmd location set-location-enabled true");
-            // Proveedor Android de pruebas sin fix; usa el listener y timeout productivos.
+
             shell("appops set com.aik1a.localcash android:mock_location allow");
             lm=(android.location.LocationManager)getTargetContext().getSystemService(android.content.Context.LOCATION_SERVICE);
             lm.addTestProvider(android.location.LocationManager.GPS_PROVIDER,false,false,false,false,true,true,true,
@@ -586,7 +583,7 @@ public final class FlowChecks extends Instrumentation {
     private void esperarUI() {
         try { getUiAutomation().waitForIdle(100, 3000); }
         catch (java.util.concurrent.TimeoutException ignored) {
-            // Cada búsqueda de nodo tiene su propio plazo; no bloquear esperando idle indefinidamente.
+
         }
     }
     private void abrir() {
@@ -595,7 +592,7 @@ public final class FlowChecks extends Instrumentation {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         main = startActivitySync(intent);
         esperarUI();
-        nodeId("crear_cuenta"); // Solo avanza tras desafío real, alimentado por sensor del emulador.
+        nodeId("crear_cuenta");
     }
     private void assertTrue(boolean condition, String message) { if (!condition) throw new AssertionError(message); }
     private AccessibilityNodeInfo buscar(String value, boolean id) {

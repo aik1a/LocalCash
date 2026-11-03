@@ -15,7 +15,7 @@ public final class DeudaRepository {
         try {
             Compra compra = new CompraRepository(helper).buscar(reparto.getCompraId());
             if (compra.getDivisa() == null) throw new IllegalArgumentException("Define la divisa de la compra primero.");
-            // Revalidar contra el total real dentro de la misma transacción.
+
             if (reparto.getMontoUsuario() == null)
                 Reparto.personalizado(compra, new ArrayList<>(reparto.getMontos().keySet()), new ArrayList<>(reparto.getMontos().values()));
             else Reparto.personalizadoConUsuario(compra, new ArrayList<>(reparto.getMontos().keySet()),
@@ -74,5 +74,4 @@ public final class DeudaRepository {
         return resultado;
     }
 }
-
 

@@ -1,6 +1,5 @@
 package com.aik1a.localcash.domain;
 
-/** Par geográfico válido e inmutable; no depende de Android ni de SQLite. */
 public final class Ubicacion {
     private final double latitud;
     private final double longitud;
@@ -13,3 +12,4 @@ public final class Ubicacion {
     public double getLatitud() { return latitud; }
     public double getLongitud() { return longitud; }
 }
+
