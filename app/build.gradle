@@ -41,7 +41,9 @@ android.sourceSets.main.assets.srcDir(layout.buildDirectory.dir('generated/offli
 android.androidResources.noCompress += ['map']
 def prepareOfflineMaps = tasks.register('prepareOfflineMaps') {
     def mapsDirectory = layout.buildDirectory.dir('generated/offlineMaps/maps/vector')
-    outputs.dir(mapsDirectory)
+    // These are cached source assets, not disposable generated outputs. Declaring
+    // the directory as task output makes Gradle delete an externally restored cache.
+    // Validate/reuse the files on every invocation instead.
     doLast {
         def directory = mapsDirectory.get().asFile
         directory.mkdirs()
