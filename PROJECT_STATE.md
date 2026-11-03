@@ -72,3 +72,28 @@ El Orquestador debe actualizar este archivo cuando:
 - una decisión pendiente pasa a aceptada mediante documentación correspondiente.
 
 No registrar aquí detalles extensos de implementación; usar handoffs, auditorías, ADRs y documentos del sprint.
+## Incremento UX-01 en copia de trabajo (2026-11-02)
+
+Pedido del usuario: auditoría de experiencia y pequeños ajustes, con integración explícita compras/cuentas. Base inspeccionada main 9b8a651d66982eea3a41e1979342468fe4cad176. Implementación local aislada; no merge, sprint cerrado sin cambios retroactivos. SQLite v6 únicamente en este incremento; main continúa como documentado arriba. La exclusión anterior de compras que crean movimientos se sustituye para el pago completo confirmado según BUSINESS_RULES.md. Próxima acción: auditoría independiente del diff UX-01 y prueba física de ubicación; no cerrar como aceptado por contar solo con implementación. Ver docs/handoffs/UX-01.md y docs/audits/UX-01-diagnostico.md.
+
+## Incremento local CRUD-02, 2026-11-03
+
+T00–T08 implementadas en la copia LocalCash-ux, SQLite v7 y APK 1.1/versionCode 2; sin push/merge ni cierre de sprint. Cierre de deudas sin movimientos, mantenimiento de nombres y registros sin uso, planificación editable/eliminable y consulta por contacto. Build y pruebas automatizadas PASS; actualización real de variante uxcheck v6→v7 conservó filas de nueve tablas. Backup previo validado. Ver docs/handoffs/CRUD-02.md.
+
+Próxima acción local: revisión independiente y recorrido manual de nuevas pantallas en teléfono. T09–T11 siguen diferidas; no implementar ingresos de devolución implícitos. La confirmación manual positiva anterior del usuario corresponde a UX-01, no se extrapola a CRUD-02.
+
+## Incremento local AV-03 — Avisos, 2026-11-03
+
+Avisos AV01–AV08 implementados en copia LocalCash-ux. APK 1.1.1/versionCode 3; SQLite sigue v7, con helper/migraciones idénticos. Errores junto al campo, alertas de rechazo persistentes, causas funcionales conocidas, ayudas de bloqueo y éxitos breves. Build y pruebas automatizadas PASS (ver docs/handoffs/AV-03.md). Sin merge ni cierre de sprint; recorrido visual de estos avisos y revisión independiente pendientes.
+
+## UT-04 y preparación de sincronización — 2026-11-03
+
+29 pruebas JUnit de dominio añadidas y verificadas: cero fallos u omisiones.
+Guía en docs/testing/UT-04-unitarias.md. El usuario solicita guardar en GitHub
+UX-01, CRUD-02, AV-03 y UT-04. Entrega preparada para la rama
+feat/local-ux-crud-feedback-tests y revisión hacia main; sin cierre de sprint
+ni aprobación de auditoría independiente. Build de app/instrumentación y pruebas
+unitarias/SQLite del host PASS. Alcance, evidencia y pendientes en
+docs/handoffs/SYNC-2026-11-03.md. La migración directa v5→v7, recorrido visual de
+avisos y GPS físico continúan pendientes.
+

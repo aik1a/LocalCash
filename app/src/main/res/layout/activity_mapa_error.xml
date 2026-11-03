@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="20dp" android:background="@drawable/cuentas_fondo" android:theme="@style/ThemeOverlay.LocalCash.Cuentas">
+    <Button android:id="@+id/volver" style="@style/Cuentas.Enlace" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Volver a movimientos" android:drawableStart="@drawable/cuentas_ic_back" android:drawablePadding="8dp" />
+    <TextView style="@style/Cuentas.Titulo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Mapa offline" android:accessibilityHeading="true" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <TextView android:id="@+id/estado_mapa" style="@style/Cuentas.Texto" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:textColor="@color/cuentas_error" android:padding="20dp" android:background="@drawable/cuentas_vidrio" android:accessibilityLiveRegion="polite" />
+    </ScrollView>
+</LinearLayout>

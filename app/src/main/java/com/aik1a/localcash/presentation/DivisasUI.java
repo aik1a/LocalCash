@@ -8,7 +8,6 @@ import com.aik1a.localcash.R;
 import com.aik1a.localcash.data.*;
 import com.aik1a.localcash.domain.Divisa;
 
-/** Selector compartido; la persistencia permanece en repositories. */
 final class DivisasUI {
     interface Guardar { void guardar(Divisa divisa); }
     private DivisasUI() { }
@@ -21,11 +20,11 @@ final class DivisasUI {
     }
     static AlertDialog solicitar(ActividadProtegida activity, String titulo, String mensaje,
                                 Divisa inicial, boolean obligatoria, Guardar guardar, Runnable despues) {
-        View form = activity.getLayoutInflater().inflate(R.layout.dialog_divisa, null);
+        View form = activity.getLayoutInflater().cloneInContext(CuentasVisual.contexto(activity)).inflate(R.layout.dialog_divisa, null);
         Spinner selector = form.findViewById(R.id.divisa);
         TextView error = form.findViewById(R.id.error_divisa);
         preparar(selector, inicial);
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity).setTitle(titulo).setMessage(mensaje)
+        AlertDialog.Builder builder = new AlertDialog.Builder(CuentasVisual.contexto(activity)).setTitle(titulo).setMessage(mensaje)
                 .setView(form).setPositiveButton("Guardar", null).setCancelable(!obligatoria);
         if (!obligatoria) builder.setNegativeButton("Más tarde", null);
         AlertDialog dialog = builder.create();
@@ -56,3 +55,4 @@ final class DivisasUI {
                 }, despues);
     }
 }
+

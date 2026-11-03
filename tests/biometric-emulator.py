@@ -41,16 +41,36 @@ def tap(tree,resource=None,text=None,pattern=None):
                     adb('shell','input','tap',str((x1+x2)//2),str((y1+y2)//2));return True
     return False
 
-def wait(predicate,label,seconds=25):
+def scroll_forward(tree):
+    node=next((n for n in tree.iter('node') if n.get('scrollable')=='true'
+               and (n.get('package')==package or n.get('resource-id','').startswith(package+':id/'))),None)
+    if node is None:return False
+    x1,y1,x2,y2=map(int,re.findall(r'-?\d+',node.get('bounds')))
+    if x2<=x1 or y2<=y1:return False
+    x=(x1+x2)//2
+    adb('shell','input','swipe',str(x),str(y1+(y2-y1)*4//5),
+        str(x),str(y1+(y2-y1)//5),'400')
+    return True
+
+def tap_revealed(tree,resource=None,text=None):
+    for attempt in range(6):
+        if tap(tree,resource=resource,text=text):return True
+        if not scroll_forward(tree):return False
+        tree=dump('reveal-tap')
+    return False
+
+def wait(predicate,label,seconds=25,scroll=False):
     deadline=time.monotonic()+seconds
+    scrolls=0
     while time.monotonic()<deadline:
         tree=dump(label)
         if predicate(tree):return tree
+        if scroll and scrolls<6 and scroll_forward(tree):scrolls+=1
         time.sleep(.3)
     raise AssertionError(label+': '+texts(tree))
 
 def private(tree):
-    return any(n.get('resource-id','').split(':id/')[-1] in {'crear_cuenta','registrar_movimiento','crear_contacto','crear_compra','compra_total','guardar_compra','reparto_total','map'} for n in tree.iter('node'))
+    return any(n.get('resource-id','').split(':id/')[-1] in {'crear_cuenta','registrar_movimiento','crear_contacto','crear_compra','compra_total','guardar_compra','reparto_total','map','cuentas','movimientos','nombre_cuenta','saldo','contactos','compras','compra_titulo','reparto_titulo','reparto_info','participantes','deudas'} for n in tree.iter('node'))
 
 def blocked(tree):
     assert not private(tree),'Contenido privado antes de autenticar: '+texts(tree)
@@ -179,11 +199,11 @@ def security():
     tree=wait(lambda t:has(t,'Compra previa'),'purchases');assert private(tree)
     assert tap(tree,text='Compra previa')
     tree=wait(lambda t:has(t,'Total: USD 100,00'),'purchase-detail');assert private(tree)
-    assert tap(tree,resource='abrir_reparto')
-    tree=wait(lambda t:has(t,'Ana: USD 50,00') and has(t,'Luis: USD 50,00'),'debts');assert private(tree)
+    assert tap_revealed(tree,resource='abrir_reparto')
+    tree=wait(lambda t:has(t,'Ana: USD 50,00') and has(t,'Luis: USD 50,00'),'debts',scroll=True);assert private(tree)
     adb('shell','settings','put','system','accelerometer_rotation','0')
     adb('shell','settings','put','system','user_rotation','1');time.sleep(1)
-    tree=wait(lambda t:has(t,'Ana: USD 50,00') and has(t,'Luis: USD 50,00'),'private-rotation');assert private(tree)
+    tree=wait(lambda t:has(t,'Ana: USD 50,00') and has(t,'Luis: USD 50,00'),'private-rotation',scroll=True);assert private(tree)
     adb('shell','settings','put','system','user_rotation','0');time.sleep(1)
     lines.append('PASS navegación y rotación de pantalla privada: cuentas/movimientos, contactos, compras/detalles/deudas con sesión válida.')
     adb('shell','input','keyevent','3');time.sleep(1)

@@ -48,18 +48,20 @@ public final class MainActivity extends ActividadProtegida {
             for (Cuenta cuenta : cuentas) {
                 Map<String, String> fila = new HashMap<>();
                 fila.put("nombre", cuenta.getNombre());
+                fila.put("moneda", cuenta.getDivisa() == null ? "" : cuenta.getDivisa().toString());
                 fila.put("saldo", "Saldo: " + Dinero.formatear(service.calcularSaldo(cuenta.getId()), cuenta.getDivisa()));
                 filas.add(fila);
             }
-            lista.setAdapter(new SimpleAdapter(this, filas, android.R.layout.simple_list_item_2,
-                    new String[]{"nombre", "saldo"}, new int[]{android.R.id.text1, android.R.id.text2}));
+            lista.setAdapter(new SimpleAdapter(this, filas, R.layout.row_cuenta,
+                    new String[]{"nombre", "saldo", "moneda"},
+                    new int[]{android.R.id.text1, android.R.id.text2, R.id.moneda_cuenta}));
         } catch (SQLiteException | ArithmeticException ex) {
             Toast.makeText(this, "No se pudieron cargar las cuentas.", Toast.LENGTH_LONG).show();
         }
     }
 
     private void mostrarFormulario() {
-        View form = getLayoutInflater().inflate(R.layout.dialog_cuenta, null);
+        View form = getLayoutInflater().cloneInContext(CuentasVisual.contexto(this)).inflate(R.layout.dialog_cuenta, null);
         EditText nombre = form.findViewById(R.id.nombre);
         EditText saldo = form.findViewById(R.id.saldo_inicial);
         Spinner divisa = form.findViewById(R.id.divisa);
@@ -70,16 +72,17 @@ public final class MainActivity extends ActividadProtegida {
             }
             public void onNothingSelected(AdapterView<?> parent) { }
         });
-        AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Crear cuenta")
+        AlertDialog dialog = new AlertDialog.Builder(CuentasVisual.contexto(this)).setTitle("Crear cuenta")
                 .setView(form).setNegativeButton("Cancelar", null).setPositiveButton("Guardar", null).create();
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-            if (nombre.getText().toString().trim().isEmpty()) { nombre.setError("Escribe un nombre."); return; }
+            if (nombre.getText().toString().trim().isEmpty()) { AccionesUI.errorCampo(nombre, "Escribe un nombre."); return; }
+            if (saldo.getText().toString().trim().isEmpty()) { AccionesUI.errorCampo(saldo, "Ingresa el saldo inicial. Si partes desde cero, escribe 0."); return; }
             try {
                 Divisa moneda = (Divisa)divisa.getSelectedItem();
                 service.crearCuenta(nombre.getText().toString(), Dinero.parsear(saldo.getText().toString(), moneda), moneda);
-                dialog.dismiss();
+                dialog.dismiss(); AccionesUI.exito(this, "Cuenta creada.");
                 actualizar();
-            } catch (IllegalArgumentException ex) { saldo.setError(ex.getMessage()); }
+            } catch (IllegalArgumentException ex) { AccionesUI.errorCampo(saldo, ex.getMessage()); }
             catch (SQLiteException ex) {
                 Toast.makeText(this, "No se guardó la cuenta. Intenta nuevamente.", Toast.LENGTH_LONG).show();
             }
@@ -88,5 +91,6 @@ public final class MainActivity extends ActividadProtegida {
     }
     @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
 }
+
 
 

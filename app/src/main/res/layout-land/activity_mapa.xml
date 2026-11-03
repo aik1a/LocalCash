@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- En horizontal, el mapa conserva su alto y la información puede desplazarse a su lado. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="horizontal" android:padding="12dp" android:background="@drawable/cuentas_fondo"
+    android:theme="@style/ThemeOverlay.LocalCash.Cuentas">
+    <ScrollView android:layout_width="0dp" android:layout_weight="2" android:layout_height="match_parent" android:fillViewport="true">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+            <Button android:id="@+id/volver" style="@style/Cuentas.Enlace" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Volver a movimientos" android:drawableStart="@drawable/cuentas_ic_back" android:drawablePadding="8dp" />
+            <TextView style="@style/Cuentas.Titulo" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Mapa offline" android:layout_marginTop="8dp" android:accessibilityHeading="true" />
+            <TextView android:id="@+id/titulo_mapa" style="@style/Cuentas.Texto" android:layout_width="match_parent" android:layout_height="wrap_content" android:accessibilityHeading="true" />
+            <TextView android:id="@+id/estado_mapa" style="@style/Cuentas.Ayuda" android:layout_width="match_parent" android:layout_height="wrap_content" android:accessibilityLiveRegion="polite" />
+            <TextView android:id="@+id/cobertura_mapa" style="@style/Cuentas.Ayuda" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Área offline demostrativa: Santiago Centro (z14–16)" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                <Button android:id="@+id/zoom_menos" style="@style/Cuentas.BotonSecundario" android:layout_width="0dp" android:layout_weight="1" android:layout_height="48dp"
+                    android:text="−" android:contentDescription="Alejar mapa" android:layout_marginEnd="4dp" />
+                <Button android:id="@+id/centrar_mapa" style="@style/Cuentas.BotonSecundario" android:layout_width="0dp" android:layout_weight="2" android:layout_height="wrap_content"
+                    android:text="Santiago Centro" android:layout_marginStart="4dp" android:layout_marginEnd="4dp" />
+                <Button android:id="@+id/zoom_mas" style="@style/Cuentas.BotonSecundario" android:layout_width="0dp" android:layout_weight="1" android:layout_height="48dp"
+                    android:text="+" android:contentDescription="Acercar mapa" android:layout_marginStart="4dp" />
+            </LinearLayout>
+            <TextView android:id="@+id/detalle_marcador" style="@style/Cuentas.Texto" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Toca un marcador para ver el movimiento." android:textSize="12sp" android:padding="12dp"
+                android:background="@drawable/cuentas_secundario" android:layout_marginTop="12dp" android:accessibilityLiveRegion="polite" />
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout android:layout_width="0dp" android:layout_weight="3" android:layout_height="match_parent" android:orientation="vertical" android:layout_marginStart="12dp">
+        <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:background="@drawable/cuentas_campo" android:padding="1dp">
+            <com.aik1a.localcash.presentation.MapaLocalView android:id="@+id/map" android:layout_width="match_parent" android:layout_height="match_parent"
+                android:contentDescription="Mapa offline de movimientos. Arrastra para desplazarte y usa los botones de zoom." />
+        </FrameLayout>
+        <TextView android:id="@+id/atribucion_mapa" style="@style/Cuentas.Ayuda" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Datos del mapa © OpenStreetMap contributors · ODbL" android:textColorLink="@color/cuentas_lavanda" android:layout_marginBottom="0dp" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ThemeOverlay.LocalCash.Cuentas" parent="android:style/ThemeOverlay.Material.Dark">
+        <item name="android:colorAccent">@color/cuentas_lavanda</item>
+        <item name="android:textColorPrimary">@color/cuentas_texto</item>
+        <item name="android:textColorSecondary">@color/cuentas_secundario</item>
+        <item name="android:colorControlNormal">@color/cuentas_secundario</item>
+        <item name="android:colorControlActivated">@color/cuentas_lavanda</item>
+        <item name="android:editTextStyle">@style/Cuentas.Campo</item>
+        <item name="android:spinnerStyle">@style/Cuentas.Selector</item>
+        <item name="android:textColorLink">@color/cuentas_lavanda</item>
+    </style>
+    <style name="Cuentas" />
+    <style name="Cuentas.Texto">
+        <item name="android:textColor">@color/cuentas_texto</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="Cuentas.Titulo" parent="Cuentas.Texto">
+        <item name="android:textSize">28sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+    <style name="Cuentas.Etiqueta" parent="Cuentas.Texto">
+        <item name="android:textColor">@color/cuentas_secundario</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+    <style name="Cuentas.Boton" parent="android:style/Widget.Material.Button">
+        <item name="android:background">@drawable/cuentas_boton</item>
+        <item name="android:backgroundTint">@null</item>
+        <item name="android:textColor">@color/cuentas_texto_primario</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+    <style name="Cuentas.BotonSecundario" parent="Cuentas.Boton">
+        <item name="android:background">@drawable/cuentas_secundario</item>
+        <item name="android:textColor">@color/cuentas_texto_secundario</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+    <style name="Cuentas.Enlace" parent="Cuentas.BotonSecundario">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:textColor">@color/cuentas_lavanda</item>
+        <item name="android:gravity">start|center_vertical</item>
+    </style>
+    <style name="Cuentas.Campo" parent="android:style/Widget.Material.EditText">
+        <item name="android:background">@drawable/cuentas_campo</item>
+        <item name="android:backgroundTint">@null</item>
+        <item name="android:textColor">@color/cuentas_texto</item>
+        <item name="android:textColorHint">@color/cuentas_secundario</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:padding">12dp</item>
+    </style>
+    <style name="Cuentas.Dialogo" parent="android:style/Theme.Material.Dialog.Alert">
+        <item name="android:alertDialogTheme">@style/Cuentas.Dialogo</item>
+        <item name="android:windowBackground">@drawable/cuentas_dialogo</item>
+        <item name="android:colorBackground">#30233E</item>
+        <item name="android:colorAccent">@color/cuentas_lavanda</item>
+        <item name="android:textColorPrimary">@color/cuentas_texto</item>
+        <item name="android:textColorSecondary">@color/cuentas_secundario</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:editTextStyle">@style/Cuentas.Campo</item>
+        <item name="android:spinnerStyle">@style/Cuentas.Selector</item>
+        <item name="android:textColorLink">@color/cuentas_lavanda</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/Cuentas.BotonDialogo</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/Cuentas.CancelarDialogo</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:backgroundDimAmount">0.65</item>
+    </style>
+    <style name="Cuentas.BotonDialogo" parent="Cuentas.Boton">
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:minWidth">100dp</item>
+    </style>
+    <style name="Cuentas.CancelarDialogo" parent="Cuentas.BotonSecundario">
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:minWidth">100dp</item>
+    </style>
+    <style name="Cuentas.Selector" parent="android:style/Widget.Material.Spinner">
+        <item name="android:background">@drawable/cuentas_selector</item>
+        <item name="android:backgroundTint">@null</item>
+        <item name="android:popupBackground">#30233E</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">36dp</item>
+    </style>
+    <style name="Cuentas.Ayuda" parent="Cuentas.Texto">
+        <item name="android:textColor">@color/cuentas_secundario</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+    </style>
+    <style name="Cuentas.Seccion" parent="Cuentas.Texto">
+        <item name="android:textColor">@color/cuentas_lavanda</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+    </style>
+    <style name="Cuentas.Resumen" parent="Cuentas.Texto">
+        <item name="android:textColor">@color/cuentas_lavanda</item>
+        <item name="android:background">@drawable/cuentas_vidrio</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:padding">20dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+    </style>
+    <style name="Cuentas.Error" parent="Cuentas.Ayuda">
+        <item name="android:textColor">@color/cuentas_error</item>
+    </style>
+    <style name="Cuentas.BotonAcento" parent="Cuentas.BotonSecundario">
+        <item name="android:background">@drawable/cuentas_acento</item>
+        <item name="android:textColor">@color/cuentas_texto</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    <style name="Cuentas.BotonPeligro" parent="Cuentas.BotonSecundario">
+        <item name="android:background">@drawable/cuentas_peligro</item>
+        <item name="android:textColor">@color/cuentas_error</item>
+    </style>
+    <style name="Cuentas.PeligroDialogo" parent="Cuentas.BotonPeligro">
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:minWidth">100dp</item>
+    </style>
+    <style name="Cuentas.DialogoPeligro" parent="Cuentas.Dialogo">
+        <item name="android:colorAccent">@color/cuentas_error</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/Cuentas.PeligroDialogo</item>
+    </style>
+</resources>

@@ -9,7 +9,6 @@ import android.view.*;
 import com.aik1a.localcash.R;
 import java.util.*;
 
-/** Todas las rutas privadas verifican sesión antes de crear su contenido/repositorios. */
 public abstract class ActividadProtegida extends Activity {
     private boolean creada;
     private Bundle estadoInicial;

@@ -1,6 +1,5 @@
 package com.aik1a.localcash.domain;
 
-/** Catálogo acotado. Escala persistida histórica: centésimas para todas las monedas. */
 public enum Divisa {
     CLP("Peso chileno", 0), USD("Dólar estadounidense", 2), EUR("Euro", 2),
     ARS("Peso argentino", 2), MXN("Peso mexicano", 2), COP("Peso colombiano", 2),
@@ -18,3 +17,4 @@ public enum Divisa {
     public static Divisa desdeCodigo(String codigo) { return codigo == null ? null : valueOf(codigo); }
     @Override public String toString() { return nombre + " (" + name() + ")"; }
 }
+

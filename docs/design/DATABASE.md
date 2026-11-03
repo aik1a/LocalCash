@@ -1,6 +1,6 @@
 # Diseño SQLite
 
-**Estado actual:** esquema v5, integrado por S01-T01: configuración inicial, divisas de cuentas/compras y cuota propia del reparto. Incluye cuentas/movimientos (T03), contactos/compras/detalles (T04), deudas (T05) y ubicación opcional (T06A). Las secciones v1–v4 siguientes conservan la evolución histórica; la sección S01-T01 documenta v5.
+**Estado local actual:** v7 por CRUD-02, pendiente revisión independiente. La sección final documenta v7; el siguiente resumen describe la integración histórica v5 por S01-T01: configuración inicial, divisas de cuentas/compras y cuota propia del reparto. Incluye cuentas/movimientos (T03), contactos/compras/detalles (T04), deudas (T05) y ubicación opcional (T06A). Las secciones v1–v4 siguientes conservan la evolución histórica; la sección S01-T01 documenta v5.
 
 ## Esquema mínimo S00-T03 (decisiones implementadas)
 
@@ -174,3 +174,17 @@ propia retroactiva. Persistir cuotas evita tener que inferirlas al cambiar regla
 Validación: tests/CurrencyDomainChecks.java, tests/sqlite-currency-checks.py,
 CurrencyChecks Android, tests/currency-ui.py y workflow s00-t06c-build.yml. La
 migración lógica SQLite no acredita actualización APK entre certificados distintos.
+
+## UX-01 — Esquema v6 en copia de trabajo
+
+Migración aditiva v5→v6: tabla compra_movimiento(compra_id INTEGER PRIMARY KEY REFERENCES compras(id) ON DELETE RESTRICT, movimiento_id INTEGER NOT NULL UNIQUE REFERENCES movimientos(id) ON DELETE RESTRICT). No reescribe datos existentes ni genera cargos retroactivos. Instalaciones v1–v4 pasan por las migraciones anteriores; instalación nueva usa la misma secuencia DDL.
+
+CompraService.pagar coordina transacción exterior, validación de divisa, movimiento y cambio de estado. La unicidad por compra protege contra repetición; la unicidad por movimiento evita compartir el mismo egreso entre compras. Los saldos continúan derivados de movimientos. Sin saldo duplicado ni nueva dependencia. Este incremento está pendiente de auditoría independiente y no se declara integrado en main.
+
+## CRUD-02 — SQLite v7 en copia local
+
+Migración v6→v7 reconstruye deudas para admitir CHECK estado IN ('PENDIENTE','PAGADA'). Preserva PK(compra_id,contacto_id), FK RESTRICT, importes enteros y filas existentes. Se retiran temporalmente y recrean los triggers compras_precision_update, deudas_precision_INSERT y deudas_precision_UPDATE dentro de la transacción de upgrade. No se usa SQL moderno incompatible con Android mínimo. Los registros históricos conservan PENDIENTE, incluido monto cero.
+
+Actualización de estado solo sobre importe positivo y par compra/contacto exacto. No nueva tabla de cobros. Renombres/deletes/edición de planes usan esquema v7 existente, sin nuevas versiones por pantalla. Edición y borrado de planes revalidan ausencia de pago/reparto y usan transacción para cabecera/detalles. Se conservan restricciones de moneda.
+
+Instalación nueva y migraciones previas convergen en v7. Prueba Android usa LegacyV6DbHelper (fixture exacta de la implementación anterior) y comprueba filas de nueve tablas, triggers y FK. Actualización de APK instalada conservó todos los registros; evidencia en docs/handoffs/CRUD-02.md.

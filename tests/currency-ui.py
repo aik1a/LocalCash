@@ -24,6 +24,7 @@ def tap(resource=None,text=None):
 
 def text(resource,value):
     import re
+    tap(resource=resource)
     tree=b.wait(lambda t:any(n.get('resource-id','').endswith(':id/'+resource) for n in t.iter('node')),'currency-input')
     node=next(n for n in tree.iter('node') if n.get('resource-id','').endswith(':id/'+resource))
     x1,y1,x2,y2=map(int,re.findall(r'\d+',node.get('bounds')))
@@ -35,7 +36,7 @@ def text(resource,value):
     b.adb('shell','input','text',value)
     b.adb('shell','input','keyevent','4')
 
-def visible(value):return b.wait(lambda t:b.has(t,value),'currency-'+value.replace(' ','-'))
+def visible(value):return b.wait(lambda t:b.has(t,value),'currency-'+value.replace(' ','-'),scroll=True)
 
 def fresh_unlock():
     b.launch()

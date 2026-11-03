@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
-<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Divisa" android:labelFor="@+id/divisa" />
-<Spinner android:id="@id/divisa" android:layout_width="match_parent" android:layout_height="48dp" android:contentDescription="Divisa" />
-<TextView android:id="@+id/error_divisa" android:layout_width="match_parent" android:layout_height="wrap_content" android:accessibilityLiveRegion="polite" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp" android:theme="@style/ThemeOverlay.LocalCash.Cuentas">
+    <TextView style="@style/Cuentas.Etiqueta" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Divisa" android:labelFor="@+id/divisa" />
+    <Spinner style="@style/Cuentas.Selector" android:id="@id/divisa" android:layout_width="match_parent" android:layout_height="48dp" android:contentDescription="Divisa" />
+    <TextView android:id="@+id/error_divisa" style="@style/Cuentas.Error" android:layout_width="match_parent" android:layout_height="wrap_content" android:accessibilityLiveRegion="polite" />
 </LinearLayout>

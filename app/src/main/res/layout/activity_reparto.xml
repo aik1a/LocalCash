@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent"
-    android:fillViewport="true" android:padding="16dp">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:fillViewport="true" android:padding="20dp" android:background="@drawable/cuentas_fondo" android:theme="@style/ThemeOverlay.LocalCash.Cuentas">
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-        <Button android:id="@+id/volver" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Volver a la compra" />
-        <TextView android:id="@+id/reparto_titulo" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="24sp" />
-        <TextView android:id="@+id/reparto_total" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="22sp" />
-        <TextView android:id="@+id/reparto_info" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="Tú ya estás incluido. Elige con quién compartir la compra." />
+        <Button android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/volver" style="@style/Cuentas.Enlace" android:text="Volver a la compra" android:layout_marginTop="12dp" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" style="@style/Cuentas.Titulo" android:id="@+id/reparto_titulo" android:accessibilityHeading="true" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" style="@style/Cuentas.Resumen" android:id="@+id/reparto_total" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" style="@style/Cuentas.Ayuda" android:id="@+id/reparto_info" android:text="Tú ya estás incluido. Elige con quién compartir la compra." />
         <LinearLayout android:id="@+id/formulario_reparto" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-            <RadioGroup android:id="@+id/modo_reparto" android:layout_width="match_parent" android:layout_height="wrap_content" android:checkedButton="@id/equitativo">
-                <RadioButton android:id="@+id/equitativo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Equitativo" />
-                <RadioButton android:id="@+id/personalizado" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Personalizado" />
+            <RadioGroup android:id="@+id/modo_reparto" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:checkedButton="@id/equitativo" android:background="@drawable/cuentas_secundario" android:padding="6dp" android:layout_marginBottom="20dp">
+                <RadioButton android:id="@+id/equitativo" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                    android:minHeight="48dp" android:text="Equitativo" android:textColor="@color/cuentas_texto" android:textSize="14sp" android:background="@drawable/cuentas_opcion" android:padding="8dp" />
+                <RadioButton android:id="@+id/personalizado" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                    android:minHeight="48dp" android:text="Personalizado" android:textColor="@color/cuentas_texto" android:textSize="14sp" android:background="@drawable/cuentas_opcion" android:padding="8dp" />
             </RadioGroup>
             <LinearLayout android:id="@+id/participantes" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" />
-            <Button android:id="@+id/guardar_reparto" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Guardar reparto" />
+            <Button android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/guardar_reparto" style="@style/Cuentas.Boton" android:text="Guardar reparto" android:layout_marginTop="12dp" />
         </LinearLayout>
-        <TextView android:id="@+id/error_reparto" android:layout_width="match_parent" android:layout_height="wrap_content" android:accessibilityLiveRegion="polite" android:textColor="#B00020" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" style="@style/Cuentas.Error" android:id="@+id/error_reparto" android:accessibilityLiveRegion="polite" />
         <LinearLayout android:id="@+id/deudas" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" />
     </LinearLayout>
 </ScrollView>
-

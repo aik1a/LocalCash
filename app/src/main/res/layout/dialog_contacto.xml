@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="16dp">
-<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Nombre del contacto" android:labelFor="@+id/nombre_contacto" />
-<EditText android:id="@id/nombre_contacto" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textCapSentences" android:maxLines="1"  />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/root" android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:padding="20dp" android:theme="@style/ThemeOverlay.LocalCash.Cuentas">
+    <TextView style="@style/Cuentas.Etiqueta" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Nombre del contacto" android:labelFor="@+id/nombre_contacto" />
+    <EditText style="@style/Cuentas.Campo" android:id="@id/nombre_contacto" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textCapSentences" android:maxLines="1" />
 </LinearLayout>

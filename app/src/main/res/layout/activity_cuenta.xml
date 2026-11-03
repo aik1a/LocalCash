@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:padding="16dp">
-    <Button android:id="@+id/volver" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Volver a cuentas" />
-    <TextView android:id="@+id/nombre_cuenta" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="24sp" android:accessibilityHeading="true" />
-    <TextView android:id="@+id/saldo" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="22sp" android:paddingVertical="8dp" />
-    <Button android:id="@+id/registrar_movimiento" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Registrar ingreso o egreso" />
-    <Button android:id="@+id/abrir_mapa" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Ver mapa offline" />
-    <TextView android:id="@+id/vacio" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:padding="16dp" android:text="Todavía no hay movimientos en esta cuenta." />
-    <ListView android:id="@+id/movimientos" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+    android:orientation="vertical" android:padding="20dp" android:background="@drawable/cuentas_fondo"
+    android:theme="@style/ThemeOverlay.LocalCash.Cuentas">
+    <Button android:id="@+id/volver" style="@style/Cuentas.Enlace" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Volver a cuentas" android:drawableStart="@drawable/cuentas_ic_back" android:drawablePadding="8dp" />
+    <TextView android:id="@+id/nombre_cuenta" style="@style/Cuentas.Titulo" android:layout_width="match_parent" android:layout_height="wrap_content" android:accessibilityHeading="true" android:layout_marginTop="12dp" android:layout_marginBottom="16dp" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"
+        android:background="@drawable/cuentas_tarjeta" android:padding="22dp" android:layout_marginBottom="20dp">
+        <TextView style="@style/Cuentas.Texto" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Saldo disponible" android:textColor="@color/cuentas_tinta" android:textSize="12sp" />
+        <TextView android:id="@+id/saldo" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:textColor="@color/cuentas_tinta" android:textSize="30sp" android:fontFamily="sans"
+            android:paddingTop="20dp" android:paddingBottom="16dp" />
+    </LinearLayout>
+    <Button android:id="@+id/registrar_movimiento" style="@style/Cuentas.Boton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Registrar ingreso o egreso" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="12dp">
+        <Button android:id="@+id/abrir_mapa" style="@style/Cuentas.BotonSecundario" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginEnd="5dp" android:text="Ver mapa offline" />
+        <Button android:id="@+id/opciones_cuenta" style="@style/Cuentas.BotonSecundario" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="5dp" android:text="Opciones de cuenta" />
+    </LinearLayout>
+    <TextView style="@style/Cuentas.Etiqueta" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Movimientos" android:textColor="@color/cuentas_texto" android:textSize="15sp" android:layout_marginTop="24dp" android:accessibilityHeading="true" />
+    <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <ListView android:id="@+id/movimientos" android:layout_width="match_parent" android:layout_height="match_parent"
+            android:divider="#3B2D49" android:dividerHeight="1dp" android:listSelector="@android:color/transparent" android:clipToPadding="false" android:paddingBottom="8dp" />
+        <TextView android:id="@+id/vacio" style="@style/Cuentas.Texto" android:layout_width="match_parent" android:layout_height="match_parent"
+            android:gravity="center" android:padding="20dp" android:textColor="@color/cuentas_secundario" android:text="Todavía no hay movimientos en esta cuenta." />
+    </FrameLayout>
+    <Button android:id="@+id/ver_compras_cuenta" style="@style/Cuentas.Enlace" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="12sp" android:text="Ver compras pagadas desde esta cuenta" android:layout_marginTop="8dp" />
 </LinearLayout>

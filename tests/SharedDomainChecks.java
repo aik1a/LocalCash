@@ -22,7 +22,7 @@ public final class SharedDomainChecks {
         check(reparto.getMontos().get(5L) == 3334);
         check(reparto.getMontos().get(9L) == 3333);
         check(new ArrayList<>(reparto.getMontos().keySet()).equals(Arrays.asList(2L, 5L, 9L)));
-        check(!reparto.getMontos().containsKey(7L)); // Contacto asociado no es participante.
+        check(!reparto.getMontos().containsKey(7L));
         Reparto custom = Reparto.personalizado(compra(10000), ids, Arrays.asList(2000L,3000L,5000L));
         check(custom.getMontos().get(9L) == 2000);
         check(custom.getMontos().get(2L) == 3000);
@@ -58,3 +58,4 @@ public final class SharedDomainChecks {
         System.out.println("PASS: " + checks + " shared domain checks (exactitud, bordes y conservación).");
     }
 }
+

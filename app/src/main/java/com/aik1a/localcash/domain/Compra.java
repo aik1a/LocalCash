@@ -13,7 +13,7 @@ public final class Compra {
     private final Long contactoId;
     private final List<DetalleCompra> detalles;
     private final Divisa divisa;
-    /** Reconstrucción histórica; los nuevos formularios siempre proporcionan divisa. */
+
     public Compra(long id, String nombre, Estado estado, long fecha, Long contactoId, List<DetalleCompra> detalles) {
         this(id, nombre, estado, fecha, contactoId, detalles, null);
     }

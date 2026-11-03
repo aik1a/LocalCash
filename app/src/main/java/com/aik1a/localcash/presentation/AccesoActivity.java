@@ -8,7 +8,6 @@ import androidx.biometric.*;
 import androidx.core.content.ContextCompat;
 import com.aik1a.localcash.R;
 
-/** Único desafío biométrico. Sin PIN, credenciales propias ni fallback abierto. */
 public final class AccesoActivity extends FragmentActivity {
     private BiometricPrompt prompt;
     private boolean pendiente;
@@ -47,7 +46,7 @@ public final class AccesoActivity extends FragmentActivity {
     }
     @Override protected void onResume() {
         super.onResume(); visible = true;
-        // Una instancia que salió a background no puede reutilizar un callback anterior.
+
         if (generacionInicial != sesion().generacion()) { finish(); return; }
         if (primeraEntrada) { primeraEntrada = false; autenticar(); }
     }
@@ -78,3 +77,4 @@ public final class AccesoActivity extends FragmentActivity {
         state.putString("proceso", sesion().proceso()); state.putLong("generacion", generacionInicial); }
     @Override public void onBackPressed() { moveTaskToBack(true); }
 }
+

@@ -10,7 +10,6 @@ import com.aik1a.localcash.data.*;
 import com.aik1a.localcash.domain.*;
 import java.util.*;
 
-/** Fixtures y acceso directo interno; jamás modifica la sesión biométrica. */
 public final class BiometricChecks {
     private final Instrumentation instrumentation;
     private String mode, activity;
@@ -69,3 +68,4 @@ public final class BiometricChecks {
         }
     }
 }
+

@@ -45,6 +45,60 @@ public final class CompraRepository {
         } finally { db.endTransaction(); }
     }
 
+    private Compra exigirPlanificacionEditable(long id) {
+        Compra actual = buscar(id);
+        DeudaRepository deudas = new DeudaRepository(helper);
+        if (actual.getEstado() != Compra.Estado.PLANIFICADA || buscarCuentaPago(id) != null
+                || !deudas.listarPorCompra(id).isEmpty() || deudas.buscarMontoUsuario(id) != null)
+            throw new IllegalArgumentException("Solo puedes modificar compras planificadas sin pago ni reparto.");
+        return actual;
+    }
+    public void actualizarPlanificacion(Compra compra) {
+        SQLiteDatabase db = helper.getWritableDatabase(); db.beginTransaction();
+        try {
+            Compra actual = exigirPlanificacionEditable(compra.getId());
+            if (compra.getEstado() != Compra.Estado.PLANIFICADA || compra.getDivisa() == null || actual.getDivisa() != compra.getDivisa())
+                throw new IllegalArgumentException("Conserva el estado planificado y la moneda original de la compra.");
+            ContentValues cabecera = new ContentValues(); cabecera.put("nombre", compra.getNombre()); cabecera.put("fecha", compra.getFecha());
+            if (compra.getContactoId() == null) cabecera.putNull("contacto_id"); else cabecera.put("contacto_id", compra.getContactoId());
+            db.update("compras", cabecera, "id=?", new String[]{Long.toString(compra.getId())});
+            db.delete("detalle_compra", "compra_id=?", new String[]{Long.toString(compra.getId())});
+            for (DetalleCompra detalle : compra.getDetalles()) {
+                ContentValues item = new ContentValues(); item.put("compra_id", compra.getId()); item.put("descripcion", detalle.getDescripcion());
+                item.put("cantidad", detalle.getCantidad()); item.put("precio_unitario", detalle.getPrecioUnitario());
+                db.insertOrThrow("detalle_compra", null, item);
+            }
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
+    }
+    public void eliminarPlanificacion(long id) {
+        SQLiteDatabase db = helper.getWritableDatabase(); db.beginTransaction();
+        try {
+            exigirPlanificacionEditable(id);
+            db.delete("detalle_compra", "compra_id=?", new String[]{Long.toString(id)});
+            if (db.delete("compras", "id=?", new String[]{Long.toString(id)}) != 1)
+                throw new IllegalArgumentException("La compra ya no existe.");
+            db.setTransactionSuccessful();
+        } finally { db.endTransaction(); }
+    }
+
+    public Long buscarCuentaPago(long compraId) {
+        try (Cursor c = helper.getReadableDatabase().rawQuery(
+                "SELECT m.cuenta_id FROM compra_movimiento cm JOIN movimientos m ON m.id=cm.movimiento_id WHERE cm.compra_id=?",
+                new String[]{Long.toString(compraId)})) {
+            return c.moveToFirst() ? c.getLong(0) : null;
+        }
+    }
+
+    public void registrarPago(long compraId, long movimientoId) {
+        ContentValues enlace = new ContentValues();
+        enlace.put("compra_id", compraId); enlace.put("movimiento_id", movimientoId);
+        helper.getWritableDatabase().insertOrThrow("compra_movimiento", null, enlace);
+        ContentValues estado = new ContentValues(); estado.put("estado", "REALIZADA");
+        if (helper.getWritableDatabase().update("compras", estado, "id=?", new String[]{Long.toString(compraId)}) != 1)
+            throw new IllegalArgumentException("La compra ya no existe.");
+    }
+
     public List<Compra> listar() {
         List<Compra> resultado = new ArrayList<>();
         try (Cursor c = helper.getReadableDatabase().query("compras", null, null, null, null, null, "fecha DESC, id DESC")) {
@@ -70,4 +124,3 @@ public final class CompraRepository {
                 c.getLong(c.getColumnIndexOrThrow("fecha")), c.isNull(contact) ? null : c.getLong(contact), detalles, Divisa.desdeCodigo(c.getString(c.getColumnIndexOrThrow("divisa"))));
     }
 }
-

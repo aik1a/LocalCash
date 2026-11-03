@@ -6,7 +6,6 @@ import java.security.*;
 import java.util.zip.ZipFile;
 import org.json.*;
 
-/** Atlas derivado de OSM. Solo copia desde APK a almacenamiento privado; nunca red. */
 public final class AtlasOffline {
     public static final String FUENTE = "LocalCashOSM";
     public static final double SUR=-33.465, OESTE=-70.675, NORTE=-33.435, ESTE=-70.645;
@@ -56,3 +55,4 @@ public final class AtlasOffline {
         } catch(NoSuchAlgorithmException ex) { throw new IOException("SHA256 no disponible.",ex); }
     }
 }
+

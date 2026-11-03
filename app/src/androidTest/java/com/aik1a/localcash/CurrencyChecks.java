@@ -11,7 +11,6 @@ import com.aik1a.localcash.data.*;
 import com.aik1a.localcash.domain.*;
 import java.util.*;
 
-/** Ejecutar únicamente en emulador descartable: crea fixtures y elimina su base de pruebas. */
 public final class CurrencyChecks {
     private static int checks;
     private static void check(boolean condition, String message) {
@@ -33,14 +32,14 @@ public final class CurrencyChecks {
             context.deleteDatabase("localcash.db");
             long cuentaClp, cuentaUsd, compraId, contacto;
             try (LocalCashDbHelper helper = new LocalCashDbHelper(context)) {
-                check(helper.getWritableDatabase().getVersion() == 5, "Instalación v5");
+                check(helper.getWritableDatabase().getVersion() == 7, "Instalación v7");
                 ConfiguracionRepository config = new ConfiguracionRepository(helper);
                 check(config.buscarDivisa() == null, "Primera vez pendiente");
                 config.configurarPrimeraVez(Divisa.CLP); config.configurarPrimeraVez(Divisa.CLP);
                 reject(() -> config.configurarPrimeraVez(Divisa.USD));
                 check(config.buscarDivisa() == Divisa.CLP, "Configuración única");
                 MovimientoService movimientos = new MovimientoService(helper);
-                cuentaClp = movimientos.crearCuenta("Efectivo", 10000); // Usa preferencia principal.
+                cuentaClp = movimientos.crearCuenta("Efectivo", 10000);
                 cuentaUsd = movimientos.crearCuenta("Dólares", 2550, Divisa.USD);
                 check(movimientos.buscarCuenta(cuentaClp).getDivisa() == Divisa.CLP, "Cuenta hereda principal");
                 check(movimientos.buscarCuenta(cuentaUsd).getDivisa() == Divisa.USD, "Otra moneda por cuenta");
@@ -84,7 +83,7 @@ public final class CurrencyChecks {
                 check(new DeudaRepository(helper).buscarMontoUsuario(compraId) == 5000, "Cuota propia tras reabrir");
                 check(new DeudaRepository(helper).listarPorCompra(compraId).get(0).getMonto() == 5000, "Deuda tras reabrir");
             }
-            result.putString("stream", "LOCALCASH_CURRENCY_PASS\nPASS " + checks + " Android SQLite/repository checks; migrations v1-v4→v5.\n");
+            result.putString("stream", "LOCALCASH_CURRENCY_PASS\nPASS " + checks + " Android SQLite/repository checks; migrations v1-v4→v7.\n");
             test.finish(Activity.RESULT_OK, result);
         } catch (Throwable error) {
             result.putString("stream", "LOCALCASH_CURRENCY_FAIL\n" + android.util.Log.getStackTraceString(error));
@@ -97,7 +96,7 @@ public final class CurrencyChecks {
         try (SQLiteOpenHelper old = fixture(context, version)) { antes = snapshot(old.getWritableDatabase()); }
         try (LocalCashDbHelper helper = new LocalCashDbHelper(context)) {
             SQLiteDatabase db = helper.getWritableDatabase();
-            check(db.getVersion() == 5, "Migración v" + version);
+            check(db.getVersion() == 7, "Migración v" + version);
             check(antes.equals(snapshot(db)), "Conserva datos históricos v" + version);
             ConfiguracionRepository config = new ConfiguracionRepository(helper);
             check(config.buscarDivisa() == null, "Migración no inventa preferencia");

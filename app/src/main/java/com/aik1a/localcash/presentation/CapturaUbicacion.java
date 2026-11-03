@@ -8,7 +8,6 @@ import android.location.*;
 import android.os.*;
 import com.aik1a.localcash.domain.Ubicacion;
 
-/** Captura acotada mientras el formulario está visible; sin caché ni tracking. */
 final class CapturaUbicacion implements LocationListener {
     interface Resultado {
         void recibido(Ubicacion ubicacion);
@@ -31,11 +30,13 @@ final class CapturaUbicacion implements LocationListener {
         if (!fine && !coarse) { resultado.noDisponible("Permiso denegado. Puedes guardar sin ubicación."); return; }
         if (manager == null) { resultado.noDisponible("Ubicación no disponible. Puedes guardar sin ubicación."); return; }
         try {
-            String provider = fine && manager.isProviderEnabled(LocationManager.GPS_PROVIDER) ? LocationManager.GPS_PROVIDER
-                    : coarse && manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ? LocationManager.NETWORK_PROVIDER : null;
-            if (provider == null) { resultado.noDisponible("Ubicación desactivada o proveedor no disponible. Puedes guardar sin ubicación."); return; }
+            boolean red = (fine || coarse) && manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            boolean gps = fine && manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if (!red && !gps) { resultado.noDisponible("Activa la ubicación del teléfono y reintenta. Puedes guardar sin ubicación."); return; }
             activa = true;
-            manager.requestLocationUpdates(provider, 0, 0, this, Looper.getMainLooper());
+
+            if (red) manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this, Looper.getMainLooper());
+            if (gps) manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this, Looper.getMainLooper());
             handler.postDelayed(timeout, 15000);
         } catch (SecurityException ex) { fallar("Permiso no disponible. Puedes guardar sin ubicación."); }
         catch (IllegalArgumentException ex) { fallar("Proveedor no disponible. Puedes guardar sin ubicación."); }
@@ -47,7 +48,9 @@ final class CapturaUbicacion implements LocationListener {
             cancelar(); resultado.recibido(ubicacion);
         } catch (IllegalArgumentException ex) { fallar("Coordenadas inválidas. Puedes guardar sin ubicación."); }
     }
-    @Override public void onProviderDisabled(String provider) { if (activa) fallar("Ubicación desactivada. Puedes guardar sin ubicación."); }
+    @Override public void onProviderDisabled(String provider) {
+
+    }
     @Override public void onProviderEnabled(String provider) { }
     @Override public void onStatusChanged(String provider, int status, Bundle extras) { }
     private void fallar(String motivo) { cancelar(); resultado.noDisponible(motivo); }
@@ -55,7 +58,7 @@ final class CapturaUbicacion implements LocationListener {
         activa = false; handler.removeCallbacks(timeout);
         if (manager != null) {
             try { manager.removeUpdates(this); }
-            catch (SecurityException ex) { /* El permiso puede revocarse durante la captura; ya no está activa. */ }
+            catch (SecurityException ex) {                                                                         }
         }
     }
 }

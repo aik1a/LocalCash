@@ -2,7 +2,6 @@ package com.aik1a.localcash.domain;
 
 import java.math.BigDecimal;
 
-/** Conversión exacta entre el formulario decimal y centésimas persistidas. */
 public final class Dinero {
     private Dinero() { }
 
@@ -29,7 +28,6 @@ public final class Dinero {
         return valor;
     }
 
-    /** Nunca oculta fracciones históricas ni convierte divisas. */
     public static String formatear(long centesimas, Divisa divisa) {
         if (divisa == null) return "Sin divisa · " + formatear(centesimas);
         divisa.validar(centesimas);

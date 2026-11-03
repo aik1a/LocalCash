@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="cuentas_fondo">#15101F</color>
+    <color name="cuentas_texto">#F4EDF9</color>
+    <color name="cuentas_secundario">#CDBEDC</color>
+    <color name="cuentas_tinta">#291936</color>
+    <color name="cuentas_lavanda">#DCC0FA</color>
+    <color name="cuentas_borde">#736087</color>
+    <color name="cuentas_error">#FFB5C8</color>
+    <color name="cuentas_ingreso">#B5DEC9</color>
+</resources>

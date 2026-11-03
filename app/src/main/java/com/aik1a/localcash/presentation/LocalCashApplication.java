@@ -3,7 +3,6 @@ package com.aik1a.localcash.presentation;
 import android.app.*;
 import android.os.Bundle;
 
-/** Sesión efímera: solo el callback biométrico abre el acceso; no se persiste. */
 public final class LocalCashApplication extends Application implements Application.ActivityLifecycleCallbacks {
     private boolean autenticada;
     private int visibles;
@@ -25,3 +24,4 @@ public final class LocalCashApplication extends Application implements Applicati
     @Override public void onActivitySaveInstanceState(Activity a, Bundle b) { }
     @Override public void onActivityDestroyed(Activity a) { }
 }
+

@@ -4,7 +4,6 @@ import com.aik1a.localcash.data.*;
 import com.aik1a.localcash.domain.*;
 import java.util.List;
 
-/** Coordina la compra existente, los contactos y el reparto. No altera cuentas. */
 public final class DeudaService {
     private final CompraRepository compras;
     private final ContactoRepository contactos;
@@ -13,6 +12,18 @@ public final class DeudaService {
         compras = new CompraRepository(helper); contactos = new ContactoRepository(helper);
         deudas = new DeudaRepository(helper);
     }
+    public void cambiarEstado(long compraId, long contactoId, boolean pagada) { deudas.cambiarEstado(compraId, contactoId, pagada); }
+    public List<Deuda> listarPorContacto(long contactoId) { return deudas.listarPorContacto(contactoId); }
+    public java.util.Map<Divisa, Long> totalesPendientes(long contactoId) {
+        java.util.Map<Divisa, Long> totales = new java.util.EnumMap<>(Divisa.class);
+        for (Deuda deuda : deudas.listarPorContacto(contactoId)) {
+            Divisa divisa = compras.buscar(deuda.getCompraId()).getDivisa();
+            if (divisa != null && "PENDIENTE".equals(deuda.getEstado()) && deuda.getMonto() > 0)
+                totales.put(divisa, Math.addExact(totales.containsKey(divisa) ? totales.get(divisa) : 0, deuda.getMonto()));
+        }
+        return totales;
+    }
+
     public Compra buscarCompra(long id) { return compras.buscar(id); }
     public List<Contacto> listarContactos() { return contactos.listar(); }
     public List<Deuda> listarDeudas(long compraId) { return deudas.listarPorCompra(compraId); }
