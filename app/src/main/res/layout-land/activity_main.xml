@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="horizontal" android:padding="12dp"
+    android:background="@drawable/cuentas_fondo" android:theme="@style/ThemeOverlay.LocalCash.Cuentas">
+    <ScrollView android:layout_width="0dp" android:layout_weight="2" android:layout_height="match_parent" android:fillViewport="true">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView style="@style/Cuentas.Texto" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="LocalCash · Cuentas" android:textSize="16sp" android:fontFamily="sans-serif-medium" android:accessibilityHeading="true" />
+            <TextView style="@style/Cuentas.Titulo" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Tus cuentas" android:accessibilityHeading="true" />
+            <TextView style="@style/Cuentas.Texto" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Cada cuenta, en su moneda." android:textColor="@color/cuentas_secundario" />
+            <Button android:id="@+id/abrir_contactos" style="@style/Cuentas.BotonAcento" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:text="Contactos" android:layout_marginTop="12dp" />
+            <Button android:id="@+id/abrir_compras" style="@style/Cuentas.BotonAcento" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:text="Compras" />
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout android:layout_width="0dp" android:layout_weight="3" android:layout_height="match_parent"
+        android:layout_marginStart="12dp" android:orientation="vertical">
+        <TextView style="@style/Cuentas.Etiqueta" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Cuentas" android:textSize="15sp" android:textColor="@color/cuentas_texto" android:accessibilityHeading="true" />
+        <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+            <ListView android:id="@+id/cuentas" android:layout_width="match_parent" android:layout_height="match_parent"
+                android:divider="@android:color/transparent" android:dividerHeight="10dp" android:listSelector="@android:color/transparent"
+                android:clipToPadding="false" android:paddingBottom="12dp" />
+            <TextView android:id="@+id/vacio" style="@style/Cuentas.Texto" android:layout_width="match_parent" android:layout_height="match_parent"
+                android:gravity="center" android:padding="16dp" android:drawableTop="@drawable/cuentas_ic_wallet" android:drawablePadding="8dp"
+                android:text="No hay cuentas. Crea una para comenzar." android:textColor="@color/cuentas_secundario" />
+        </FrameLayout>
+        <Button android:id="@+id/crear_cuenta" style="@style/Cuentas.Boton" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Crear cuenta" android:layout_marginTop="8dp" android:drawableStart="@drawable/cuentas_ic_plus" android:drawableTint="@color/cuentas_tinta" />
+    </LinearLayout>
+</LinearLayout>
