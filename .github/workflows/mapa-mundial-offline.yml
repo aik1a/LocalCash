@@ -1,0 +1,88 @@
+name: Mapa mundial offline - entrega urgente
+on:
+  pull_request:
+    branches: [main]
+    paths: ['app/**', 'tools/maps/prepare_vector_maps.py', '.github/workflows/mapa-mundial-offline.yml', 'tests/maps-emulator.py']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: world-map-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  build-and-map-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - run: sdkmanager "platforms;android-36.1" "build-tools;36.0.0"
+      - uses: actions/cache@v4
+        with:
+          path: app/build/generated/offlineMaps
+          key: mapsforge-world-chile-v5-2026-11-03
+      - name: Compile Java and tests before preparing large maps
+        run: bash gradlew --no-daemon --console=plain :app:compileDebugJavaWithJavac :app:compileDebugAndroidTestJavaWithJavac :app:testDebugUnitTest -x :app:prepareOfflineMaps
+      - name: Prepare licensed offline maps
+        run: python3 tools/maps/prepare_vector_maps.py
+      - name: Cache prepared maps before packaging
+        uses: actions/cache/save@v4
+        with:
+          path: app/build/generated/offlineMaps
+          key: mapsforge-world-chile-v5-2026-11-03
+      - name: Compile app, instrumentation and domain tests
+        run: |
+          mkdir -p evidence
+          git rev-parse HEAD > evidence/validated-sha.txt
+          bash tests/domain-checks.sh | tee evidence/domain-checks.log
+          bash gradlew --no-daemon --console=plain :app:assembleDebug :app:assembleDebugAndroidTest :app:testDebugUnitTest 2>&1 | tee evidence/build.log
+          sha256sum app/build/outputs/apk/debug/app-debug.apk > evidence/apk-sha256.txt
+          cp app/build/generated/offlineMaps/maps/vector/provenance.json evidence/
+      - name: Preserve installable APK immediately after build
+        uses: actions/upload-artifact@v4
+        with:
+          name: LocalCash-1.2.0-mapa-mundial-APK
+          compression-level: 6
+          path: |
+            app/build/outputs/apk/debug/app-debug.apk
+            evidence/
+      - name: Free runner disk for Android image
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk/ndk
+          df -h /
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Verify real global map and current location offline
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          ram-size: 3072M
+          arch: x86_64
+          target: google_apis
+          disk-size: 6000M
+          disable-animations: true
+          emulator-boot-timeout: 300
+          script: |
+            adb install -g app/build/outputs/apk/debug/app-debug.apk
+            adb install -g app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            adb shell appops set com.aik1a.localcash android:mock_location allow
+            python tests/biometric-emulator.py prepare
+            python tests/biometric-emulator.py enroll
+            python tests/maps-emulator.py
+      - name: Preserve test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LocalCash-mapa-mundial-pruebas
+          path: evidence/

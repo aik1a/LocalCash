@@ -5,114 +5,106 @@ import android.content.*;
 import android.content.pm.PackageManager;
 import android.graphics.*;
 import android.graphics.drawable.*;
-import android.net.*;
+import android.location.*;
+import android.net.ConnectivityManager;
 import android.os.*;
-import android.view.*;
-import android.view.accessibility.AccessibilityNodeInfo;
-import android.accessibilityservice.AccessibilityServiceInfo;
+import android.view.WindowManager;
 import android.widget.TextView;
 import com.aik1a.localcash.presentation.*;
 import com.aik1a.localcash.application.*;
 import com.aik1a.localcash.data.*;
 import com.aik1a.localcash.domain.*;
-import org.osmdroid.views.*;
 import org.osmdroid.views.overlay.*;
-import org.osmdroid.tileprovider.modules.OfflineTileProvider;
+import org.osmdroid.mapsforge.MapsForgeTileProvider;
 import org.osmdroid.util.*;
 import java.io.*;
 import java.util.*;
-import java.util.zip.*;
+import java.util.concurrent.atomic.*;
 
+/** Disposable emulator fixtures. Exercises the production location callback and vector renderer. */
 public final class MapChecks {
-    private final Instrumentation ins;private final Context context;private final StringBuilder log=new StringBuilder();
-    private Activity pantalla;private MapaLocalView mapa;
+    private final Instrumentation ins; private final Context context;
+    private final StringBuilder log=new StringBuilder();
+    private Activity pantalla; private MapaLocalView mapa;
     private MapChecks(Instrumentation ins){this.ins=ins;context=ins.getTargetContext();}
     public static void ejecutar(Instrumentation ins){new MapChecks(ins).ejecutar();}
-    private void ok(boolean value,String message){if(!value)throw new AssertionError(message);}
+    private void ok(boolean condition,String message){if(!condition)throw new AssertionError(message);log.append("PASS ").append(message).append('\n');android.util.Log.i("LocalCashMaps",message);Bundle progress=new Bundle();progress.putString("stream","PASS "+message+"\n");ins.sendStatus(0,progress);}
     private void ui(Runnable work){ins.runOnMainSync(work);}
-    private void ejecutar(){Bundle result=new Bundle();try {
-        AccessibilityServiceInfo info=ins.getUiAutomation().getServiceInfo();info.flags|=AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;ins.getUiAutomation().setServiceInfo(info);
-        ConnectivityManager manager=(ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        android.net.NetworkInfo active=manager.getActiveNetworkInfo();
-        long networkDeadline=SystemClock.uptimeMillis()+20000;
-        while(active!=null && active.isConnected() && SystemClock.uptimeMillis()<networkDeadline){SystemClock.sleep(250);active=manager.getActiveNetworkInfo();}
-        ok(active==null||!active.isConnected(),"Primera apertura exige red desactivada");
-        ok(context.checkSelfPermission("android.permission.INTERNET")==PackageManager.PERMISSION_DENIED,"APK no debe tener permiso INTERNET");
-        ok(!AtlasOffline.archivo(context).exists(),"Atlas ya copiado: primera apertura no limpia");
-        log.append("PASS primera instalación: sin conectividad, sin permiso INTERNET y sin atlas/caché previo.\n");
-        context.deleteDatabase("localcash.db");long cuenta,sinGps;
-        try(LocalCashDbHelper helper=new LocalCashDbHelper(context)){
-            new com.aik1a.localcash.data.ConfiguracionRepository(helper).configurarPrimeraVez(Divisa.USD);
-            MovimientoService service=new MovimientoService(helper);cuenta=service.crearCuenta("Demo mapa",10000);sinGps=service.crearCuenta("Sin GPS",5000);
-            service.registrar(cuenta,Movimiento.Tipo.INGRESO,100,"Centro",new Ubicacion(-33.450,-70.660));
-            service.registrar(cuenta,Movimiento.Tipo.EGRESO,50,"Fuera",new Ubicacion(-33.50,-70.70));
-            service.registrar(cuenta,Movimiento.Tipo.INGRESO,25,"Sin coordenadas");
-            service.registrar(sinGps,Movimiento.Tipo.INGRESO,1,"Sin GPS");ok(helper.getReadableDatabase().getVersion()==7,"SQLite v7");
-        }
-        ins.startActivitySync(new Intent(context,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK));
-        clickText("Demo mapa");
-        Instrumentation.ActivityMonitor monitor=ins.addMonitor(MapaActivity.class.getName(),null,false);clickId("abrir_mapa");
-        pantalla=ins.waitForMonitorWithTimeout(monitor,25000);ins.removeMonitor(monitor);ok(pantalla!=null,"Navegación a mapa");esperarMapa();
-        ok((pantalla.getWindow().getAttributes().flags&WindowManager.LayoutParams.FLAG_SECURE)!=0,"FLAG_SECURE permanece");
-        ok(mapa.getTileProvider() instanceof OfflineTileProvider,"OfflineTileProvider real");
-        ok(!mapa.useDataConnection(),"Conectividad del mapa desactivada");
-        ok(mapa.getTileProvider().getTileSource().name().equals("LocalCashOSM"),"Fuente exacta");
-        List<Marker> markers=new ArrayList<>();for(Overlay o:mapa.getOverlays())if(o instanceof Marker)markers.add((Marker)o);
-        ok(markers.size()==2,"Solo dos movimientos georreferenciados; sin GPS y otra cuenta excluidos");
-        Marker centro=null;boolean exterior=false;
-        for(Marker m:markers){if(Math.abs(m.getPosition().getLatitude()+33.45)<1e-8)centro=m;if(m.getPosition().getLatitude()==-33.50&&m.getPosition().getLongitude()==-70.70)exterior=true;}
-        ok(centro!=null&&exterior,"Coordenadas originales intactas, incluso fuera del área");
-        ok(((TextView)pantalla.findViewById(R.id.estado_mapa)).getText().toString().contains("fuera de cobertura"),"Aviso fuera de cobertura");
-        for(int z:new int[]{14,15,16}){
-            final int zoom=z;ui(()->mapa.getController().setZoom((double)zoom));SystemClock.sleep(700);
-            verificarTile(z);
-        }
-        final Marker marcador=centro;ui(()->{Point p=mapa.getProjection().toPixels(marcador.getPosition(),null);android.view.MotionEvent event=android.view.MotionEvent.obtain(android.os.SystemClock.uptimeMillis(),android.os.SystemClock.uptimeMillis(),android.view.MotionEvent.ACTION_UP,p.x,p.y-8,0);marcador.onSingleTapConfirmed(event,mapa);event.recycle();});
-        ok(((TextView)pantalla.findViewById(R.id.detalle_marcador)).getText().toString().contains("Centro"),"Detalle de marcador");
-        ui(()->{mapa.getController().setCenter(new GeoPoint(-33.451,-70.662));});SystemClock.sleep(400);
-        ok(Math.abs(mapa.getMapCenter().getLongitude()+70.662)<.002,"Desplazamiento geográfico");
-        ui(()->{mapa.getController().setCenter(new GeoPoint(-33.450,-70.660));mapa.getController().setZoom(16.0);});SystemClock.sleep(1000);
-        renderConMarcador(marcador);
-        Instrumentation.ActivityMonitor recreate=ins.addMonitor(MapaActivity.class.getName(),null,false);
-        ui(()->pantalla.recreate());Activity nueva=ins.waitForMonitorWithTimeout(recreate,25000);ins.removeMonitor(recreate);ok(nueva!=null,"Recreación de mapa");pantalla=nueva;esperarMapa();ok(Math.abs(mapa.getZoomLevelDouble()-16)<.01,"Zoom conservado en lifecycle");
-        log.append("PASS proveedor local, tiles reales z14/15/16 decodificados idénticos al ZIP, base dibujada y marcador visible, pan/zoom/detalles/cobertura.\n");
-        ui(()->pantalla.finish());SystemClock.sleep(500);
-        abrirDirecto(sinGps);esperarMapa();ok(mapa.getOverlays().stream().noneMatch(o->o instanceof Marker),"Cuenta sin GPS sin marcadores");
-        ok(((TextView)pantalla.findViewById(R.id.estado_mapa)).getText().toString().contains("Sin movimientos con ubicación"),"Estado vacío");
-        verificarTile(15);ui(()->pantalla.finish());SystemClock.sleep(400);
-        try(FileOutputStream out=new FileOutputStream(AtlasOffline.archivo(context))){out.write(new byte[]{1,2,3});}
-        abrirDirecto(cuenta);esperarError();ok(pantalla.findViewById(R.id.map)==null,"Atlas corrupto no muestra mapa vacío ni fallback");ui(()->pantalla.finish());
-        ok(AtlasOffline.archivo(context).delete(),"Eliminar copia corrupta de emulador");abrirDirecto(cuenta);esperarMapa();verificarTile(15);
-        log.append("PASS sin coordenadas: cero marcadores/estado vacío; ZIP corrupto: error local controlado; copia ausente: recuperada exclusivamente desde APK.\n");
-        try{AtlasOffline.validar(context,new File(context.getFilesDir(),"no-existe.zip"));throw new AssertionError("Archivo ausente aceptado");}catch(IOException esperado){}
-        try(LocalCashDbHelper helper=new LocalCashDbHelper(context)){
-            MovimientoService s=new MovimientoService(helper);ok(helper.getReadableDatabase().getVersion()==7,"No hay migración");ok(s.calcularSaldo(cuenta)==10075&&s.listarMovimientos(cuenta).size()==3,"Mapa no altera datos/saldo");
-        }
-        log.append("PASS reapertura/lifecycle y SQLite v7: datos/saldos/coordenadas intactos.\nLOCALCASH_MAPS_PASS\n");
-        File evidence=new File(context.getFilesDir(),"map-evidence");evidence.mkdirs();try(FileWriter writer=new FileWriter(new File(evidence,"map-checks.log"))){writer.write(log.toString());}
-        result.putString("stream",log.toString());ins.finish(Activity.RESULT_OK,result);
-    }catch(Throwable ex){result.putString("stream",log+"\nLOCALCASH_MAPS_FAIL\n"+android.util.Log.getStackTraceString(ex));ins.finish(Activity.RESULT_CANCELED,result);}}
-    private void abrirDirecto(long cuenta){pantalla=ins.startActivitySync(new Intent(context,MapaActivity.class).putExtra(CuentaActivity.CUENTA_ID,cuenta).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));}
-    private void esperarMapa(){long end=SystemClock.uptimeMillis()+25000;while(SystemClock.uptimeMillis()<end){ui(()->mapa=pantalla.findViewById(R.id.map));if(mapa!=null&&mapa.getWidth()>0)return;SystemClock.sleep(150);}throw new AssertionError("Mapa no disponible tras biometría");}
-    private void esperarError(){long end=SystemClock.uptimeMillis()+25000;while(SystemClock.uptimeMillis()<end){final boolean[] found={false};ui(()->{TextView t=pantalla.findViewById(R.id.estado_mapa);found[0]=t!=null&&t.getText().toString().contains("No se pudo abrir el mapa local");});if(found[0])return;SystemClock.sleep(100);}throw new AssertionError("No hay error de atlas controlado");}
-    private void verificarTile(int z)throws Exception{
-        int x=(int)((-70.660+180)/360*(1<<z));double lat=Math.toRadians(-33.450);int y=(int)((1-Math.log(Math.tan(lat)+1/Math.cos(lat))/Math.PI)/2*(1<<z));long index=MapTileIndex.getTileIndex(z,x,y);
-        Drawable[] tile={null};long end=SystemClock.uptimeMillis()+15000;
-        while(SystemClock.uptimeMillis()<end){ui(()->{mapa.invalidate();tile[0]=mapa.getTileProvider().getMapTile(index);});if(tile[0] instanceof BitmapDrawable)break;SystemClock.sleep(150);}
-        ok(tile[0] instanceof BitmapDrawable,"Tile real no cargado z"+z);Bitmap actual=((BitmapDrawable)tile[0]).getBitmap();
-        Bitmap expected;try(ZipFile zip=new ZipFile(AtlasOffline.archivo(context));InputStream in=zip.getInputStream(zip.getEntry("LocalCashOSM/"+z+"/"+x+"/"+y+".png"))){expected=BitmapFactory.decodeStream(in);}
-        ok(actual.getWidth()==256&&expected!=null,"PNG 256px");int[] a=new int[65536],b=new int[65536];actual.getPixels(a,0,256,0,0,256,256);expected.getPixels(b,0,256,0,0,256,256);ok(Arrays.equals(a,b),"Tile visible idéntico al PNG versionado");
-        HashSet<Integer> colors=new HashSet<>();for(int c:a)colors.add(c);ok(colors.size()>15,"Cartografía no vacía");
-        File folder=new File(context.getFilesDir(),"map-evidence");folder.mkdirs();try(OutputStream out=new FileOutputStream(new File(folder,"tile-z"+z+".png"))){expected.compress(Bitmap.CompressFormat.PNG,100,out);}expected.recycle();
-        log.append("PASS tile fuente LocalCashOSM z").append(z).append(" ").append(x).append("/").append(y).append(" colores=").append(colors.size()).append("\n");
+    private void ejecutar(){
+        Bundle result=new Bundle(); LocationManager lm=(LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        AtomicBoolean feeding=new AtomicBoolean(true); AtomicReference<GeoPoint> fix=new AtomicReference<>(new GeoPoint(-33.55,-70.58)); Thread feed=null;
+        try {
+            ConnectivityManager cm=(ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            ok(cm.getActiveNetworkInfo()==null||!cm.getActiveNetworkInfo().isConnected(),"Primera apertura sin red");
+            ok(context.checkSelfPermission("android.permission.INTERNET")==PackageManager.PERMISSION_DENIED,"APK sin permiso INTERNET");
+            ok(!MapasVectoriales.archivo(context,"world.map").exists(),"Instalación nueva sin mapas copiados ni caché");
+            lm.addTestProvider(LocationManager.GPS_PROVIDER,false,false,false,false,true,true,true,Criteria.POWER_LOW,Criteria.ACCURACY_FINE);
+            lm.setTestProviderEnabled(LocationManager.GPS_PROVIDER,true);
+            feed=new Thread(() -> {while(feeding.get()){
+                try {GeoPoint p=fix.get();Location location=new Location(LocationManager.GPS_PROVIDER);location.setLatitude(p.getLatitude());location.setLongitude(p.getLongitude());location.setAccuracy(5);location.setTime(System.currentTimeMillis());location.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());lm.setTestProviderLocation(LocationManager.GPS_PROVIDER,location);Thread.sleep(250);}catch(Exception ignored){}
+            }});feed.start();
+            context.deleteDatabase("localcash.db");long cuenta;
+            try(LocalCashDbHelper helper=new LocalCashDbHelper(context)){
+                new ConfiguracionRepository(helper).configurarPrimeraVez(Divisa.USD);
+                MovimientoService service=new MovimientoService(helper);cuenta=service.crearCuenta("Demo mapa",10000);
+                service.registrar(cuenta,Movimiento.Tipo.INGRESO,100,"La Florida",new Ubicacion(-33.55,-70.58));
+                service.registrar(cuenta,Movimiento.Tipo.EGRESO,50,"París",new Ubicacion(48.8566,2.3522));
+                service.registrar(cuenta,Movimiento.Tipo.INGRESO,25,"Sin coordenadas");
+            }
+            abrir(cuenta);esperarMapa();esperarPosicion(-33.55,-70.58);
+            ok((pantalla.getWindow().getAttributes().flags&WindowManager.LayoutParams.FLAG_SECURE)!=0,"Biometría y FLAG_SECURE intactos");
+            ok(mapa.getTileProvider() instanceof MapsForgeTileProvider&&!mapa.useDataConnection(),"Render vectorial local sin conexión");
+            ok(((TextView)pantalla.findViewById(R.id.centrar_mapa)).getText().toString().equals("Mi ubicación"),"Botón Mi ubicación visible");
+            ok(!((TextView)pantalla.findViewById(R.id.estado_mapa)).getText().toString().contains("fuera de cobertura"),"Sin rechazo territorial de movimientos");
+            long movimientos=mapa.getOverlays().stream().filter(o->o instanceof Marker&&"Movimiento".equals(((Marker)o).getSnippet())).count();
+            ok(movimientos==2,"Dos movimientos geolocalizados de la cuenta; sin GPS excluido");
+            verificarTile(-33.55,-70.58,15,"la-florida-callles",15);
+            verificarTile(35.6762,139.6503,3,"mundo-tokio",3);
+            verificarTile(48.8566,2.3522,3,"mundo-europa",3);
+            fix.set(new GeoPoint(48.8566,2.3522));ui(()->pantalla.findViewById(R.id.centrar_mapa).performClick());esperarPosicion(48.8566,2.3522);
+            ok(true,"Mi ubicación se centra en París mediante callback GPS, fuera de Chile");
+            // At zoom5 one projected pixel spans ~0.044 degrees. Allow two pixels
+            // for integer viewport rounding; this still rejects any territorial clamp.
+            ui(()->{mapa.getController().setZoom(5.0);mapa.getController().setCenter(new GeoPoint(35.6762,139.6503));});SystemClock.sleep(500);
+            ok(Math.abs(mapa.getMapCenter().getLongitude()-139.6503)<.1,"Navegación mundial sin rectángulo de Santiago; centro="+mapa.getMapCenter());
+            ui(()->pantalla.findViewById(R.id.ver_movimientos_mapa).performClick());SystemClock.sleep(800);
+            ok(mapa.getZoomLevelDouble()<10,"Ver movimientos encuadra continentes distintos");
+            // Invalid imports must not replace the existing map or touch SQLite.
+            File invalid=new File(context.getCacheDir(),"invalid.map");try(FileOutputStream out=new FileOutputStream(invalid)){out.write(new byte[]{1,2,3});}
+            try{MapasVectoriales.importar(context,android.net.Uri.fromFile(invalid));throw new AssertionError("Mapa inválido aceptado");}catch(IOException expected){ok(!MapasVectoriales.tieneAdicional(context),"Importación inválida rechazada de forma atómica");}
+            // A valid local map may be imported without internet.
+            MapasVectoriales.importar(context,android.net.Uri.fromFile(MapasVectoriales.archivo(context,"world.map")));
+            ok(MapasVectoriales.tieneAdicional(context),"Importación local .map válida sin red");
+            MapasVectoriales.archivo(context,"importado.map").delete();
+            try(LocalCashDbHelper helper=new LocalCashDbHelper(context)){
+                MovimientoService service=new MovimientoService(helper);
+                ok(helper.getReadableDatabase().getVersion()==7&&service.calcularSaldo(cuenta)==10075&&service.listarMovimientos(cuenta).size()==3,"SQLite v7, saldos y coordenadas preservados");
+            }
+            ui(()->{mapa.getController().setZoom(5.0);mapa.getController().setCenter(new GeoPoint(35.6762,139.6503));});
+            Instrumentation.ActivityMonitor monitor=ins.addMonitor(MapaActivity.class.getName(),null,false);ui(()->pantalla.recreate());
+            Activity nueva=ins.waitForMonitorWithTimeout(monitor,30000);ins.removeMonitor(monitor);pantalla=nueva;esperarMapa();SystemClock.sleep(600);
+            ok(Math.abs(mapa.getMapCenter().getLongitude()-139.6503)<.1&&Math.abs(mapa.getZoomLevelDouble()-5)<.01,"Rotación/recreación conserva vista mundial");
+            log.append("LOCALCASH_MAPS_PASS\n");
+            File folder=new File(context.getFilesDir(),"map-evidence");folder.mkdirs();try(FileWriter writer=new FileWriter(new File(folder,"map-checks.log"))){writer.write(log.toString());}
+            result.putString("stream",log.toString());ins.finish(Activity.RESULT_OK,result);
+        }catch(Throwable ex){result.putString("stream",log+"\nLOCALCASH_MAPS_FAIL\n"+android.util.Log.getStackTraceString(ex));ins.finish(Activity.RESULT_CANCELED,result);}
+        finally{feeding.set(false);if(feed!=null)feed.interrupt();try{lm.removeTestProvider(LocationManager.GPS_PROVIDER);}catch(Exception ignored){}}
     }
-    private void renderConMarcador(Marker marker)throws Exception{
-        Bitmap[] images=new Bitmap[2];ui(()->{
-            for(int i=0;i<2;i++){marker.setEnabled(i==1);images[i]=Bitmap.createBitmap(mapa.getWidth(),mapa.getHeight(),Bitmap.Config.ARGB_8888);mapa.draw(new Canvas(images[i]));}marker.setEnabled(true);
-        });int[] a=new int[images[0].getWidth()*images[0].getHeight()],b=new int[a.length];images[0].getPixels(a,0,images[0].getWidth(),0,0,images[0].getWidth(),images[0].getHeight());images[1].getPixels(b,0,images[1].getWidth(),0,0,images[1].getWidth(),images[1].getHeight());int changed=0;for(int i=0;i<a.length;i++)if(a[i]!=b[i])changed++;ok(changed>20,"El marcador no se dibujó sobre MapView");
-        File folder=new File(context.getFilesDir(),"map-evidence");folder.mkdirs();try(OutputStream out=new FileOutputStream(new File(folder,"authenticated-map-render.png"))){images[1].compress(Bitmap.CompressFormat.PNG,100,out);}for(Bitmap bitmap:images)bitmap.recycle();log.append("PASS render MapView real: marcador cambia ").append(changed).append(" pixels; FLAG_SECURE intacto.\n");
+    private void abrir(long id){
+        Instrumentation.ActivityMonitor monitor=ins.addMonitor(MapaActivity.class.getName(),null,false);
+        ui(()->context.startActivity(new Intent(context,MapaActivity.class).putExtra(CuentaActivity.CUENTA_ID,id).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK)));
+        pantalla=ins.waitForMonitorWithTimeout(monitor,30000);ins.removeMonitor(monitor);
+        ok(pantalla!=null,"Activity del mapa iniciada sin esperar al render continuo");
     }
-    private AccessibilityNodeInfo nodo(String id,String text){AccessibilityNodeInfo root=ins.getUiAutomation().getRootInActiveWindow();if(root==null)return null;List<AccessibilityNodeInfo> list=id!=null?root.findAccessibilityNodeInfosByViewId(context.getPackageName()+":id/"+id):root.findAccessibilityNodeInfosByText(text);for(AccessibilityNodeInfo n:list)if(n.isVisibleToUser())return n;return null;}
-    private void clickId(String id){click(id,null);}private void clickText(String text){click(null,text);}
-    private void click(String id,String text){long end=SystemClock.uptimeMillis()+25000;while(SystemClock.uptimeMillis()<end){AccessibilityNodeInfo n=nodo(id,text);if(n!=null){while(n!=null&&!n.isClickable())n=n.getParent();if(n!=null&&n.performAction(AccessibilityNodeInfo.ACTION_CLICK))return;}SystemClock.sleep(150);}throw new AssertionError("Control no disponible "+id+" "+text);}
+    private void esperarMapa(){long end=SystemClock.uptimeMillis()+90000;while(SystemClock.uptimeMillis()<end){ui(()->mapa=pantalla.findViewById(R.id.map));if(mapa!=null&&mapa.getWidth()>0&&mapa.getHeight()>0)return;SystemClock.sleep(200);}throw new AssertionError("Mapa no disponible tras biometría/preparación");}
+    private void esperarPosicion(double lat,double lon){long end=SystemClock.uptimeMillis()+22000;while(SystemClock.uptimeMillis()<end){final boolean[] ready={false};ui(()->{TextView t=pantalla.findViewById(R.id.detalle_marcador);ready[0]=t!=null&&t.getText().toString().startsWith("Mi ubicación:")&&Math.abs(mapa.getMapCenter().getLatitude()-lat)<.001&&Math.abs(mapa.getMapCenter().getLongitude()-lon)<.001;});if(ready[0]){ok(true,"GPS centra "+lat+", "+lon);return;}SystemClock.sleep(200);}throw new AssertionError("La posición actual no centró el mapa");}
+    private void verificarTile(double lat,double lon,int z,String name,int minColors)throws Exception{
+        int x=(int)((lon+180)/360*(1<<z)),y=(int)((1-Math.log(Math.tan(Math.toRadians(lat))+1/Math.cos(Math.toRadians(lat)))/Math.PI)/2*(1<<z));
+        long index=MapTileIndex.getTileIndex(z,x,y);Drawable[] tile={null};long end=SystemClock.uptimeMillis()+30000;
+        while(SystemClock.uptimeMillis()<end){ui(()->tile[0]=mapa.getTileProvider().getMapTile(index));if(tile[0] instanceof BitmapDrawable)break;SystemClock.sleep(200);}
+        ok(tile[0] instanceof BitmapDrawable,"Tile offline renderizado "+name);
+        Bitmap bitmap=((BitmapDrawable)tile[0]).getBitmap();HashSet<Integer> colors=new HashSet<>();int[] pixels=new int[bitmap.getWidth()*bitmap.getHeight()];bitmap.getPixels(pixels,0,bitmap.getWidth(),0,0,bitmap.getWidth(),bitmap.getHeight());for(int p:pixels)colors.add(p);
+        ok(colors.size()>minColors,"Cartografía real no vacía "+name+" colores="+colors.size());
+        File folder=new File(context.getFilesDir(),"map-evidence");folder.mkdirs();try(OutputStream out=new FileOutputStream(new File(folder,name+".png"))){bitmap.compress(Bitmap.CompressFormat.PNG,100,out);}
+    }
 }
