@@ -63,8 +63,10 @@ public final class MapChecks {
             verificarTile(48.8566,2.3522,3,"mundo-europa",3);
             fix.set(new GeoPoint(48.8566,2.3522));ui(()->pantalla.findViewById(R.id.centrar_mapa).performClick());esperarPosicion(48.8566,2.3522);
             ok(true,"Mi ubicación se centra en París mediante callback GPS, fuera de Chile");
+            // At zoom5 one projected pixel spans ~0.044 degrees. Allow two pixels
+            // for integer viewport rounding; this still rejects any territorial clamp.
             ui(()->{mapa.getController().setZoom(5.0);mapa.getController().setCenter(new GeoPoint(35.6762,139.6503));});SystemClock.sleep(500);
-            ok(Math.abs(mapa.getMapCenter().getLongitude()-139.6503)<.01,"Navegación mundial sin rectángulo de Santiago");
+            ok(Math.abs(mapa.getMapCenter().getLongitude()-139.6503)<.1,"Navegación mundial sin rectángulo de Santiago; centro="+mapa.getMapCenter());
             ui(()->pantalla.findViewById(R.id.ver_movimientos_mapa).performClick());SystemClock.sleep(800);
             ok(mapa.getZoomLevelDouble()<10,"Ver movimientos encuadra continentes distintos");
             // Invalid imports must not replace the existing map or touch SQLite.
@@ -81,7 +83,7 @@ public final class MapChecks {
             ui(()->{mapa.getController().setZoom(5.0);mapa.getController().setCenter(new GeoPoint(35.6762,139.6503));});
             Instrumentation.ActivityMonitor monitor=ins.addMonitor(MapaActivity.class.getName(),null,false);ui(()->pantalla.recreate());
             Activity nueva=ins.waitForMonitorWithTimeout(monitor,30000);ins.removeMonitor(monitor);pantalla=nueva;esperarMapa();SystemClock.sleep(600);
-            ok(Math.abs(mapa.getMapCenter().getLongitude()-139.6503)<.01&&Math.abs(mapa.getZoomLevelDouble()-5)<.01,"Rotación/recreación conserva vista mundial");
+            ok(Math.abs(mapa.getMapCenter().getLongitude()-139.6503)<.1&&Math.abs(mapa.getZoomLevelDouble()-5)<.01,"Rotación/recreación conserva vista mundial");
             log.append("LOCALCASH_MAPS_PASS\n");
             File folder=new File(context.getFilesDir(),"map-evidence");folder.mkdirs();try(FileWriter writer=new FileWriter(new File(folder,"map-checks.log"))){writer.write(log.toString());}
             result.putString("stream",log.toString());ins.finish(Activity.RESULT_OK,result);
