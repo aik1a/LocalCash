@@ -30,7 +30,14 @@ try:
     # MapChecks exige File.exists()==false antes de abrir el mapa; sin depender de test(1) en Android 7.
     with (e/'maps-fingerprint-feed.log').open('w') as output:feed=subprocess.Popen([sys.executable,'tests/biometric-emulator.py','feed'],stdout=output,stderr=subprocess.STDOUT,start_new_session=True)
     try:
-     bio.instrument('FlowChecks','maps',file='maps-flow.log',marker='LOCALCASH_MAPS_PASS')
+     try:
+      bio.instrument('FlowChecks','maps',file='maps-flow.log',marker='LOCALCASH_MAPS_PASS')
+     except subprocess.TimeoutExpired as failure:
+      captured=failure.stdout or b''
+      if isinstance(captured,bytes):captured=captured.decode(errors='replace')
+      (e/'maps-timeout-progress.log').write_text(captured)
+      print(captured,flush=True)
+      raise
      # Instrumentation termina el proceso. Extraer solo evidencia de fixtures ya autenticados.
      folder=e/'map-evidence';folder.mkdir(exist_ok=True)
      names=bio.adb('shell','run-as',bio.package,'ls','files/map-evidence').split()
@@ -66,7 +73,7 @@ try:
     (e/'network-restore.log').write_text('\n'.join(restore))
 finally:
     try:
-        r=subprocess.run(['adb','logcat','-d','-t','1800'],capture_output=True,text=True,timeout=30)
+        r=subprocess.run(['adb','logcat','-d'],capture_output=True,text=True,timeout=30)
         pathlib.Path('evidence/maps-final-logcat.txt').write_text(r.stdout+r.stderr)
     except Exception as failure:print('No se pudo guardar logcat:',failure,flush=True)
 

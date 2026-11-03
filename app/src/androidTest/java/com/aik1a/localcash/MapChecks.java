@@ -28,7 +28,7 @@ public final class MapChecks {
     private Activity pantalla; private MapaLocalView mapa;
     private MapChecks(Instrumentation ins){this.ins=ins;context=ins.getTargetContext();}
     public static void ejecutar(Instrumentation ins){new MapChecks(ins).ejecutar();}
-    private void ok(boolean condition,String message){if(!condition)throw new AssertionError(message);log.append("PASS ").append(message).append('\n');}
+    private void ok(boolean condition,String message){if(!condition)throw new AssertionError(message);log.append("PASS ").append(message).append('\n');android.util.Log.i("LocalCashMaps",message);Bundle progress=new Bundle();progress.putString("stream","PASS "+message+"\n");ins.sendStatus(0,progress);}
     private void ui(Runnable work){ins.runOnMainSync(work);}
     private void ejecutar(){
         Bundle result=new Bundle(); LocationManager lm=(LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
@@ -88,7 +88,12 @@ public final class MapChecks {
         }catch(Throwable ex){result.putString("stream",log+"\nLOCALCASH_MAPS_FAIL\n"+android.util.Log.getStackTraceString(ex));ins.finish(Activity.RESULT_CANCELED,result);}
         finally{feeding.set(false);if(feed!=null)feed.interrupt();try{lm.removeTestProvider(LocationManager.GPS_PROVIDER);}catch(Exception ignored){}}
     }
-    private void abrir(long id){pantalla=ins.startActivitySync(new Intent(context,MapaActivity.class).putExtra(CuentaActivity.CUENTA_ID,id).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));}
+    private void abrir(long id){
+        Instrumentation.ActivityMonitor monitor=ins.addMonitor(MapaActivity.class.getName(),null,false);
+        ui(()->context.startActivity(new Intent(context,MapaActivity.class).putExtra(CuentaActivity.CUENTA_ID,id).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK)));
+        pantalla=ins.waitForMonitorWithTimeout(monitor,30000);ins.removeMonitor(monitor);
+        ok(pantalla!=null,"Activity del mapa iniciada sin esperar al render continuo");
+    }
     private void esperarMapa(){long end=SystemClock.uptimeMillis()+90000;while(SystemClock.uptimeMillis()<end){ui(()->mapa=pantalla.findViewById(R.id.map));if(mapa!=null&&mapa.getWidth()>0)return;SystemClock.sleep(200);}throw new AssertionError("Mapa no disponible tras biometría/preparación");}
     private void esperarPosicion(double lat,double lon){long end=SystemClock.uptimeMillis()+22000;while(SystemClock.uptimeMillis()<end){final boolean[] ready={false};ui(()->{TextView t=pantalla.findViewById(R.id.detalle_marcador);ready[0]=t!=null&&t.getText().toString().startsWith("Mi ubicación:")&&Math.abs(mapa.getMapCenter().getLatitude()-lat)<.001&&Math.abs(mapa.getMapCenter().getLongitude()-lon)<.001;});if(ready[0]){ok(true,"GPS centra "+lat+", "+lon);return;}SystemClock.sleep(200);}throw new AssertionError("La posición actual no centró el mapa");}
     private void verificarTile(double lat,double lon,int z,String name,int minColors)throws Exception{
