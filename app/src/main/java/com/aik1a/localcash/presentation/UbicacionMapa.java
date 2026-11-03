@@ -38,6 +38,8 @@ final class UbicacionMapa implements LocationListener {
     }
     @Override public void onLocationChanged(Location location) {
         if (!activa) return;
+        long edad = SystemClock.elapsedRealtimeNanos() - location.getElapsedRealtimeNanos();
+        if (edad < 0 || edad > 60_000_000_000L) return;
         double lat = location.getLatitude(), lon = location.getLongitude();
         if (Double.isNaN(lat) || Double.isNaN(lon) || Math.abs(lat)>90 || Math.abs(lon)>180) { fallar("El teléfono devolvió coordenadas inválidas."); return; }
         cancelar(); resultado.recibido(new GeoPoint(lat,lon));

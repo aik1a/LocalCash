@@ -29,8 +29,15 @@ jobs:
         with:
           path: app/build/generated/offlineMaps
           key: mapsforge-world-chile-v5-2026-11-03
+      - name: Compile Java and tests before preparing large maps
+        run: bash gradlew --no-daemon --console=plain :app:compileDebugJavaWithJavac :app:compileDebugAndroidTestJavaWithJavac :app:testDebugUnitTest -x :app:prepareOfflineMaps
       - name: Prepare licensed offline maps
         run: python3 tools/maps/prepare_vector_maps.py
+      - name: Cache prepared maps before packaging
+        uses: actions/cache/save@v4
+        with:
+          path: app/build/generated/offlineMaps
+          key: mapsforge-world-chile-v5-2026-11-03
       - name: Compile app, instrumentation and domain tests
         run: |
           mkdir -p evidence

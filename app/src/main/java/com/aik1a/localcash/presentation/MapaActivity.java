@@ -138,7 +138,7 @@ public final class MapaActivity extends ActividadProtegida {
     @Override public void onRequestPermissionsResult(int code,String[] permisos,int[] resultados) {
         super.onRequestPermissionsResult(code,permisos,resultados);
         if(code!=PERMISO_UBICACION)return;
-        if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED) solicitarUbicacion();
+        if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED) { if(visible)solicitarUbicacion();else pedirInicial=true; }
         else estadoUbicacion("Permiso de ubicación denegado. Puedes explorar el mapa y ver tus movimientos.");
     }
     @Override protected void onActivityResult(int request,int result,Intent data) {

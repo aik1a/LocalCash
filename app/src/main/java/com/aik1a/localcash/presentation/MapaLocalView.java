@@ -9,6 +9,7 @@ import org.osmdroid.mapsforge.MapsForgeTileSource;
 import org.osmdroid.tileprovider.util.SimpleRegisterReceiver;
 
 public final class MapaLocalView extends MapView {
+    private boolean detached;
     public MapaLocalView(Context context, AttributeSet attrs) {
         super(context, proveedor(context), null, attrs);
         setUseDataConnection(false);
@@ -23,6 +24,8 @@ public final class MapaLocalView extends MapView {
         return proveedor;
     }
     @Override public void onDetach() {
+        if (detached) return;
+        detached = true;
         MapsForgeTileSource fuente = (MapsForgeTileSource) getTileProvider().getTileSource();
         super.onDetach();
         fuente.dispose();
