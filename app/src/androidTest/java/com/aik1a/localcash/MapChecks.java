@@ -94,7 +94,7 @@ public final class MapChecks {
         pantalla=ins.waitForMonitorWithTimeout(monitor,30000);ins.removeMonitor(monitor);
         ok(pantalla!=null,"Activity del mapa iniciada sin esperar al render continuo");
     }
-    private void esperarMapa(){long end=SystemClock.uptimeMillis()+90000;while(SystemClock.uptimeMillis()<end){ui(()->mapa=pantalla.findViewById(R.id.map));if(mapa!=null&&mapa.getWidth()>0)return;SystemClock.sleep(200);}throw new AssertionError("Mapa no disponible tras biometría/preparación");}
+    private void esperarMapa(){long end=SystemClock.uptimeMillis()+90000;while(SystemClock.uptimeMillis()<end){ui(()->mapa=pantalla.findViewById(R.id.map));if(mapa!=null&&mapa.getWidth()>0&&mapa.getHeight()>0)return;SystemClock.sleep(200);}throw new AssertionError("Mapa no disponible tras biometría/preparación");}
     private void esperarPosicion(double lat,double lon){long end=SystemClock.uptimeMillis()+22000;while(SystemClock.uptimeMillis()<end){final boolean[] ready={false};ui(()->{TextView t=pantalla.findViewById(R.id.detalle_marcador);ready[0]=t!=null&&t.getText().toString().startsWith("Mi ubicación:")&&Math.abs(mapa.getMapCenter().getLatitude()-lat)<.001&&Math.abs(mapa.getMapCenter().getLongitude()-lon)<.001;});if(ready[0]){ok(true,"GPS centra "+lat+", "+lon);return;}SystemClock.sleep(200);}throw new AssertionError("La posición actual no centró el mapa");}
     private void verificarTile(double lat,double lon,int z,String name,int minColors)throws Exception{
         int x=(int)((lon+180)/360*(1<<z)),y=(int)((1-Math.log(Math.tan(Math.toRadians(lat))+1/Math.cos(Math.toRadians(lat)))/Math.PI)/2*(1<<z));

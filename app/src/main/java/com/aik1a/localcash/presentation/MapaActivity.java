@@ -130,7 +130,26 @@ public final class MapaActivity extends ActividadProtegida {
         if(mapa==null)return;
         if(puntos.isEmpty()) { mapa.getController().setZoom(3.0); mapa.getController().setCenter(new GeoPoint(0,0)); return; }
         mapa.getController().setCenter(puntos.get(0)); mapa.getController().setZoom(15.0);
-        if(puntos.size()>1) mapa.post(() -> { if(mapa!=null)mapa.zoomToBoundingBox(BoundingBox.fromGeoPoints(puntos),false,80,18.0,null); });
+        if(puntos.size()>1) {
+            final MapaLocalView vista = mapa;
+            if(vista.getWidth()>0 && vista.getHeight()>0) encuadrar(vista);
+            else vista.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override public void onLayoutChange(View v,int l,int t,int r,int b,int ol,int ot,int or,int ob) {
+                    if(r<=l || b<=t)return;
+                    v.removeOnLayoutChangeListener(this);
+                    // A fresh GPS fix takes priority over a deferred initial fit.
+                    if(mapa==vista && posicion==null && !buscando)encuadrar(vista);
+                }
+            });
+        }
+    }
+    private void encuadrar(MapaLocalView vista) {
+        int ancho = vista.getWidth(), alto = vista.getHeight();
+        if(ancho<=0 || alto<=0 || puntos.isEmpty())return;
+        // osmdroid's fit computes a projection immediately: both dimensions after
+        // padding must remain positive, including small landscape viewports.
+        int margen = Math.min(40,Math.min(ancho,alto)/5);
+        vista.zoomToBoundingBox(BoundingBox.fromGeoPoints(puntos),false,margen,18.0,null);
     }
     private void estadoUbicacion(String texto) { TextView estado=findViewById(R.id.detalle_marcador); if(estado!=null)estado.setText(texto); }
     private void solicitarUbicacion() {
