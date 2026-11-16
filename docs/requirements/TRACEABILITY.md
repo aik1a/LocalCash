@@ -1,5 +1,12 @@
 # Incremento FB-01 — trazabilidad planificada, 2026-11-16
 
+## Conciliación operativa FB-F0-T02 — 2026-11-16
+
+La tabla T07C inferior conserva el estado de octubre. Para implementación actual tras #16 (`c28a27b`, inspeccionada en integración `d7657d1`), consultar la [baseline con rutas/pruebas y garantías](../design/FIREBASE_BASELINE.md): SQLite v7/nueve tablas; divisas/configuración/cuota propia; pago confirmado con egreso único; deuda pagada/pendiente sin ingreso; renombres/borrado sin uso y planificación editable/eliminable. Esto concilia LC-P02/LC-TECH-01, LC-ACC-01, LC-CON-01, LC-BUY-01/02 y LC-SHARED-01 con código existente; no cambia requisitos.
+
+FB-R01–05 continúan pendientes de aceptación sobre Firebase. Evidencia F0-T02: inspección estática, consulta de PR/CI y control documental, sin pruebas funcionales nuevas. El run final de #16 tiene API36 failure; no extender PASS históricos a la app integrada. [Handoff](../handoffs/FB-F0-T02-baseline-inventario.md). F0-T03 pendiente; F0 no se cierra.
+
+
 | Requisito nuevo | Fases | Evidencia de aceptación |
 |---|---|---|
 | FB-R01 Firebase sustituye SQLite | F1, F3–F5 | Pendiente: repositorios Firestore, importación y retirada SQLite |

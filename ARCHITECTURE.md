@@ -1,5 +1,18 @@
 # Arquitectura de LocalCash
 
+## Implementación integrada vigente — 2026-11-16
+
+Conciliación FB-F0-T02 sobre integración `d7657d1cd798e3f86f9ac9fbe75a80af1fd28c4b`, base funcional #16 `c28a27b87aeeb092a936b8ba6b05b83404ac1c13`. Java/XML; SQLite v7 con nueve tablas y seis repositorios (incluye ConfiguracionRepository); tres servicios existentes. APK declarado 1.1.1/versionCode 3. [Inventario con rutas y matriz de garantías](docs/design/FIREBASE_BASELINE.md).
+
+Cuentas/compras tienen divisa fija; configuración inicial y cuota propia se persisten. Pago explícito completo de compra genera un único egreso, vínculo compra_movimiento y estado REALIZADA en la transacción de CompraService. Reparto incluye «Tú» y contactos; no genera movimientos. Deudas admiten PAGADA/PENDIENTE sin cambiar saldos. Renombres/borrados de registros sin uso y edición/borrado de planificación están integrados; se revalidan restricciones en persistencia. No hay edición/borrado general de movimientos ni rehacer repartos. Saldo y total siguen derivados, dinero entero en centésimas, precisión por divisa.
+
+Las ocho rutas financieras conservan gate biométrico; ActividadProtegida y DivisasUI también acceden a configuración/repositorios. UI y servicios consumen lecturas síncronas del helper; no hay Firestore implementado. La arquitectura objetivo está propuesta en [ADR-003](docs/design/decisions/ADR-003-firebase-google-offline.md) y [FB-01](docs/exec-plans/active/FB-01-firebase-google-offline.md), pendiente de viabilidad. INTERNET continúa eliminado en el manifest actual; mapa sigue con atlas local.
+
+Las secciones inferiores son el registro arquitectónico T07C y anterior: sus referencias a v4/seis tablas, mínimo dos contactos, deudas solo pendientes o compras sin movimiento no describen la implementación posterior a #16. Sus pruebas son históricas, no se extrapolan a ese incremento ni a Firebase. Esta conciliación no ejecutó build o pruebas funcionales; CI final de #16 tiene fallo API36 detallado en la baseline.
+
+## Registro histórico T07C (preservado)
+
+
 **Vigente: 2026-10-18, T07C.** Contraste sobre main `9084b573ebe055485e3cdda11ca8db2d8df6a3bc`, posterior a PR #10. Este documento describe lo implementado; no cambia decisiones ni declara cerrado S00. [Entrega académica](docs/delivery/S00-final-delivery.md).
 
 ## Estructura y responsabilidades
