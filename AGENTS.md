@@ -1,5 +1,11 @@
 # LocalCash — instrucciones para agentes
 
+## Actualización de alcance — 2026-11-16
+
+Aplicar [FIREBASE_PROTOCOL.md](docs/agent/FIREBASE_PROTOCOL.md) para ramas, auditorías, evidencia y límites de FB-01. Primera implementación solo después del gate de viabilidad correspondiente; tareas funcionales no se autoauditan.
+
+Para el incremento FB-01, el usuario confirma la nueva instrucción docente de sustituir SQLite por Firebase, añadir inicio Google y mantener operación offline. [ADR-003](docs/design/decisions/ADR-003-firebase-google-offline.md) y [FB-01](docs/exec-plans/active/FB-01-firebase-google-offline.md) sustituyen, para este incremento, las restricciones inferiores de SQLite como única persistencia y Firebase fuera de alcance. La migración está planificada, no implementada. Aplicar las demás reglas de roles, calidad y validación.
+
 ## 1. Objetivo
 
 Implementar LocalCash respetando estrictamente el alcance académico. El repositorio y su documentación son la fuente de contexto; no depender de conversaciones externas.

@@ -1,5 +1,11 @@
 # LocalCash — Project Router
 
+## Actualización docente vigente para el próximo incremento — 2026-11-16
+
+Protocolo obligatorio FB-01: [límites, ramas y auditoría](docs/agent/FIREBASE_PROTOCOL.md). Próxima tarea: [FB-F0-T02](docs/tasks/active/FB-F0-T02-baseline-inventario.md).
+
+El usuario confirma nueva indicación del docente: sustituir SQLite por Firebase, iniciar sesión con Google y mantener operación offline. Para este cambio consultar primero [ADR-003](docs/design/decisions/ADR-003-firebase-google-offline.md) y el [roadmap FB-01](docs/exec-plans/active/FB-01-firebase-google-offline.md). Las referencias históricas a SQLite/Firebase excluido describen el alcance anterior. El PDF original permanece como antecedente; la actualización procede de la comunicación del usuario. La implementación actual aún es SQLite.
+
 **Propósito:** ser el punto de entrada para cualquier agente que trabaje en LocalCash. Este archivo no reemplaza la documentación técnica: indica qué leer, qué fuente manda y cómo cargar solo el contexto necesario.
 
 ## 1. Fuentes de verdad
