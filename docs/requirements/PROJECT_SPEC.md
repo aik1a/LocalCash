@@ -1,5 +1,9 @@
 # LocalCash — Especificación técnica canónica
 
+## Actualización docente — 2026-11-16
+
+El usuario informa y confirma la sustitución de SQLite por Firebase, el inicio con Google y la conservación del funcionamiento offline. El PDF no se ha modificado. Para el próximo incremento, LC-P02/LC-TECH-01 se reformulan como persistencia Firestore con operación offline; Firebase deja de estar excluido. Se incorpora Firebase Authentication con Google y se mantiene biometría como protección local. Requisitos FB-R01–05, límites de primera conexión y criterios verificables están en [FB-01](../exec-plans/active/FB-01-firebase-google-offline.md); procedencia y decisión en [ADR-003](../design/decisions/ADR-003-firebase-google-offline.md). Las secciones inferiores describen la especificación original; no usar su exclusión de Firebase para rechazar este incremento.
+
 **Estado:** CANONICAL DERIVED SPEC  
 **Fuente primaria:** documento del docente `LocalCash Proyecto Android.pdf`.  
 **Regla:** este archivo traduce el encargo a requisitos implementables; no reemplaza el original.

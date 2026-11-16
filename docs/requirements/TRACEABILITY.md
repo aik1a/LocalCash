@@ -1,3 +1,15 @@
+# Incremento FB-01 — trazabilidad planificada, 2026-11-16
+
+| Requisito nuevo | Fases | Evidencia de aceptación |
+|---|---|---|
+| FB-R01 Firebase sustituye SQLite | F1, F3–F5 | Pendiente: repositorios Firestore, importación y retirada SQLite |
+| FB-R02 Google Auth | F2 | Pendiente: acceso Google real, cancelación y sesión |
+| FB-R03 funcionamiento offline | F1, F3–F6 | Pendiente: modo avión, reinicio y reconexión |
+| FB-R04 propiedad e integridad | F1, F2, F4–F6 | Pendiente: reglas A/B, reintentos y pagos compuestos |
+| FB-R05 Java/XML, biometría y mapas | F3, F6 | Pendiente: regresión de la versión migrada |
+
+Fuente: nueva indicación docente comunicada y confirmada por el usuario. [Plan](../exec-plans/active/FB-01-firebase-google-offline.md) · [ADR-003](../design/decisions/ADR-003-firebase-google-offline.md). La evidencia histórica inferior no acredita el nuevo alcance.
+
 # Matriz de trazabilidad
 
 **Revisión T07C: 2026-10-18.** Fuente normativa: PDF docente, páginas 3–6; traducción canónica en [PROJECT_SPEC](PROJECT_SPEC.md). Se revisa documentación, no requisitos ni estados administrativos. Base inspeccionada: 9084b573ebe055485e3cdda11ca8db2d8df6a3bc.

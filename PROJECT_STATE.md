@@ -1,5 +1,9 @@
 # LocalCash — Project State
 
+## Próximo incremento vigente — FB-01, 2026-11-16
+
+Requisitos nuevos confirmados por el usuario como indicación docente: Firebase sustituye SQLite, inicio Google y funcionamiento offline. Ver [ADR-003](docs/design/decisions/ADR-003-firebase-google-offline.md) y [roadmap por fases](docs/exec-plans/active/FB-01-firebase-google-offline.md). Estado: PLANIFICADO, sin implementación ni build nuevos. Base real inspeccionada: main c28a27b, SQLite v7, APK declarado 1.1.1/versionCode 3. Las secciones inferiores conservan contexto histórico y necesitan conciliación F0-T02; sus exclusiones de Firebase no rigen el nuevo alcance. Próxima tarea: F0-T02, conciliar baseline, inventario y evidencia; completar F0 antes de F1. No hay cierre ni aprobación técnica de la migración. Publicación documental autorizada por el usuario: rama docs/firebase-roadmap hacia main; integración funcional en feat/firebase-migration. Protocolo: docs/agent/FIREBASE_PROTOCOL.md. Brief READY: docs/tasks/active/FB-F0-T02-baseline-inventario.md. El registro de publicación se conserva en docs/handoffs/FB-01-arranque.md.
+
 **Estado del documento:** operativo  
 **Responsable principal:** Agente Orquestador  
 **Regla:** actualizar cuando cambie el estado real del proyecto. No usar este archivo para reemplazar requisitos, ADRs ni historial de auditorías.
