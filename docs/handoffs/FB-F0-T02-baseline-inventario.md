@@ -1,8 +1,8 @@
 # Handoff — FB-F0-T02
 
-**Rol saliente:** Orquestador  
-**Fecha:** 2026-11-16  
-**Rama/commit:** task/FB-F0-T02-baseline-inventario; base d7657d1cd798e3f86f9ac9fbe75a80af1fd28c4b; commits identificables en el PR de esta rama  
+**Rol saliente:** Orquestador
+**Fecha:** 2026-11-16
+**Rama/commit:** task/FB-F0-T02-baseline-inventario; base d7657d1cd798e3f86f9ac9fbe75a80af1fd28c4b; commits identificables en el PR de esta rama
 **Sprint:** FB-01 / F0 abierta
 
 ## Objetivo ejecutado
@@ -11,7 +11,7 @@ Inventario del comportamiento integrado SQLite v7 y garantías a conservar. [Bas
 
 ## Estado
 
-DONE en elaboración y control documental; pendiente publicación/integración registrada debajo. Brief permanece activo hasta cierre administrativo. No aprobación técnica Firebase ni cierre F0.
+DONE en elaboración, control documental y publicación; integración pendiente en PR #20. Brief permanece activo hasta cierre administrativo. No aprobación técnica Firebase ni cierre F0.
 
 ## Cambios realizados y archivos modificados
 
@@ -60,4 +60,4 @@ Preparar/ejecutar F0-T03 con metadatos y decisiones explícitas del responsable.
 
 ## Publicación
 
-Pendiente de registrar enlace del PR tras push. No se declara merge ni cierre administrativo.
+Rama publicada mediante git push -u origin task/FB-F0-T02-baseline-inventario. [PR #20](https://github.com/aik1a/LocalCash/pull/20) abierto hacia feat/firebase-migration, base d7657d1. Commit de inventario: 573dfb19c2c04c0658b871989981bb588cc76773; un segundo commit documental registra publicación y limpia espacios finales del handoff. Head definitivo verificable en el PR y remoto. No se fusionó ni se cerró F0 o el brief. Control final git diff d7657d1..HEAD --check sin incidencias tras esa limpieza.
