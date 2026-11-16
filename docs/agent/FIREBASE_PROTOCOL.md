@@ -11,6 +11,18 @@ Vigente desde 2026-11-16. Aprobación de alcance: usuario solicita publicar el r
 - `main`: mantiene la app SQLite durante la migración. Recibe documentación operativa y, al terminar, el incremento Firebase completo tras F6.
 - No force-push sobre ramas compartidas, no mover la etiqueta base y no fusionar cambios funcionales parciales directamente a main. Ante avances de main, incorporar sus cambios de manera explícita y reevaluar pruebas afectadas.
 
+## Calidad MVP y proporcionalidad
+
+Instrucción explícita del usuario, 2026-11-16: evitar sobreingeniería; calidad de MVP académico de alumno. Este criterio regula el tamaño de tareas, soluciones, documentación y auditorías de todo FB-01.
+
+- Priorizar código Java legible, reutilizar dominio/pantallas existentes y los SDK oficiales. Introducir clases o abstracciones solo cuando resuelvan una necesidad concreta de la tarea.
+- No crear frameworks propios de repositorios, motores de sincronización/conflictos, colas persistentes paralelas, backend propio ni capas genéricas para posibles necesidades futuras. Aprovechar primero la persistencia y sincronización del SDK Firestore.
+- Demostrar un flujo pequeño completo antes de extenderlo a otros módulos. Requisitos obligatorios y reglas financieras existentes siguen siendo criterios de aceptación.
+- Documentar brevemente decisiones, evidencia y límites; no generar informes duplicados ni auditorías por cada commit. Una revisión independiente por tarea funcional y un gate final integrado son suficientes, con reevaluación focalizada de correcciones.
+- Auditorías y pruebas proporcionales: centrarse en funcionamiento, datos, privacidad entre cuentas y regresiones del cambio. No exigir infraestructura de producción, certificaciones, pruebas de carga ni cobertura exhaustiva sin requisito concreto.
+- Dos clientes simultáneos se prueban de forma acotada donde afecten doble pago o integridad. No asumir edición colaborativa ni sincronización avanzada como funcionalidad del MVP. Si cumplir una invariante exige complejidad adicional, registrar el problema y decidir la alternativa mínima antes de construirla.
+- Una observación de estilo o mejora futura no bloquea una tarea que cumple sus criterios. Integridad monetaria, conservación de datos y aislamiento de usuarios sí deben resolverse.
+
 ## Roles y unidad de trabajo
 
 Orquestador prepara el brief, resuelve dependencias, registra decisiones, actualiza estado y formaliza merge/cierre. Codificador implementa el alcance y aporta evidencia. Auditor independiente revisa el commit exacto, no corrige el código ni amplía la tarea. No basta cambiar el nombre del rol dentro del mismo chat para obtener independencia.

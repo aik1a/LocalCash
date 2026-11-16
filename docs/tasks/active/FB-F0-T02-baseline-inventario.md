@@ -4,6 +4,8 @@ Estado: READY. Rol: Orquestador. Fase F0 del roadmap FB-01.
 
 ## Objetivo
 
+Aplicar criterio MVP académico: inventario conciso centrado en operaciones reales y riesgos concretos; no proponer nuevas capas, frameworks, funcionalidades ni una reescritura general como resultado de esta tarea.
+
 Producir el inventario del código integrado y sus garantías para que F1 diseñe Firebase sobre hechos comprobados.
 
 ## Contexto obligatorio

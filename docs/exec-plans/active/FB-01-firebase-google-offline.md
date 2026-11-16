@@ -33,6 +33,8 @@ Base: aik1a/LocalCash main c28a27b87aeeb092a936b8ba6b05b83404ac1c13, consultada 
 
 ## Alcance y límites
 
+Criterio confirmado por el usuario: MVP académico de alumno, sin sobreingeniería. Usar las capacidades del SDK antes de diseñar infraestructura propia; conservar arquitectura simple y documentación breve. Prototipo y auditorías deben ser proporcionales al requisito y al riesgo real. Ver «Calidad MVP y proporcionalidad» en docs/agent/FIREBASE_PROTOCOL.md. No convertir los riesgos aquí enumerados en funcionalidades adicionales ni en una plataforma empresarial.
+
 Incluye identidad, almacenamiento, modelo documental, adaptación asíncrona, comportamiento offline, migración de datos y regresión. Firebase no implica colaboración entre contactos: los contactos siguen siendo registros del propietario, no cuentas con acceso compartido. No añadir notificaciones, pagos reales, conversión monetaria ni backend propio sin nueva necesidad demostrada.
 
 No utilizar SQLite como segunda persistencia financiera en la solución final. Durante la transición podrá leerse exclusivamente para importar instalaciones existentes. La política final sobre conservar ese importador se decide con la estrategia de distribución.
