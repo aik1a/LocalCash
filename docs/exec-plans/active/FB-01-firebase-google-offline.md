@@ -152,6 +152,10 @@ Build previsto: ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest :app:
 - Pendiente F1: contrato offline definitivo, concurrencia entre dispositivos, atomicidad de pago, borrados e integridad referencial. No asumir acceso compartido entre contactos.
 - Internet inicial para Google y descarga de datos es una limitación explícita del diseño propuesto. Si el docente exige primera instalación completamente offline, debe revisarse el requisito de Google obligatorio antes de implementar.
 
+## Actualización F0-T02 — 2026-11-16
+
+Inventario documental preparado desde integración `d7657d1cd798e3f86f9ac9fbe75a80af1fd28c4b`: [baseline y matriz](../../design/FIREBASE_BASELINE.md), [handoff](../../handoffs/FB-F0-T02-baseline-inventario.md). PR #16 confirmado integrado en c28a27b; esquema v7/APK declarado 1.1.1. CI histórico final #16: API24 success/API36 failure en relanzamiento, sin repetición en esta tarea. Las garantías y lagunas de CI están identificadas; su corrección exige otra tarea. F0-T03 queda como siguiente unidad recomendada; F0 y viabilidad F1 siguen pendientes. No hay cambios funcionales, servicios remotos ni nuevas pruebas Android. El resultado de la sesión de arranque inferior se conserva como antecedente, no estado actual de publicación.
+
 ## Progreso
 
 - [x] Inspección de main y fuentes pertinentes.
@@ -164,7 +168,7 @@ Build previsto: ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest :app:
 - [ ] F5 datos existentes resueltos y SQLite retirado.
 - [ ] F6 revisión, aceptación y entrega.
 
-## Resultado de esta sesión
+## Resultado histórico de la sesión de arranque
 
 Plan local preparado; no implementación, no configuración remota Firebase, no push/merge, no nueva evidencia de build o aceptación. La próxima tarea es F0-T02; completar F0 antes del prototipo. Mantener este documento vivo y moverlo a completed solo al cumplir F6.
 

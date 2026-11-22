@@ -1,5 +1,14 @@
 # Diseño SQLite
 
+## Estado integrado conciliado — FB-F0-T02, 2026-11-16
+
+SQLite v7/nueve tablas está integrado mediante [PR #16](https://github.com/aik1a/LocalCash/pull/16), merge `c28a27b87aeeb092a936b8ba6b05b83404ac1c13`; inspección sobre `d7657d1cd798e3f86f9ac9fbe75a80af1fd28c4b`. [Inventario físico, transacciones, triggers y riesgos](FIREBASE_BASELINE.md). Las secciones posteriores preservan la evolución por fecha: «en copia local», «no integrado» y «pendiente» se refieren al momento de cada entrega. Integración no acredita auditoría independiente, actualización con cualquier firma ni migración directa v5→v7. No se repitieron pruebas en esta tarea.
+
+SQLite sigue siendo la persistencia real hasta implementar y validar FB-01. Los candidatos y decisiones pendientes de diseños iniciales no desplazan las operaciones y reglas UX-01/CRUD-02 ya integradas. Firestore sustituirá SQLite según ADR-003; esta conciliación no cambia DDL ni reglas.
+
+## Registro histórico de evolución (preservado)
+
+
 **Estado local actual:** v7 por CRUD-02, pendiente revisión independiente. La sección final documenta v7; el siguiente resumen describe la integración histórica v5 por S01-T01: configuración inicial, divisas de cuentas/compras y cuota propia del reparto. Incluye cuentas/movimientos (T03), contactos/compras/detalles (T04), deudas (T05) y ubicación opcional (T06A). Las secciones v1–v4 siguientes conservan la evolución histórica; la sección S01-T01 documenta v5.
 
 ## Esquema mínimo S00-T03 (decisiones implementadas)

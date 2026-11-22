@@ -1,6 +1,6 @@
 # FB-F0-T02 — Baseline e inventario para migración
 
-Estado: READY. Rol: Orquestador. Fase F0 del roadmap FB-01.
+Estado: IN_PROGRESS — entrega documental preparada y verificada para PR; pendiente de integración/cierre administrativo. Rol: Orquestador. Fase F0 del roadmap FB-01.
 
 ## Objetivo
 
@@ -26,11 +26,15 @@ Implementar Firebase, cambiar dominio, agregar dependencias, configurar servicio
 
 ## Aceptación
 
-- [ ] Inventario con rutas reales y SHA, sin suponer que una garantía SQLite existe en Firestore.
-- [ ] Matriz cubre cuentas/movimientos, compra/pago, reparto/deudas, configuración y borrados.
-- [ ] Estado concilia merges actuales; evidencia y pendientes diferenciados.
-- [ ] Estrategia para completar F0-T03 y decisiones F1 enumeradas.
+- [x] Inventario con rutas reales y SHA, sin suponer que una garantía SQLite existe en Firestore.
+- [x] Matriz cubre cuentas/movimientos, compra/pago, reparto/deudas, configuración y borrados.
+- [x] Estado concilia merges actuales; evidencia y pendientes diferenciados.
+- [x] Estrategia para completar F0-T03 y decisiones F1 enumeradas.
 
 ## Validación, entrega y rama
 
 Rama task/FB-F0-T02-baseline-inventario desde feat/firebase-migration; destino PR: feat/firebase-migration. Commits/push documentales autorizados. Entregar docs/design/FIREBASE_BASELINE.md, diff documental pertinente y handoff conforme a docs/agent/HANDOFF_TEMPLATE.md. Verificar enlaces/diff/coherencia; no exigir build por documentos ni reportar pruebas Android no ejecutadas. Cierre documental por Orquestador; F0 no cierra hasta resolver también F0-T03. No iniciar F1 solo por completar este inventario.
+
+## Entrega documental — 2026-11-16
+
+[Baseline](../../design/FIREBASE_BASELINE.md) y [handoff](../../handoffs/FB-F0-T02-baseline-inventario.md). Criterios contrastados por el Orquestador; no auditoría independiente. Checks marcados corresponden a contenido/documentación, no aprobación funcional de Firebase. No fusionar ni cerrar F0 como efecto de esta entrega.

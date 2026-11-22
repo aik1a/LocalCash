@@ -1,5 +1,21 @@
 # LocalCash — Project State
 
+## Avance local FB-01 — 2026-11-22
+
+Usuario solicita priorizar MVP y avanzar sin bloquear por publicación documental. Informe original T02 recibido y aceptado para head 126b30b; integrado solo en rama local feat/firebase-migration junto con su informe. GitHub #20/#21 permanecen sin fusionar; no confundir integración local con publicación. H-01 editorial se corrige aquí: reparto inserta deudas, no contactos.
+
+F0: decisiones suficientes para prototipo registradas: sin importación histórica, sin rediseño, conservar reglas/formatos, proyecto localcash-f6298 del usuario, Google/OAuth/SHA configurados. Desarrollo en instalación limpia de emulador con datos sintéticos; no reemplazar ni desinstalar la app anterior. Firma estable y distribución final se verifican antes de F6. Se autoriza FB-F1-T01, prototipo mínimo aislado; no migración masiva ni gate F1 aprobado. Publicación pendiente no impide este trabajo local.
+
+## Estado operativo conciliado — FB-F0-T02, 2026-11-16
+
+Base remota al iniciar: main `f0e491d2f620fefcdfd18ad317a85c00a3b29a39`; integración `feat/firebase-migration` en `d7657d1cd798e3f86f9ac9fbe75a80af1fd28c4b`. [PR #16](https://github.com/aik1a/LocalCash/pull/16) está fusionado desde 2026-11-03, merge `c28a27b87aeeb092a936b8ba6b05b83404ac1c13`: UX-01, CRUD-02 T00–T08, AV-03, UT-04 y rediseño están integrados. La app actual usa SQLite v7/nueve tablas y declara APK 1.1.1/versionCode 3. Los apartados inferiores sobre v5 o incrementos «locales/no merge» son registros históricos de sus fechas; no describen el estado integrado actual ni se eliminan sus límites.
+
+FB-F0-T02: inventario y conciliación documentales preparados en `task/FB-F0-T02-baseline-inventario` para PR a integración, sin merge/cierre administrativo anticipado. [Baseline y matriz de garantías](docs/design/FIREBASE_BASELINE.md) · [handoff](docs/handoffs/FB-F0-T02-baseline-inventario.md). No hay implementación Firebase, build nuevo ni auditoría independiente en esta tarea.
+
+Evidencia histórica recuperada ahora: [CI 41705745479](https://github.com/aik1a/LocalCash/actions/runs/41705745479), head final de #16 `2bfec047...`, concluyó failure (API24 success, API36 failure en relaunch-checks.py buscando REALIZADA). No declarar regresión integral PASS ni aprobación independiente del incremento por su merge. No se encontraron runs para merge c28a27b o integración d7657d1 en las consultas por SHA. JUnit y modos payment/crud/feedback no están invocados por los workflows actuales. Corrección de pruebas/CI requiere tarea separada; este cambio solo documenta.
+
+**Próxima tarea recomendada: FB-F0-T03**, inventario de instalaciones/datos a conservar, firma/distribución y responsable/proyecto Firebase de desarrollo. F0 sigue abierta; F1 no está autorizada por completar T02. Mantener pendientes firma compatible, actualización con datos, migración directa v5→v7, recorrido visual/GPS físico y auditoría independiente aplicable. Detalle de decisiones y estrategia en la baseline. No se regeneró paquete ni se sincronizó Library: no se está cerrando un hito.
+
 ## Próximo incremento vigente — FB-01, 2026-11-16
 
 Requisitos nuevos confirmados por el usuario como indicación docente: Firebase sustituye SQLite, inicio Google y funcionamiento offline. Ver [ADR-003](docs/design/decisions/ADR-003-firebase-google-offline.md) y [roadmap por fases](docs/exec-plans/active/FB-01-firebase-google-offline.md). Estado: PLANIFICADO, sin implementación ni build nuevos. Base real inspeccionada: main c28a27b, SQLite v7, APK declarado 1.1.1/versionCode 3. Las secciones inferiores conservan contexto histórico y necesitan conciliación F0-T02; sus exclusiones de Firebase no rigen el nuevo alcance. Próxima tarea: F0-T02, conciliar baseline, inventario y evidencia; completar F0 antes de F1. No hay cierre ni aprobación técnica de la migración. Publicación documental autorizada por el usuario: rama docs/firebase-roadmap hacia main; integración funcional en feat/firebase-migration. Protocolo: docs/agent/FIREBASE_PROTOCOL.md. Brief READY: docs/tasks/active/FB-F0-T02-baseline-inventario.md. El registro de publicación se conserva en docs/handoffs/FB-01-arranque.md.

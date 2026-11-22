@@ -28,6 +28,8 @@ android {
 
 
 dependencies {
+    // Prototipo F1 aislado: Firebase no se incorpora a release.
+    debugImplementation 'com.google.firebase:firebase-firestore:27.2.0'
     testImplementation 'junit:junit:4.13.2'
     implementation 'androidx.biometric:biometric:1.1.0'
     implementation 'org.osmdroid:osmdroid-android:6.1.18'

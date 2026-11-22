@@ -28,6 +28,7 @@ public final class FlowChecks extends Instrumentation {
     private boolean crud;
     private boolean upgradeCrud;
     private boolean feedback;
+    private Bundle argumentosFirestore;
     @Override public void onCreate(Bundle arguments) {
         super.onCreate(arguments);
         compras = arguments != null && "purchases".equals(arguments.getString("mode"));
@@ -40,9 +41,10 @@ public final class FlowChecks extends Instrumentation {
         crud = arguments != null && "crud".equals(arguments.getString("mode"));
         upgradeCrud = arguments != null && "crud-upgrade".equals(arguments.getString("mode"));
         feedback = arguments != null && "feedback".equals(arguments.getString("mode"));
+        if (arguments != null && "firestore".equals(arguments.getString("mode"))) argumentosFirestore = arguments;
         start();
     }
-    @Override public void onStart() { if (feedback) { com.aik1a.localcash.presentation.FeedbackChecks.ejecutar(this); return; } if (upgradeCrud) { CrudChecks.verificarActualizacionInstalada(this); return; } if (crud) { CrudChecks.ejecutar(this); return; } if (pagos) { PaymentChecks.ejecutar(this); return; } if (divisas) { CurrencyChecks.ejecutar(this); return; } if (mapas) { MapChecks.ejecutar(this); return; } if (argumentosBiometricos != null) BiometricChecks.ejecutar(this, argumentosBiometricos); else if (ubicaciones) verificarUbicaciones(); else if (compartidas) verificarCompartidas(); else if (compras) verificarCompras(); else verificarCuentas(); }
+    @Override public void onStart() { if (argumentosFirestore != null) { FirestoreOfflineChecks.ejecutar(this, argumentosFirestore); return; } if (feedback) { com.aik1a.localcash.presentation.FeedbackChecks.ejecutar(this); return; } if (upgradeCrud) { CrudChecks.verificarActualizacionInstalada(this); return; } if (crud) { CrudChecks.ejecutar(this); return; } if (pagos) { PaymentChecks.ejecutar(this); return; } if (divisas) { CurrencyChecks.ejecutar(this); return; } if (mapas) { MapChecks.ejecutar(this); return; } if (argumentosBiometricos != null) BiometricChecks.ejecutar(this, argumentosBiometricos); else if (ubicaciones) verificarUbicaciones(); else if (compartidas) verificarCompartidas(); else if (compras) verificarCompras(); else verificarCuentas(); }
 
     private void verificarCuentas() {
         Bundle result = new Bundle();
