@@ -2,7 +2,7 @@
 
 ## Verificación de cierre — 2026-11-23
 
-Base recibida 736f748 comprobada contra GitHub. Las 29 unitarias de dominio pasaron localmente. Corrección de avisos de rechazo en segundo plano preparada y revisada como WIP; falta build del cambio y recorrido Android. Configuración cliente real disponible solo localmente. Build local bloqueado por plugin Google Services ausente de caché offline. Ver docs/delivery/CIERRE-FIREBASE-MVP.md. Firebase real, modo avión/reinicio/reconexión, reglas y firma siguen pendientes; no hay aceptación final. Los registros inferiores son históricos.
+Base recibida 736f748 comprobada contra GitHub. Las 29 unitarias de dominio pasaron localmente. Corrección de avisos de rechazo en segundo plano preparada y revisada como WIP; CI 45105532009 SUCCESS sobre d533b5e (app/instrumentación/unitarias, configuración sintética); falta recorrido Android/Firebase real. Configuración cliente real disponible solo localmente. Build local bloqueado por plugin Google Services ausente de caché offline. Ver docs/delivery/CIERRE-FIREBASE-MVP.md. Firebase real, modo avión/reinicio/reconexión, reglas y firma siguen pendientes; no hay aceptación final. Los registros inferiores son históricos.
 
 ## Entrega de código Firebase MVP en curso
 

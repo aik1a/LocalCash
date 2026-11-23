@@ -4,6 +4,9 @@ Fecha: 2026-11-23. Base: `736f748db92cff20c8caf24f8deca5136147d057`. MVP académ
 
 ## Evidencia actual
 
+- Corrección publicada: `d533b5e444b580e9124114b0dfad903fdd1ed056`, `task/FB-final-validation`. [CI 45105532009](https://github.com/aik1a/LocalCash/actions/runs/45105532009): SUCCESS (compilación app/instrumentación y unitarias; configuración sintética). Terra contrastó ambos Java publicados con los revisados: aptos como WIP. Pruebas Android/Firebase real y aceptación final pendientes.
+- Aviso de rechazo: conserva por UID los rechazos cuyo callback llegó con proceso vivo; la bandera sobrevive a reapertura una vez guardada. No acredita rechazo ocurrido después de morir el proceso original ni aviso individual por cada fallo agrupado.
+
 - Copia recibida contrastada con los 589 archivos del árbol GitHub: 588 idénticos; gradlew.bat solo cambia saltos de línea.
 - [CI 45102302173](https://github.com/aik1a/LocalCash/actions/runs/45102302173): SUCCESS, app/instrumentación/unitarias con Firebase sintético. No prueba Google real.
 - Ejecución local: seis clases JUnit de dominio, 29 pruebas, cero fallos. Compilación directa javac y ejecución JUnitCore; no cubre Android/repositorios/Firebase.
