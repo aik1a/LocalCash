@@ -28,3 +28,14 @@ cambio; git diff --check correcto. Compilación aislada: NOT TESTED, depende de 
 implementación de data y del gate Auth aún en ramas separadas. El Orquestador
 compilará el conjunto integrado. Google real, offline, reinicio, sincronización,
 reglas y recorrido visual: NOT TESTED; se validan al final conforme al usuario.
+
+## Adaptación de instrumentación para la app Firebase
+
+Las siete fuentes de runner/fixtures dependientes de SQLite se conservan, sin
+alterar su contenido, bajo app/src/legacySqliteAndroidTest/java. Esa carpeta no
+pertenece al source set androidTest actual. No se borra evidencia ni se atribuyen
+sus resultados a Firestore. El runner actual FlowChecks admite solamente
+mode=firestore y rechaza expresamente modos antiguos o desconocidos. Se conserva
+FeedbackChecks, independiente de SQLite, compilable pero no ejecutado por ese
+runner. No hay nuevos escenarios ni cambios de Gradle. Instrumentación pendiente
+de compilación integral con data/Auth, sin afirmar que los tests históricos pasen.
