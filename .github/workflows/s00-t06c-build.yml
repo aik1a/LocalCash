@@ -14,6 +14,8 @@ permissions:
   contents: read
 jobs:
   validate:
+    # Las comprobaciones SQLite históricas no validan el incremento Firebase.
+    if: ${{ github.base_ref != 'feat/firebase-migration' && !startsWith(github.head_ref, 'task/FB-') && !startsWith(github.head_ref, 'feat/firebase') }}
     strategy:
       fail-fast: false
       matrix:

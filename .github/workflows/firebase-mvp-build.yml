@@ -1,0 +1,64 @@
+name: LocalCash Firebase MVP build
+on:
+  push:
+    branches: ['task/FB-*', 'feat/firebase-migration']
+    paths: ['app/**', 'build.gradle', 'settings.gradle', 'gradle.properties', 'gradle/**', '.github/workflows/firebase-mvp-build.yml']
+  pull_request:
+    branches: [feat/firebase-migration, main]
+    paths: ['app/**', 'build.gradle', 'settings.gradle', 'gradle.properties', 'gradle/**', '.github/workflows/firebase-mvp-build.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: firebase-mvp-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - name: Android SDK
+        run: sdkmanager 'platforms;android-36.1' 'build-tools;36.0.0'
+      - name: Synthetic configuration for compilation only
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          Path('app/google-services.json').write_text(json.dumps({
+            'project_info': {'project_number': '123456789000', 'project_id': 'demo-localcash-build'},
+            'client': [{
+              'client_info': {'mobilesdk_app_id': '1:123456789000:android:0123456789abcdef', 'android_client_info': {'package_name': 'com.aik1a.localcash'}},
+              'oauth_client': [{'client_id': '123456789000-demo.apps.googleusercontent.com', 'client_type': 3}],
+              'api_key': [{'current_key': 'AIzaSyDemoLocalCashBuildOnly0000000000000'}]
+            }], 'configuration_version': '1'
+          }))
+          PY
+      - name: Compile and domain unit tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p verification/firebase-mvp
+          git rev-parse HEAD | tee verification/firebase-mvp/source-sha.txt
+          bash gradlew --no-daemon --console=plain :app:assembleDebug :app:assembleDebugAndroidTest :app:testDebugUnitTest 2>&1 | tee verification/firebase-mvp/build.log
+      - name: Build evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LocalCash-Firebase-MVP-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            verification/firebase-mvp/
+            app/build/test-results/testDebugUnitTest/
+            app/build/outputs/apk/
+          if-no-files-found: warn

@@ -3,6 +3,10 @@
 Fecha: 2026-11-16. Estado: PLANIFICADO; implementación no iniciada.
 Responsabilidad de esta entrega: Orquestador, revisión y planificación; no auditoría independiente.
 
+## Ejecución MVP por bloques — actualización del usuario
+
+El usuario solicita priorizar completar el código y reservar la regresión completa, Google real, recorridos offline y cierre documental para el final. Autoriza agentes Codificadores en paralelo con ámbitos separados y revisión independiente después de cada bloque. Se trabaja en ramas WIP desde 93a20f6; esto no convierte tests pendientes en PASS ni autoriza distribuir datos financieros sin comprobar integridad. Integrar Google/biometría, persistencia Firestore y adaptación de pantallas, conservando diseño, parámetros y reglas. Sin importación histórica. Entrega por ZIP incremental y push desde el PC del usuario.
+
 ## Objetivo
 
 Migrar LocalCash de SQLite a Cloud Firestore, incorporar inicio de sesión con Google mediante Firebase Authentication y mantener los flujos financieros offline después de una primera autenticación y preparación con conexión. Conservar Java/XML, dominio financiero, biometría y mapas locales. Cada fase produce evidencia verificable antes de avanzar.
