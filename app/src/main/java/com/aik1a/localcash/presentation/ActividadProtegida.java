@@ -32,7 +32,7 @@ public abstract class ActividadProtegida extends Activity {
         }
     };
     private final com.google.firebase.auth.FirebaseAuth.AuthStateListener estadoGoogle = auth -> {
-        if (visible && !sesion().identidadGoogleValida()) {
+        if (visible && !sesion().autenticada()) {
             mostrarBloqueo("Inicia sesión con Google para continuar.");
             abrirGate();
         }
