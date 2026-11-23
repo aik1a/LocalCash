@@ -6,7 +6,7 @@ service cloud.firestore {
     function importe(n,c) { return n is int && (!(c in ['CLP','JPY']) || n % 100 == 0); }
     function nombre(n) { return n is string && n.size() > 0; }
     function cuenta(uid,id) { return getAfter(/databases/$(database)/documents/users/$(uid)/cuentas/$(string(id))).data; }
-    function contactoExiste(uid,id) { return id == null || getAfter(/databases/$(database)/documents/users/$(uid)/contactos/$(string(id))).data.id == id; }
+    function contactoExiste(uid,id) { return id == null || (id is int && id > 0 && getAfter(/databases/$(database)/documents/users/$(uid)/contactos/$(string(id))).data.id == id); }
     function compra(uid,id) { return getAfter(/databases/$(database)/documents/users/$(uid)/compras/$(string(id))).data; }
     function movimientoPago(uid,id) { return getAfter(/databases/$(database)/documents/users/$(uid)/movimientos/$("p-" + string(id))).data; }
     match /users/{uid}/configuracion/{id} {
@@ -52,8 +52,10 @@ service cloud.firestore {
           && d.estado in ['PLANIFICADA','REALIZADA'] && d.fecha is int && d.fecha >= 0
           && moneda(d.divisa) && importe(d.total,d.divisa) && d.total >= 0
           && d.detalles is list && d.detalles.size() > 0 && contactoExiste(uid,d.contacto_id)
-          && (d.reparto == null || d.reparto is map)
-          && (d.monto_usuario == null || (importe(d.monto_usuario,d.divisa) && d.monto_usuario >= 0));
+          && (d.deuda_actualizada_id == null || d.deuda_actualizada_id is string)
+          && ((d.reparto == null && d.monto_usuario == null) || (d.reparto is map
+            && d.reparto.size() + (d.monto_usuario == null ? 0 : 1) >= 2
+            && (d.monto_usuario == null || (importe(d.monto_usuario,d.divisa) && d.monto_usuario >= 0 && d.monto_usuario <= d.total))));
       }
       function cabeceraFija(d,o) { return d.id == o.id && d.nombre == o.nombre && d.fecha == o.fecha && d.contacto_id == o.contacto_id && d.detalles == o.detalles && d.total == o.total && d.divisa == o.divisa; }
       function pago(d,o) {
@@ -61,7 +63,10 @@ service cloud.firestore {
           && cabeceraFija(d,o) && d.reparto == o.reparto && d.monto_usuario == o.monto_usuario && d.deuda_actualizada_id == o.deuda_actualizada_id
           && movimientoPago(uid,d.id).monto == d.total && movimientoPago(uid,d.id).cuenta_id == d.pago_cuenta_id;
       }
-      function reparto(d,o) { return o.reparto == null && d.reparto is map && d.estado == 'REALIZADA' && o.estado == 'REALIZADA' && cabeceraFija(d,o) && d.pago_movimiento_id == o.pago_movimiento_id && d.pago_cuenta_id == o.pago_cuenta_id; }
+      // Forma/cuota propia se validan aquí. La suma de montos y cada participante
+      // de un mapa de tamaño variable se validan en Reparto (dominio Java).
+      // No afirmar que estas reglas prueban esa suma ante escrituras arbitrarias.
+      function reparto(d,o) { return o.reparto == null && d.reparto is map && d.deuda_actualizada_id == null && d.estado == 'REALIZADA' && o.estado == 'REALIZADA' && cabeceraFija(d,o) && d.pago_movimiento_id == o.pago_movimiento_id && d.pago_cuenta_id == o.pago_cuenta_id; }
       function estadoDeuda(d,o) {
         let k = d.deuda_actualizada_id;
         return k is string && o.reparto is map && k in o.reparto && o.reparto[k].monto > 0
