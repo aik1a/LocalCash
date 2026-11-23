@@ -31,7 +31,7 @@ public final class LocalCashStore implements AutoCloseable {
   private final SecureRandom azar = new SecureRandom();
   private WriteBatch lote;
   private int profundidad, enviosEnCurso;
-  private boolean iniciada, invalida;
+  private boolean iniciada, invalida, errorCarga;
 
   private LocalCashStore(Context context, String uid) {
     this.uid = uid;
@@ -76,6 +76,14 @@ public final class LocalCashStore implements AutoCloseable {
   public void iniciar(Listener listener) {
     comprobarUsuario();
     oyentes.add(listener);
+    if (iniciada && errorCarga) {
+      for (ListenerRegistration registro : registros) registro.remove();
+      registros.clear();
+      cargadas.clear();
+      servidor.clear();
+      iniciada = false;
+      errorCarga = false;
+    }
     if (iniciada) {
       if (estaListo()) listener.alCambiar();
       return;
@@ -89,6 +97,7 @@ public final class LocalCashStore implements AutoCloseable {
                   (snapshot, error) -> {
                     if (invalida) return;
                     if (error != null) {
+                      errorCarga = true;
                       for (Listener l : new ArrayList<>(oyentes))
                         l.alError(
                             "No se pudieron cargar los datos: " + error.getLocalizedMessage());
@@ -109,12 +118,19 @@ public final class LocalCashStore implements AutoCloseable {
                   }));
   }
 
+  public void reintentar() {
+    comprobarUsuario();
+    errorCarga = true;
+    if (!oyentes.isEmpty()) iniciar(oyentes.iterator().next());
+  }
+
   public void quitarListener(Listener listener) {
     oyentes.remove(listener);
   }
 
   public boolean estaListo() {
     return !invalida
+        && !errorCarga
         && cargadas.size() == COLECCIONES.length
         && (servidor.size() == COLECCIONES.length || preferencias.getBoolean(uid, false));
   }
