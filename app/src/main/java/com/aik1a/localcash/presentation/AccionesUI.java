@@ -35,7 +35,7 @@ final class AccionesUI {
     }
     static void exito(android.content.Context contexto, String mensaje) {
         if (LocalCashStore.get(contexto).hayPendientes())
-            mensaje += " Guardado en este dispositivo; sincronización pendiente.";
+            mensaje += " Cambio pendiente de sincronización.";
         Toast.makeText(contexto, mensaje, Toast.LENGTH_SHORT).show();
     }
 
