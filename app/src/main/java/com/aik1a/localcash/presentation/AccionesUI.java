@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.aik1a.localcash.R;
 import com.aik1a.localcash.domain.Dinero;
 import com.aik1a.localcash.domain.Divisa;
-import android.database.sqlite.SQLiteException;
+import com.aik1a.localcash.data.LocalCashStore;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -34,6 +34,8 @@ final class AccionesUI {
         activity.protegerDialogo(dialog).show();
     }
     static void exito(android.content.Context contexto, String mensaje) {
+        if (LocalCashStore.get(contexto).hayPendientes())
+            mensaje += " Guardado en este dispositivo; sincronización pendiente.";
         Toast.makeText(contexto, mensaje, Toast.LENGTH_SHORT).show();
     }
 
@@ -57,7 +59,7 @@ final class AccionesUI {
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             try { guardar.guardar(campo.getText().toString()); dialog.dismiss(); exito(activity, "Nombre actualizado."); despues.run(); }
             catch (IllegalArgumentException ex) { errorCampo(campo, ex.getMessage()); }
-            catch (SQLiteException ex) { errorCampo(campo, "No se guardó el nombre. Intenta de nuevo."); }
+            catch (IllegalStateException ex) { errorCampo(campo, "No se guardó el nombre. Intenta de nuevo."); }
         }));
         activity.protegerDialogo(dialog).show();
     }
@@ -66,7 +68,7 @@ final class AccionesUI {
                 .setMessage(mensaje).setNegativeButton("Cancelar", null).setPositiveButton("Eliminar", (dialog, which) -> {
                     try { eliminar.run(); exito(activity, "Eliminado correctamente."); despues.run(); }
                     catch (IllegalArgumentException ex) { aviso(activity, "No se puede eliminar", ex.getMessage()); }
-                    catch (SQLiteException ex) { aviso(activity, "No se pudo eliminar", "No se completó la operación. Tus datos se conservan. Vuelve a abrir el registro e intenta de nuevo."); }
+                    catch (IllegalStateException ex) { aviso(activity, "No se pudo eliminar", "No se completó la operación. Tus datos se conservan. Vuelve a abrir el registro e intenta de nuevo."); }
                 }).create()).show();
     }
 }

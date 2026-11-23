@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.database.sqlite.SQLiteException;
 import android.view.View;
 import android.widget.*;
 import com.aik1a.localcash.R;
 import com.aik1a.localcash.application.MovimientoService;
-import com.aik1a.localcash.data.LocalCashDbHelper;
+import com.aik1a.localcash.data.LocalCashStore;
 import com.aik1a.localcash.domain.Cuenta;
 import com.aik1a.localcash.domain.Dinero;
 import com.aik1a.localcash.domain.Divisa;
@@ -17,7 +16,7 @@ import com.aik1a.localcash.data.ConfiguracionRepository;
 import java.util.*;
 
 public final class MainActivity extends ActividadProtegida {
-    private LocalCashDbHelper helper;
+    private LocalCashStore store;
     private MovimientoService service;
     private List<Cuenta> cuentas = new ArrayList<>();
     private ListView lista;
@@ -26,8 +25,8 @@ public final class MainActivity extends ActividadProtegida {
         
         setContentView(R.layout.activity_main);
         Pantalla.aplicarMargenes(findViewById(R.id.root));
-        helper = new LocalCashDbHelper(this);
-        service = new MovimientoService(helper);
+        store = LocalCashStore.get(this);
+        service = new MovimientoService(store);
         findViewById(R.id.abrir_contactos).setOnClickListener(v -> startActivity(new Intent(this, ContactosActivity.class)));
         findViewById(R.id.abrir_compras).setOnClickListener(v -> startActivity(new Intent(this, ComprasActivity.class)));
         lista = findViewById(R.id.cuentas);
@@ -55,7 +54,7 @@ public final class MainActivity extends ActividadProtegida {
             lista.setAdapter(new SimpleAdapter(this, filas, R.layout.row_cuenta,
                     new String[]{"nombre", "saldo", "moneda"},
                     new int[]{android.R.id.text1, android.R.id.text2, R.id.moneda_cuenta}));
-        } catch (SQLiteException | ArithmeticException ex) {
+        } catch (IllegalStateException | ArithmeticException ex) {
             Toast.makeText(this, "No se pudieron cargar las cuentas.", Toast.LENGTH_LONG).show();
         }
     }
@@ -65,7 +64,7 @@ public final class MainActivity extends ActividadProtegida {
         EditText nombre = form.findViewById(R.id.nombre);
         EditText saldo = form.findViewById(R.id.saldo_inicial);
         Spinner divisa = form.findViewById(R.id.divisa);
-        DivisasUI.preparar(divisa, new ConfiguracionRepository(helper).exigirDivisa());
+        DivisasUI.preparar(divisa, new ConfiguracionRepository(store).exigirDivisa());
         divisa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 DivisasUI.ejemplo(saldo, (Divisa)divisa.getSelectedItem());
@@ -83,13 +82,13 @@ public final class MainActivity extends ActividadProtegida {
                 dialog.dismiss(); AccionesUI.exito(this, "Cuenta creada.");
                 actualizar();
             } catch (IllegalArgumentException ex) { AccionesUI.errorCampo(saldo, ex.getMessage()); }
-            catch (SQLiteException ex) {
+            catch (IllegalStateException ex) {
                 Toast.makeText(this, "No se guardó la cuenta. Intenta nuevamente.", Toast.LENGTH_LONG).show();
             }
         }));
         protegerDialogo(dialog).show();
     }
-    @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
+    @Override protected void onDestroy() { if (store != null) store.close(); super.onDestroy(); }
 }
 
 

@@ -3,24 +3,23 @@ package com.aik1a.localcash.presentation;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.database.sqlite.SQLiteException;
 import android.widget.*;
 import com.aik1a.localcash.R;
 import com.aik1a.localcash.application.CompraService;
-import com.aik1a.localcash.data.LocalCashDbHelper;
+import com.aik1a.localcash.data.LocalCashStore;
 import com.aik1a.localcash.domain.*;
 import java.text.DateFormat;
 import java.util.*;
 
 public final class ComprasActivity extends ActividadProtegida {
-    private LocalCashDbHelper helper;
+    private LocalCashStore store;
     private CompraService service;
     private List<Compra> compras = new ArrayList<>();
     private ListView lista;
     @Override protected void crearContenido(Bundle state) {
          setContentView(R.layout.activity_compras);
         Pantalla.aplicarMargenes(findViewById(R.id.root));
-        helper = new LocalCashDbHelper(this); service = new CompraService(helper);
+        store = LocalCashStore.get(this); service = new CompraService(store);
         lista = findViewById(R.id.compras); lista.setEmptyView(findViewById(R.id.vacio));
         findViewById(R.id.volver).setOnClickListener(v -> finish());
         findViewById(R.id.crear_compra).setOnClickListener(v -> startActivity(new Intent(this, NuevaCompraActivity.class)));
@@ -45,9 +44,9 @@ public final class ComprasActivity extends ActividadProtegida {
             }
             lista.setAdapter(new SimpleAdapter(this, filas, R.layout.row_compra,
                     new String[]{"nombre", "detalle"}, new int[]{android.R.id.text1, android.R.id.text2}));
-        } catch (SQLiteException | IllegalArgumentException | ArithmeticException ex) {
+        } catch (IllegalStateException | IllegalArgumentException | ArithmeticException ex) {
             Toast.makeText(this, "No se pudieron cargar las compras.", Toast.LENGTH_LONG).show();
         }
     }
-    @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
+    @Override protected void onDestroy() { if (store != null) store.close(); super.onDestroy(); }
 }
