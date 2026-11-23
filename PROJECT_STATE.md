@@ -1,5 +1,11 @@
 # LocalCash — Project State
 
+## Entrega de código Firebase MVP en curso
+
+Base publicada: 93a20f6. Rama local task/FB-mvp-delivery integra Google/Credential Manager, biometría ligada al UID, persistencia Firestore de todos los módulos y adaptación de pantallas sin rediseño. SQLite sale del código productivo y se conserva en fuentes de prueba históricas. No hay importación de datos. Reglas versionadas en firestore.rules, todavía sin desplegar.
+
+Compilación integrada app/instrumentación y 29 JUnit PASS. Google real, operación Android offline/reinicio/reconexión, concurrencia y reglas remotas permanecen NOT TESTED: no se declara aceptación final ni APK apto para reemplazar una instalación con datos. Ver [guía de entrega](docs/delivery/FIREBASE-MVP.md). El usuario prioriza completar código y efectuar regresión/cierre al final.
+
 ## Avance local FB-01 — 2026-11-22
 
 Usuario solicita priorizar MVP y avanzar sin bloquear por publicación documental. Informe original T02 recibido y aceptado para head 126b30b; integrado solo en rama local feat/firebase-migration junto con su informe. GitHub #20/#21 permanecen sin fusionar; no confundir integración local con publicación. H-01 editorial se corrige aquí: reparto inserta deudas, no contactos.
