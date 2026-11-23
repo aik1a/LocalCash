@@ -1,0 +1,80 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function propietario(uid) { return request.auth != null && request.auth.uid == uid; }
+    function moneda(c) { return c in ['CLP','USD','EUR','ARS','BRL','PEN','COP','MXN','GBP','JPY']; }
+    function importe(n,c) { return n is int && (!(c in ['CLP','JPY']) || n % 100 == 0); }
+    function nombre(n) { return n is string && n.size() > 0; }
+    function cuenta(uid,id) { return getAfter(/databases/$(database)/documents/users/$(uid)/cuentas/$(string(id))).data; }
+    function contactoExiste(uid,id) { return id == null || getAfter(/databases/$(database)/documents/users/$(uid)/contactos/$(string(id))).data.id == id; }
+    function compra(uid,id) { return getAfter(/databases/$(database)/documents/users/$(uid)/compras/$(string(id))).data; }
+    function movimientoPago(uid,id) { return getAfter(/databases/$(database)/documents/users/$(uid)/movimientos/$("p-" + string(id))).data; }
+    match /users/{uid}/configuracion/{id} {
+      allow read: if propietario(uid);
+      allow create: if propietario(uid) && id == 'principal' && request.resource.data.keys().hasOnly(['divisa']) && moneda(request.resource.data.divisa);
+      allow update: if propietario(uid) && request.resource.data == resource.data;
+      allow delete: if false;
+    }
+    match /users/{uid}/cuentas/{id} {
+      function valida(d) { return d.keys().hasOnly(['id','nombre','saldo_inicial','divisa','usos']) && d.id is int && d.id > 0 && id == string(d.id) && nombre(d.nombre) && moneda(d.divisa) && importe(d.saldo_inicial,d.divisa) && d.usos is int && d.usos >= 0; }
+      allow read: if propietario(uid);
+      allow create: if propietario(uid) && valida(request.resource.data) && request.resource.data.usos == 0;
+      allow update: if propietario(uid) && valida(request.resource.data) && request.resource.data.id == resource.data.id && request.resource.data.divisa == resource.data.divisa && request.resource.data.saldo_inicial == resource.data.saldo_inicial && request.resource.data.usos >= resource.data.usos;
+      allow delete: if propietario(uid) && resource.data.usos == 0;
+    }
+    match /users/{uid}/contactos/{id} {
+      function valida(d) { return d.keys().hasOnly(['id','nombre','usos']) && d.id is int && d.id > 0 && id == string(d.id) && nombre(d.nombre) && d.usos is int && d.usos >= 0; }
+      allow read: if propietario(uid);
+      allow create: if propietario(uid) && valida(request.resource.data) && request.resource.data.usos == 0;
+      allow update: if propietario(uid) && valida(request.resource.data) && request.resource.data.id == resource.data.id;
+      allow delete: if propietario(uid) && resource.data.usos == 0;
+    }
+    match /users/{uid}/movimientos/{id} {
+      function valido(d) {
+        let c = cuenta(uid,d.cuenta_id);
+        return d.keys().hasOnly(['id','cuenta_id','tipo','monto','descripcion','fecha','latitud','longitud','compra_id'])
+          && d.id is int && d.id > 0 && d.cuenta_id is int && c.id == d.cuenta_id
+          && d.tipo in ['INGRESO','EGRESO'] && importe(d.monto,c.divisa) && d.monto > 0
+          && d.descripcion is string && d.fecha is int && d.fecha >= 0
+          && ((d.latitud == null && d.longitud == null) || (d.latitud is number && d.longitud is number && d.latitud >= -90 && d.latitud <= 90 && d.longitud >= -180 && d.longitud <= 180))
+          && ((d.compra_id == null && id == string(d.id)) || (d.compra_id is int && d.id == d.compra_id && id == 'p-' + string(d.compra_id) && d.tipo == 'EGRESO'
+            && compra(uid,d.compra_id).pago_movimiento_id == d.id && compra(uid,d.compra_id).pago_cuenta_id == d.cuenta_id && compra(uid,d.compra_id).total == d.monto && compra(uid,d.compra_id).divisa == c.divisa));
+      }
+      allow read: if propietario(uid);
+      allow create: if propietario(uid) && valido(request.resource.data);
+      // Un pago usa siempre p-compraId: un segundo cliente no puede crear otro egreso.
+      allow update, delete: if false;
+    }
+    match /users/{uid}/compras/{id} {
+      function valida(d) {
+        return d.keys().hasOnly(['id','nombre','estado','fecha','contacto_id','divisa','detalles','total','pago_cuenta_id','pago_movimiento_id','reparto','monto_usuario','deuda_actualizada_id'])
+          && d.id is int && d.id > 0 && id == string(d.id) && nombre(d.nombre)
+          && d.estado in ['PLANIFICADA','REALIZADA'] && d.fecha is int && d.fecha >= 0
+          && moneda(d.divisa) && importe(d.total,d.divisa) && d.total >= 0
+          && d.detalles is list && d.detalles.size() > 0 && contactoExiste(uid,d.contacto_id)
+          && (d.reparto == null || d.reparto is map)
+          && (d.monto_usuario == null || (importe(d.monto_usuario,d.divisa) && d.monto_usuario >= 0));
+      }
+      function cabeceraFija(d,o) { return d.id == o.id && d.nombre == o.nombre && d.fecha == o.fecha && d.contacto_id == o.contacto_id && d.detalles == o.detalles && d.total == o.total && d.divisa == o.divisa; }
+      function pago(d,o) {
+        return o.pago_movimiento_id == null && d.pago_movimiento_id == d.id && d.pago_cuenta_id is int && d.estado == 'REALIZADA'
+          && cabeceraFija(d,o) && d.reparto == o.reparto && d.monto_usuario == o.monto_usuario && d.deuda_actualizada_id == o.deuda_actualizada_id
+          && movimientoPago(uid,d.id).monto == d.total && movimientoPago(uid,d.id).cuenta_id == d.pago_cuenta_id;
+      }
+      function reparto(d,o) { return o.reparto == null && d.reparto is map && d.estado == 'REALIZADA' && o.estado == 'REALIZADA' && cabeceraFija(d,o) && d.pago_movimiento_id == o.pago_movimiento_id && d.pago_cuenta_id == o.pago_cuenta_id; }
+      function estadoDeuda(d,o) {
+        let k = d.deuda_actualizada_id;
+        return k is string && o.reparto is map && k in o.reparto && o.reparto[k].monto > 0
+          && cabeceraFija(d,o) && d.estado == o.estado && d.pago_movimiento_id == o.pago_movimiento_id && d.pago_cuenta_id == o.pago_cuenta_id && d.monto_usuario == o.monto_usuario
+          && d.reparto.keys() == o.reparto.keys() && d.reparto.diff(o.reparto).affectedKeys().hasOnly([k])
+          && d.reparto[k].diff(o.reparto[k]).affectedKeys().hasOnly(['estado']) && d.reparto[k].estado in ['PENDIENTE','PAGADA'];
+      }
+      allow read: if propietario(uid);
+      allow create: if propietario(uid) && valida(request.resource.data) && request.resource.data.pago_movimiento_id == null && request.resource.data.pago_cuenta_id == null && request.resource.data.reparto == null && request.resource.data.monto_usuario == null;
+      allow update: if propietario(uid) && valida(request.resource.data) && request.resource.data.divisa == resource.data.divisa
+        && ((resource.data.estado == 'PLANIFICADA' && resource.data.pago_movimiento_id == null && resource.data.reparto == null && request.resource.data.estado == 'PLANIFICADA' && request.resource.data.pago_movimiento_id == null && request.resource.data.pago_cuenta_id == null && request.resource.data.reparto == null && request.resource.data.monto_usuario == null)
+          || pago(request.resource.data,resource.data) || reparto(request.resource.data,resource.data) || estadoDeuda(request.resource.data,resource.data));
+      allow delete: if propietario(uid) && resource.data.estado == 'PLANIFICADA' && resource.data.pago_movimiento_id == null && resource.data.reparto == null;
+    }
+  }
+}
