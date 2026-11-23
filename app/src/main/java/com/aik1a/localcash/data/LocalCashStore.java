@@ -143,6 +143,16 @@ public final class LocalCashStore implements AutoCloseable {
     return cache.containsValue(true);
   }
 
+  public boolean hayRechazoPendiente() {
+    comprobarUsuario();
+    return preferencias.getBoolean("rechazo_" + uid, false);
+  }
+
+  public void confirmarAvisoRechazo() {
+    comprobarUsuario();
+    preferencias.edit().remove("rechazo_" + uid).apply();
+  }
+
   private void notificar() {
     for (Listener l : new ArrayList<>(oyentes)) l.alCambiar();
   }
@@ -318,11 +328,11 @@ public final class LocalCashStore implements AutoCloseable {
               })
           .addOnFailureListener(
               error -> {
+                // Conservar solo un aviso generico, tambien sin pantallas activas.
+                // La clave conserva el propietario aunque ya haya cambiado la sesion.
+                preferencias.edit().putBoolean("rechazo_" + uid, true).apply();
                 if (invalida) return;
-                for (Listener l : new ArrayList<>(oyentes))
-                  l.alError(
-                      "Firebase rechazó el cambio; revisa el estado actualizado: "
-                          + error.getLocalizedMessage());
+                notificar();
               });
     } catch (RuntimeException error) {
       datos.clear();

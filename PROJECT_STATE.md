@@ -1,5 +1,9 @@
 # LocalCash — Project State
 
+## Verificación de cierre — 2026-11-23
+
+Base recibida 736f748 comprobada contra GitHub. Las 29 unitarias de dominio pasaron localmente. Corrección de avisos de rechazo en segundo plano preparada y revisada como WIP; falta build del cambio y recorrido Android. Configuración cliente real disponible solo localmente. Build local bloqueado por plugin Google Services ausente de caché offline. Ver docs/delivery/CIERRE-FIREBASE-MVP.md. Firebase real, modo avión/reinicio/reconexión, reglas y firma siguen pendientes; no hay aceptación final. Los registros inferiores son históricos.
+
 ## Entrega de código Firebase MVP en curso
 
 Base publicada: 93a20f6. Rama local task/FB-mvp-delivery integra Google/Credential Manager, biometría ligada al UID, persistencia Firestore de todos los módulos y adaptación de pantallas sin rediseño. SQLite sale del código productivo y se conserva en fuentes de prueba históricas. No hay importación de datos. Reglas versionadas en firestore.rules, todavía sin desplegar.

@@ -1,5 +1,9 @@
 # LocalCash — Project Router
 
+## Punto de continuación — 2026-11-23
+
+El código vigente ya integra Firebase/Google. Para cerrar desde la base 736f748, leer primero docs/delivery/CIERRE-FIREBASE-MVP.md y el inicio actualizado de PROJECT_STATE.md. Las referencias inferiores a implementación no iniciada y F0 pendiente son históricas; no reiniciar la migración.
+
 ## Actualización docente vigente para el próximo incremento — 2026-11-16
 
 Protocolo obligatorio FB-01: [límites, ramas y auditoría](docs/agent/FIREBASE_PROTOCOL.md). Entrega documental FB-F0-T02 en rama de tarea, pendiente de integración: [baseline real](docs/design/FIREBASE_BASELINE.md) y [brief](docs/tasks/active/FB-F0-T02-baseline-inventario.md). Próxima unidad recomendada: F0-T03, conservación de instalaciones/firma/responsable Firebase; F0 permanece abierta.

@@ -1,42 +1,24 @@
-# LocalCash
+# LocalCash — MVP Android con Firebase
 
-Aplicación Android académica en Java para gestión financiera personal local/offline.
+Aplicación académica de finanzas personales en Java, XML y Gradle Groovy. Google identifica al usuario; la biometría protege el acceso local. Firestore guarda datos por UID, con caché persistente para trabajar sin conexión después de preparar los datos.
 
 ## Estado
 
-El proyecto se encuentra en **S00 — Foundation**. La documentación base y el protocolo multiagente están preparados; la aplicación Android todavía debe inicializarse/validarse.
+Base verificada: `736f748db92cff20c8caf24f8deca5136147d057`, rama `task/FB-mvp-delivery`. [CI de la base](https://github.com/aik1a/LocalCash/actions/runs/45102302173): SUCCESS con configuración sintética. Las 29 unitarias de dominio también se ejecutaron localmente el 2026-11-23, sin fallos.
 
-Consultar primero:
-1. `PROJECT_ROUTER.md`
-2. `PROJECT_STATE.md`
-3. `AGENTS.md`
+**Aceptación final pendiente.** Compilar no acredita Google real, reglas desplegadas, biometría ni recorrido financiero offline/reinicio/reconexión. Ver [comprobaciones para cerrar](docs/delivery/CIERRE-FIREBASE-MVP.md).
 
-## Pilares del proyecto
+## Compilar
 
-- Android nativo en Java.
-- Persistencia local SQLite mediante `SQLiteOpenHelper`.
-- Autenticación biométrica.
-- Movimientos con geolocalización opcional y visualización en mapa.
-- Compras, contactos, gastos compartidos y deudas.
-- Funcionamiento principal offline.
-- Sin backend/Firebase/Room/Compose dentro del alcance actual.
+Colocar la configuración cliente en `app/google-services.json` (ignorada por Git). Registrar la firma del APK, habilitar Google y preparar Firestore con las reglas productivas de `firestore.rules`. Nunca desplegar las reglas anónimas del prototipo de `tests/firebase`.
 
-## Documentación
+```powershell
+.\gradlew.bat :app:assembleDebug :app:assembleDebugAndroidTest :app:testDebugUnitTest
+```
 
-- Arquitectura: `ARCHITECTURE.md`
-- Requisitos: `docs/requirements/PROJECT_SPEC.md`
-- Trazabilidad: `docs/requirements/TRACEABILITY.md`
-- Dominio: `docs/design/DOMAIN_MODEL.md`
-- Base de datos: `docs/design/DATABASE.md`
-- Reglas de negocio: `docs/design/BUSINESS_RULES.md`
-- Sprints: `docs/sprints/`
-- Testing: `docs/testing/`
-- Operación multiagente: `docs/agent/`
-- Auditorías: `docs/audits/`
-- ExecPlans: `docs/exec-plans/`
+No importa historial SQLite. Usar instalación de pruebas y datos sintéticos; conservar instalaciones existentes con datos. [Guía](docs/delivery/FIREBASE-MVP.md).
 
-## Flujo de agentes
+## Continuidad
 
-`ORQUESTADOR → TASK BRIEF → CODIFICADOR → BUILD/TEST → HANDOFF → AUDITOR → ORQUESTADOR`
+Leer `PROJECT_ROUTER.md`, `AGENTS.md` y el inicio de `PROJECT_STATE.md`. Las restricciones históricas de SQLite como única persistencia están sustituidas para este incremento por Firebase. Las pruebas antiguas no acreditan el backend actual.
 
-GitHub es la fuente de verdad mutable del proyecto. Library conserva un espejo persistente de documentos y artefactos importantes.

@@ -19,6 +19,7 @@ public abstract class ActividadProtegida extends Activity {
     private final List<Dialog> dialogos = new ArrayList<>();
     private View privado, bloqueo;
     private AlertDialog configuracion;
+    private AlertDialog rechazoSincronizacion;
     private LocalCashStore store;
     private String uidContenido;
     private final LocalCashStore.Listener datos = new LocalCashStore.Listener() {
@@ -105,10 +106,28 @@ public abstract class ActividadProtegida extends Activity {
                 || !store.estaListo() || actualizando) return;
         actualizando = true;
         try {
-            if (asegurarConfiguracion()) mostrarContenido();
+            if (asegurarConfiguracion()) {
+                mostrarContenido();
+                mostrarRechazoPendiente();
+            }
         } catch (IllegalArgumentException | IllegalStateException | ArithmeticException error) {
             mostrarBloqueo("No se pudieron abrir los datos. Comprueba la conexión y reintenta.");
         } finally { actualizando = false; }
+    }
+    private void mostrarRechazoPendiente() {
+        if (!store.hayRechazoPendiente()
+                || (rechazoSincronizacion != null && rechazoSincronizacion.isShowing())) return;
+        LocalCashStore propietarioAviso = store;
+        rechazoSincronizacion = protegerDialogo(new AlertDialog.Builder(this)
+                .setTitle("Cambio no sincronizado")
+                .setMessage("Firebase rechazó uno o más cambios pendientes. Revisa los datos actualizados; esos cambios no se confirmaron.")
+                .setPositiveButton("Entendido", (dialogo, boton) -> {
+                    if (store != propietarioAviso || !sesion().autenticada()) return;
+                    try { propietarioAviso.confirmarAvisoRechazo(); }
+                    catch (IllegalStateException cambioDeSesion) { /* El aviso sigue con su UID. */ }
+                })
+                .create());
+        rechazoSincronizacion.show();
     }
     private boolean asegurarConfiguracion() {
         if (new ConfiguracionRepository(store).buscarDivisa() != null) return true;
