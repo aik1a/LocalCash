@@ -94,8 +94,7 @@ public final class AccesoActivity extends FragmentActivity {
             findViewById(R.id.google_acceso).setVisibility(View.VISIBLE);
             findViewById(R.id.google_acceso).setEnabled(true);
             findViewById(R.id.autenticar).setVisibility(View.GONE);
-            mensaje("Esta instalación pertenece a otra cuenta o conserva datos anteriores sin vincular. "
-                    + "Usa la cuenta original o una instalación de prueba separada; no borres los datos.");
+            mensaje("No se pudo validar una sesión Google. Vuelve a iniciar sesión.");
             return;
         }
         findViewById(R.id.google_acceso).setVisibility(View.GONE);

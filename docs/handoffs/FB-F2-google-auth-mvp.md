@@ -19,7 +19,7 @@ paralelo autorizado por usuario; no aprobación F1/F2 ni entrega final.
   existentes se mantienen. Firestore ya disponible en producción para siguiente
   bloque de datos, pero este commit **no migra finanzas**.
 
-## Límite SQLite transitorio
+## Límite SQLite transitorio (histórico del bloque Auth aislado)
 
 No hay selector ni cierre de cuenta nuevo. Antes de biometría se guarda un UID
 propietario local y se exige el mismo usuario después. Si ya existe localcash.db y
@@ -68,3 +68,23 @@ caducado, segundo plano y primer acceso offline: **NOT TESTED** por no haber
 Google/dispositivo en este entorno. Build no acredita esos flujos. Los runners
 Android históricos compilan pero no han sido adaptados para entrar con Google.
 Auditor independiente recibe el SHA; sin merge/push ni servicios remotos tocados.
+
+## Integración con Firestore — 2026-11-23
+
+Sobre integración root d76bc78, ActividadProtegida ahora inicia LocalCashStore por
+UID y espera readiness completa de las cinco colecciones/configuración antes de
+crear pantallas. Mientras no están preparadas muestra carga/reintento; no presenta
+lista vacía/saldo cero como información completa. Reintentar reabre listeners con
+el método del store sin borrar caché ni pendientes. Cambios/rechazos refrescan
+contenido; se retira el observador de Activity al pausar/destruir.
+
+Se retira la guardia SQLite anterior: la app financiera ya no la lee. FirebaseUser
+Google válido + biometría ligada al UID actual son obligatorios; el store filtra
+por UID. Vistas/servicios de otra identidad no se reutilizan: cambio UID cierra la
+pila y crea MainActivity limpia. El estado guardado de vistas también lleva UID.
+La base antigua queda intacta, sin importación ni eliminación.
+
+Build integrado app/instrumentación y 29 JUnit: PASS exit0; comprobación manual de
+Google/biometría/reconexión aún NOT TESTED. Esta integración no añade logout ni
+rediseño, ni certifica reglas/aislamiento remoto sin pruebas finales. Los archivos
+de prueba/config Firebase cliente siguen fuera de Git.
