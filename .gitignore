@@ -15,3 +15,6 @@ captures/
 /verification/
 /sources/
 *.class
+
+# Configuración Firebase cliente proporcionada fuera del repositorio.
+**/google-services.json

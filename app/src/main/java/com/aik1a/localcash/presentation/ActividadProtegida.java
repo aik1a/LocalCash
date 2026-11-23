@@ -11,15 +11,25 @@ import java.util.*;
 
 public abstract class ActividadProtegida extends Activity {
     private boolean creada;
+    private boolean visible;
+    private boolean gateAbierto;
     private Bundle estadoInicial;
     private final List<Dialog> dialogos = new ArrayList<>();
     private View privado;
     private AlertDialog configuracion;
+    private final com.google.firebase.auth.FirebaseAuth.AuthStateListener estadoGoogle = auth -> {
+        if (visible && !sesion().identidadGoogleValida()) {
+            if (privado != null) privado.setVisibility(View.GONE);
+            for (Dialog dialogo : dialogos) if (dialogo.isShowing()) dialogo.dismiss();
+            abrirGate();
+        }
+    };
     @Override public final void onCreate(Bundle state) {
         super.onCreate(state); estadoInicial = state;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_bloqueo);
         findViewById(R.id.autenticar).setOnClickListener(v -> abrirGate());
+        findViewById(R.id.google_acceso).setOnClickListener(v -> abrirGate());
         findViewById(R.id.salir).setOnClickListener(v -> finishAffinity());
     }
     protected abstract void crearContenido(Bundle state);
@@ -32,6 +42,9 @@ public abstract class ActividadProtegida extends Activity {
     private LocalCashApplication sesion() { return (LocalCashApplication)getApplication(); }
     @Override protected void onResume() {
         super.onResume();
+        visible = true;
+        gateAbierto = false;
+        if (sesion().googleAuth() != null) sesion().googleAuth().addAuthStateListener(estadoGoogle);
         if (!sesion().autenticada()) { if (privado != null) privado.setVisibility(View.GONE); abrirGate(); return; }
         if (!asegurarConfiguracion()) return;
         mostrarContenido();
@@ -68,7 +81,11 @@ public abstract class ActividadProtegida extends Activity {
         if (privado != null) privado.setVisibility(View.VISIBLE);
         if (!isFinishing()) actualizarContenido();
     }
-    private void abrirGate() { startActivity(new Intent(this, AccesoActivity.class)); }
+    private void abrirGate() {
+        if (gateAbierto || !visible) return;
+        gateAbierto = true;
+        startActivity(new Intent(this, AccesoActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
+    }
     @Override protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         if (privado != null) {
@@ -77,6 +94,8 @@ public abstract class ActividadProtegida extends Activity {
         }
     }
     @Override protected void onPause() {
+        visible = false;
+        if (sesion().googleAuth() != null) sesion().googleAuth().removeAuthStateListener(estadoGoogle);
         if (privado != null) privado.setVisibility(View.GONE);
         super.onPause();
     }
