@@ -1,18 +1,33 @@
 package com.aik1a.localcash.presentation;
 
+import android.app.Application;
 import android.content.Context;
 import android.util.AttributeSet;
 import org.osmdroid.views.MapView;
-import org.osmdroid.tileprovider.modules.OfflineTileProvider;
+import org.osmdroid.mapsforge.MapsForgeTileProvider;
+import org.osmdroid.mapsforge.MapsForgeTileSource;
 import org.osmdroid.tileprovider.util.SimpleRegisterReceiver;
-import org.osmdroid.tileprovider.tilesource.BitmapTileSourceBase;
-import java.io.File;
 
 public final class MapaLocalView extends MapView {
-    public MapaLocalView(Context context,AttributeSet attrs) {
-        super(context,new OfflineTileProvider(new SimpleRegisterReceiver(context),new File[]{AtlasOffline.archivo(context)}),null,attrs);
+    private boolean detached;
+    public MapaLocalView(Context context, AttributeSet attrs) {
+        super(context, proveedor(context), null, attrs);
         setUseDataConnection(false);
-        setTileSource(new BitmapTileSourceBase(AtlasOffline.FUENTE,14,16,256,".png","© OpenStreetMap contributors · ODbL") { });
+    }
+    private static MapsForgeTileProvider proveedor(Context context) {
+        MapsForgeTileSource.createInstance((Application) context.getApplicationContext());
+        MapsForgeTileSource fuente = MapsForgeTileSource.createFromFiles(
+                MapasVectoriales.archivos(context), null,
+                "LocalCashVector-" + MapasVectoriales.archivo(context,"importado.map").lastModified());
+        MapsForgeTileProvider proveedor = new MapsForgeTileProvider(new SimpleRegisterReceiver(context), fuente, null);
+        proveedor.setUseDataConnection(false);
+        return proveedor;
+    }
+    @Override public void onDetach() {
+        if (detached) return;
+        detached = true;
+        MapsForgeTileSource fuente = (MapsForgeTileSource) getTileProvider().getTileSource();
+        super.onDetach();
+        fuente.dispose();
     }
 }
-

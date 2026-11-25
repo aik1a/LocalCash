@@ -3,6 +3,9 @@ import pathlib
 import re
 import subprocess
 import xml.etree.ElementTree as ET
+import importlib
+
+ui = importlib.import_module('biometric-emulator')
 
 folder = pathlib.Path('evidence')
 def adb(*args):
@@ -15,13 +18,16 @@ def screen(name):
 def contains(tree, text):
     assert any(text in n.get('text', '') for n in tree.iter('node')), text
 def tap(tree, resource=None, text=None):
-    nodes = [n for n in tree.iter('node') if
-             (resource and n.get('resource-id') == 'com.aik1a.localcash:id/' + resource) or
-             (text and n.get('text') == text)]
-    assert nodes, (resource, text)
-    x1,y1,x2,y2 = map(int,re.findall(r'\d+',nodes[0].get('bounds')))
-    assert x2>x1 and y2>y1
-    adb('shell','input','tap',str((x1+x2)//2),str((y1+y2)//2))
+    if resource == 'volver':
+        for attempt in range(7):
+            if ui.tap(tree, resource=resource): return
+            node=next(n for n in tree.iter('node') if n.get('scrollable')=='true')
+            x1,y1,x2,y2=map(int,re.findall(r'\d+',node.get('bounds')))
+            adb('shell','input','swipe',str((x1+x2)//2),str(y1+(y2-y1)//5),
+                str((x1+x2)//2),str(y1+(y2-y1)*4//5),'400')
+            tree=screen('shared-scroll-back')
+        raise AssertionError('Volver no visible tras desplazar')
+    assert ui.tap_revealed(tree, resource=resource, text=text), (resource, text)
 
 main = screen('shared-restarted-main')
 contains(main, 'Saldo: USD 125,50')
@@ -32,9 +38,10 @@ for nombre, montos in [('Compartida exacta',['25,00','25,00','25,00']),
     tap(compras,text=nombre)
     detalle = screen('shared-restarted-detail')
     tap(detalle,resource='abrir_reparto')
-    deudas = screen('shared-restarted-' + ('equal' if 'exacta' in nombre else 'custom'))
     for id,(contacto,monto) in enumerate(zip(['Ana','Luis','Marta'],montos),1):
-        contains(deudas,f'{contacto}: USD {monto} · PENDIENTE')
+        deudas = ui.wait(lambda t: any(f'{contacto}: USD {monto} · Pendiente' in n.get('text', '')
+                         for n in t.iter('node')), 'shared-restarted-'+contacto, scroll=True)
+        contains(deudas,f'{contacto}: USD {monto} · Pendiente')
     assert not any(n.get('resource-id')=='com.aik1a.localcash:id/guardar_reparto' for n in deudas.iter('node'))
     adb('shell','screencap','-p','/sdcard/shared-restart.png')
     adb('pull','/sdcard/shared-restart.png',str(folder/('restart-equal.png' if 'exacta' in nombre else 'restart-custom.png')))

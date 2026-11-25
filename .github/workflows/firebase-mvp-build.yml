@@ -1,7 +1,7 @@
-name: LocalCash Firebase MVP build
+name: Android build and tests
 on:
   push:
-    branches: ['task/FB-*', 'feat/firebase-migration']
+    branches: [main, 'task/FB-*', 'feat/firebase-migration', 'maintenance/repository-cleanup']
     paths: ['app/**', 'build.gradle', 'settings.gradle', 'gradle.properties', 'gradle/**', '.github/workflows/firebase-mvp-build.yml']
   pull_request:
     branches: [feat/firebase-migration, main]
@@ -30,6 +30,10 @@ jobs:
           packages: platform-tools
       - name: Android SDK
         run: sdkmanager 'platforms;android-36.1' 'build-tools;36.0.0'
+      - uses: actions/cache@v4
+        with:
+          path: app/build/generated/offlineMaps
+          key: mapsforge-world-chile-v5-2026-11-03
       - name: Synthetic configuration for compilation only
         shell: bash
         run: |
@@ -45,12 +49,15 @@ jobs:
             }], 'configuration_version': '1'
           }))
           PY
+      - name: Check Java compilation before downloading maps
+        run: bash gradlew --no-daemon --console=plain :app:compileDebugJavaWithJavac :app:compileDebugAndroidTestJavaWithJavac :app:testDebugUnitTest -x :app:prepareOfflineMaps
       - name: Compile and domain unit tests
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p verification/firebase-mvp
           git rev-parse HEAD | tee verification/firebase-mvp/source-sha.txt
+          bash tests/domain-checks.sh
           bash gradlew --no-daemon --console=plain :app:assembleDebug :app:assembleDebugAndroidTest :app:testDebugUnitTest 2>&1 | tee verification/firebase-mvp/build.log
       - name: Build evidence
         if: always()

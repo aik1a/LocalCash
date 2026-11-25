@@ -3,6 +3,13 @@ import importlib.util,os,pathlib,re,signal,subprocess,sys,time
 spec=importlib.util.spec_from_file_location('bio','tests/biometric-emulator.py');bio=importlib.util.module_from_spec(spec);spec.loader.exec_module(bio)
 try:
     e=pathlib.Path('evidence');e.mkdir(exist_ok=True)
+    bio.adb('shell','pm','grant',bio.package,'android.permission.ACCESS_COARSE_LOCATION')
+    bio.adb('shell','pm','grant',bio.package,'android.permission.ACCESS_FINE_LOCATION')
+    bio.adb('shell','appops','set',bio.package,'android:mock_location','allow')
+    if int(bio.adb('shell','getprop','ro.build.version.sdk').strip()) < 28:
+        bio.adb('shell','settings','put','secure','location_mode','3')
+    else:
+        bio.adb('shell','cmd','location','set-location-enabled','true')
     network_commands=[]
     for args in [('shell','svc','wifi','disable'),('shell','svc','data','disable')]:
      try:r=subprocess.run(['adb',*args],capture_output=True,text=True,timeout=20)
@@ -23,7 +30,14 @@ try:
     # MapChecks exige File.exists()==false antes de abrir el mapa; sin depender de test(1) en Android 7.
     with (e/'maps-fingerprint-feed.log').open('w') as output:feed=subprocess.Popen([sys.executable,'tests/biometric-emulator.py','feed'],stdout=output,stderr=subprocess.STDOUT,start_new_session=True)
     try:
-     bio.instrument('FlowChecks','maps',file='maps-flow.log',marker='LOCALCASH_MAPS_PASS')
+     try:
+      bio.instrument('FlowChecks','maps',file='maps-flow.log',marker='LOCALCASH_MAPS_PASS')
+     except subprocess.TimeoutExpired as failure:
+      captured=failure.stdout or b''
+      if isinstance(captured,bytes):captured=captured.decode(errors='replace')
+      (e/'maps-timeout-progress.log').write_text(captured)
+      print(captured,flush=True)
+      raise
      # Instrumentation termina el proceso. Extraer solo evidencia de fixtures ya autenticados.
      folder=e/'map-evidence';folder.mkdir(exist_ok=True)
      names=bio.adb('shell','run-as',bio.package,'ls','files/map-evidence').split()
@@ -33,7 +47,7 @@ try:
     bio.launch();tree=bio.unlock();assert bio.tap(tree,text='Demo mapa')
     tree=bio.wait(lambda t:any(n.get('resource-id','').endswith(':id/abrir_mapa') for n in t.iter('node')),'maps-account')
     assert bio.tap(tree,resource='abrir_mapa')
-    tree=bio.wait(lambda t:any(n.get('resource-id','').endswith(':id/map') for n in t.iter('node')),'maps-reopened');assert bio.has(tree,'fuera de cobertura')
+    tree=bio.wait(lambda t:any(n.get('resource-id','').endswith(':id/map') for n in t.iter('node')),'maps-reopened');assert not bio.has(tree,'fuera de cobertura')
     bio.adb('shell','input','keyevent','3');time.sleep(1)
     bio.adb('shell','am','start','-W','-a','android.intent.action.MAIN','-c','android.intent.category.LAUNCHER','-f','0x10200000','-n',bio.package+'/.presentation.MainActivity')
     tree=bio.wait(lambda t:bio.has(t,'Desbloquear LocalCash'),'maps-background-gate');bio.blocked(tree);assert bio.tap(tree,text='Cancelar')
@@ -59,6 +73,7 @@ try:
     (e/'network-restore.log').write_text('\n'.join(restore))
 finally:
     try:
-        r=subprocess.run(['adb','logcat','-d','-t','1800'],capture_output=True,text=True,timeout=30)
+        r=subprocess.run(['adb','logcat','-d'],capture_output=True,text=True,timeout=30)
         pathlib.Path('evidence/maps-final-logcat.txt').write_text(r.stdout+r.stderr)
     except Exception as failure:print('No se pudo guardar logcat:',failure,flush=True)
+

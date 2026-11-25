@@ -1,24 +1,52 @@
-# LocalCash — MVP Android con Firebase
+# LocalCash
 
-Aplicación académica de finanzas personales en Java, XML y Gradle Groovy. Google identifica al usuario; la biometría protege el acceso local. Firestore guarda datos por UID, con caché persistente para trabajar sin conexión después de preparar los datos.
+Aplicación Android de finanzas personales desarrollada en Java y XML. Permite administrar cuentas, ingresos, egresos, compras, contactos y gastos compartidos.
 
-## Estado
+## Funciones
 
-Base verificada: `736f748db92cff20c8caf24f8deca5136147d057`, rama `task/FB-mvp-delivery`. [CI de la base](https://github.com/aik1a/LocalCash/actions/runs/45102302173): SUCCESS con configuración sintética. Las 29 unitarias de dominio también se ejecutaron localmente el 2026-11-23, sin fallos.
+- Inicio de sesión con Google y acceso protegido con biometría.
+- Datos financieros privados por usuario en Cloud Firestore.
+- Caché persistente y estado de sincronización para conexiones intermitentes.
+- Cuentas por divisa, movimientos y cálculo de saldos con importes enteros.
+- Compras planificadas, pago asociado a una cuenta y distribución de gastos.
+- Mapa mundial básico sin conexión, calles de Chile y ubicación actual con permiso del usuario. Otros países admiten mapas `.map` importados desde el dispositivo.
 
-**Aceptación final pendiente.** Compilar no acredita Google real, reglas desplegadas, biometría ni recorrido financiero offline/reinicio/reconexión. Ver [comprobaciones para cerrar](docs/delivery/CIERRE-FIREBASE-MVP.md).
+## Configuración
 
-## Compilar
+1. Clonar este repositorio y abrirlo en Android Studio desde `main`.
+2. Usar JDK 25 para Gradle; el código Java tiene compatibilidad 17. Instalar Android SDK 36.1 y Build Tools 36.0.0. Android mínimo: API 24.
+3. Registrar `com.aik1a.localcash` en Firebase y colocar su configuración en `app/google-services.json`, excluido de Git.
+4. Habilitar Google en Firebase Authentication y registrar la huella SHA del certificado usado para firmar el APK.
+5. Crear Cloud Firestore y publicar las reglas de `firestore.rules`.
+6. Ejecutar en un dispositivo con servicios Google y biometría configurada.
 
-Colocar la configuración cliente en `app/google-services.json` (ignorada por Git). Registrar la firma del APK, habilitar Google y preparar Firestore con las reglas productivas de `firestore.rules`. Nunca desplegar las reglas anónimas del prototipo de `tests/firebase`.
+La primera compilación descarga cartografía de OpenStreetMap en formato Mapsforge. El mapa detallado de Chile ocupa aproximadamente 650 MB; se necesita conexión, tiempo y espacio libre para preparar y empaquetar estos recursos. Los archivos se reutilizan en compilaciones posteriores y se incluyen en el APK para consultarlos sin conexión.
+
+## Compilar y probar
+
+Windows:
 
 ```powershell
 .\gradlew.bat :app:assembleDebug :app:assembleDebugAndroidTest :app:testDebugUnitTest
 ```
 
-No importa historial SQLite. Usar instalación de pruebas y datos sintéticos; conservar instalaciones existentes con datos. [Guía](docs/delivery/FIREBASE-MVP.md).
+Linux o macOS:
 
-## Continuidad
+```sh
+./gradlew :app:assembleDebug :app:assembleDebugAndroidTest :app:testDebugUnitTest
+bash tests/domain-checks.sh
+```
 
-Leer `PROJECT_ROUTER.md`, `AGENTS.md` y el inicio de `PROJECT_STATE.md`. Las restricciones históricas de SQLite como única persistencia están sustituidas para este incremento por Firebase. Las pruebas antiguas no acreditan el backend actual.
+APK: `app/build/outputs/apk/debug/app-debug.apk`.
 
+GitHub Actions compila con una configuración Firebase sintética. Para iniciar sesión con Google, compilar con la configuración real del proyecto y la firma registrada.
+
+## Documentación
+
+- [Arquitectura](ARCHITECTURE.md).
+- [Datos y reglas financieras](docs/DATABASE.md).
+- [Pruebas](docs/TESTING.md).
+- [Requisitos funcionales](docs/requirements/PROJECT_SPEC.md).
+- [Cartografía y licencias](docs/maps/README.md).
+
+La primera autenticación y descarga de datos financieros requieren conexión. La aplicación no importa automáticamente el historial de versiones SQLite y no realiza transferencias bancarias ni conversión de moneda.
