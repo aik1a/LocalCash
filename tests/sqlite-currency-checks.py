@@ -129,4 +129,3 @@ else h.onUpgrade(d,Integer.parseInt(a[0]),7); } }'''
     reject(db,"UPDATE compras SET divisa='USD' WHERE id=1")
     check(not list(db.execute('PRAGMA foreign_key_check')))
     print(f'PASS: {checks} host SQLite checks; actual Java DDL, fresh install and migrations v1-v6→v7.')
-

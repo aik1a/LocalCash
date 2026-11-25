@@ -26,4 +26,3 @@
     <TextView android:id="@+id/atribucion_mapa" style="@style/Cuentas.Ayuda" android:layout_width="match_parent" android:layout_height="wrap_content"
         android:text="Datos del mapa © OpenStreetMap contributors · ODbL" android:textColorLink="@color/cuentas_lavanda" />
 </LinearLayout>
-

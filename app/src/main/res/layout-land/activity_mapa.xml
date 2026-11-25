@@ -40,4 +40,3 @@
             android:text="Datos del mapa © OpenStreetMap contributors · ODbL" android:textColorLink="@color/cuentas_lavanda" android:layout_marginBottom="0dp" />
     </LinearLayout>
 </LinearLayout>
-

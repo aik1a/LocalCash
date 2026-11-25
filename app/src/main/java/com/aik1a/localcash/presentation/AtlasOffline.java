@@ -55,5 +55,3 @@ public final class AtlasOffline {
         } catch(NoSuchAlgorithmException ex) { throw new IOException("SHA256 no disponible.",ex); }
     }
 }
-
-

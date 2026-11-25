@@ -76,4 +76,3 @@ finally:
         r=subprocess.run(['adb','logcat','-d'],capture_output=True,text=True,timeout=30)
         pathlib.Path('evidence/maps-final-logcat.txt').write_text(r.stdout+r.stderr)
     except Exception as failure:print('No se pudo guardar logcat:',failure,flush=True)
-
