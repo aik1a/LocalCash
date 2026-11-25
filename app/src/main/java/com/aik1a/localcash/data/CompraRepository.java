@@ -1,126 +1,162 @@
 package com.aik1a.localcash.data;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import com.aik1a.localcash.domain.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public final class CompraRepository {
-    private final LocalCashDbHelper helper;
-    public CompraRepository(LocalCashDbHelper helper) { this.helper = helper; }
-    public long crear(Compra compra) {
-        SQLiteDatabase db = helper.getWritableDatabase();
-        db.beginTransaction();
-        try {
-            ContentValues values = new ContentValues();
-            values.put("divisa", compra.getDivisa() == null ? null : compra.getDivisa().name());
-            values.put("nombre", compra.getNombre()); values.put("estado", compra.getEstado().name()); values.put("fecha", compra.getFecha());
-            if (compra.getContactoId() == null) values.putNull("contacto_id"); else values.put("contacto_id", compra.getContactoId());
-            long id = db.insertOrThrow("compras", null, values);
-            for (DetalleCompra detalle : compra.getDetalles()) {
-                ContentValues item = new ContentValues(); item.put("compra_id", id); item.put("descripcion", detalle.getDescripcion());
-                item.put("cantidad", detalle.getCantidad()); item.put("precio_unitario", detalle.getPrecioUnitario());
-                db.insertOrThrow("detalle_compra", null, item);
-            }
-            db.setTransactionSuccessful(); return id;
-        } finally { db.endTransaction(); }
-    }
-    public void asignarDivisa(long id, Divisa divisa) {
-        if (divisa == null) throw new IllegalArgumentException("Selecciona una divisa.");
-        SQLiteDatabase db = helper.getWritableDatabase(); db.beginTransaction();
-        try {
-            Compra compra = buscar(id);
-            if (compra.getDivisa() != null) throw new IllegalArgumentException("La compra ya tiene divisa.");
-            for (DetalleCompra d : compra.getDetalles()) divisa.validar(d.getPrecioUnitario());
-            DeudaRepository deudas = new DeudaRepository(helper);
-            for (Deuda d : deudas.listarPorCompra(id)) divisa.validar(d.getMonto());
-            Long propio = deudas.buscarMontoUsuario(id);
-            if (propio != null) divisa.validar(propio);
-            ContentValues values = new ContentValues(); values.put("divisa", divisa.name());
-            if (db.update("compras", values, "id=? AND divisa IS NULL", new String[]{Long.toString(id)}) != 1)
-                throw new IllegalArgumentException("La compra cambió. Vuelve a abrirla.");
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
-    }
+  private final LocalCashStore store;
 
-    private Compra exigirPlanificacionEditable(long id) {
-        Compra actual = buscar(id);
-        DeudaRepository deudas = new DeudaRepository(helper);
-        if (actual.getEstado() != Compra.Estado.PLANIFICADA || buscarCuentaPago(id) != null
-                || !deudas.listarPorCompra(id).isEmpty() || deudas.buscarMontoUsuario(id) != null)
-            throw new IllegalArgumentException("Solo puedes modificar compras planificadas sin pago ni reparto.");
-        return actual;
-    }
-    public void actualizarPlanificacion(Compra compra) {
-        SQLiteDatabase db = helper.getWritableDatabase(); db.beginTransaction();
-        try {
-            Compra actual = exigirPlanificacionEditable(compra.getId());
-            if (compra.getEstado() != Compra.Estado.PLANIFICADA || compra.getDivisa() == null || actual.getDivisa() != compra.getDivisa())
-                throw new IllegalArgumentException("Conserva el estado planificado y la moneda original de la compra.");
-            ContentValues cabecera = new ContentValues(); cabecera.put("nombre", compra.getNombre()); cabecera.put("fecha", compra.getFecha());
-            if (compra.getContactoId() == null) cabecera.putNull("contacto_id"); else cabecera.put("contacto_id", compra.getContactoId());
-            db.update("compras", cabecera, "id=?", new String[]{Long.toString(compra.getId())});
-            db.delete("detalle_compra", "compra_id=?", new String[]{Long.toString(compra.getId())});
-            for (DetalleCompra detalle : compra.getDetalles()) {
-                ContentValues item = new ContentValues(); item.put("compra_id", compra.getId()); item.put("descripcion", detalle.getDescripcion());
-                item.put("cantidad", detalle.getCantidad()); item.put("precio_unitario", detalle.getPrecioUnitario());
-                db.insertOrThrow("detalle_compra", null, item);
-            }
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
-    }
-    public void eliminarPlanificacion(long id) {
-        SQLiteDatabase db = helper.getWritableDatabase(); db.beginTransaction();
-        try {
-            exigirPlanificacionEditable(id);
-            db.delete("detalle_compra", "compra_id=?", new String[]{Long.toString(id)});
-            if (db.delete("compras", "id=?", new String[]{Long.toString(id)}) != 1)
-                throw new IllegalArgumentException("La compra ya no existe.");
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
-    }
+  public CompraRepository(LocalCashStore store) {
+    this.store = store;
+  }
 
-    public Long buscarCuentaPago(long compraId) {
-        try (Cursor c = helper.getReadableDatabase().rawQuery(
-                "SELECT m.cuenta_id FROM compra_movimiento cm JOIN movimientos m ON m.id=cm.movimiento_id WHERE cm.compra_id=?",
-                new String[]{Long.toString(compraId)})) {
-            return c.moveToFirst() ? c.getLong(0) : null;
-        }
-    }
+  public long crear(Compra compra) {
+    long id = store.nuevoId();
+    store.transaccion(
+        () -> {
+          store.guardar("compras", id, datos(compra, id));
+          if (compra.getContactoId() != null)
+            store.incrementarUso("contactos", compra.getContactoId(), 1);
+        });
+    return id;
+  }
 
-    public void registrarPago(long compraId, long movimientoId) {
-        ContentValues enlace = new ContentValues();
-        enlace.put("compra_id", compraId); enlace.put("movimiento_id", movimientoId);
-        helper.getWritableDatabase().insertOrThrow("compra_movimiento", null, enlace);
-        ContentValues estado = new ContentValues(); estado.put("estado", "REALIZADA");
-        if (helper.getWritableDatabase().update("compras", estado, "id=?", new String[]{Long.toString(compraId)}) != 1)
-            throw new IllegalArgumentException("La compra ya no existe.");
-    }
+  private Map<String, Object> datos(Compra c, long id) {
+    List<Map<String, Object>> detalles = new ArrayList<>();
+    for (DetalleCompra d : c.getDetalles())
+      detalles.add(
+          LocalCashStore.mapa(
+              "descripcion",
+              d.getDescripcion(),
+              "cantidad",
+              d.getCantidad(),
+              "precio_unitario",
+              d.getPrecioUnitario()));
+    return LocalCashStore.mapa(
+        "id",
+        id,
+        "nombre",
+        c.getNombre(),
+        "estado",
+        c.getEstado().name(),
+        "fecha",
+        c.getFecha(),
+        "contacto_id",
+        c.getContactoId(),
+        "divisa",
+        c.getDivisa() == null ? null : c.getDivisa().name(),
+        "detalles",
+        detalles,
+        "pago_cuenta_id",
+        null,
+        "pago_movimiento_id",
+        null,
+        "reparto",
+        null,
+        "monto_usuario",
+        null,
+        "deuda_actualizada_id",
+        null,
+        "total",
+        c.calcularTotal());
+  }
 
-    public List<Compra> listar() {
-        List<Compra> resultado = new ArrayList<>();
-        try (Cursor c = helper.getReadableDatabase().query("compras", null, null, null, null, null, "fecha DESC, id DESC")) {
-            while (c.moveToNext()) resultado.add(leer(c));
-        }
-        return resultado;
+  public void asignarDivisa(long id, Divisa divisa) {
+    if (divisa == null) throw new IllegalArgumentException("Selecciona una divisa.");
+    Compra c = buscar(id);
+    if (c.getDivisa() != null) throw new IllegalArgumentException("La compra ya tiene divisa.");
+    for (DetalleCompra d : c.getDetalles()) divisa.validar(d.getPrecioUnitario());
+    for (Deuda d : new DeudaRepository(store).listarPorCompra(id)) divisa.validar(d.getMonto());
+    Long propio = new DeudaRepository(store).buscarMontoUsuario(id);
+    if (propio != null) divisa.validar(propio);
+    Map<String, Object> m = store.buscar("compras", id);
+    m.put("divisa", divisa.name());
+    store.guardar("compras", id, m);
+  }
+
+  private Compra exigirEditable(long id) {
+    Compra c = buscar(id);
+    Map<String, Object> m = store.buscar("compras", id);
+    if (c.getEstado() != Compra.Estado.PLANIFICADA
+        || m.get("pago_cuenta_id") != null
+        || m.get("reparto") != null)
+      throw new IllegalArgumentException(
+          "Solo puedes modificar compras planificadas sin pago ni reparto.");
+    return c;
+  }
+
+  public void actualizarPlanificacion(Compra compra) {
+    Compra anterior = exigirEditable(compra.getId());
+    if (compra.getEstado() != Compra.Estado.PLANIFICADA
+        || compra.getDivisa() == null
+        || anterior.getDivisa() != compra.getDivisa())
+      throw new IllegalArgumentException(
+          "Conserva el estado planificado y la moneda original de la compra.");
+    store.transaccion(
+        () -> {
+          store.guardar("compras", compra.getId(), datos(compra, compra.getId()));
+          if (!Objects.equals(anterior.getContactoId(), compra.getContactoId())) {
+            if (anterior.getContactoId() != null)
+              store.incrementarUso("contactos", anterior.getContactoId(), -1);
+            if (compra.getContactoId() != null)
+              store.incrementarUso("contactos", compra.getContactoId(), 1);
+          }
+        });
+  }
+
+  public void eliminarPlanificacion(long id) {
+    Compra c = exigirEditable(id);
+    store.transaccion(
+        () -> {
+          store.borrar("compras", id);
+          if (c.getContactoId() != null) store.incrementarUso("contactos", c.getContactoId(), -1);
+        });
+  }
+
+  public Long buscarCuentaPago(long compraId) {
+    return (Long) store.buscar("compras", compraId).get("pago_cuenta_id");
+  }
+
+  public void registrarPago(long compraId, long movimientoId) {
+    Map<String, Object> compra = store.buscar("compras", compraId);
+    if (compra.get("pago_cuenta_id") != null)
+      throw new IllegalArgumentException("Esta compra ya tiene un pago registrado.");
+    Map<String, Object> movimiento = store.buscar("movimientos", "p-" + movimientoId);
+    compra.put("pago_cuenta_id", LocalCashStore.numero(movimiento, "cuenta_id"));
+    compra.put("pago_movimiento_id", movimientoId);
+    compra.put("estado", "REALIZADA");
+    store.guardar("compras", compraId, compra);
+  }
+
+  public List<Compra> listar() {
+    List<Compra> r = new ArrayList<>();
+    for (Map<String, Object> m : store.listar("compras")) r.add(leer(m));
+    r.sort(Comparator.comparingLong(Compra::getFecha).thenComparingLong(Compra::getId).reversed());
+    return r;
+  }
+
+  public Compra buscar(long id) {
+    return leer(store.buscar("compras", id));
+  }
+
+  @SuppressWarnings("unchecked")
+  private Compra leer(Map<String, Object> m) {
+    List<DetalleCompra> detalles = new ArrayList<>();
+    for (Object item : (List<?>) m.get("detalles")) {
+      Map<String, Object> d = (Map<String, Object>) item;
+      detalles.add(
+          new DetalleCompra(
+              LocalCashStore.texto(d, "descripcion"),
+              LocalCashStore.numero(d, "cantidad"),
+              LocalCashStore.numero(d, "precio_unitario")));
     }
-    public Compra buscar(long id) {
-        try (Cursor c = helper.getReadableDatabase().query("compras", null, "id = ?", new String[]{Long.toString(id)}, null, null, null)) {
-            if (!c.moveToFirst()) throw new IllegalArgumentException("La compra no existe.");
-            return leer(c);
-        }
-    }
-    private Compra leer(Cursor c) {
-        long id = c.getLong(c.getColumnIndexOrThrow("id"));
-        int contact = c.getColumnIndexOrThrow("contacto_id");
-        List<DetalleCompra> detalles = new ArrayList<>();
-        try (Cursor d = helper.getReadableDatabase().query("detalle_compra", null, "compra_id = ?", new String[]{Long.toString(id)}, null, null, "id ASC")) {
-            while (d.moveToNext()) detalles.add(new DetalleCompra(d.getString(d.getColumnIndexOrThrow("descripcion")),
-                    d.getLong(d.getColumnIndexOrThrow("cantidad")), d.getLong(d.getColumnIndexOrThrow("precio_unitario"))));
-        }
-        return new Compra(id, c.getString(c.getColumnIndexOrThrow("nombre")), Compra.Estado.valueOf(c.getString(c.getColumnIndexOrThrow("estado"))),
-                c.getLong(c.getColumnIndexOrThrow("fecha")), c.isNull(contact) ? null : c.getLong(contact), detalles, Divisa.desdeCodigo(c.getString(c.getColumnIndexOrThrow("divisa"))));
-    }
+    return new Compra(
+        LocalCashStore.numero(m, "id"),
+        LocalCashStore.texto(m, "nombre"),
+        Compra.Estado.valueOf(LocalCashStore.texto(m, "estado")),
+        LocalCashStore.numero(m, "fecha"),
+        (Long) m.get("contacto_id"),
+        detalles,
+        Divisa.desdeCodigo((String) m.get("divisa")));
+  }
 }

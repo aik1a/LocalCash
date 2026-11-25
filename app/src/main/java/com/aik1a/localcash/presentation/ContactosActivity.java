@@ -3,7 +3,6 @@ package com.aik1a.localcash.presentation;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.database.sqlite.SQLiteException;
 import android.view.View;
 import android.widget.*;
 import com.aik1a.localcash.R;
@@ -11,17 +10,17 @@ import com.aik1a.localcash.application.CompraService;
 import com.aik1a.localcash.application.DeudaService;
 import com.aik1a.localcash.domain.*;
 import java.util.*;
-import com.aik1a.localcash.data.LocalCashDbHelper;
+import com.aik1a.localcash.data.LocalCashStore;
 
 public final class ContactosActivity extends ActividadProtegida {
-    private LocalCashDbHelper helper;
+    private LocalCashStore store;
     private CompraService service;
     private ListView lista;
     private List<Contacto> contactos = new ArrayList<>();
     @Override protected void crearContenido(Bundle state) {
          setContentView(R.layout.activity_contactos);
         Pantalla.aplicarMargenes(findViewById(R.id.root));
-        helper = new LocalCashDbHelper(this); service = new CompraService(helper);
+        store = LocalCashStore.get(this); service = new CompraService(store);
         lista = findViewById(R.id.contactos); lista.setEmptyView(findViewById(R.id.vacio));
         lista.setOnItemClickListener((parent, view, position, id) -> opciones(contactos.get(position)));
         findViewById(R.id.volver).setOnClickListener(v -> finish());
@@ -30,7 +29,7 @@ public final class ContactosActivity extends ActividadProtegida {
     @Override protected void actualizarContenido() { actualizar(); }
     private void actualizar() {
         try { contactos = service.listarContactos(); lista.setAdapter(new ArrayAdapter<>(this, R.layout.row_contacto, contactos)); }
-        catch (SQLiteException ex) { Toast.makeText(this, "No se pudieron leer los contactos.", Toast.LENGTH_LONG).show(); }
+        catch (IllegalStateException ex) { Toast.makeText(this, "No se pudieron leer los contactos.", Toast.LENGTH_LONG).show(); }
     }
     private void opciones(Contacto contacto) {
         protegerDialogo(new AlertDialog.Builder(CuentasVisual.contexto(this)).setTitle(contacto.getNombre())
@@ -44,7 +43,7 @@ public final class ContactosActivity extends ActividadProtegida {
     }
     private void mostrarDeudas(Contacto contacto) {
         try {
-            DeudaService deudas = new DeudaService(helper);
+            DeudaService deudas = new DeudaService(store);
             LinearLayout contenido = new LinearLayout(this); contenido.setOrientation(LinearLayout.VERTICAL);
             int espacio = Math.round(16 * getResources().getDisplayMetrics().density); contenido.setPadding(espacio, espacio, espacio, espacio);
             TextView resumen = new TextView(CuentasVisual.contexto(this));
@@ -66,7 +65,7 @@ public final class ContactosActivity extends ActividadProtegida {
             ScrollView scroll = new ScrollView(this); scroll.addView(contenido);
             protegerDialogo(new AlertDialog.Builder(CuentasVisual.contexto(this)).setTitle("Deudas de " + contacto.getNombre()).setView(scroll)
                     .setPositiveButton("Cerrar", null).create()).show();
-        } catch (IllegalArgumentException | ArithmeticException | SQLiteException ex) {
+        } catch (IllegalArgumentException | ArithmeticException | IllegalStateException ex) {
             Toast.makeText(this, "No se pudieron cargar las deudas del contacto.", Toast.LENGTH_LONG).show();
         }
     }
@@ -78,11 +77,11 @@ public final class ContactosActivity extends ActividadProtegida {
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             try { service.crearContacto(nombre.getText().toString()); dialog.dismiss(); AccionesUI.exito(this, "Contacto creado."); actualizar(); }
             catch (IllegalArgumentException ex) { AccionesUI.errorCampo(nombre, ex.getMessage()); }
-            catch (SQLiteException ex) { Toast.makeText(this, "No se guardó el contacto.", Toast.LENGTH_LONG).show(); }
+            catch (IllegalStateException ex) { Toast.makeText(this, "No se guardó el contacto.", Toast.LENGTH_LONG).show(); }
         }));
         protegerDialogo(dialog).show();
     }
-    @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
+    @Override protected void onDestroy() { if (store != null) store.close(); super.onDestroy(); }
 }
 
 

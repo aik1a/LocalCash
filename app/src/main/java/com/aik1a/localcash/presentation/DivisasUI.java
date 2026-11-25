@@ -3,7 +3,6 @@ package com.aik1a.localcash.presentation;
 import android.app.AlertDialog;
 import android.view.View;
 import android.widget.*;
-import android.database.sqlite.SQLiteException;
 import com.aik1a.localcash.R;
 import com.aik1a.localcash.data.*;
 import com.aik1a.localcash.domain.Divisa;
@@ -33,7 +32,7 @@ final class DivisasUI {
                 guardar.guardar((Divisa)selector.getSelectedItem());
                 dialog.dismiss(); despues.run();
             } catch (IllegalArgumentException ex) { error.setText(ex.getMessage()); }
-            catch (SQLiteException ex) { error.setText("No se pudo guardar. Intenta de nuevo."); }
+            catch (IllegalStateException ex) { error.setText("No se pudo guardar. Intenta de nuevo."); }
         }));
         activity.protegerDialogo(dialog).show();
         return dialog;
@@ -41,16 +40,16 @@ final class DivisasUI {
     static AlertDialog cuenta(ActividadProtegida activity, long id, Divisa inicial, Runnable despues) {
         return solicitar(activity, "Divisa de la cuenta", "Elige la moneda de estos importes. No se convertirán ni redondearán.",
                 inicial, false, divisa -> {
-                    try (LocalCashDbHelper helper = new LocalCashDbHelper(activity)) {
-                        new CuentaRepository(helper).asignarDivisa(id, divisa);
+                    try (LocalCashStore store = LocalCashStore.get(activity)) {
+                        new CuentaRepository(store).asignarDivisa(id, divisa);
                     }
                 }, despues);
     }
     static AlertDialog compra(ActividadProtegida activity, long id, Divisa inicial, Runnable despues) {
         return solicitar(activity, "Divisa de la compra", "Elige la moneda de estos importes. No se convertirán ni redondearán.",
                 inicial, false, divisa -> {
-                    try (LocalCashDbHelper helper = new LocalCashDbHelper(activity)) {
-                        new CompraRepository(helper).asignarDivisa(id, divisa);
+                    try (LocalCashStore store = LocalCashStore.get(activity)) {
+                        new CompraRepository(store).asignarDivisa(id, divisa);
                     }
                 }, despues);
     }

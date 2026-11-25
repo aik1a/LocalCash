@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.database.sqlite.SQLiteException;
 import android.view.View;
 import android.widget.*;
 import com.aik1a.localcash.R;
 import com.aik1a.localcash.application.CompraService;
-import com.aik1a.localcash.data.LocalCashDbHelper;
+import com.aik1a.localcash.data.LocalCashStore;
 import com.aik1a.localcash.domain.*;
 import java.text.DateFormat;
 import java.util.*;
@@ -17,7 +16,7 @@ import java.util.*;
 public final class NuevaCompraActivity extends ActividadProtegida {
     public static final String EDITAR_COMPRA_ID = "editar_compra_id";
     private long compraId;
-    private LocalCashDbHelper helper;
+    private LocalCashStore store;
     private CompraService service;
     private final List<DetalleCompra> detalles = new ArrayList<>();
     private List<Contacto> contactos;
@@ -31,7 +30,7 @@ public final class NuevaCompraActivity extends ActividadProtegida {
     @Override protected void crearContenido(Bundle saved) {
          setContentView(R.layout.activity_nueva_compra);
         Pantalla.aplicarMargenes(findViewById(R.id.root));
-        helper = new LocalCashDbHelper(this); service = new CompraService(helper);
+        store = LocalCashStore.get(this); service = new CompraService(store);
         compraId = getIntent().getLongExtra(EDITAR_COMPRA_ID, -1);
         Compra existente = null;
         try {
@@ -46,7 +45,7 @@ public final class NuevaCompraActivity extends ActividadProtegida {
                     && !"Solo puedes editar compras planificadas que no tengan pago ni reparto.".equals(motivo))
                 motivo = "Los datos de esta planificación no están disponibles. Vuelve al historial e intenta de nuevo.";
             AccionesUI.aviso(this, "No se puede editar la compra", motivo, this::finish); return;
-        } catch (SQLiteException ex) {
+        } catch (IllegalStateException ex) {
             AccionesUI.aviso(this, "No se pudo abrir la planificación", "Vuelve al historial e intenta de nuevo. Tus datos se conservan.", this::finish); return;
         }
         lista = findViewById(R.id.detalles); error = findViewById(R.id.error_compra);
@@ -54,7 +53,7 @@ public final class NuevaCompraActivity extends ActividadProtegida {
         cantidad = findViewById(R.id.item_cantidad); precio = findViewById(R.id.item_precio);
         estado = findViewById(R.id.estado_compra); contacto = findViewById(R.id.contacto_compra);
         selectorDivisa = findViewById(R.id.divisa);
-        divisa = saved == null ? (existente != null ? existente.getDivisa() : new com.aik1a.localcash.data.ConfiguracionRepository(helper).exigirDivisa())
+        divisa = saved == null ? (existente != null ? existente.getDivisa() : new com.aik1a.localcash.data.ConfiguracionRepository(store).exigirDivisa())
                 : Divisa.valueOf(saved.getString("divisa", "CLP"));
         DivisasUI.preparar(selectorDivisa, divisa);
         selectorDivisa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -70,7 +69,7 @@ public final class NuevaCompraActivity extends ActividadProtegida {
             contactos = service.listarContactos(); List<String> opciones = new ArrayList<>(); opciones.add("Sin contacto");
             for (Contacto c : contactos) opciones.add(c.getNombre());
             contacto.setAdapter(new ArrayAdapter<>(contacto.getContext(), android.R.layout.simple_spinner_dropdown_item, opciones));
-        } catch (SQLiteException ex) { Toast.makeText(this, "No se pudieron cargar los contactos.", Toast.LENGTH_LONG).show(); finish(); return; }
+        } catch (IllegalStateException ex) { Toast.makeText(this, "No se pudieron cargar los contactos.", Toast.LENGTH_LONG).show(); finish(); return; }
         fecha = saved == null ? System.currentTimeMillis() : saved.getLong("fecha");
         if (saved != null) {
             ArrayList<String> nombres = saved.getStringArrayList("items");
@@ -156,7 +155,7 @@ public final class NuevaCompraActivity extends ActividadProtegida {
             startActivity(new Intent(this, CompraDetalleActivity.class).putExtra(CompraDetalleActivity.COMPRA_ID, id)); finish();
         } catch (IllegalArgumentException ex) { AccionesUI.errorTexto(error, ex.getMessage()); }
         catch (ArithmeticException ex) { AccionesUI.errorTexto(error, "El total es demasiado grande. Reduce los importes e intenta de nuevo."); }
-        catch (SQLiteException ex) { AccionesUI.errorTexto(error, "No se guardó la compra. Los datos del formulario se conservan; intenta de nuevo."); }
+        catch (IllegalStateException ex) { AccionesUI.errorTexto(error, "No se guardó la compra. Los datos del formulario se conservan; intenta de nuevo."); }
     }
     @Override protected void onSaveInstanceState(Bundle out) {
         super.onSaveInstanceState(out); if (!contenidoCreado() || divisa == null || nombre == null) return; out.putLong("fecha", fecha); out.putString("divisa", divisa.name());
@@ -164,5 +163,5 @@ public final class NuevaCompraActivity extends ActividadProtegida {
         for (int i = 0; i < detalles.size(); i++) { DetalleCompra d = detalles.get(i); nombres.add(d.getDescripcion()); cantidades[i] = d.getCantidad(); precios[i] = d.getPrecioUnitario(); }
         out.putStringArrayList("items", nombres); out.putLongArray("cantidades", cantidades); out.putLongArray("precios", precios);
     }
-    @Override protected void onDestroy() { if (helper != null) helper.close(); super.onDestroy(); }
+    @Override protected void onDestroy() { if (store != null) store.close(); super.onDestroy(); }
 }

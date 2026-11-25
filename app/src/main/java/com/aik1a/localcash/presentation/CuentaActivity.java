@@ -5,12 +5,11 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.database.sqlite.SQLiteException;
 import android.view.View;
 import android.widget.*;
 import com.aik1a.localcash.R;
 import com.aik1a.localcash.application.MovimientoService;
-import com.aik1a.localcash.data.LocalCashDbHelper;
+import com.aik1a.localcash.data.LocalCashStore;
 import com.aik1a.localcash.domain.*;
 import java.text.DateFormat;
 import java.util.*;
@@ -18,7 +17,7 @@ import java.util.*;
 public final class CuentaActivity extends ActividadProtegida {
     public static final String CUENTA_ID = "cuenta_id";
     private long cuentaId;
-    private LocalCashDbHelper helper;
+    private LocalCashStore store;
     private MovimientoService service;
     private ListView lista;
     private static final int PERMISO_UBICACION = 60;
@@ -36,8 +35,8 @@ public final class CuentaActivity extends ActividadProtegida {
         setContentView(R.layout.activity_cuenta);
         Pantalla.aplicarMargenes(findViewById(R.id.root));
         cuentaId = getIntent().getLongExtra(CUENTA_ID, -1);
-        helper = new LocalCashDbHelper(this);
-        service = new MovimientoService(helper);
+        store = LocalCashStore.get(this);
+        service = new MovimientoService(store);
         findViewById(R.id.abrir_mapa).setOnClickListener(v -> startActivity(new android.content.Intent(this, MapaActivity.class).putExtra(CUENTA_ID, cuentaId)));
         findViewById(R.id.ver_compras_cuenta).setOnClickListener(v -> startActivity(
                 new android.content.Intent(this, ComprasActivity.class).putExtra(CUENTA_ID, cuentaId)));
@@ -55,7 +54,7 @@ public final class CuentaActivity extends ActividadProtegida {
             divisa = cuenta.getDivisa();
             if (divisa == null && (selectorDivisa == null || !selectorDivisa.isShowing()))
                 selectorDivisa = DivisasUI.cuenta(this, cuentaId,
-                        new com.aik1a.localcash.data.ConfiguracionRepository(helper).exigirDivisa(), this::actualizar);
+                        new com.aik1a.localcash.data.ConfiguracionRepository(store).exigirDivisa(), this::actualizar);
             ((TextView) findViewById(R.id.nombre_cuenta)).setText(cuenta.getNombre());
             ((TextView) findViewById(R.id.saldo)).setText("Saldo: " + Dinero.formatear(service.calcularSaldo(cuentaId), divisa));
             List<Movimiento> historial = service.listarMovimientos(cuentaId);
@@ -85,7 +84,7 @@ public final class CuentaActivity extends ActividadProtegida {
                     return fila;
                 }
             });
-        } catch (IllegalArgumentException | SQLiteException | ArithmeticException ex) {
+        } catch (IllegalArgumentException | IllegalStateException | ArithmeticException ex) {
             Toast.makeText(this, "No se pudo abrir la cuenta.", Toast.LENGTH_LONG).show();
             finish();
         }
@@ -101,7 +100,7 @@ public final class CuentaActivity extends ActividadProtegida {
                         else AccionesUI.eliminar(this, "¿Eliminar " + cuenta.getNombre() + "? Solo se eliminará si no tiene movimientos.",
                                 () -> service.eliminarCuenta(cuentaId), this::finish);
                     }).setNegativeButton("Cancelar", null).create()).show();
-        } catch (IllegalArgumentException | SQLiteException ex) {
+        } catch (IllegalArgumentException | IllegalStateException ex) {
             Toast.makeText(this, "No se pudo abrir la cuenta.", Toast.LENGTH_LONG).show();
         }
     }
@@ -162,7 +161,7 @@ public final class CuentaActivity extends ActividadProtegida {
                         ? ex.getMessage() : "Revisa la cuenta y vuelve a intentar. Los datos del formulario se conservan.";
                 AccionesUI.aviso(this, "No se pudo guardar el movimiento", motivo);
             } catch (ArithmeticException ex) { AccionesUI.errorCampo(monto, "El importe supera el límite admitido por la cuenta. Usa otro monto."); }
-            catch (SQLiteException ex) {
+            catch (IllegalStateException ex) {
                 AccionesUI.aviso(this, "No se guardó el movimiento", "No se completó la operación. Los datos del formulario se conservan; intenta de nuevo.");
             }
         }));
@@ -203,5 +202,5 @@ public final class CuentaActivity extends ActividadProtegida {
         super.onPause();
     }
     @Override protected void onDestroy() { if (formulario != null) formulario.dismiss(); if (captura != null) captura.cancelar();
-        if (helper != null) helper.close(); super.onDestroy(); }
+        if (store != null) store.close(); super.onDestroy(); }
 }

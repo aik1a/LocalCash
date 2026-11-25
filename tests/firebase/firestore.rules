@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // SOLO proyecto demo-localcash-f1 en Emulator Suite. No publicar en Firebase.
+    match /f1/prototype/items/{id} {
+      allow read: if true;
+      allow create, update: if request.resource.data.keys().hasOnly(['value', 'synthetic'])
+        && request.resource.data.value is int
+        && request.resource.data.value >= 1 && request.resource.data.value <= 2
+        && request.resource.data.synthetic == true;
+    }
+  }
+}

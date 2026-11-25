@@ -1,77 +1,79 @@
 package com.aik1a.localcash.data;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import com.aik1a.localcash.domain.Cuenta;
-import com.aik1a.localcash.domain.Divisa;
-import java.util.ArrayList;
-import java.util.List;
+import com.aik1a.localcash.domain.*;
+import java.util.*;
 
 public final class CuentaRepository {
-    private final LocalCashDbHelper helper;
-    public CuentaRepository(LocalCashDbHelper helper) { this.helper = helper; }
+  private final LocalCashStore store;
 
-    public long crear(Cuenta cuenta) {
-        ContentValues values = new ContentValues();
-        values.put("nombre", cuenta.getNombre());
-        values.put("saldo_inicial", cuenta.getSaldoInicial());
-        values.put("divisa", cuenta.getDivisa() == null ? null : cuenta.getDivisa().name());
-        return helper.getWritableDatabase().insertOrThrow("cuentas", null, values);
-    }
+  public CuentaRepository(LocalCashStore store) {
+    this.store = store;
+  }
 
-    public void asignarDivisa(long id, Divisa divisa) {
-        if (divisa == null) throw new IllegalArgumentException("Selecciona una divisa.");
-        android.database.sqlite.SQLiteDatabase db = helper.getWritableDatabase();
-        db.beginTransaction();
-        try {
-            Cuenta cuenta = buscar(id);
-            if (cuenta.getDivisa() != null) throw new IllegalArgumentException("La cuenta ya tiene divisa.");
-            divisa.validar(cuenta.getSaldoInicial());
-            for (com.aik1a.localcash.domain.Movimiento m : new MovimientoRepository(helper).listar(id)) divisa.validar(m.getMonto());
-            ContentValues values = new ContentValues(); values.put("divisa", divisa.name());
-            if (db.update("cuentas", values, "id=? AND divisa IS NULL", new String[]{Long.toString(id)}) != 1)
-                throw new IllegalArgumentException("La cuenta cambió. Vuelve a abrirla.");
-            db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
-    }
+  public long crear(Cuenta cuenta) {
+    long id = store.nuevoId();
+    store.guardar(
+        "cuentas",
+        id,
+        LocalCashStore.mapa(
+            "id",
+            id,
+            "nombre",
+            cuenta.getNombre(),
+            "saldo_inicial",
+            cuenta.getSaldoInicial(),
+            "divisa",
+            cuenta.getDivisa() == null ? null : cuenta.getDivisa().name(),
+            "usos",
+            0L));
+    return id;
+  }
 
-    public void renombrar(long id, String nombre) {
-        Cuenta actual = buscar(id);
-        Cuenta validada = new Cuenta(id, nombre, actual.getSaldoInicial(), actual.getDivisa());
-        ContentValues values = new ContentValues(); values.put("nombre", validada.getNombre());
-        if (helper.getWritableDatabase().update("cuentas", values, "id=?", new String[]{Long.toString(id)}) != 1)
-            throw new IllegalArgumentException("La cuenta ya no existe.");
-    }
-    public void eliminarSinUso(long id) {
-        if (helper.getWritableDatabase().delete("cuentas", "id=? AND NOT EXISTS (SELECT 1 FROM movimientos WHERE cuenta_id=cuentas.id)", new String[]{Long.toString(id)}) != 1) {
-            buscar(id);
-            throw new IllegalArgumentException("No puedes eliminar esta cuenta porque tiene movimientos registrados. Su historial se conserva.");
-        }
-    }
+  public void asignarDivisa(long id, Divisa divisa) {
+    if (divisa == null) throw new IllegalArgumentException("Selecciona una divisa.");
+    Cuenta actual = buscar(id);
+    if (actual.getDivisa() != null)
+      throw new IllegalArgumentException("La cuenta ya tiene divisa.");
+    divisa.validar(actual.getSaldoInicial());
+    for (Movimiento m : new MovimientoRepository(store).listar(id)) divisa.validar(m.getMonto());
+    Map<String, Object> m = store.buscar("cuentas", id);
+    m.put("divisa", divisa.name());
+    store.guardar("cuentas", id, m);
+  }
 
-    public List<Cuenta> listar() {
-        List<Cuenta> cuentas = new ArrayList<>();
-        try (Cursor cursor = helper.getReadableDatabase().query("cuentas", null,
-                null, null, null, null, "id ASC")) {
-            while (cursor.moveToNext()) cuentas.add(leer(cursor));
-        }
-        return cuentas;
-    }
+  public void renombrar(long id, String nombre) {
+    Cuenta c = buscar(id);
+    Cuenta validada = new Cuenta(id, nombre, c.getSaldoInicial(), c.getDivisa());
+    Map<String, Object> m = store.buscar("cuentas", id);
+    store.actualizarCampo("cuentas", id, "nombre", validada.getNombre());
+  }
 
-    public Cuenta buscar(long id) {
-        try (Cursor cursor = helper.getReadableDatabase().query("cuentas", null,
-                "id = ?", new String[]{Long.toString(id)}, null, null, null)) {
-            if (!cursor.moveToFirst()) throw new IllegalArgumentException("La cuenta no existe.");
-            return leer(cursor);
-        }
-    }
+  public void eliminarSinUso(long id) {
+    buscar(id);
+    if (!new MovimientoRepository(store).listar(id).isEmpty()
+        || LocalCashStore.numero(store.buscar("cuentas", id), "usos") != 0)
+      throw new IllegalArgumentException(
+          "No puedes eliminar esta cuenta porque tiene movimientos registrados. Su historial se"
+              + " conserva.");
+    store.borrar("cuentas", id);
+  }
 
-    private Cuenta leer(Cursor cursor) {
-        return new Cuenta(cursor.getLong(cursor.getColumnIndexOrThrow("id")),
-                cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
-                cursor.getLong(cursor.getColumnIndexOrThrow("saldo_inicial")),
-                Divisa.desdeCodigo(cursor.getString(cursor.getColumnIndexOrThrow("divisa"))));
-    }
+  public List<Cuenta> listar() {
+    List<Cuenta> r = new ArrayList<>();
+    for (Map<String, Object> m : store.listar("cuentas")) r.add(leer(m));
+    r.sort(Comparator.comparingLong(Cuenta::getId));
+    return r;
+  }
+
+  public Cuenta buscar(long id) {
+    return leer(store.buscar("cuentas", id));
+  }
+
+  private Cuenta leer(Map<String, Object> m) {
+    return new Cuenta(
+        LocalCashStore.numero(m, "id"),
+        LocalCashStore.texto(m, "nombre"),
+        LocalCashStore.numero(m, "saldo_inicial"),
+        Divisa.desdeCodigo((String) m.get("divisa")));
+  }
 }
-
-

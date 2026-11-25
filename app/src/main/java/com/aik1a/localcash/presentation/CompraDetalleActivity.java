@@ -4,12 +4,11 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.view.View;
 import android.os.Bundle;
-import android.database.sqlite.SQLiteException;
 import android.widget.*;
 import com.aik1a.localcash.R;
 import com.aik1a.localcash.application.CompraService;
 import com.aik1a.localcash.application.MovimientoService;
-import com.aik1a.localcash.data.LocalCashDbHelper;
+import com.aik1a.localcash.data.LocalCashStore;
 import com.aik1a.localcash.domain.*;
 import java.text.DateFormat;
 import java.util.*;
@@ -24,11 +23,11 @@ public final class CompraDetalleActivity extends ActividadProtegida {
     }
     private long compraId() { return getIntent().getLongExtra(COMPRA_ID, -1); }
     @Override protected void actualizarContenido() {
-        try (LocalCashDbHelper helper = new LocalCashDbHelper(this)) {
-            CompraService service = new CompraService(helper);
+        try (LocalCashStore store = LocalCashStore.get(this)) {
+            CompraService service = new CompraService(store);
             Compra compra = service.buscarCompra(compraId());
             if (compra.getDivisa() == null) DivisasUI.compra(this, compra.getId(),
-                    new com.aik1a.localcash.data.ConfiguracionRepository(helper).exigirDivisa(), this::recreate);
+                    new com.aik1a.localcash.data.ConfiguracionRepository(store).exigirDivisa(), this::recreate);
             findViewById(R.id.abrir_reparto).setVisibility(compra.getEstado() == Compra.Estado.REALIZADA ? View.VISIBLE : View.GONE);
             findViewById(R.id.abrir_reparto).setOnClickListener(v -> startActivity(
                     new Intent(this, RepartoActivity.class).putExtra(COMPRA_ID, compra.getId())));
@@ -51,7 +50,7 @@ public final class CompraDetalleActivity extends ActividadProtegida {
             findViewById(R.id.eliminar_planificacion).setVisibility(planificada ? View.VISIBLE : View.GONE);
             findViewById(R.id.eliminar_planificacion).setOnClickListener(v -> AccionesUI.eliminar(this,
                     "¿Eliminar la planificación " + compra.getNombre() + " y sus productos? No cambiará ningún saldo.",
-                    () -> { try (LocalCashDbHelper db = new LocalCashDbHelper(this)) { new CompraService(db).eliminarPlanificacion(compra.getId()); } }, this::finish));
+                    () -> { try (LocalCashStore db = LocalCashStore.get(this)) { new CompraService(db).eliminarPlanificacion(compra.getId()); } }, this::finish));
             Button pagar = findViewById(R.id.pagar_compra);
             pagar.setVisibility(cuentaId == null ? View.VISIBLE : View.GONE);
             pagar.setEnabled(compra.getDivisa() != null && compra.calcularTotal() > 0);
@@ -59,7 +58,7 @@ public final class CompraDetalleActivity extends ActividadProtegida {
             Button abrir = findViewById(R.id.ver_cuenta_pago);
             abrir.setVisibility(cuentaId == null ? View.GONE : View.VISIBLE);
             if (cuentaId != null) {
-                Cuenta cuenta = new MovimientoService(helper).buscarCuenta(cuentaId);
+                Cuenta cuenta = new MovimientoService(store).buscarCuenta(cuentaId);
                 abrir.setText("Ver cuenta: " + cuenta.getNombre());
                 abrir.setOnClickListener(v -> startActivity(new Intent(this, CuentaActivity.class)
                         .putExtra(CuentaActivity.CUENTA_ID, cuentaId)));
@@ -79,13 +78,13 @@ public final class CompraDetalleActivity extends ActividadProtegida {
             AccionesUI.aviso(this, "No se pudo abrir la compra", "La compra no existe.".equals(ex.getMessage())
                     ? "La compra ya no existe. Vuelve al historial y selecciona otra."
                     : "Los datos de esta compra no están disponibles. Vuelve al historial e intenta de nuevo.", this::finish);
-        } catch (ArithmeticException | SQLiteException ex) {
+        } catch (ArithmeticException | IllegalStateException ex) {
             AccionesUI.aviso(this, "No se pudo abrir la compra", "No se pudieron cargar sus datos. Vuelve al historial e intenta de nuevo.", this::finish);
         }
     }
     private void elegirCuenta() {
-        try (LocalCashDbHelper helper = new LocalCashDbHelper(this)) {
-            CompraService service = new CompraService(helper);
+        try (LocalCashStore store = LocalCashStore.get(this)) {
+            CompraService service = new CompraService(store);
             Compra compra = service.buscarCompra(compraId());
             List<Cuenta> cuentas = service.listarCuentasPago(compraId());
             if (cuentas.isEmpty()) {
@@ -96,11 +95,11 @@ public final class CompraDetalleActivity extends ActividadProtegida {
             }
             String[] nombres = new String[cuentas.size()];
             for (int i = 0; i < cuentas.size(); i++) nombres[i] = cuentas.get(i).getNombre()
-                    + " · " + Dinero.formatear(new MovimientoService(helper).calcularSaldo(cuentas.get(i).getId()), compra.getDivisa());
+                    + " · " + Dinero.formatear(new MovimientoService(store).calcularSaldo(cuentas.get(i).getId()), compra.getDivisa());
             protegerDialogo(new AlertDialog.Builder(CuentasVisual.contexto(this)).setTitle("¿Desde qué cuenta pagaste?")
                     .setItems(nombres, (dialog, posicion) -> confirmarPago(compra, cuentas.get(posicion)))
                     .setNegativeButton("Cancelar", null).create()).show();
-        } catch (IllegalArgumentException | ArithmeticException | SQLiteException ex) {
+        } catch (IllegalArgumentException | ArithmeticException | IllegalStateException ex) {
             AccionesUI.aviso(this, "No se pudieron cargar las cuentas", "No se registró ningún pago. Vuelve a abrir la compra e intenta de nuevo.");
         }
     }
@@ -111,12 +110,12 @@ public final class CompraDetalleActivity extends ActividadProtegida {
                         + "Las deudas del reparto quedan aparte.")
                 .setNegativeButton("Cancelar", null).setPositiveButton("Registrar pago", null).create();
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-            try (LocalCashDbHelper helper = new LocalCashDbHelper(this)) {
-                new CompraService(helper).pagar(compra.getId(), cuenta.getId());
+            try (LocalCashStore store = LocalCashStore.get(this)) {
+                new CompraService(store).pagar(compra.getId(), cuenta.getId());
                 dialog.dismiss(); AccionesUI.exito(this, "Pago registrado."); actualizarContenido();
             } catch (IllegalArgumentException ex) {
                 AccionesUI.aviso(this, "No se puede registrar el pago", ex.getMessage());
-            } catch (ArithmeticException | SQLiteException ex) {
+            } catch (ArithmeticException | IllegalStateException ex) {
                 AccionesUI.aviso(this, "No se registró el pago", "No se completó la operación. El saldo no cambió por este intento. Vuelve a abrir la compra e intenta de nuevo.");
             }
         }));

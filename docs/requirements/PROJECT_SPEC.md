@@ -1,80 +1,22 @@
-# LocalCash — Especificación técnica canónica
+# Requisitos de LocalCash
 
-## Actualización docente — 2026-11-16
+Aplicación Android de finanzas personales en Java y XML. La versión actual sustituye la persistencia SQLite de la primera entrega por Firebase y mantiene la biometría como protección local.
 
-El usuario informa y confirma la sustitución de SQLite por Firebase, el inicio con Google y la conservación del funcionamiento offline. El PDF no se ha modificado. Para el próximo incremento, LC-P02/LC-TECH-01 se reformulan como persistencia Firestore con operación offline; Firebase deja de estar excluido. Se incorpora Firebase Authentication con Google y se mantiene biometría como protección local. Requisitos FB-R01–05, límites de primera conexión y criterios verificables están en [FB-01](../exec-plans/active/FB-01-firebase-google-offline.md); procedencia y decisión en [ADR-003](../design/decisions/ADR-003-firebase-google-offline.md). Las secciones inferiores describen la especificación original; no usar su exclusión de Firebase para rechazar este incremento.
+## Funciones
 
-**Estado:** CANONICAL DERIVED SPEC  
-**Fuente primaria:** documento del docente `LocalCash Proyecto Android.pdf`.  
-**Regla:** este archivo traduce el encargo a requisitos implementables; no reemplaza el original.
+- Identificación mediante Firebase Authentication con Google.
+- Autorización biométrica antes de acceder a contenido financiero.
+- Cuentas con nombre, divisa y saldo inicial.
+- Movimientos de ingreso y egreso por cuenta, con ubicación opcional.
+- Compras con productos, cantidades y precios, en estado planificado o realizado.
+- Pago explícito de compra desde una cuenta de moneda compatible.
+- Contactos para gastos compartidos y reparto equitativo o personalizado.
+- Seguimiento del estado de deudas sin ejecutar transferencias bancarias.
+- Consulta de movimientos geolocalizados, ubicación actual y cartografía offline.
+- Persistencia Firestore por UID, caché y sincronización tras recuperar conexión.
 
-## Propósito
+## Tecnología
 
-Aplicación móvil Android nativa en Java, orientada a la gestión financiera personal y diseñada para operar localmente/offline.
+Java, vistas XML, Gradle Groovy, Firebase Authentication, Cloud Firestore, AndroidX Biometric y osmdroid con Mapsforge. Android mínimo API 24. El código financiero utiliza importes enteros y entidades independientes de la interfaz.
 
-## Pilares obligatorios
-
-- **LC-P01 — Java nativo:** desarrollar en Android Studio utilizando Java.
-- **LC-P02 — SQLite offline:** la funcionalidad principal y sus datos deben operar localmente mediante SQLite, sin dependencia de servidor externo.
-- **LC-P03 — Biometría:** proteger el acceso mediante autenticación biométrica usando capacidades Android.
-- **LC-P04 — Mapas:** permitir interacción con mapas para movimientos geolocalizados.
-
-## Requisitos funcionales
-
-### Autenticación y contactos
-
-- **LC-AUTH-01:** solicitar autenticación biométrica antes de permitir acceso al contenido financiero.
-- **LC-CON-01:** mantener una agenda/directorio local de contactos utilizables por compras y gastos compartidos.
-
-### Cuentas y movimientos
-
-- **LC-ACC-01:** crear y administrar múltiples cuentas de dinero.
-- **LC-MOV-01:** registrar movimientos de tipo ingreso y egreso asociados a una cuenta.
-- **LC-MOV-02:** permitir que un movimiento tenga coordenadas geográficas opcionales.
-- **LC-MAP-01:** visualizar/explorar movimientos geolocalizados mediante un mapa.
-
-### Compras
-
-- **LC-BUY-01:** registrar compras y consultar su historial/detalle.
-- **LC-BUY-02:** permitir programar adquisiciones futuras.
-- **LC-BUY-03:** permitir vincular compras con contactos cuando corresponda.
-
-### Gastos compartidos y deudas
-
-- **LC-SHARED-01:** registrar compras compartidas detallando productos o servicios adquiridos.
-- **LC-SHARED-02:** seleccionar participantes desde la agenda local.
-- **LC-DEBT-01:** distribuir el costo entre participantes y obtener cuánto debe pagar cada uno.
-- **LC-DEBT-02:** admitir una distribución equitativa o personalizada según el diseño funcional aprobado.
-
-## Requisitos técnicos
-
-- **LC-TECH-01:** persistencia implementada con SQLite en Android Studio.
-- **LC-TECH-02:** autenticación mediante `BiometricPrompt`.
-- **LC-TECH-03:** mapas mediante osmdroid o alternativa compatible con el requisito; decisión actual: osmdroid 6.1.18.
-- **LC-TECH-04:** repositorio Git con código fuente completo.
-- **LC-TECH-05:** documentación técnica de arquitectura, estructura SQLite, dependencias y compilación/ejecución.
-- **LC-TECH-06:** material/estructura para exposición y demostración de módulos offline.
-
-## Decisiones de implementación ya aprobadas
-
-Estas decisiones son del proyecto, no requisitos literales del documento docente:
-- XML para UI.
-- Gradle con Groovy DSL.
-- `SQLiteOpenHelper` para acceso a SQLite.
-- osmdroid 6.1.18.
-- arquitectura simple Presentation -> Services/Domain -> Repositories -> SQLiteOpenHelper -> SQLite.
-- Firebase y backend remoto fuera de alcance.
-- Room fuera de alcance actual.
-- POO con encapsulamiento real y comportamiento de dominio.
-
-## No inferir automáticamente
-
-El documento fuente no define por sí solo:
-- nombres físicos de tablas/columnas;
-- diseño exacto de pantallas;
-- reglas de borrado/cascada;
-- todos los campos de contactos;
-- fórmula/UX exacta de reparto personalizado;
-- estructura definitiva de paquetes Java.
-
-Estas decisiones deben quedar documentadas antes o durante el sprint que las necesite.
+La cartografía básica cubre el mundo. El APK incorpora calles de Chile y permite importar mapas de otros países. El primer acceso y la preparación de datos financieros requieren conexión. El proyecto no ejecuta transferencias, cobros ni conversiones automáticas de divisa.
